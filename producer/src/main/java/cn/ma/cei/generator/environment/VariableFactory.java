@@ -2,6 +2,7 @@ package cn.ma.cei.generator.environment;
 
 import cn.ma.cei.exception.CEIException;
 import cn.ma.cei.utils.NormalMap;
+import cn.ma.cei.utils.SecondLevelMap;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
@@ -23,6 +24,8 @@ public class VariableFactory {
     }
 
     private static final VariableTypeMap variableTypeMap = new VariableTypeMap();
+
+    private static final EnvironmentData<SecondLevelMap<VariableType, String, VariableType>> modelInfo = new EnvironmentData<>();
 
     public static String genericTypeName(String name, String... names) {
         // TODO
@@ -65,8 +68,17 @@ public class VariableFactory {
         return createVariable(type, name, Variable.Position.INPUT, null);
     }
 
-    public static Variable createMemberVariable(Variable parentVariable, VariableType type, String name) {
-        return createVariable(type, name, Variable.Position.MEMBER, parentVariable);
+    public static Variable createMemberVariable(VariableType modelType, VariableType memberType, String name) {
+        if (modelInfo.isNull()) {
+            modelInfo.trySet(new SecondLevelMap<>());
+        }
+        modelInfo.get().tryPut(modelType, name, memberType);
+        return createVariable(memberType, name, Variable.Position.MEMBER, null);
+    }
+
+    public static Variable queryMemberVariable(Variable parentVariable, String name) {
+        VariableType memberType = modelInfo.get().get(parentVariable.type, name);
+        return null;
     }
 
     private static Variable createVariable(VariableType type, String name, Variable.Position position, Variable parentVariable) {

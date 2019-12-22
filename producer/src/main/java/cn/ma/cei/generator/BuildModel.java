@@ -4,7 +4,6 @@ import cn.ma.cei.generator.environment.Variable;
 import cn.ma.cei.generator.environment.VariableType;
 import cn.ma.cei.generator.environment.VariableFactory;
 import cn.ma.cei.generator.builder.ModelBuilder;
-import cn.ma.cei.generator.environment.ModelInfo;
 import cn.ma.cei.generator.environment.Reference;
 import cn.ma.cei.model.xModel;
 
@@ -17,8 +16,7 @@ public class BuildModel {
         Reference.addReference(modelType, referecne);
         builder.startModel(modelType);
         model.memberList.forEach((item) -> {
-            Variable member = VariableFactory.createLocalVariable(item.getType(), item.name);
-            ModelInfo.addMember(modelType, member.name, member);
+            Variable member = VariableFactory.createMemberVariable(modelType, item.getType(), item.name);
             member.defaultValue = item.defaultValue;
             builder.registerMember(member);
         });

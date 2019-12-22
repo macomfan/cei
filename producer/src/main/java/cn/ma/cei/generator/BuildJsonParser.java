@@ -7,7 +7,6 @@ import cn.ma.cei.exception.CEIException;
 import cn.ma.cei.generator.builder.JsonParserBuilder;
 import cn.ma.cei.generator.builder.MethodBuilder;
 import cn.ma.cei.generator.buildin.JsonWrapper;
-import cn.ma.cei.generator.environment.ModelInfo;
 import cn.ma.cei.model.json.*;
 
 public class BuildJsonParser {
@@ -33,7 +32,7 @@ public class BuildJsonParser {
         if (variableName == null) {
             throw new CEIException("[BuildJsonParser] To must be Variable");
         }
-        return ModelInfo.queryMember(parentModel.type, variableName);
+        return VariableFactory.queryMemberVariable(parentModel, to);
     }
 
     private static Variable processJsonItem(JsonItemContext context) {
