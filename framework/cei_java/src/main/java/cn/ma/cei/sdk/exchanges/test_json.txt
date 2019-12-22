@@ -1,0 +1,49 @@
+    public LastTrade getLastTrade(String symbol) {
+        RestfulRequest request = new RestfulRequest(this.options);
+        request.setTarget("/market/trade");
+        request.method = RestfulRequest.Method.GET;
+        request.addQueryString("symbol", symbol);
+        RestfulResponse response = RestfulConnection.connect(request);
+        LastTrade lastTrade_var = new LastTrade();
+        JsonWrapper lastTrade_obj = new JsonWrapper(response);
+        lastTrade_var.status = lastTrade_obj.getString("status");
+		
+		JsonWrapper tick_obj = lastTrade_obj.getObject("tick");
+		LastTradeTick lastTradeTick_var = new LastTradeTick();
+		lastTradeTick_var.ts = tick_obj.getString("ts");
+		lastTrade_obj.tick = lastTradeTick_var;
+		return lastTrade_var;
+		
+    }
+    
+	            
+				<json_parser model="Symbols">
+				JsonWrapper root_obj = new JsonWrapper(response);
+				Symbols symbols_var = new Symbols();
+				
+                    <json_string from="status" to="{status}"/>
+					symbols_var.status = root_obj.getString("status");
+					
+                    <json_array from="data" to="{data}" model="SymbolsData">
+					
+					
+                        <json_string from="base-currency" to="{base_currency}"/>
+                    </json_array>
+                </json_parser>
+	
+	
+
+    public LastTradeEx getLastTradeEx(String symbol) {
+        RestfulRequest request = new RestfulRequest(this.options);
+        request.setTarget("/market/trade");
+        request.method = RestfulRequest.Method.GET;
+        request.addQueryString("symbol", symbol);
+        RestfulResponse response = RestfulConnection.connect(request);
+        LastTradeEx lastTradeEx_var = new LastTradeEx();
+        JsonWrapper lastTradeEx_obj = new JsonWrapper(response);
+        lastTradeEx_var.status = lastTradeEx_obj.getString("status");
+		
+		JsonWrapper tick_obj = lastTradeEx_obj.getObject("tick");
+		
+		
+    }

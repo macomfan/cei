@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<sdk exchange="Huobi" document="https://huobiapi.github.io/docs/spot/v1/en/">
+
+    <model name="Symbols">
+        <string name="status"/>
+        <object_list name="data" refer="SymbolsData"/>
+    </model>
+
+    <model name="SymbolsData">
+        <string name="base_currency"/>
+        <string name="quote_currency"/>
+    </model>
+
+    <model name="Currencies">
+        <string name="status"/>
+        <string_list name="data"/>
+    </model>
+
+    <model name="LastTrade">
+        <string name="status"/>
+        <object name="tick" refer="LastTradeTick"/>
+    </model>
+
+    <model name="LastTradeTick">
+        <string name="ts"/>
+        <object_list name="data" refer="LastTradeData"/>
+    </model>
+
+    <model name="LastTradeData">
+        <string name="direction"/>
+    </model>
+
+    <model name="LastTradeEx">
+        <string name="status"/>
+        <object name="data" refer="LastTradeData"/>
+    </model>
+
+    <signature name="restful">
+        <get_now output="{timestamp}" format=""/>
+        <append_query_string key="AccessKeyId" value="{apikey}"/>
+        <append_query_string key="SignatureMethod" value="HmacSHA256"/>
+        <append_query_string key="SignatureVersion" value="2"/>
+        <append_query_string key="timestamp" value="{timestamp}"/>
+        <get_query_sting_list output="queryStringList"/>
+        <sort_list output="{queryStringList}" input="{output}" order="ASC"/>
+        <combine_string_list output="{newurlbuffer}" input="{queryStringList}" separator="&amp;"/>
+        <get_method output="{method}" uppercase="true"/>
+        <get_host output="{host}"/>
+        <get_path output="{path}"/>
+        <append_list input="{buffer}" item="{method}"/>
+        <append_list input="{buffer}" item="{host}"/>
+        <append_list input="{buffer}" item="{path}"/>
+        <append_list input="{buffer}" item="{newurlbuffer}"/>
+        <combine_string_list output="{newbuffer}" input="{buffer}" separator="\n"/>
+    </signature>
+
+
+    <restful client_name="MarketClient" url="https://api.huobi.so">
+        <interface name="getSymbol">
+            <headers>
+                <header tag="accept-encoding" value="gzip"/>
+            </headers>
+            <request method="get" target="/v1/common/symbols"/>
+            <response type="model">
+                <json_parser model="Symbols">
+                    <json_string from="status" to="{status}"/>
+                    <json_array from="data" to="{data}" model="SymbolsData">
+                        <json_string from="base-currency" to="{base_currency}"/>
+                    </json_array>
+                </json_parser>
+            </response>
+        </interface>
+
+        <!--interface name="getCurrencies">
+            <request method="get" target="/v1/common/currencys"/>
+            <response type="model">
+                <json_parser model="Currencies">
+                    <json_string from="status" to="{status}"/>
+                    <json_array from="data" to="{data}"/>
+                </json_parser>
+            </response>
+        </interface-->
+
+        <!--interface name="getCurrencyInfo">
+            <inputs>
+                <string name="currency" mandatory="false"/>
+                <boolean name="authorizedUser" mandatory="false"/>
+            </inputs>
+            <request method="get" target="/v2/reference/currencies">
+                <query_strings/>
+            </request>
+            <response type="raw"/>
+        </interface>
+
+        <interface name="getCandlestick">
+            <inputs>
+                <string name="symbol" mandatory="true"/>
+                <string name="period"/>
+                <int name="size"/>
+            </inputs>
+            <request method="get" target="/market/history/kline">
+                <query_strings>
+                    <query name="symbol" value="{symbol}"/>
+                    <query name="period" value="{period}"/>
+                    <query name="size" value="{size}"/>
+                </query_strings>
+            </request>
+            <response type="model">
+                <json_parser model="Symbols">
+                    <json_string from="status" to="{status}"/>
+                    <json_array from="data" to="{data}" model="LastTradeTick">
+                        <json_string from="base-currency" to="{base_currency}"/>
+                    </json_array>
+                </json_parser>
+            </response>
+        </interface-->
+
+        <interface name="getLastTrade">
+            <inputs>
+                <string name="symbol" mandatory="true"/>
+            </inputs>
+            <request method="get" target="/market/trade">
+                <query_strings>
+                    <query name="symbol" value="{symbol}"/>
+                </query_strings>
+            </request>
+            <response type="model">
+                <json_parser model="LastTrade">
+                    <json_string from="status" to="{status}"/>
+                    <json_object from="tick" to="{tick}" model="LastTradeTick">
+                        <json_string from="ts" to="{ts}"/>
+                        <json_array from="data" to="{data}" model="LastTradeData">
+                            <json_string from="direction" to="{direction}"/>
+                        </json_array>
+                    </json_object>
+                </json_parser>
+            </response>
+        </interface>
+
+        <!--interface name="getLastTradeEx">
+            <inputs>
+                <string name="symbol" mandatory="true"/>
+            </inputs>
+            <request method="get" target="/market/trade">
+                <query_strings>
+                    <query name="symbol" value="{symbol}"/>
+                </query_strings>
+            </request>
+            <response type="model">
+                <json_parser model="LastTradeEx">
+                    <json_string from="status" to="{status}"/>
+                    <json_object from="tick">
+                        <json_array from="data" to="{data}" model="LastTradeData">
+                            <json_string from="direction" to="{direction}"/>
+                        </json_array>
+                    </json_object>
+                </json_parser>
+            </response>
+        </interface>
+
+        <interface name="placeOrder">
+            <inputs>
+                <string name="account_id" mandatory="true"/>
+                <string name="symbol" mandatory="true"/>
+                <string name="type" mandatory="true"/>
+                <string name="amount" mandatory="true"/>
+                <string name="price"/>
+            </inputs>
+            <request method="post" target="/placeOrder">
+                <post_body>
+                    <json_builder>
+                        <json_string name="account-id" value="{account_id}"/>
+                    </json_builder>
+                </post_body>
+            </request>
+            <response type="raw"/>
+        </interface-->
+    </restful>
+</sdk>
