@@ -1,13 +1,16 @@
 package cn.ma.cei.generator;
 
-import cn.ma.cei.generator.database.VariableFactory;
+import cn.ma.cei.generator.environment.Variable;
+import cn.ma.cei.generator.environment.VariableList;
+import cn.ma.cei.generator.environment.VariableType;
+import cn.ma.cei.generator.environment.VariableFactory;
 import cn.ma.cei.exception.CEIException;
 import cn.ma.cei.generator.builder.RestfulInterfaceBuilder;
 import cn.ma.cei.generator.buildin.RestfulConnection;
 import cn.ma.cei.generator.buildin.RestfulRequest;
 import cn.ma.cei.generator.buildin.RestfulResponse;
-import cn.ma.cei.generator.database.Constant;
-import cn.ma.cei.generator.database.Naming;
+import cn.ma.cei.generator.environment.Constant;
+import cn.ma.cei.generator.environment.Naming;
 import cn.ma.cei.model.xInterface;
 import cn.ma.cei.model.xQueryStrings;
 

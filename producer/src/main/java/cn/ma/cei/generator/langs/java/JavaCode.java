@@ -2,10 +2,10 @@ package cn.ma.cei.generator.langs.java;
 
 import cn.ma.cei.exception.CEIException;
 import cn.ma.cei.generator.Code;
-import cn.ma.cei.generator.Variable;
-import cn.ma.cei.generator.VariableType;
+import cn.ma.cei.generator.environment.Variable;
+import cn.ma.cei.generator.environment.VariableType;
 import cn.ma.cei.generator.builder.MethodBuilder;
-import cn.ma.cei.generator.VariableList;
+import cn.ma.cei.generator.environment.VariableList;
 
 public class JavaCode extends Code {
     public JavaKeyword keyword = new JavaKeyword();

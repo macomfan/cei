@@ -1,11 +1,13 @@
 package cn.ma.cei.generator;
 
+import cn.ma.cei.generator.environment.Variable;
+import cn.ma.cei.generator.environment.VariableType;
 import cn.ma.cei.exception.CEIException;
 import cn.ma.cei.generator.builder.JsonParserBuilder;
 import cn.ma.cei.generator.builder.ResponseBuilder;
 import cn.ma.cei.generator.builder.RestfulInterfaceBuilder;
 import cn.ma.cei.generator.buildin.RestfulResponse;
-import cn.ma.cei.generator.database.VariableFactory;
+import cn.ma.cei.generator.environment.VariableFactory;
 import cn.ma.cei.model.xResponse;
 import cn.ma.cei.model.types.xString;
 

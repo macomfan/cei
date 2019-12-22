@@ -1,6 +1,6 @@
-package cn.ma.cei.generator;
+package cn.ma.cei.generator.environment;
 
-import cn.ma.cei.generator.database.Reference;
+import cn.ma.cei.generator.environment.Reference;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;

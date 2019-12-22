@@ -1,6 +1,6 @@
 package cn.ma.cei.generator.langs.java.tools;
 
-import cn.ma.cei.generator.VariableType;
+import cn.ma.cei.generator.environment.VariableType;
 import cn.ma.cei.generator.langs.java.JavaCode;
 
 public class JavaMethod {

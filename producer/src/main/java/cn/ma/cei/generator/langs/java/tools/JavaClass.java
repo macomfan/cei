@@ -1,9 +1,9 @@
 package cn.ma.cei.generator.langs.java.tools;
 
-import cn.ma.cei.generator.Variable;
-import cn.ma.cei.generator.VariableList;
-import cn.ma.cei.generator.VariableType;
-import cn.ma.cei.generator.database.Reference;
+import cn.ma.cei.generator.environment.Variable;
+import cn.ma.cei.generator.environment.VariableList;
+import cn.ma.cei.generator.environment.VariableType;
+import cn.ma.cei.generator.environment.Reference;
 import cn.ma.cei.generator.langs.java.JavaCode;
 import cn.ma.cei.generator.langs.java.JavaKeyword;
 

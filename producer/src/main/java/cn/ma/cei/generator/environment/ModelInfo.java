@@ -1,7 +1,5 @@
-package cn.ma.cei.generator.database;
+package cn.ma.cei.generator.environment;
 
-import cn.ma.cei.generator.Variable;
-import cn.ma.cei.generator.VariableType;
 import cn.ma.cei.utils.SecondLevelMap;
 
 public class ModelInfo {

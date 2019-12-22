@@ -1,9 +1,11 @@
 package cn.ma.cei.generator;
 
-import cn.ma.cei.generator.database.VariableFactory;
+import cn.ma.cei.generator.environment.Variable;
+import cn.ma.cei.generator.environment.VariableType;
+import cn.ma.cei.generator.environment.VariableFactory;
 import cn.ma.cei.generator.builder.ModelBuilder;
-import cn.ma.cei.generator.database.ModelInfo;
-import cn.ma.cei.generator.database.Reference;
+import cn.ma.cei.generator.environment.ModelInfo;
+import cn.ma.cei.generator.environment.Reference;
 import cn.ma.cei.model.xModel;
 
 public class BuildModel {
@@ -13,13 +15,12 @@ public class BuildModel {
         
         String referecne = builder.getRefrerence(modelType);
         Reference.addReference(modelType, referecne);
-        Variable modelVariable = VariableFactory.createLocalVariable(modelType, "temp");
         builder.startModel(modelType);
         model.memberList.forEach((item) -> {
-            Variable variable = VariableFactory.createMemberVariable(modelVariable, item.getType(), item.name);
-            ModelInfo.addMember(modelType, variable.name, variable);
-            variable.defaultValue = item.defaultValue;
-            builder.registerMember(variable);
+            Variable member = VariableFactory.createLocalVariable(item.getType(), item.name);
+            ModelInfo.addMember(modelType, member.name, member);
+            member.defaultValue = item.defaultValue;
+            builder.registerMember(member);
         });
         builder.endModel();
     }

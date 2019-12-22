@@ -1,10 +1,10 @@
 package cn.ma.cei.generator.langs.java;
 
-import cn.ma.cei.generator.Variable;
-import cn.ma.cei.generator.VariableType;
+import cn.ma.cei.generator.environment.Variable;
+import cn.ma.cei.generator.environment.VariableType;
 import cn.ma.cei.generator.builder.ModelBuilder;
-import cn.ma.cei.generator.database.Environment;
-import cn.ma.cei.generator.database.Reference;
+import cn.ma.cei.generator.environment.Environment;
+import cn.ma.cei.generator.environment.Reference;
 import cn.ma.cei.generator.langs.java.tools.JavaClass;
 
 public class JavaModelBuilder extends ModelBuilder {

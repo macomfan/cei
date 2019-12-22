@@ -1,8 +1,6 @@
-package cn.ma.cei.generator.database;
+package cn.ma.cei.generator.environment;
 
 import cn.ma.cei.exception.CEIException;
-import cn.ma.cei.generator.Variable;
-import cn.ma.cei.generator.VariableType;
 import cn.ma.cei.utils.NormalMap;
 
 import java.lang.reflect.Constructor;

@@ -2,7 +2,7 @@ package cn.ma.cei.generator.langs.java;
 
 import cn.ma.cei.generator.builder.RestfulClientBuilder;
 import cn.ma.cei.generator.builder.RestfulInterfaceBuilder;
-import cn.ma.cei.generator.database.Environment;
+import cn.ma.cei.generator.environment.Environment;
 import cn.ma.cei.generator.langs.java.tools.JavaClass;
 
 public class JavaRestfulClientBuilder extends RestfulClientBuilder {

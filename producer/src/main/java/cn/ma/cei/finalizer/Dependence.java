@@ -9,8 +9,8 @@ import java.util.Map;
 
 public class Dependence<T extends IDependenceNode> {
 
-    private Map<String, Node<T>> nodeMap = new HashMap<>();
-    private List<Node<T>> nodeList = new LinkedList<>();
+    private final Map<String, Node<T>> nodeMap = new HashMap<>();
+    private final List<Node<T>> nodeList = new LinkedList<>();
 
     public void addNode(T node, T dependOn) {
         Node<T> currentNode = getOrCreateNode(node);
@@ -29,14 +29,14 @@ public class Dependence<T extends IDependenceNode> {
     }
 
     private T select() {
-        if (nodeMap.size() == 0) {
+        if (nodeMap.isEmpty()) {
             return null;
         }
         for (Map.Entry<String, Node<T>> node : nodeMap.entrySet()) {
             if (node.getValue().node == null) {
                 throw new CEIException("Dependence in Error case");
             }
-            if (node.getValue().dependenceList.size() == 0) {
+            if (node.getValue().dependenceList.isEmpty()) {
                 T res = node.getValue().node;
                 node.getValue().node = null;
                 nodeMap.remove(node.getKey());

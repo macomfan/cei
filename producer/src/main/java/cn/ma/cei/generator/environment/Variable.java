@@ -1,7 +1,7 @@
-package cn.ma.cei.generator;
+package cn.ma.cei.generator.environment;
 
 import cn.ma.cei.exception.CEIException;
-import cn.ma.cei.generator.database.Naming;
+import cn.ma.cei.generator.environment.Naming;
 
 public class Variable {
 

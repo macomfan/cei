@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package cn.ma.cei.generator.database;
+package cn.ma.cei.generator.environment;
 
 import cn.ma.cei.generator.naming.DescriptionConverterDefault;
 import cn.ma.cei.generator.naming.IDescriptionConverter;

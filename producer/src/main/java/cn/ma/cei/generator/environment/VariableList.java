@@ -1,4 +1,4 @@
-package cn.ma.cei.generator;
+package cn.ma.cei.generator.environment;
 
 import cn.ma.cei.exception.CEIException;
 import cn.ma.cei.utils.IndexedList;

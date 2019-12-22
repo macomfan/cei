@@ -1,9 +1,9 @@
 package cn.ma.cei.generator.builder;
 
 import cn.ma.cei.exception.CEIException;
-import cn.ma.cei.generator.Variable;
-import cn.ma.cei.generator.VariableList;
-import cn.ma.cei.generator.VariableType;
+import cn.ma.cei.generator.environment.Variable;
+import cn.ma.cei.generator.environment.VariableList;
+import cn.ma.cei.generator.environment.VariableType;
 
 public abstract class MethodBuilder {
     public abstract void onAddReference(VariableType variableType);

@@ -1,6 +1,6 @@
 package cn.ma.cei.generator.builder;
 
-import cn.ma.cei.generator.Variable;
+import cn.ma.cei.generator.environment.Variable;
 
 public abstract class JsonParserBuilder {
     

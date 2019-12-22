@@ -1,8 +1,8 @@
 package cn.ma.cei.generator.langs.java;
 
-import cn.ma.cei.generator.Variable;
-import cn.ma.cei.generator.VariableList;
-import cn.ma.cei.generator.VariableType;
+import cn.ma.cei.generator.environment.Variable;
+import cn.ma.cei.generator.environment.VariableList;
+import cn.ma.cei.generator.environment.VariableType;
 import cn.ma.cei.generator.builder.ResponseBuilder;
 import cn.ma.cei.generator.builder.RestfulInterfaceBuilder;
 import cn.ma.cei.generator.langs.java.tools.JavaClass;

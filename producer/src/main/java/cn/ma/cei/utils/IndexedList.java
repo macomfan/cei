@@ -2,7 +2,7 @@ package cn.ma.cei.utils;
 
 
 import cn.ma.cei.exception.CEIException;
-import cn.ma.cei.generator.Variable;
+import cn.ma.cei.generator.environment.Variable;
 
 import java.util.HashMap;
 import java.util.LinkedList;

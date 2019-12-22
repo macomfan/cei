@@ -1,6 +1,6 @@
 package cn.ma.cei.model.base;
 
-import cn.ma.cei.generator.VariableType;
+import cn.ma.cei.generator.environment.VariableType;
 import cn.ma.cei.generator.builder.MethodBuilder;
 import cn.ma.cei.xml.XmlElementBase;
 
