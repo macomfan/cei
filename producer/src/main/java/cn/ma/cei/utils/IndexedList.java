@@ -2,7 +2,6 @@ package cn.ma.cei.utils;
 
 
 import cn.ma.cei.exception.CEIException;
-import cn.ma.cei.generator.environment.Variable;
 
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -17,6 +16,10 @@ public class IndexedList<IndexType, ValueType> {
         return indexed.containsKey(key);
     }
 
+    public boolean isEmpty() {
+        return indexedList.isEmpty();
+    }
+    
     public void put(IndexType key, ValueType value) {
         if (indexed.containsKey(key)) {
             throw new CEIException("[IndexedList] Cannot add duplicate element: " + key.toString());

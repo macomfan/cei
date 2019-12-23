@@ -78,7 +78,7 @@ public class VariableFactory {
 
     public static Variable queryMemberVariable(Variable parentVariable, String name) {
         VariableType memberType = modelInfo.get().get(parentVariable.type, name);
-        return null;
+        return createVariable(memberType, name, Variable.Position.REFER, parentVariable);
     }
 
     private static Variable createVariable(VariableType type, String name, Variable.Position position, Variable parentVariable) {

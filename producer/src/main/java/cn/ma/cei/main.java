@@ -2,6 +2,7 @@ package cn.ma.cei;
 
 import cn.ma.cei.finalizer.Finalizer;
 import cn.ma.cei.generator.BuildExchange;
+import cn.ma.cei.generator.langs.cpp.CppExchangeBuilder;
 import cn.ma.cei.generator.langs.java.JavaExchangeBuilder;
 import cn.ma.cei.model.xSDK;
 import cn.ma.cei.xml.JAXBWrapper;
@@ -81,10 +82,11 @@ public class main {
 
 
         JAXBWrapper wrapper = new JAXBWrapper();
-        List<xSDK> sdks = wrapper.loadFromFolder("C:\\dev\\cei\\producer\\src\\main\\resources\\huobi", xSDK.class);
+        List<xSDK> sdks = wrapper.loadFromFolder("C:\\dev\\cei\\config", xSDK.class);
         Finalizer finalizer = new Finalizer();
         finalizer.addSDK(sdks);
         List<xSDK> finalSDK = finalizer.finalizeSDK();
+        BuildExchange.build(finalSDK.get(0), new CppExchangeBuilder());
         BuildExchange.build(finalSDK.get(0), new JavaExchangeBuilder());
 
 //        File file = new File("C:\\dev\\cei\\src\\main\\resources\\main_ex.xml");

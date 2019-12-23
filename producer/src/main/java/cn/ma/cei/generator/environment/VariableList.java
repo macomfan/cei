@@ -6,10 +6,15 @@ import cn.ma.cei.utils.IndexedList;
 import java.util.List;
 
 public class VariableList {
+
     private final IndexedList<String, Variable> variableList = new IndexedList<>();
 
     public VariableList() {
 
+    }
+
+    public boolean isEmpty() {
+        return variableList.isEmpty();
     }
 
     public void registerVariable(Variable variable) {

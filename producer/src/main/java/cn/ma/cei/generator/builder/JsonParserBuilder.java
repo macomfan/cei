@@ -4,9 +4,9 @@ import cn.ma.cei.generator.environment.Variable;
 
 public abstract class JsonParserBuilder {
     
-    public abstract void getJsonString(Variable model, Variable to, Variable jsonObject, String itemName);
+    public abstract void getJsonString(Variable to, Variable jsonObject, String itemName);
 
-    public abstract void getJsonInteger(Variable model, Variable to, Variable jsonObject, String itemName);
+    public abstract void getJsonInteger(Variable to, Variable jsonObject, String itemName);
 
     public abstract void getJsonObject(Variable jsonObject, Variable parentJsonObject, String itemName);
 
@@ -17,11 +17,10 @@ public abstract class JsonParserBuilder {
     /***
      * parentModel.to.add(model)
      *
-     * @param parentModel
      * @param to
      * @param model
      */
-    public abstract void endJsonObjectArrayLoop(Variable parentModel, Variable to, Variable model);
+    public abstract void endJsonObjectArrayLoop(Variable to, Variable model);
 
     public abstract void defineModel(Variable model);
 

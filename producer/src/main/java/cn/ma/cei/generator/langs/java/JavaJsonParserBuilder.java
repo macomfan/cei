@@ -12,15 +12,15 @@ public class JavaJsonParserBuilder extends JsonParserBuilder {
     }
 
     @Override
-    public void getJsonString(Variable model, Variable to, Variable jsonObject, String itemName) {
+    public void getJsonString(Variable to, Variable jsonObject, String itemName) {
         method.getCode().appendStatementWordsln(
-                model.nameDescriptor + "." + to.nameDescriptor, "=", jsonObject.nameDescriptor + ".getString(" + method.getCode().toJavaString(itemName) + ")");
+                to.nameDescriptor, "=", jsonObject.nameDescriptor + ".getString(" + method.getCode().toJavaString(itemName) + ")");
     }
 
     @Override
-    public void getJsonInteger(Variable model, Variable to, Variable jsonObject, String itemName) {
+    public void getJsonInteger(Variable to, Variable jsonObject, String itemName) {
         method.getCode().appendStatementWordsln(
-                model.nameDescriptor + "." + to.nameDescriptor, "=", jsonObject.nameDescriptor + ".getInteger(" + method.getCode().toJavaString(itemName) + ")");
+                to.nameDescriptor, "=", jsonObject.nameDescriptor + ".getInteger(" + method.getCode().toJavaString(itemName) + ")");
     }
 
     @Override
@@ -43,11 +43,11 @@ public class JavaJsonParserBuilder extends JsonParserBuilder {
     }
 
     @Override
-    public void endJsonObjectArrayLoop(Variable parentModel, Variable to, Variable model) {
-        method.getCode().appendWordsln("if, (" + parentModel.nameDescriptor + "." + to.nameDescriptor, "==", "null) {");
-        method.getCode().newBlock(() -> method.getCode().appendStatementWordsln(parentModel.nameDescriptor + "." + to.nameDescriptor, "=", "new", to.type.getDescriptor()));
+    public void endJsonObjectArrayLoop(Variable to, Variable model) {
+        method.getCode().appendWordsln("if, (" + to.nameDescriptor, "==", "null) {");
+        method.getCode().newBlock(() -> method.getCode().appendStatementWordsln(to.nameDescriptor, "=", "new", to.type.getDescriptor()));
         method.getCode().appendln("}");
-        method.getCode().appendStatementWordsln(parentModel.nameDescriptor + "." + to.nameDescriptor + ".add(" + model.nameDescriptor + ")");
+        method.getCode().appendStatementWordsln(to.nameDescriptor + ".add(" + model.nameDescriptor + ")");
         method.getCode().endBlock();
         method.getCode().appendStatementln("}");
     }

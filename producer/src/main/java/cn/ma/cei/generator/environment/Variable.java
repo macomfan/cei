@@ -8,7 +8,8 @@ public class Variable {
     public enum Position {
         INPUT,
         LOCAL,
-        MEMBER
+        MEMBER,
+        REFER,
     }
 
     public Variable parent;
@@ -26,8 +27,11 @@ public class Variable {
             throw new CEIException("[Variable] name is null");
         }
         this.name = name;
-        if (position == Position.MEMBER) {
+        if (Position.MEMBER == position) {
             this.nameDescriptor = Naming.get().getMemberVariableDescriptor(name);
+        } else if (position == Position.REFER) {
+            // TODO
+            this.nameDescriptor = parentVariable.nameDescriptor + "." + Naming.get().getVariableDescriptor(name);
         } else {
             this.nameDescriptor = Naming.get().getVariableDescriptor(name);
         }

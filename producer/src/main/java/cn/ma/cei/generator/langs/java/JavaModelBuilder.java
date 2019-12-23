@@ -4,7 +4,6 @@ import cn.ma.cei.generator.environment.Variable;
 import cn.ma.cei.generator.environment.VariableType;
 import cn.ma.cei.generator.builder.ModelBuilder;
 import cn.ma.cei.generator.environment.Environment;
-import cn.ma.cei.generator.environment.Reference;
 import cn.ma.cei.generator.langs.java.tools.JavaClass;
 
 public class JavaModelBuilder extends ModelBuilder {

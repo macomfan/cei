@@ -32,7 +32,7 @@ public class BuildJsonParser {
         if (variableName == null) {
             throw new CEIException("[BuildJsonParser] To must be Variable");
         }
-        return VariableFactory.queryMemberVariable(parentModel, to);
+        return VariableFactory.queryMemberVariable(parentModel, variableName);
     }
 
     private static Variable processJsonItem(JsonItemContext context) {
@@ -51,9 +51,9 @@ public class BuildJsonParser {
                 return null;
             }
             if (context.jsonItem instanceof xJsonString) {
-                context.jsonParserBuilder.getJsonString(context.parentModel, to, context.parentJsonObject, context.jsonItem.from);
+                context.jsonParserBuilder.getJsonString(to, context.parentJsonObject, context.jsonItem.from);
             } else if (context.jsonItem instanceof xJsonInteger) {
-                context.jsonParserBuilder.getJsonInteger(context.parentModel, to, context.parentJsonObject, context.jsonItem.from);
+                context.jsonParserBuilder.getJsonInteger(to, context.parentJsonObject, context.jsonItem.from);
             }
             return null;
         }
@@ -104,7 +104,7 @@ public class BuildJsonParser {
         if (to == null) {
             throw new CEIException("[BuildJsonParser] To for json_object_array is null");
         }
-        context.jsonParserBuilder.endJsonObjectArrayLoop(context.parentModel, to, newModel);
+        context.jsonParserBuilder.endJsonObjectArrayLoop(to, newModel);
         return null;
     }
 
