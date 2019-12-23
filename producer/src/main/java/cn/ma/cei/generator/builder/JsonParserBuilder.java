@@ -3,10 +3,19 @@ package cn.ma.cei.generator.builder;
 import cn.ma.cei.generator.environment.Variable;
 
 public abstract class JsonParserBuilder {
-    
+
+    /***
+     * Should be [ to.nameDescriptor = jsonObject.nameDescriptor.getString(itemName) ]
+     * 
+     * @param to
+     * @param jsonObject
+     * @param itemName 
+     */    
     public abstract void getJsonString(Variable to, Variable jsonObject, String itemName);
 
     public abstract void getJsonInteger(Variable to, Variable jsonObject, String itemName);
+    
+    public abstract void getJsonStringArray(Variable to, Variable jsonObject, String itemName);
 
     public abstract void getJsonObject(Variable jsonObject, Variable parentJsonObject, String itemName);
 

@@ -5,6 +5,7 @@ import cn.ma.cei.generator.builder.JsonParserBuilder;
 import cn.ma.cei.generator.langs.java.tools.JavaMethod;
 
 public class JavaJsonParserBuilder extends JsonParserBuilder {
+
     private JavaMethod method;
 
     public JavaJsonParserBuilder(JavaMethod method) {
@@ -21,6 +22,11 @@ public class JavaJsonParserBuilder extends JsonParserBuilder {
     public void getJsonInteger(Variable to, Variable jsonObject, String itemName) {
         method.getCode().appendStatementWordsln(
                 to.nameDescriptor, "=", jsonObject.nameDescriptor + ".getInteger(" + method.getCode().toJavaString(itemName) + ")");
+    }
+
+    @Override
+    public void getJsonStringArray(Variable to, Variable jsonObject, String itemName) {
+        method.getCode().appendStatementWordsln(to.nameDescriptor, "=", jsonObject.nameDescriptor + ".getStringArray(" + method.getCode().toJavaString(itemName) + ")");
     }
 
     @Override

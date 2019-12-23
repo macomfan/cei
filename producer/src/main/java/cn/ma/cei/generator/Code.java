@@ -5,9 +5,10 @@ public class Code {
     private static final String LF = "\n";
     private static final String CR = "\r";
     private static final String endl = LF;
+    private static final String block = "    ";
 
     private int blockLevel = 0;
-    private String block = "    ";
+    
     private boolean isNewLine = true;
 
     private StringBuilder stringBuilder = new StringBuilder();

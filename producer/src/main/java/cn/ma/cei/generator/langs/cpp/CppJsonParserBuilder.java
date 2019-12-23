@@ -53,5 +53,10 @@ public class CppJsonParserBuilder extends JsonParserBuilder {
     public void defineRootJsonObject(Variable jsonObject, Variable responseVariable) {
         //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
+
+    @Override
+    public void getJsonStringArray(Variable to, Variable jsonObject, String itemName) {
+        //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
     
 }

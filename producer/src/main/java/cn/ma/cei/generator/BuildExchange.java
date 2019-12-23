@@ -1,20 +1,33 @@
 package cn.ma.cei.generator;
 
+import cn.ma.cei.exception.CEIException;
 import cn.ma.cei.generator.builder.ExchangeBuilder;
-import cn.ma.cei.model.xModel;
-import cn.ma.cei.model.xRestful;
+import cn.ma.cei.generator.builder.ModelBuilder;
+import cn.ma.cei.generator.builder.RestfulClientBuilder;
 import cn.ma.cei.model.xSDK;
 
 public class BuildExchange {
+
     public static void build(xSDK sdk, ExchangeBuilder builder) {
+        if (builder == null) {
+            throw new CEIException("[BuildExchange] ExchangeBuilder is null");
+        }
         builder.startExchange(sdk.exchange);
-        for (xModel model : sdk.modelList) {
-            BuildModel.build(model, builder.getModelBuilder());
-        }
 
-        for (xRestful restful : sdk.restfulList) {
+        sdk.modelList.forEach((model) -> {
+            ModelBuilder modelBuilder = builder.getModelBuilder();
+            if (modelBuilder == null) {
+                throw new CEIException("[BuildExchange] ModelBuilder is null");
+            }
+            BuildModel.build(model, modelBuilder);
+        });
+
+        sdk.restfulList.forEach((restful) -> {
+            RestfulClientBuilder clientBuilder = builder.getRestfulClientBuilder();
+            if (clientBuilder == null) {
+                throw new CEIException("[BuildExchange] RestfulClientBuilder is null");
+            }
             BuildRestfulInterfaceClient.build(restful, builder.getRestfulClientBuilder());
-        }
-
+        });
     }
 }

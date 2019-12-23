@@ -22,15 +22,6 @@ public abstract class MethodBuilder {
         return variableList;
     }
 
-//    public boolean containVariable(String name) {
-//        if (localVariableList.containsName(name)) {
-//            return true;
-//        } else if (inputVariableList.containsName(name)) {
-//            return true;
-//        }
-//        return false;
-//    }
-
     public Variable queryVariable(String name) {
         return variableList.queryVariable(name);
     }
