@@ -136,7 +136,7 @@ public class WordSplitter {
 //    }
 
     private static boolean isUppercaseChar(char ch) {
-        return 'A' <= ch && ch <= 'Z' ? true : false;
+        return 'A' <= ch && ch <= 'Z';
     }
 
     private static List<String> parseWord(String name) {

@@ -50,7 +50,7 @@ public class JavaJsonParserBuilder extends JsonParserBuilder {
 
     @Override
     public void endJsonObjectArrayLoop(Variable to, Variable model) {
-        method.getCode().appendWordsln("if, (" + to.nameDescriptor, "==", "null) {");
+        method.getCode().appendWordsln("if (" + to.nameDescriptor, "==", "null) {");
         method.getCode().newBlock(() -> method.getCode().appendStatementWordsln(to.nameDescriptor, "=", "new", to.type.getDescriptor()));
         method.getCode().appendln("}");
         method.getCode().appendStatementWordsln(to.nameDescriptor + ".add(" + model.nameDescriptor + ")");

@@ -71,15 +71,15 @@
             </response>
         </interface>
 
-        <!--interface name="getCurrencies">
+        <interface name="getCurrencies">
             <request method="get" target="/v1/common/currencys"/>
             <response type="model">
                 <json_parser model="Currencies">
                     <json_string from="status" to="{status}"/>
-                    <json_array from="data" to="{data}"/>
+                    <json_string_array from="data" to="{data}"/>
                 </json_parser>
             </response>
-        </interface-->
+        </interface>
 
         <!--interface name="getCurrencyInfo">
             <inputs>

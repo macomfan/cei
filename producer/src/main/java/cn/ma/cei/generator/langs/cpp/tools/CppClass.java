@@ -17,27 +17,27 @@ import java.util.Set;
 
 public class CppClass {
 
-    private CodeForCpp codeCpp = new CodeForCpp();
-    private CodeForHpp codeH = new CodeForHpp();
+    private final CodeForCpp codeCpp = new CodeForCpp();
+    private final CodeForHpp codeH = new CodeForHpp();
 
-    private VariableList privateMemberList = new VariableList();
-    private VariableList publicMemberList = new VariableList();
-    private Set<VariableType> importList = new HashSet<>();
-    private List<CppMethod> methodList = new LinkedList<>();
+    private final VariableList privateMemberList = new VariableList();
+    private final VariableList publicMemberList = new VariableList();
+    private final Set<VariableType> importList = new HashSet<>();
+    private final List<CppMethod> methodList = new LinkedList<>();
 
     public enum AccessType {
         PUBLIC,
         PRIVATE
     }
 
-    private String className;
-    private String exchangeName;
+    private final String className;
+    private final String exchangeName;
 
     public CppClass(String exchangName, String className) {
         this.className = className;
         this.exchangeName = exchangName;
     }
-    
+
     public String getClassName() {
         return className;
     }
