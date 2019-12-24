@@ -14,10 +14,11 @@ import cn.ma.cei.generator.environment.Reference;
 import cn.ma.cei.model.types.xBoolean;
 import cn.ma.cei.model.types.xInt;
 import cn.ma.cei.model.types.xString;
+import java.io.File;
 
 public class JavaExchangeBuilder extends ExchangeBuilder {
 
-    private String fileFolder = "";
+    private final String fileFolder = "C:\\dev\\cei\\framework\\cei_java";
 
     @Override
     public void startExchange(String exchangeName) {
@@ -26,7 +27,6 @@ public class JavaExchangeBuilder extends ExchangeBuilder {
 
         Constant.requestMethod().tryPut(RestfulInterfaceBuilder.RequestMethod.GET, "RestfulRequest.Method.GET");
         Constant.requestMethod().tryPut(RestfulInterfaceBuilder.RequestMethod.POST, "RestfulRequest.Method.GET");
-
 
         Reference.setupBuildinVariableType(xString.typeName, "String", JavaKeyword.NO_REF);
         Reference.setupBuildinVariableType(xBoolean.typeName, "Boolean", JavaKeyword.NO_REF);
@@ -37,12 +37,16 @@ public class JavaExchangeBuilder extends ExchangeBuilder {
         Reference.setupBuildinVariableType(RestfulResponse.typeName, "RestfulResponse", "cn.ma.cei.sdk.impl.RestfulResponse");
         Reference.setupBuildinVariableType(RestfulConnection.typeName, "RestfulConnection", "cn.ma.cei.sdk.impl.RestfulConnection");
         Reference.setupBuildinVariableType(JsonWrapper.typeName, "JsonWrapper", "cn.ma.cei.sdk.impl.JsonWrapper");
-
-//        File folder = Database.getWorkingFolder();
-//        File exchangeFolder = new File(folder.getPath() + "//" + exchangeName);
-//        if (!exchangeFolder.exists()) {
-//
-//        }
+        
+        File workingFolder = Environment.getWorkingFolder();
+        File exchangeFolder = new File(workingFolder.getPath() + File.separator + "src/main/java/cn/ma/cei/sdk/exchanges" + File.separator + exchangeName);
+        exchangeFolder.mkdirs();
+        Environment.setWorkingFolder(exchangeFolder);
+        
+        File modelFile = new File(exchangeFolder.getPath() + File.separator + "models");
+        modelFile.mkdirs();
+        File serviceFile = new File(exchangeFolder.getPath() + File.separator + "services");
+        serviceFile.mkdirs();
     }
 
     @Override

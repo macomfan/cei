@@ -2,14 +2,20 @@ package cn.ma.cei;
 
 import cn.ma.cei.finalizer.Finalizer;
 import cn.ma.cei.generator.BuildExchange;
+import cn.ma.cei.generator.BuildSDK;
+import cn.ma.cei.generator.environment.Environment;
 import cn.ma.cei.generator.langs.cpp.CppExchangeBuilder;
+import cn.ma.cei.generator.langs.cpp.CppFramework;
 import cn.ma.cei.generator.langs.java.JavaExchangeBuilder;
+import cn.ma.cei.generator.langs.java.JavaFramework;
 import cn.ma.cei.model.xSDK;
 import cn.ma.cei.xml.JAXBWrapper;
 
 import javax.xml.bind.JAXBException;
 import java.lang.reflect.Field;
 import java.lang.reflect.Type;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -79,15 +85,21 @@ public class main {
 //            code.endln();
 //        });
 //        code.appendln("}");
-
-
         JAXBWrapper wrapper = new JAXBWrapper();
         List<xSDK> sdks = wrapper.loadFromFolder("C:\\dev\\cei\\config", xSDK.class);
         Finalizer finalizer = new Finalizer();
         finalizer.addSDK(sdks);
-        List<xSDK> finalSDK = finalizer.finalizeSDK();
-        BuildExchange.build(finalSDK.get(0), new CppExchangeBuilder());
-        BuildExchange.build(finalSDK.get(0), new JavaExchangeBuilder());
+        List<xSDK> finalSDKs = finalizer.finalizeSDK();
+
+        BuildSDK.registerFramework(Environment.Language.java, new JavaFramework());
+        BuildSDK.registerFramework(Environment.Language.cpp, new CppFramework());
+        BuildSDK.build(finalSDKs, Environment.Language.java, "C:\\dev\\cei\\output");
+
+//        
+//        
+//        
+//        BuildExchange.build(finalSDK.get(0), new CppExchangeBuilder());
+//        BuildExchange.build(finalSDK.get(0), new JavaExchangeBuilder());
 
 //        File file = new File("C:\\dev\\cei\\src\\main\\resources\\main_ex.xml");
 //        xSDK sdk = wrapper.loadFromXML(file, xSDK.class);

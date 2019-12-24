@@ -44,10 +44,10 @@ public class CppMethod {
         boolean isFirst = true;
         for (Variable variable : params.getVariableList()) {
             if (isFirst) {
-                paramString += variable.type.getDescriptor() + " " + variable.name;
+                paramString += "const " + variable.type.getDescriptor() + "& " + variable.name;
                 isFirst = false;
             } else {
-                paramString += ", " + variable.type.getDescriptor() + " " + variable.name;
+                paramString += ", " + "const " + variable.type.getDescriptor() + "& " + variable.name;
             }
         }
         return paramString;

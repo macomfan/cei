@@ -21,7 +21,7 @@ public class Environment {
         NA,
     }
 
-    private static File workingFolder = new File("C:\\dev\\cei\\framework\\cei_java\\src\\main\\java\\cn\\ma\\cei\\sdk\\exchanges");
+    private static File workingFolder = new File("C:\\dev\\cei\\framework");
     private static String currentExchange = "";
     private static Language currentLanguage = Language.NA;
 
