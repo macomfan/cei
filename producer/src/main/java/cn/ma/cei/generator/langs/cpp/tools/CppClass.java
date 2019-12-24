@@ -109,12 +109,13 @@ public class CppClass {
             writeMemberVariable();
 
             codeH.appendln("public:");
-            methodList.forEach((method) -> {
-                codeH.appendCode(method.getCodeForH());
-                codeCpp.appendCode(method.getCode());
+            codeH.newBlock(() -> {
+                methodList.forEach((method) -> {
+                    codeH.appendCode(method.getCodeForH());
+                    codeCpp.appendCode(method.getCode());
+                });
             });
         });
-
         codeCpp.endBlock();
         codeH.endBlock();
         codeCpp.appendln("}");

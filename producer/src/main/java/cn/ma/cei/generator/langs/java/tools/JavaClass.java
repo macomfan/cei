@@ -50,7 +50,7 @@ public class JavaClass {
         methodList.add(code);
     }
 
-    public void build() {
+    public void build(File folder) {
         writeReference(code);
         defineClass(className, () -> {
             code.endln();
@@ -59,7 +59,7 @@ public class JavaClass {
         });
 
         try {
-            File newFile = new File("C:\\dev\\cei\\framework\\cei_java\\src\\main\\java\\cn\\ma\\cei\\sdk\\exchanges\\" + className + ".java");
+            File newFile = new File(folder.getPath() + File.separator + className + ".java");
             newFile.createNewFile();
             FileWriter newFileWriter = new FileWriter(newFile);
             BufferedWriter bufferedWriter = new BufferedWriter(newFileWriter);

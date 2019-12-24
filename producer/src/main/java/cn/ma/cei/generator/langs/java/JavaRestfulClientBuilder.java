@@ -4,6 +4,7 @@ import cn.ma.cei.generator.builder.RestfulClientBuilder;
 import cn.ma.cei.generator.builder.RestfulInterfaceBuilder;
 import cn.ma.cei.generator.environment.Environment;
 import cn.ma.cei.generator.langs.java.tools.JavaClass;
+import java.io.File;
 
 public class JavaRestfulClientBuilder extends RestfulClientBuilder {
     JavaClass javaClass = null;
@@ -20,7 +21,7 @@ public class JavaRestfulClientBuilder extends RestfulClientBuilder {
 
     @Override
     public void endClient() {
-        javaClass.build();
+        javaClass.build(new File(Environment.getWorkingFolder().getPath() + File.separator + "services"));
     }
 
 

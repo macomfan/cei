@@ -5,6 +5,7 @@ import cn.ma.cei.generator.environment.VariableType;
 import cn.ma.cei.generator.builder.ModelBuilder;
 import cn.ma.cei.generator.environment.Environment;
 import cn.ma.cei.generator.langs.java.tools.JavaClass;
+import java.io.File;
 
 public class JavaModelBuilder extends ModelBuilder {
     JavaClass javaClass = null;
@@ -21,7 +22,7 @@ public class JavaModelBuilder extends ModelBuilder {
 
     @Override
     public void endModel() {
-        javaClass.build();
+        javaClass.build(new File(Environment.getWorkingFolder().getPath() + File.separator + "models"));
     }
 
     @Override
