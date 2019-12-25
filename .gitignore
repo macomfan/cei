@@ -24,3 +24,5 @@ hs_err_pid*
 /producer/target/
 /output/
 nb-configuration.xml
+*.iml
+/producer/.idea/

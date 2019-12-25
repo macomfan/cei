@@ -1,5 +1,6 @@
 package cn.ma.cei.generator.langs.java.tools;
 
+import cn.ma.cei.generator.CEIPath;
 import cn.ma.cei.generator.environment.Variable;
 import cn.ma.cei.generator.environment.VariableList;
 import cn.ma.cei.generator.environment.VariableType;
@@ -7,9 +8,6 @@ import cn.ma.cei.generator.environment.Reference;
 import cn.ma.cei.generator.langs.java.JavaCode;
 import cn.ma.cei.generator.langs.java.JavaKeyword;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -50,7 +48,7 @@ public class JavaClass {
         methodList.add(code);
     }
 
-    public void build(File folder) {
+    public void build(CEIPath folder) {
         writeReference(code);
         defineClass(className, () -> {
             code.endln();
@@ -58,18 +56,8 @@ public class JavaClass {
             writeMethods(code);
         });
 
-        try {
-            File newFile = new File(folder.getPath() + File.separator + className + ".java");
-            newFile.createNewFile();
-            FileWriter newFileWriter = new FileWriter(newFile);
-            BufferedWriter bufferedWriter = new BufferedWriter(newFileWriter);
-            bufferedWriter.write(code.toString());
-            bufferedWriter.close();
-            newFileWriter.close();
-        } catch (Exception e) {
-
-        }
-
+        CEIPath file = CEIPath.appendFile(folder, className + ".java");
+        file.write(code.toString());
     }
 
     public void addReference(VariableType type) {

@@ -1,5 +1,6 @@
 package cn.ma.cei.generator.langs.java;
 
+import cn.ma.cei.generator.CEIPath;
 import cn.ma.cei.generator.builder.ExchangeBuilder;
 import cn.ma.cei.generator.builder.ModelBuilder;
 import cn.ma.cei.generator.builder.RestfulClientBuilder;
@@ -37,16 +38,16 @@ public class JavaExchangeBuilder extends ExchangeBuilder {
         Reference.setupBuildinVariableType(RestfulResponse.typeName, "RestfulResponse", "cn.ma.cei.sdk.impl.RestfulResponse");
         Reference.setupBuildinVariableType(RestfulConnection.typeName, "RestfulConnection", "cn.ma.cei.sdk.impl.RestfulConnection");
         Reference.setupBuildinVariableType(JsonWrapper.typeName, "JsonWrapper", "cn.ma.cei.sdk.impl.JsonWrapper");
-        
-        File workingFolder = Environment.getWorkingFolder();
-        File exchangeFolder = new File(workingFolder.getPath() + File.separator + "src/main/java/cn/ma/cei/sdk/exchanges" + File.separator + exchangeName);
+
+        CEIPath workingFolder = Environment.getWorkingFolder();
+        CEIPath exchangeFolder = CEIPath.appendPath(workingFolder, "src", "main", "java", "cn", "ma", "cei", "sdk", "exchanges", exchangeName);
         exchangeFolder.mkdirs();
         Environment.setWorkingFolder(exchangeFolder);
-        
-        File modelFile = new File(exchangeFolder.getPath() + File.separator + "models");
-        modelFile.mkdirs();
-        File serviceFile = new File(exchangeFolder.getPath() + File.separator + "services");
-        serviceFile.mkdirs();
+
+        CEIPath modelFileFolder = CEIPath.appendPath(exchangeFolder, "models");
+        modelFileFolder.mkdirs();
+        CEIPath serviceFileFolder = CEIPath.appendPath(exchangeFolder, "services");
+        serviceFileFolder.mkdirs();
     }
 
     @Override

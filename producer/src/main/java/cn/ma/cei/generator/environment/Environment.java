@@ -6,7 +6,7 @@
 package cn.ma.cei.generator.environment;
 
 import cn.ma.cei.exception.CEIException;
-import java.io.File;
+import cn.ma.cei.generator.CEIPath;
 
 /**
  *
@@ -21,18 +21,18 @@ public class Environment {
         NA,
     }
 
-    private static File workingFolder = new File("C:\\dev\\cei\\framework");
+    private static CEIPath workingFolder = null;
     private static String currentExchange = "";
     private static Language currentLanguage = Language.NA;
 
-    public static void setWorkingFolder(File folder) {
+    public static void setWorkingFolder(CEIPath folder) {
         if (!folder.exists()) {
             throw new CEIException("Folder invalid");
         }
         Environment.workingFolder = folder;
     }
 
-    public static File getWorkingFolder() {
+    public static CEIPath getWorkingFolder() {
         return workingFolder;
     }
 

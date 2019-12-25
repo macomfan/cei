@@ -1,5 +1,6 @@
 package cn.ma.cei.generator.langs.java;
 
+import cn.ma.cei.generator.CEIPath;
 import cn.ma.cei.generator.environment.Variable;
 import cn.ma.cei.generator.environment.VariableType;
 import cn.ma.cei.generator.builder.ModelBuilder;
@@ -22,7 +23,8 @@ public class JavaModelBuilder extends ModelBuilder {
 
     @Override
     public void endModel() {
-        javaClass.build(new File(Environment.getWorkingFolder().getPath() + File.separator + "models"));
+        CEIPath modelFileFolder = CEIPath.appendPath(Environment.getWorkingFolder(), "models");
+        javaClass.build(modelFileFolder);
     }
 
     @Override

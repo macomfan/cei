@@ -3,6 +3,7 @@ package cn.ma.cei;
 import cn.ma.cei.finalizer.Finalizer;
 import cn.ma.cei.generator.BuildExchange;
 import cn.ma.cei.generator.BuildSDK;
+import cn.ma.cei.generator.CEIPath;
 import cn.ma.cei.generator.environment.Environment;
 import cn.ma.cei.generator.langs.cpp.CppExchangeBuilder;
 import cn.ma.cei.generator.langs.cpp.CppFramework;
@@ -39,6 +40,15 @@ public class main {
     }
     
     public static void main(String[] args) throws NoSuchFieldException, JAXBException {
+        CEIPath testPath = new CEIPath(CEIPath.Type.FILE, "C:\\dev\\test\\test.txt");
+        CEIPath newPath = new CEIPath(CEIPath.Type.FILE, "C:\\dev\\test\\new.txt");
+        CEIPath newPath1 = new CEIPath(CEIPath.Type.FOLDER, "C:\\dev\\test\\newfolder");
+        testPath.copyTo(newPath);
+        testPath.copyTo(newPath1);
+
+        CEIPath srcFolder = new CEIPath(CEIPath.Type.FOLDER, "C:\\dev\\test\\");
+        CEIPath copyto = new CEIPath(CEIPath.Type.FOLDER, "C:\\dev\\test_bak");
+        srcFolder.copyTo(copyto);
         D1<Integer> di = new D1<>();
         D2<String> ds = new D2<>();
         di.aaa = "aaa";
@@ -86,7 +96,7 @@ public class main {
 //        });
 //        code.appendln("}");
         JAXBWrapper wrapper = new JAXBWrapper();
-        List<xSDK> sdks = wrapper.loadFromFolder("C:\\dev\\cei\\config", xSDK.class);
+        List<xSDK> sdks = wrapper.loadFromFolder("C:\\dev\\cei\\exchanges", xSDK.class);
         Finalizer finalizer = new Finalizer();
         finalizer.addSDK(sdks);
         List<xSDK> finalSDKs = finalizer.finalizeSDK();
