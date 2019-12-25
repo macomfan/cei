@@ -57,7 +57,7 @@ public class BuildSDK {
         
         Framework framework = frameworks.get(language);
         
-        Environment.setWorkingFolder(CEIPath.appendPath(frameworkPath, framework.getFrameworkName()));
+        Environment.setWorkingFolder(CEIPath.appendPath(buildFolder, framework.getFrameworkName()));
         
         sdks.forEach((sdk) -> {
             BuildExchange.build(sdk, framework.getExchangeBuilder());
