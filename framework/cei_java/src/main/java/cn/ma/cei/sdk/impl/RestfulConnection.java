@@ -10,14 +10,13 @@ public class RestfulConnection {
 
     }
 
-    public RestfulResponse query(RestfulRequest restfulRequest) {
+    public static RestfulResponse query(RestfulRequest restfulRequest) {
         try {
-            Request request = null;
             Request.Builder builder = new Request.Builder();
-            String url = restfulRequest.url + restfulRequest.target;
+            String url = restfulRequest.getUrl() + restfulRequest.getTarget() + restfulRequest.buildQueryString();
             builder.headers(buildHeaders(restfulRequest));
             builder.url(url);
-            switch (restfulRequest.method) {
+            switch (restfulRequest.getMethod()) {
                 case GET: {
                     builder.get();
                     break;
@@ -26,15 +25,15 @@ public class RestfulConnection {
                     break;
             }
             Response response = client_.newCall(builder.build()).execute();
-            System.out.println(response.body().string());
-            return new RestfulResponse();
+            //System.out.println(response.body().string());
+            return new RestfulResponse(response);
         } catch (Exception e) {
 
         }
-        return new RestfulResponse();
+        return null;
     }
 
-    private Headers buildHeaders(RestfulRequest restfulRequest) {
+    private static Headers buildHeaders(RestfulRequest restfulRequest) {
         Headers.Builder builder = new Headers.Builder();
         for (Pair<String, String> item: restfulRequest.getHeaders()) {
             builder.add(item.getKey(), item.getValue());

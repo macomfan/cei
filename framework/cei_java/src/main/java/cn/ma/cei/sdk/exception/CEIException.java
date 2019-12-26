@@ -3,12 +3,14 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package cn.ma.cei.sdk.impl;
+package cn.ma.cei.sdk.exception;
 
 /**
  *
  * @author u0151316
  */
-public class RawData {
-    
+public class CEIException extends RuntimeException {
+    public CEIException(String errMsg) {
+        super(errMsg);
+    }
 }
