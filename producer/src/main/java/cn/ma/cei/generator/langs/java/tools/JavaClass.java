@@ -25,7 +25,8 @@ public class JavaClass {
 
     private VariableList privateMemberList = new VariableList();
     private VariableList publicMemberList = new VariableList();
-    private Set<VariableType> importList = new HashSet<>();
+    //private Set<VariableType> importList = new HashSet<>();
+    private Set<String> importList = new HashSet<>();
     private List<JavaCode> methodList = new LinkedList<>();
 
     JavaCode code = new JavaCode();
@@ -61,7 +62,11 @@ public class JavaClass {
     }
 
     public void addReference(VariableType type) {
-        importList.add(type);
+        if (type.isGeneric()) {
+            importList.addAll(type.getReferences());
+        } else {
+            importList.add(type.getReference());
+        }
     }
 
     private void writeMethods(JavaCode code) {
@@ -74,22 +79,11 @@ public class JavaClass {
     private void writeReference(JavaCode code) {
         code.appendPackage(packageName);
         code.endln();
-        for (VariableType type : importList) {
-            if (type.isGeneric()) {
-                for (VariableType generic : type.getGenericList()) {
-                    String typename = Reference.getReference(generic);
-                    if (!typename.equals(JavaKeyword.NO_REF)) {
-                        code.appendImport(typename);
-                    }
-                }
-            } else {
-                String typename = Reference.getReference(type);
-                if (!typename.equals(JavaKeyword.NO_REF)) {
-                    code.appendImport(typename);
-                }
+        importList.forEach((item) -> {
+            if (!item.equals(JavaKeyword.NO_REF)) {
+                code.appendImport(item);
             }
-
-        }
+        });
         code.endln();
     }
 

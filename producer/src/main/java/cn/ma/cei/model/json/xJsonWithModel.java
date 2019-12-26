@@ -13,6 +13,14 @@ public abstract class xJsonWithModel extends xJsonType {
     public String model;
 
     @XmlAnyElement(lax = true)
-    @XmlAnyElementTypes({xJsonString.class, xJsonObjectArray.class, xJsonObject.class, xJsonStringArray.class})
+    @XmlAnyElementTypes({
+        xJsonString.class,
+        xJsonInteger.class,
+        xJsonLong.class,
+        xJsonBoolean.class,
+        xJsonDecimal.class,
+        xJsonObjectArray.class,
+        xJsonObject.class,
+        xJsonStringArray.class})
     public List<xJsonType> itemList;
 }

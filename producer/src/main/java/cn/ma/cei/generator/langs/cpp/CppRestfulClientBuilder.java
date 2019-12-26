@@ -12,8 +12,7 @@ public class CppRestfulClientBuilder extends RestfulClientBuilder {
         this.exchangeName = exchangeName;
     }
     
-    @Override
-    public void startClient(String clientName) {
+    public void startClient(String clientName, String url) {
         cppClass = new CppClass(exchangeName, clientName);
     }
 

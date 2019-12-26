@@ -15,13 +15,17 @@ public abstract class JsonParserBuilder {
 
     public abstract void getJsonInteger(Variable to, Variable jsonObject, String itemName);
     
+    public abstract void getJsonLong(Variable to, Variable jsonObject, String itemName);
+    
+    public abstract void getJsonBoolean(Variable to, Variable jsonObject, String itemName);
+    
+    public abstract void getJsonDecimal(Variable to, Variable jsonObject, String itemName);
+    
     public abstract void getJsonStringArray(Variable to, Variable jsonObject, String itemName);
 
-    public abstract void getJsonObject(Variable jsonObject, Variable parentJsonObject, String itemName);
+    public abstract void getJsonObject(Variable to, Variable parentModel, Variable jsonObject, Variable parentJsonObject, String itemName);
 
-    public abstract void getJsonObjectArray(Variable jsonObject, Variable parentJsonObject, String itemName);
-
-    public abstract void startJsonObjectArrayLoop(Variable eachItemJsonObject, Variable parentJsonObject);
+    public abstract void startJsonObjectArrayLoop(Variable eachItemJsonObject, Variable parentJsonObject, String itemName);
 
     /***
      * parentModel.to.add(model)

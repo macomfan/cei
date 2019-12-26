@@ -26,14 +26,14 @@ public class BuildJsonParser {
 
     private void check(Variable to, xJsonType jsonItem) {
         if (jsonItem instanceof xJsonString) {
-            
+
         } else if (jsonItem instanceof xJsonInteger) {
-            
+
         } else if (jsonItem instanceof xJsonStringArray) {
-            
+
         }
     }
-    
+
     private static Variable getToVariable(Variable parentModel, xJsonType jsonItem) {
         if (jsonItem.to == null || jsonItem.to.equals("")) {
             return null;
@@ -65,6 +65,12 @@ public class BuildJsonParser {
                 context.jsonParserBuilder.getJsonString(to, context.parentJsonObject, context.jsonItem.from);
             } else if (context.jsonItem instanceof xJsonInteger) {
                 context.jsonParserBuilder.getJsonInteger(to, context.parentJsonObject, context.jsonItem.from);
+            } else if (context.jsonItem instanceof xJsonLong) {
+                context.jsonParserBuilder.getJsonLong(to, context.parentJsonObject, context.jsonItem.from);
+            } else if (context.jsonItem instanceof xJsonBoolean) {
+                context.jsonParserBuilder.getJsonBoolean(to, context.parentJsonObject, context.jsonItem.from);
+            } else if (context.jsonItem instanceof xJsonDecimal) {
+                context.jsonParserBuilder.getJsonDecimal(to, context.parentJsonObject, context.jsonItem.from);
             } else if (context.jsonItem instanceof xJsonStringArray) {
                 context.jsonParserBuilder.getJsonStringArray(to, context.parentJsonObject, context.jsonItem.from);
             }
@@ -95,11 +101,10 @@ public class BuildJsonParser {
 
     private static Variable processJsonObjectArray(JsonItemContext context) {
         xJsonObjectArray jsonWithModel = (xJsonObjectArray) context.jsonItem;
-        Variable newJsonObject = defineJsonObject(context);
-        context.jsonParserBuilder.getJsonObjectArray(newJsonObject, context.parentJsonObject, jsonWithModel.from);
+        Variable newJsonObject = context.parentJsonObject;
 
         Variable eachItemJsonObject = VariableFactory.createLocalVariable(JsonWrapper.getType(), "item");
-        context.jsonParserBuilder.startJsonObjectArrayLoop(eachItemJsonObject, newJsonObject);
+        context.jsonParserBuilder.startJsonObjectArrayLoop(eachItemJsonObject, newJsonObject, jsonWithModel.from);
 
         Variable newModel = defineModel(context);
 
@@ -124,13 +129,18 @@ public class BuildJsonParser {
     private static Variable processJsonObject(JsonItemContext context) {
         xJsonObject jsonWithModel = (xJsonObject) context.jsonItem;
         Variable newJsonObject = defineJsonObject(context);
-        context.jsonParserBuilder.getJsonObject(newJsonObject, context.parentJsonObject, jsonWithModel.from);
+
+        Variable to = getToVariable(context.parentModel, context.jsonItem);
+        if (to == null) {
+            return null;
+        }
 
         Variable newModel = context.parentModel;
-
         if (jsonWithModel.model != null) {
             newModel = defineModel(context);
         }
+
+        context.jsonParserBuilder.getJsonObject(to, newModel, newJsonObject, context.parentJsonObject, jsonWithModel.from);
 
         for (xJsonType item : jsonWithModel.itemList) {
             JsonItemContext newContext = new JsonItemContext();
@@ -140,11 +150,6 @@ public class BuildJsonParser {
             newContext.jsonParserBuilder = context.jsonParserBuilder;
             newContext.method = context.method;
             processJsonItem(newContext);
-        }
-
-        Variable to = getToVariable(context.parentModel, context.jsonItem);
-        if (to == null) {
-            return null;
         }
 
         return null;

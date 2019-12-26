@@ -17,7 +17,15 @@ public class xModel implements IDependenceNode {
     public String name;
 
     @XmlAnyElement(lax = true)
-    @XmlAnyElementTypes({xString.class, xBoolean.class, xInt.class, xObject.class, xObjectList.class, xStringList.class})
+    @XmlAnyElementTypes({
+        xString.class,
+        xBoolean.class,
+        xInt.class,
+        xLong.class,
+        xDecimal.class,
+        xObject.class,
+        xObjectList.class,
+        xStringList.class})
     public List<xType> memberList;
 
     @Override

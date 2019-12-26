@@ -10,11 +10,12 @@ import cn.ma.cei.generator.langs.java.tools.JavaMethod;
 
 public class JavaRestfulInterfaceBuilder extends RestfulInterfaceBuilder {
 
-    private JavaMethod method = new JavaMethod();
+    private JavaMethod method;
     private JavaClass javaClass;
 
     public JavaRestfulInterfaceBuilder(JavaClass javaClass) {
         this.javaClass = javaClass;
+        method = new JavaMethod(javaClass);
     }
 
     @Override
@@ -39,7 +40,7 @@ public class JavaRestfulInterfaceBuilder extends RestfulInterfaceBuilder {
 
     @Override
     public void defineRequest(Variable request) {
-        method.getCode().appendStatementWordsln(request.type.getDescriptor(), request.nameDescriptor, "=", "new", request.type.getDescriptor() + "(this.options)");
+        method.getCode().appendStatementWordsln(request.type.getDescriptor(), request.nameDescriptor, "=", "new", request.type.getDescriptor() + "(this.option)");
     }
 
     @Override
@@ -53,13 +54,13 @@ public class JavaRestfulInterfaceBuilder extends RestfulInterfaceBuilder {
     }
 
     @Override
-    public void invokeConnection(Variable request, Variable response) {
-        method.getCode().appendStatementWordsln(response.type.getDescriptor(), response.nameDescriptor, "=", "RestfulConnection.connect(" + request.nameDescriptor + ")");
+    public void invokeQuery(Variable request, Variable response) {
+        method.getCode().appendStatementWordsln(response.type.getDescriptor(), response.nameDescriptor, "=", "RestfulConnection.query(" + request.nameDescriptor + ")");
     }
 
     @Override
     public void setRequestMethod(Variable request, String requestMethodDescriptor) {
-        method.getCode().appendStatementWordsln(request.nameDescriptor + ".method", "=", requestMethodDescriptor);
+        method.getCode().appendStatementWordsln(request.nameDescriptor + ".setMethod(" + requestMethodDescriptor + ")");
     }
 
     @Override
@@ -75,5 +76,10 @@ public class JavaRestfulInterfaceBuilder extends RestfulInterfaceBuilder {
     @Override
     public void onAddReference(VariableType variableType) {
         javaClass.addReference(variableType);
+    }
+
+    @Override
+    public void setUrl(Variable request) {
+        method.getCode().appendStatementWordsln(request.nameDescriptor + ".setUrl(this.option.url)");
     }
 }

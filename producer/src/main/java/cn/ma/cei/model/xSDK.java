@@ -9,6 +9,7 @@ import java.util.List;
 
 @XmlRootElement(name = "sdk")
 public class xSDK extends xElement {
+
     @XmlElement(name = "restful")
     public List<xRestful> restfulList;
 
@@ -20,4 +21,7 @@ public class xSDK extends xElement {
 
     @XmlElement(name = "model")
     public List<xModel> modelList;
+
+    @XmlElement(name = "signature")
+    public List<xSignature> signatureList;
 }

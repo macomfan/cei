@@ -3,7 +3,6 @@ package cn.ma.cei.generator.builder;
 import cn.ma.cei.generator.environment.Variable;
 import cn.ma.cei.generator.environment.VariableList;
 import cn.ma.cei.generator.environment.VariableType;
-import cn.ma.cei.model.xInterface;
 
 public abstract class RestfulInterfaceBuilder extends MethodBuilder {
 
@@ -26,7 +25,9 @@ public abstract class RestfulInterfaceBuilder extends MethodBuilder {
 
     public abstract void addToQueryStringByHardcode(Variable request, String queryStringName, String value);
 
-    public abstract void invokeConnection(Variable request, Variable response);
+    public abstract void invokeQuery(Variable request, Variable response);
+    
+    public abstract void setUrl(Variable request);
 
     public abstract void setRequestMethod(Variable request, String requestMethodDescriptor);
 

@@ -42,6 +42,7 @@ public class BuildRestfulInterface {
 
         builder.defineMethod(returnType, restIf.name, inputVariableList, () -> {
             builder.defineRequest(request);
+            builder.setUrl(request);
             builder.setRequestTarget(request, restIf.request.target);
             if (restIf.request.method.equals("get")) {
                 builder.setRequestMethod(request, Constant.requestMethod().tryGet(RestfulInterfaceBuilder.RequestMethod.GET));
@@ -50,7 +51,7 @@ public class BuildRestfulInterface {
             }
             makeQueryString(restIf.request.queryStrings, builder);
             builder.onAddReference(RestfulConnection.getType());
-            builder.invokeConnection(request, response);
+            builder.invokeQuery(request, response);
             Variable returnVariable = BuildResponse.build(restIf.response, response, builder);
             builder.returnResult(returnVariable);
         });

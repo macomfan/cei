@@ -61,6 +61,20 @@ public class VariableType {
         return typeReference;
     }
 
+    public List<String> getReferences() {
+        if (typeReference == null) {
+            typeReference = Reference.getReference(this);
+        }
+        List<String> res = new LinkedList<>();
+        res.add(typeReference);
+        if (isGeneric()) {
+            genericList.forEach((item) -> {
+                res.addAll(item.getReferences());
+            });
+        }
+        return res;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {

@@ -33,7 +33,6 @@ public class BuildSDK {
         if (frameworks.containsKey(language)) {
             throw new CEIException("[BuildSDK] Framework duplicated");
         }
-        
         frameworks.put(language, framework);
     }
 
@@ -42,26 +41,29 @@ public class BuildSDK {
             throw new CEIException("[BuildSDK] The framework does not exist");
         }
 
-        CEIPath folder = new CEIPath(CEIPath.Type.FOLDER, outputFolder);
-        if (!folder.exists()) {
-            throw new CEIException("[BuildSDK] The output folder does not exist");
-        }
-        SimpleDateFormat df = new SimpleDateFormat("yyyyMMdd_HHmmssSSS");
-        String date = df.format(new Date());
-        
-        CEIPath buildFolder = CEIPath.appendPath(folder, date);
+//        CEIPath folder = new CEIPath(CEIPath.Type.FOLDER, outputFolder);
+//        if (!folder.exists()) {
+//            throw new CEIException("[BuildSDK] The output folder does not exist");
+//        }
+//        SimpleDateFormat df = new SimpleDateFormat("yyyyMMdd_HHmmssSSS");
+//        String date = df.format(new Date());
+
+//        CEIPath buildFolder = CEIPath.appendPath(folder, date);
+//        buildFolder.mkdirs();
+//        CEIPath buildFolder = CEIPath.appendPath(folder, date);
+//        buildFolder.mkdirs();
+//        CEIPath frameworkPath = new CEIPath(CEIPath.Type.FOLDER, "C:\\dev\\cei\\framework");
+//        frameworkPath.copyTo(buildFolder);
+
+        CEIPath buildFolder = new CEIPath(CEIPath.Type.FOLDER, "C:\\dev\\cei\\framework");
         buildFolder.mkdirs();
 
-        CEIPath frameworkPath = new CEIPath(CEIPath.Type.FOLDER, "C:\\dev\\cei\\framework");
-        frameworkPath.copyTo(buildFolder);
-        
         Framework framework = frameworks.get(language);
-        
+
         Environment.setWorkingFolder(CEIPath.appendPath(buildFolder, framework.getFrameworkName()));
-        
+
         sdks.forEach((sdk) -> {
             BuildExchange.build(sdk, framework.getExchangeBuilder());
         });
     }
-
 }

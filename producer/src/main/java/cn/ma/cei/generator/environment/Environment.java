@@ -22,6 +22,7 @@ public class Environment {
     }
 
     private static CEIPath workingFolder = null;
+    private static CEIPath exchangeFolder = null;
     private static String currentExchange = "";
     private static Language currentLanguage = Language.NA;
 
@@ -34,6 +35,17 @@ public class Environment {
 
     public static CEIPath getWorkingFolder() {
         return workingFolder;
+    }
+
+    public static void setExchangeFolder(CEIPath folder) {
+        if (!folder.exists()) {
+            throw new CEIException("Folder invalid");
+        }
+        Environment.exchangeFolder = folder;
+    }
+
+    public static CEIPath getExchangeFolder() {
+        return exchangeFolder;
     }
 
     public static String getCurrentExchange() {

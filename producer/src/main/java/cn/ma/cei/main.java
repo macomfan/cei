@@ -40,15 +40,6 @@ public class main {
     }
     
     public static void main(String[] args) throws NoSuchFieldException, JAXBException {
-        CEIPath testPath = new CEIPath(CEIPath.Type.FILE, "C:\\dev\\test\\test.txt");
-        CEIPath newPath = new CEIPath(CEIPath.Type.FILE, "C:\\dev\\test\\new.txt");
-        CEIPath newPath1 = new CEIPath(CEIPath.Type.FOLDER, "C:\\dev\\test\\newfolder");
-        testPath.copyTo(newPath);
-        testPath.copyTo(newPath1);
-
-        CEIPath srcFolder = new CEIPath(CEIPath.Type.FOLDER, "C:\\dev\\test\\");
-        CEIPath copyto = new CEIPath(CEIPath.Type.FOLDER, "C:\\dev\\test_bak");
-        srcFolder.copyTo(copyto);
         D1<Integer> di = new D1<>();
         D2<String> ds = new D2<>();
         di.aaa = "aaa";
