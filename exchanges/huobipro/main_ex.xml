@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<sdk exchange="Huobi" document="https://huobiapi.github.io/docs/spot/v1/en/">
+<sdk exchange="huobipro" document="https://huobiapi.github.io/docs/spot/v1/en/">
 
     <model name="Symbols">
         <string name="status"/>
@@ -41,7 +41,7 @@
         <append_query_string key="SignatureMethod" value="HmacSHA256"/>
         <append_query_string key="SignatureVersion" value="2"/>
         <append_query_string key="timestamp" value="{timestamp}"/>
-        <get_query_sting_list output="queryStringList"/>
+        <get_query_sting_list output="{queryStringList}"/>
         <sort_list output="{queryStringList}" input="{output}" order="ASC"/>
         <combine_string_list output="{newurlbuffer}" input="{queryStringList}" separator="&amp;"/>
         <get_method output="{method}" uppercase="true"/>
@@ -166,7 +166,7 @@
                 <string name="amount" mandatory="true"/>
                 <string name="price"/>
             </inputs>
-            <request method="post" target="/placeOrder">
+            <request method="post" target="/placeOrder" signature="restful">
                 <post_body>
                     <json_builder>
                         <json_string name="account-id" value="{account_id}"/>

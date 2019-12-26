@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<sdk exchange="bittrex" document="https://bittrex.github.io/api/v1-1">
+    <model name="Markets">
+        <string name="success"/>
+		<string name="message"/>
+		<object_list name="result" refer="MarketInfo"/>
+    </model>
+	
+	<model name="MarketInfo">
+		<string name="MarketCurrency"/>
+		<string name="BaseCurrency"/>
+		<string name="MarketCurrencyLong"/>
+		<string name="BaseCurrencyLong"/>
+		<decimal name="MinTradeSize"/>
+		<string name="MarketName"/>
+		<boolean name="IsActive"/>
+		<boolean name="IsRestricted"/>
+		<string name="Created"/>
+		<string name="Notice"/>
+		<boolean name="IsSponsored"/>
+		<string name="LogoUrl"/>
+	</model>
+	
+	<restful client_name="bittrexClient" url="https://api.bittrex.com/api/v1.1">
+		<interface name="getMarkets">
+            <request method="get" target="/public/getmarkets"/>
+            <response type="model">
+                <json_parser model="Markets">
+					<json_string from="success" to="{success}"/>
+					<json_string from="message" to="{message}"/>
+                    <json_array from="result" to="{result}" model="MarketInfo">
+						<json_string from="MarketCurrency" to="{MarketCurrency}"/>
+						<json_string from="BaseCurrency" to="{BaseCurrency}"/>
+						<json_string from="MarketCurrencyLong" to="{MarketCurrencyLong}"/>
+						<json_string from="BaseCurrencyLong" to="{BaseCurrencyLong}"/>
+						<json_decimal from="MinTradeSize" to="{MinTradeSize}"/>
+						<json_string from="MarketName" to="{MarketName}"/>
+						<json_boolean from="IsActive" to="{IsActive}"/>
+						<json_boolean from="IsRestricted" to="{IsRestricted}"/>
+						<json_string from="Created" to="{Created}"/>
+						<json_string from="Notice" to="{Notice}"/>
+						<json_boolean from="IsSponsored" to="{IsSponsored}"/>
+						<json_string from="LogoUrl" to="{LogoUrl}"/>
+                    </json_array>
+                </json_parser>
+            </response>
+		</interface>
+	</restful>
+</sdk>
