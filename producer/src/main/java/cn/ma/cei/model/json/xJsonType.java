@@ -11,4 +11,7 @@ public abstract class xJsonType {
 
     @XmlAttribute(name = "to")
     public String to;
+    
+    @XmlAttribute(name = "copy")
+    public String copy;
 }

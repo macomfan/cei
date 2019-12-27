@@ -38,6 +38,7 @@ public class BuildResponse {
             return BuildJsonParser.build(response.jsonParser, responseVariable, jsonParserBuilder, interfaceBuilder);
         }
         //BuildJsonParser.build(response.jsonParser, );
-        return null;
+        // TODO
+        return responseVariable;
     }
 }

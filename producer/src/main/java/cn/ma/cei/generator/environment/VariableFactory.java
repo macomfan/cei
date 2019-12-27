@@ -36,6 +36,10 @@ public class VariableFactory {
         return finalName;
     }
 
+    public static boolean isModel(VariableType type) {
+        return modelInfo.get().containsKey1(type);
+    }
+
     public static VariableType variableType(String name, VariableType... argsTypes) {
         String finalName = name;
         for (VariableType argsType : argsTypes) {
@@ -77,8 +81,12 @@ public class VariableFactory {
     }
 
     public static Variable queryMemberVariable(Variable parentVariable, String name) {
-        VariableType memberType = modelInfo.get().get(parentVariable.type, name);
-        return createVariable(memberType, name, Variable.Position.REFER, parentVariable);
+        try {
+            VariableType memberType = modelInfo.get().tryGet(parentVariable.type, name);
+            return createVariable(memberType, name, Variable.Position.REFER, parentVariable);
+        } catch (CEIException e) {
+            throw new CEIException("[VariableFactory] The model is not defined");
+        }
     }
 
     private static Variable createVariable(VariableType type, String name, Variable.Position position, Variable parentVariable) {

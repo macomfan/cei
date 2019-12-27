@@ -38,6 +38,28 @@ public class VariableType {
         return !(type == null || type.equals(""));
     }
 
+    public boolean equalTo(VariableType obj) {
+        return this.equals(obj);
+    }
+
+    public boolean equalTo(String typeName) {
+        return type.equals(typeName);
+    }
+
+    public boolean isObject() {
+        return VariableFactory.isModel(this);
+    }
+
+    public boolean isObjectList() {
+        if (!type.equals("array")) {
+            return false;
+        }
+        if (genericList.isEmpty()) {
+            return false;
+        }
+        return VariableFactory.isModel(genericList.get(0));
+    }
+
     public String getDescriptor() {
         if (typeDescriptor == null) {
             if (!isGeneric()) {

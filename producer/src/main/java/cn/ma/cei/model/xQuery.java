@@ -5,9 +5,13 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement(name = "query")
 public class xQuery {
+
     @XmlAttribute(name = "name")
     public String name;
 
     @XmlAttribute(name = "value")
     public String value;
+
+    @XmlAttribute(name = "copy")
+    public String copy;
 }

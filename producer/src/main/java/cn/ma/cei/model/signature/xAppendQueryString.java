@@ -6,6 +6,7 @@
 package cn.ma.cei.model.signature;
 
 import cn.ma.cei.model.base.xSignatureItem;
+import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -14,5 +15,9 @@ import javax.xml.bind.annotation.XmlRootElement;
  */
 @XmlRootElement(name = "append_query_string")
 public class xAppendQueryString extends xSignatureItem {
+    @XmlAttribute(name = "key")
+    public String key;
     
+    @XmlAttribute(name = "value")
+    public String value;
 }

@@ -5,10 +5,17 @@
  */
 package cn.ma.cei.generator.builder;
 
+import cn.ma.cei.generator.environment.VariableType;
+
 /**
  *
  * @author U0151316
  */
-public class SignatureBuilder {
+public class SignatureBuilder extends MethodBuilder {
+
+    @Override
+    public void onAddReference(VariableType variableType) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
     
 }

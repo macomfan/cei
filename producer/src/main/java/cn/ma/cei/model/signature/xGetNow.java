@@ -6,6 +6,7 @@
 package cn.ma.cei.model.signature;
 
 import cn.ma.cei.model.base.xSignatureItem;
+import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -14,5 +15,9 @@ import javax.xml.bind.annotation.XmlRootElement;
  */
 @XmlRootElement(name = "get_now")
 public class xGetNow extends xSignatureItem {
+    @XmlAttribute(name = "output")
+    public String output;
     
+    @XmlAttribute(name = "format")
+    public String format;
 }

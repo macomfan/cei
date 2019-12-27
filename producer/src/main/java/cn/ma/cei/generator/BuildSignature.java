@@ -25,4 +25,8 @@ public class BuildSignature {
             }
         });
     }
+    
+    public void processGetNow(xGetNow getNow, SignatureBuilder builder) {
+        
+    }
 }
