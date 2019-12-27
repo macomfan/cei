@@ -4,6 +4,10 @@ import cn.ma.cei.exception.CEIException;
 import cn.ma.cei.generator.builder.ExchangeBuilder;
 import cn.ma.cei.generator.builder.ModelBuilder;
 import cn.ma.cei.generator.builder.RestfulClientBuilder;
+import cn.ma.cei.generator.buildin.RestfulOption;
+import cn.ma.cei.generator.environment.Variable;
+import cn.ma.cei.generator.environment.VariableFactory;
+import cn.ma.cei.model.types.xString;
 import cn.ma.cei.model.xSDK;
 
 public class BuildExchange {
@@ -12,6 +16,9 @@ public class BuildExchange {
         if (builder == null) {
             throw new CEIException("[BuildExchange] ExchangeBuilder is null");
         }
+
+        
+        
         builder.startExchange(sdk.exchange);
 
         sdk.modelList.forEach((model) -> {

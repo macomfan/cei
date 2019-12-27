@@ -3,14 +3,15 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package cn.ma.cei.model.base;
-
+package cn.ma.cei.utils;
 
 /**
  *
- * @author U0151316
+ * @author u0151316
  */
+public class Checker {
 
-public class xSignatureItem {
-    
+    public static boolean isEmpty(String value) {
+        return (value == null || "".equals(value));
+    }
 }

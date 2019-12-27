@@ -36,9 +36,9 @@ public class BuildJsonParser {
             if (variableName == null) {
                 throw new CEIException("[BuildJsonParser] To must be Variable");
             }
-            return VariableFactory.queryMemberVariable(parentModel, variableName);
+            return parentModel.queryMember(variableName);
         } else if (jsonItem.copy != null && !jsonItem.copy.equals("")) {
-            return VariableFactory.queryMemberVariable(parentModel, jsonItem.copy);
+            return parentModel.queryMember(jsonItem.copy);
         }
         return null;
     }

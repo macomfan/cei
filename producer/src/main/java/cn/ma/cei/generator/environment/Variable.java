@@ -40,4 +40,8 @@ public class Variable {
         this.type = type;
         this.position = position;
     }
+    
+    public Variable queryMember(String name) {
+        return VariableFactory.queryMemberVariable(this, name);
+    }
 }

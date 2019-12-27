@@ -10,6 +10,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class xString extends xType {
     public final static String typeName = "string";
 
+    public final static xString inst = new xString();
     @Override
     public VariableType getType() {
         return VariableFactory.variableType(typeName);

@@ -25,6 +25,9 @@ public class VariableFactory {
 
     private static final VariableTypeMap variableTypeMap = new VariableTypeMap();
 
+    /***
+     * ModelType - MemberName - MemberType
+     */
     private static final EnvironmentData<SecondLevelMap<VariableType, String, VariableType>> modelInfo = new EnvironmentData<>();
 
     public static String genericTypeName(String name, String... names) {
