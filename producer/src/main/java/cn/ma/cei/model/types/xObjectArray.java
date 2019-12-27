@@ -8,13 +8,13 @@ import cn.ma.cei.model.base.xReferable;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
-@XmlRootElement(name = "object_list")
-public class xObjectList extends xReferable {
+@XmlRootElement(name = "object_array")
+public class xObjectArray extends xReferable {
     @Override
     public VariableType getType() {
         if (refer == null || refer.equals("")) {
             throw new CEIException("refer is null");
         }
-        return VariableFactory.variableType("list", VariableFactory.variableType(refer));
+        return VariableFactory.variableType("array", VariableFactory.variableType(refer));
     }
 }

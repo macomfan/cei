@@ -35,7 +35,7 @@ public class CppExchangeBuilder extends ExchangeBuilder {
         Reference.setupBuildinVariableType(RestfulRequest.typeName, "RestfulRequest", "\"impl/RestfulRequest.h\"");
         Reference.setupBuildinVariableType(RestfulResponse.typeName, "RestfulResponse", "\"impl/RestfulResponse.h\"");
         Reference.setupBuildinVariableType(RestfulConnection.typeName, "RestfulConnection", "\"impl/RestfulConnection.h\"");
-        Reference.setupBuildinVariableType("list", "std::vevtor", "<vector>");
+        Reference.setupBuildinVariableType("array", "std::vevtor", "<vector>");
     }
 
     @Override

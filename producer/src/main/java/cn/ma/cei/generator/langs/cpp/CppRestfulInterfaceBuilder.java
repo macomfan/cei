@@ -82,4 +82,14 @@ public class CppRestfulInterfaceBuilder extends RestfulInterfaceBuilder {
     public void setUrl(Variable request) {
         //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
+
+    @Override
+    public void addHeaderByVariable(Variable request, String tag, Variable value) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void addHeaderByHardcode(Variable request, String tag, String value) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 }

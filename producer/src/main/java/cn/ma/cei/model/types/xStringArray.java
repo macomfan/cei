@@ -6,12 +6,12 @@ import cn.ma.cei.model.base.xType;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
-@XmlRootElement(name = "string_list")
-public class xStringList extends xType {
-    public final static String typeName = VariableFactory.genericTypeName("list", "string");
+@XmlRootElement(name = "string_array")
+public class xStringArray extends xType {
+    public final static String typeName = VariableFactory.genericTypeName("array", "string");
 
     @Override
     public VariableType getType() {
-        return VariableFactory.variableType("list", VariableFactory.variableType("string"));
+        return VariableFactory.variableType("array", VariableFactory.variableType("string"));
     }
 }

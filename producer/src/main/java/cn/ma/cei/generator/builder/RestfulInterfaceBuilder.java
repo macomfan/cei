@@ -18,7 +18,11 @@ public abstract class RestfulInterfaceBuilder extends MethodBuilder {
     public abstract void defineMethod(VariableType returnType, String methodDescriptor, VariableList params, MethodImplementation impl);
 
     public abstract void setRequestTarget(Variable request, String target);
+    
+    public abstract void addHeaderByVariable(Variable request, String tag, Variable value);
 
+    public abstract void addHeaderByHardcode(Variable request, String tag, String value);
+    
     public abstract void defineRequest(Variable request);
 
     public abstract void addToQueryStringByVariable(Variable request, String queryStringName, Variable variable);

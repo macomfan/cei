@@ -11,8 +11,10 @@ import cn.ma.cei.generator.buildin.RestfulRequest;
 import cn.ma.cei.generator.buildin.RestfulResponse;
 import cn.ma.cei.generator.environment.Constant;
 import cn.ma.cei.generator.environment.Naming;
+import cn.ma.cei.model.xHeader;
 import cn.ma.cei.model.xInterface;
-import cn.ma.cei.model.xQueryStrings;
+import cn.ma.cei.model.xQuery;
+import java.util.List;
 
 public class BuildRestfulInterface {
 
@@ -49,6 +51,7 @@ public class BuildRestfulInterface {
             } else if (restIf.request.method.equals("post")) {
                 builder.setRequestMethod(request, Constant.requestMethod().tryGet(RestfulInterfaceBuilder.RequestMethod.POST));
             }
+            makeHeaders(restIf.request.headers, builder);
             makeQueryString(restIf.request.queryStrings, builder);
             builder.onAddReference(RestfulConnection.getType());
             builder.invokeQuery(request, response);
@@ -59,12 +62,31 @@ public class BuildRestfulInterface {
         builder.endInterface();
     }
 
-    private static void makeQueryString(xQueryStrings queryStrings, RestfulInterfaceBuilder builder) {
-        if (queryStrings == null || queryStrings.queryList == null) {
+    private static void makeHeaders(List<xHeader> headers, RestfulInterfaceBuilder builder) {
+        if (headers == null) {
             return;
         }
         Variable request = builder.queryVariable("request");
-        queryStrings.queryList.forEach((queryString) -> {
+        headers.forEach((header) -> {
+            String value = VariableFactory.isReference(header.value);
+            if (value == null) {
+                builder.addHeaderByHardcode(request, header.tag, header.value);
+            } else {
+                Variable var = builder.queryVariable(value);
+                if (var == null) {
+                    throw new CEIException("Cannot lookup variable: " + var);
+                }
+                builder.addHeaderByVariable(request, header.tag, var);
+            }
+        });
+    }
+
+    private static void makeQueryString(List<xQuery> queryStrings, RestfulInterfaceBuilder builder) {
+        if (queryStrings == null) {
+            return;
+        }
+        Variable request = builder.queryVariable("request");
+        queryStrings.forEach((queryString) -> {
             String value = VariableFactory.isReference(queryString.value);
             if (value == null) {
                 builder.addToQueryStringByHardcode(request, queryString.name, queryString.value);

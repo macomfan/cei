@@ -6,7 +6,7 @@ import javax.xml.bind.annotation.XmlAnyElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.util.List;
 
-@XmlRootElement(name = "json_array")
+@XmlRootElement(name = "json_object_array")
 public class xJsonObjectArray extends xJsonWithModel {
 
 }

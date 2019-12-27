@@ -38,7 +38,7 @@ public class JavaExchangeBuilder extends ExchangeBuilder {
         Reference.setupBuildinVariableType(xInt.typeName, "Integer", JavaKeyword.NO_REF);
         Reference.setupBuildinVariableType(xLong.typeName, "Long", JavaKeyword.NO_REF);
         Reference.setupBuildinVariableType(xDecimal.typeName, "BigDecimal", "java.math.BigDecimal");
-        Reference.setupBuildinVariableType("list", "List", "java.util.List");
+        Reference.setupBuildinVariableType("array", "List", "java.util.List");
         Reference.setupBuildinVariableType(TheLinkedList.typeName, "LinkedList", "java.util.LinkedList");
         Reference.setupBuildinVariableType(RestfulRequest.typeName, "RestfulRequest", "cn.ma.cei.sdk.impl.RestfulRequest");
         Reference.setupBuildinVariableType(RestfulResponse.typeName, "RestfulResponse", "cn.ma.cei.sdk.impl.RestfulResponse");

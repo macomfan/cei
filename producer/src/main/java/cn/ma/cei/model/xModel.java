@@ -24,8 +24,8 @@ public class xModel implements IDependenceNode {
         xLong.class,
         xDecimal.class,
         xObject.class,
-        xObjectList.class,
-        xStringList.class})
+        xObjectArray.class,
+        xStringArray.class})
     public List<xType> memberList;
 
     @Override

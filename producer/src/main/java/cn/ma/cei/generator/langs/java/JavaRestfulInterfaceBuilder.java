@@ -82,4 +82,14 @@ public class JavaRestfulInterfaceBuilder extends RestfulInterfaceBuilder {
     public void setUrl(Variable request) {
         method.getCode().appendStatementWordsln(request.nameDescriptor + ".setUrl(this.option.url)");
     }
+
+    @Override
+    public void addHeaderByVariable(Variable request, String tag, Variable value) {
+       method.getCode().appendStatementWordsln(request.nameDescriptor + ".addHeader(" + method.getCode().toJavaString(tag) + ",", value.nameDescriptor + ")");
+    }
+
+    @Override
+    public void addHeaderByHardcode(Variable request, String tag, String value) {
+        method.getCode().appendStatementWordsln(request.nameDescriptor + ".addHeader(" + method.getCode().toJavaString(tag) + ",", method.getCode().toJavaString(value) + ")");
+    }
 }
