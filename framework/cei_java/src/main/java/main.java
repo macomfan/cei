@@ -1,4 +1,7 @@
 
+import cn.ma.cei.sdk.exchanges.huobipro.huobipro;
+
+
 //import cn.ma.cei.sdk.exchanges.binance.models.ExchangeInfo;
 //import cn.ma.cei.sdk.exchanges.bittrex.models.Markets;
 //import cn.ma.cei.sdk.exchanges.bittrex.services.BittrexClient;
@@ -13,7 +16,10 @@ public class main {
     }
 
     public static void main(String[] args) {
-
+        huobipro.services.MarketClient huobiClient = new huobipro.services.MarketClient();
+        huobipro.models.Currencies currencies = huobiClient.getCurrencies();
+        int a = 0;
+        
 //        cn.ma.cei.sdk.exchanges.binance.services.MarketClient client = new cn.ma.cei.sdk.exchanges.binance.services.MarketClient();
 //        ExchangeInfo ex = client.getExchangeInfo();
 //        int a = 0;

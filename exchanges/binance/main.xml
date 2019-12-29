@@ -4,8 +4,8 @@
     <model name="ExchangeInfo">
         <string name="timezone"/>
 		<long name="serverTime"/>
-		<object_list name="rateLimits" refer="RateLimits"/>
-        <object_list name="symbols" refer="Symbol"/>
+		<object_array name="rateLimits" refer="RateLimits"/>
+        <object_array name="symbols" refer="Symbol"/>
     </model>
 	
 	<model name="RateLimits">
@@ -22,7 +22,7 @@
 		<int name="baseAssetPrecision"/>
 		<string name="quoteAsset"/>
 		<int name="quotePrecision"/>
-		<string_list name="orderTypes"/>
+		<string_array name="orderTypes"/>
 		<boolean name="icebergAllowed"/>
 		<boolean name="ocoAllowed"/>
 	</model>
@@ -56,25 +56,25 @@
             <request method="get" target="/api/v3/exchangeInfo"/>
             <response type="model">
                 <json_parser model="ExchangeInfo">
-                    <json_string from="timezone" to="{timezone}"/>
-					<json_long from="serverTime" to="{serverTime}"/>
-					<json_array from="rateLimits" to="{rateLimits}" model="RateLimits">
-						<json_string from="rateLimitType" to="{rateLimitType}"/>
-						<json_string from="interval" to="{interval}"/>
-						<json_int from="intervalNum" to="{intervalNum}"/>
-						<json_int from="limit" to="{limit}"/>
-					</json_array>
-					<json_array from="symbols" to="{symbols}" model="Symbol">
-						<json_string from="symbol" to="{symbol}"/>
-						<json_string from="status" to="{status}"/>
-						<json_string from="baseAsset" to="{baseAsset}"/>
-						<json_int from="baseAssetPrecision" to="{baseAssetPrecision}"/>
-						<json_string from="quoteAsset" to="{quoteAsset}"/>
-						<json_int from="quotePrecision" to="{quotePrecision}"/>
-						<json_string_array from="orderTypes" to="{orderTypes}"/>
-						<json_boolean from="icebergAllowed" to="{icebergAllowed}"/>
-						<json_boolean from="ocoAllowed" to="{ocoAllowed}"/>
-					</json_array>
+                    <json_auto copy="timezone"/>
+					<json_auto copy="serverTime"/>
+					<json_auto copy="rateLimits" model="RateLimits">
+						<json_auto copy="rateLimitType"/>
+						<json_auto copy="interval"/>
+						<json_auto copy="intervalNum"/>
+						<json_auto copy="limit"/>
+					</json_auto>
+					<json_auto copy="symbols" model="Symbol">
+						<json_auto copy="symbol"/>
+						<json_auto copy="status"/>
+						<json_auto copy="baseAsset"/>
+						<json_auto copy="baseAssetPrecision"/>
+						<json_auto copy="quoteAsset"/>
+						<json_auto copy="quotePrecision"/>
+						<json_auto copy="orderTypes"/>
+						<json_auto copy="icebergAllowed"/>
+						<json_auto copy="ocoAllowed"/>
+					</json_auto>
                 </json_parser>
             </response>
         </interface>

@@ -3,7 +3,7 @@
 
     <model name="Symbols">
         <string name="status"/>
-        <object_list name="data" refer="SymbolsData"/>
+        <object_array name="data" refer="SymbolsData"/>
     </model>
 
     <model name="SymbolsData">
@@ -13,7 +13,7 @@
 
     <model name="Currencies">
         <string name="status"/>
-        <string_list name="data"/>
+        <string_array name="data"/>
     </model>
 
     <model name="LastTrade">
@@ -23,7 +23,7 @@
 
     <model name="LastTradeTick">
         <string name="ts"/>
-        <object_list name="data" refer="LastTradeData"/>
+        <object_array name="data" refer="LastTradeData"/>
     </model>
 
     <model name="LastTradeData">
@@ -41,9 +41,7 @@
         <append_query_string key="SignatureMethod" value="HmacSHA256"/>
         <append_query_string key="SignatureVersion" value="2"/>
         <append_query_string key="timestamp" value="{timestamp}"/>
-        <get_query_sting_list output="{queryStringList}"/>
-        <sort_list output="{queryStringList}" input="{output}" order="ASC"/>
-        <combine_string_list output="{newurlbuffer}" input="{queryStringList}" separator="&amp;"/>
+		<combine_query_string output="{queryString}" sort="asc" separator="&amp;"/>
         <get_method output="{method}" uppercase="true"/>
         <get_host output="{host}"/>
         <get_path output="{path}"/>
@@ -57,16 +55,13 @@
 
     <restful client_name="MarketClient" url="https://api.huobi.so">
         <interface name="getSymbol">
-            <headers>
-                <header tag="accept-encoding" value="gzip"/>
-            </headers>
             <request method="get" target="/v1/common/symbols"/>
             <response type="model">
                 <json_parser model="Symbols">
-                    <json_string from="status" to="{status}"/>
-                    <json_array from="data" to="{data}" model="SymbolsData">
-                        <json_string from="base-currency" to="{base_currency}"/>
-                    </json_array>
+                    <json_auto copy="status"/>
+                    <json_auto from="data" to="{data}" model="SymbolsData">
+                        <json_auto from="base-currency" to="{base_currency}"/>
+                    </json_auto>
                 </json_parser>
             </response>
         </interface>
@@ -108,9 +103,9 @@
             <response type="model">
                 <json_parser model="Symbols">
                     <json_string from="status" to="{status}"/>
-                    <json_array from="data" to="{data}" model="LastTradeTick">
+                    <json_object_array from="data" to="{data}" model="LastTradeTick">
                         <json_string from="base-currency" to="{base_currency}"/>
-                    </json_array>
+                    </json_object_array>
                 </json_parser>
             </response>
         </interface-->
@@ -120,6 +115,9 @@
                 <string name="symbol" mandatory="true"/>
             </inputs>
             <request method="get" target="/market/trade">
+				<headers>
+					<header tag="accept-encoding" value="gzip"/>
+				</headers>
                 <query_strings>
                     <query name="symbol" value="{symbol}"/>
                 </query_strings>
@@ -129,9 +127,9 @@
                     <json_string from="status" to="{status}"/>
                     <json_object from="tick" to="{tick}" model="LastTradeTick">
                         <json_string from="ts" to="{ts}"/>
-                        <json_array from="data" to="{data}" model="LastTradeData">
+                        <json_object_array from="data" to="{data}" model="LastTradeData">
                             <json_string from="direction" to="{direction}"/>
-                        </json_array>
+                        </json_object_array>
                     </json_object>
                 </json_parser>
             </response>
@@ -150,13 +148,13 @@
                 <json_parser model="LastTradeEx">
                     <json_string from="status" to="{status}"/>
                     <json_object from="tick">
-                        <json_array from="data" to="{data}" model="LastTradeData">
+                        <json_object_array from="data" to="{data}" model="LastTradeData">
                             <json_string from="direction" to="{direction}"/>
-                        </json_array>
+                        </json_object_array>
                     </json_object>
                 </json_parser>
             </response>
-        </interface>
+        </interface-->
 
         <interface name="placeOrder">
             <inputs>
@@ -174,6 +172,6 @@
                 </post_body>
             </request>
             <response type="raw"/>
-        </interface-->
+        </interface>
     </restful>
 </sdk>

@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<sdk exchange="test" document="https://huobiapi.github.io/docs/spot/v1/en/">
+
+    <model name="Symbols">
+        <string name="status"/>
+        <object_array name="data" refer="SymbolsData"/>
+    </model>
+
+    <model name="SymbolsData">
+        <string name="base_currency"/>
+        <string name="quote_currency"/>
+    </model>
+
+    <model name="LastTrade">
+        <string name="status"/>
+        <object name="tick" refer="LastTradeTick"/>
+    </model>
+
+    <model name="LastTradeTick">
+        <string name="ts"/>
+    </model>
+
+    <restful client_name="MarketClient" url="https://api.huobi.so">
+        <interface name="getSymbol">
+            <request method="get" target="/v1/common/symbols">
+				<headers>
+					<header tag="accept-encoding" value="gzip"/>
+				</headers>
+			</request>
+            <response type="model">
+                <json_parser model="Symbols">
+                    <json_auto from="status" to="{status}"/>
+                    <json_auto from="data" to="{data}" model="SymbolsData">
+                        <json_auto from="base-currency" to="{base_currency}"/>
+                    </json_auto>
+                </json_parser>
+            </response>
+        </interface>
+		
+        <interface name="getLastTrade">
+            <inputs>
+                <string name="symbol" mandatory="true"/>
+            </inputs>
+            <request method="get" target="/market/trade">
+				<headers>
+					<header tag="accept-encoding" value="gzip"/>
+				</headers>
+                <query_strings>
+                    <query name="symbol" value="{symbol}"/>
+                </query_strings>
+            </request>
+            <response type="model">
+                <json_parser model="LastTrade">
+                    <json_auto copy="status"/>
+                    <json_auto copy="tick" model="LastTradeTick">
+                        <json_auto copy="ts"/>
+                    </json_auto>
+                </json_parser>
+            </response>
+        </interface>
+		
+        <!--interface name="placeOrder">
+            <inputs>
+                <string name="account_id" mandatory="true"/>
+                <string name="symbol" mandatory="true"/>
+                <string name="type" mandatory="true"/>
+                <string name="amount" mandatory="true"/>
+                <string name="price"/>
+            </inputs>
+            <request method="post" target="/placeOrder" signature="restful">
+                <post_body>
+                    <json_builder>
+                        <json_string name="account-id" value="{account_id}"/>
+                    </json_builder>
+                </post_body>
+            </request>
+            <response type="raw"/>
+        </interface-->
+    </restful>
+</sdk>

@@ -13,6 +13,7 @@ import cn.ma.cei.generator.environment.Variable;
 import cn.ma.cei.generator.environment.VariableFactory;
 import cn.ma.cei.model.signature.xAppendQueryString;
 import cn.ma.cei.model.signature.xCombineQueryString;
+import cn.ma.cei.model.signature.xGetMethod;
 import cn.ma.cei.model.signature.xGetNow;
 import cn.ma.cei.model.types.xString;
 import cn.ma.cei.model.xSignature;
@@ -35,6 +36,8 @@ public class BuildSignature {
             } else if (item instanceof xAppendQueryString) {
 
             } else if (item instanceof xCombineQueryString) {
+
+            } else if (item instanceof xGetMethod) {
 
             }
         });
@@ -86,7 +89,21 @@ public class BuildSignature {
             builder.registerVariable(output);
         }
         builder.combineQueryString(requestVariable, output, combineQueryString.sort, combineQueryString.separator);
-        
-        
+    }
+
+    public void processGetMethod(xGetMethod getMethod, Variable requestVariable, SignatureBuilder builder) {
+        if (Checker.isEmpty(getMethod.output)) {
+            throw new CEIException("[BuildSignature] output must be defined for GetMethod");
+        }
+        String outputName = VariableFactory.isReference(getMethod.output);
+        if (outputName == null) {
+            throw new CEIException("[BuildSignature] output must be variable");
+        }
+        Variable output = builder.queryVariable(getMethod.output);
+        if (output == null) {
+            output = VariableFactory.createLocalVariable(xString.inst.getType(), getMethod.output);
+            builder.registerVariable(output);
+        }
+        builder.getMethod(requestVariable, output, getMethod.convert);
     }
 }
