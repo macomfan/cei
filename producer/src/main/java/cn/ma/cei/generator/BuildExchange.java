@@ -36,5 +36,7 @@ public class BuildExchange {
             }
             BuildRestfulInterfaceClient.build(restful, builder.getRestfulClientBuilder());
         });
+        
+        builder.endExchange();
     }
 }

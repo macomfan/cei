@@ -14,16 +14,17 @@ import cn.ma.cei.generator.environment.Constant;
 import cn.ma.cei.generator.environment.Environment;
 import cn.ma.cei.generator.environment.Reference;
 import cn.ma.cei.generator.langs.java.buildin.TheLinkedList;
+import cn.ma.cei.generator.langs.java.tools.JavaClass;
 import cn.ma.cei.model.types.xBoolean;
 import cn.ma.cei.model.types.xDecimal;
 import cn.ma.cei.model.types.xInt;
 import cn.ma.cei.model.types.xLong;
 import cn.ma.cei.model.types.xString;
-import java.io.File;
 
 public class JavaExchangeBuilder extends ExchangeBuilder {
 
     private final String fileFolder = "C:\\dev\\cei\\framework\\cei_java";
+    private JavaClass mainClass;
 
     @Override
     public void startExchange(String exchangeName) {
@@ -40,36 +41,33 @@ public class JavaExchangeBuilder extends ExchangeBuilder {
         Reference.setupBuildinVariableType(xDecimal.typeName, "BigDecimal", "java.math.BigDecimal");
         Reference.setupBuildinVariableType("array", "List", "java.util.List");
         Reference.setupBuildinVariableType(TheLinkedList.typeName, "LinkedList", "java.util.LinkedList");
-        Reference.setupBuildinVariableType(RestfulRequest.typeName, "RestfulRequest", "cn.ma.cei.sdk.impl.RestfulRequest");
-        Reference.setupBuildinVariableType(RestfulResponse.typeName, "RestfulResponse", "cn.ma.cei.sdk.impl.RestfulResponse");
-        Reference.setupBuildinVariableType(RestfulConnection.typeName, "RestfulConnection", "cn.ma.cei.sdk.impl.RestfulConnection");
-        Reference.setupBuildinVariableType(RestfulOption.typeName, "RestfulOption", "cn.ma.cei.sdk.impl.RestfulOption");
-        Reference.setupBuildinVariableType(JsonWrapper.typeName, "JsonWrapper", "cn.ma.cei.sdk.impl.JsonWrapper");
+        Reference.setupBuildinVariableType(RestfulRequest.typeName, "RestfulRequest", "cn.ma.cei.impl.RestfulRequest");
+        Reference.setupBuildinVariableType(RestfulResponse.typeName, "RestfulResponse", "cn.ma.cei.impl.RestfulResponse");
+        Reference.setupBuildinVariableType(RestfulConnection.typeName, "RestfulConnection", "cn.ma.cei.impl.RestfulConnection");
+        Reference.setupBuildinVariableType(RestfulOption.typeName, "RestfulOption", "cn.ma.cei.impl.RestfulOption");
+        Reference.setupBuildinVariableType(JsonWrapper.typeName, "JsonWrapper", "cn.ma.cei.impl.JsonWrapper");
 
         CEIPath workingFolder = Environment.getWorkingFolder();
-        CEIPath exchangeFolder = CEIPath.appendPath(workingFolder, "src", "main", "java", "cn", "ma", "cei", "sdk", "exchanges", exchangeName);
+        CEIPath exchangeFolder = CEIPath.appendPath(workingFolder, "src", "main", "java", "cn", "ma", "cei", "exchanges");
         exchangeFolder.mkdirs();
         Environment.setExchangeFolder(exchangeFolder);
-
-        CEIPath modelFileFolder = CEIPath.appendPath(exchangeFolder, "models");
-        modelFileFolder.mkdirs();
-        CEIPath serviceFileFolder = CEIPath.appendPath(exchangeFolder, "services");
-        serviceFileFolder.mkdirs();
+        
+        mainClass = new JavaClass(exchangeName, "cn.ma.cei.exchanges");
     }
 
     @Override
     public RestfulClientBuilder getRestfulClientBuilder() {
-        return new JavaRestfulClientBuilder();
+        return new JavaRestfulClientBuilder(mainClass);
     }
 
     @Override
     public ModelBuilder getModelBuilder() {
-        return new JavaModelBuilder();
+        return new JavaModelBuilder(mainClass);
     }
 
     @Override
     public void endExchange() {
-
+        mainClass.build(Environment.getExchangeFolder());
     }
 
 }

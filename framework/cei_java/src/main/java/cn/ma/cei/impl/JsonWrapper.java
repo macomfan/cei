@@ -3,9 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package cn.ma.cei.sdk.impl;
+package cn.ma.cei.impl;
 
-import cn.ma.cei.sdk.exception.CEIException;
+import cn.ma.cei.exception.CEIException;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONException;

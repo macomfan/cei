@@ -1,4 +1,4 @@
-package cn.ma.cei.sdk.impl.utils;
+package cn.ma.cei.impl.utils;
 
 public class JsonBuilder {
     public void addString(String number, String value) {

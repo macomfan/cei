@@ -11,43 +11,49 @@ import cn.ma.cei.generator.langs.java.tools.JavaMethod;
 
 public class JavaRestfulClientBuilder extends RestfulClientBuilder {
 
-    private JavaClass javaClass = null;
+    private final JavaClass mainClass;
+    private JavaClass clientClass = null;
 
     private JavaMethod defauleConstructor = null;
     private JavaMethod optionConstructor = null;
+    
+    public JavaRestfulClientBuilder(JavaClass mainClass) {
+        this.mainClass = mainClass;
+    }
 
     @Override
     public void startClient(String clientDescriptor, String url) {
-        javaClass = new JavaClass(clientDescriptor, JavaKeyword.CURRENT_PACKAGE + Environment.getCurrentExchange() + ".services");
-        javaClass.addMemberVariable(JavaClass.AccessType.PRIVATE, VariableFactory.createLocalVariable(RestfulOption.getType(), "option"));
+        clientClass = new JavaClass(clientDescriptor);
+        clientClass.addMemberVariable(JavaClass.AccessType.PRIVATE, VariableFactory.createLocalVariable(RestfulOption.getType(), "option"));
 
-        defauleConstructor = new JavaMethod(javaClass);
+        defauleConstructor = new JavaMethod(clientClass);
         defauleConstructor.getCode().appendWordsln("public", clientDescriptor + "() {");
         defauleConstructor.getCode().newBlock(() -> {
             defauleConstructor.getCode().appendStatementWordsln("this.option", "=", "new", RestfulOption.getType().getDescriptor() + "()");
             defauleConstructor.getCode().appendStatementWordsln("this.option.url", "=", defauleConstructor.getCode().toJavaString(url));
         });
         defauleConstructor.getCode().appendln("}");
-        javaClass.addMethod(defauleConstructor.getCode());
+        clientClass.addMethod(defauleConstructor.getCode());
 
-        optionConstructor = new JavaMethod(javaClass);
+        optionConstructor = new JavaMethod(clientClass);
         optionConstructor.getCode().appendWordsln("public", clientDescriptor + "(" + RestfulOption.getType().getDescriptor() + " option) {");
         optionConstructor.getCode().newBlock(() -> {
             optionConstructor.getCode().appendStatementWordsln("this.option ", "=", "option");
         });
         optionConstructor.getCode().appendln("}");
-        javaClass.addMethod(optionConstructor.getCode());
+        clientClass.addMethod(optionConstructor.getCode());
+        
+
     }
 
     @Override
     public RestfulInterfaceBuilder getRestfulInterfaceBuilder() {
-        return new JavaRestfulInterfaceBuilder(javaClass);
+        return new JavaRestfulInterfaceBuilder(clientClass);
     }
 
     @Override
     public void endClient() {
-        CEIPath serviceFileFolder = CEIPath.appendPath(Environment.getExchangeFolder(), "services");
-        javaClass.build(serviceFileFolder);
+        mainClass.addInnerClass(clientClass);
     }
 
 }

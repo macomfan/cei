@@ -1,6 +1,6 @@
-package cn.ma.cei.sdk.impl;
+package cn.ma.cei.impl;
 
-import cn.ma.cei.sdk.exception.CEIException;
+import cn.ma.cei.exception.CEIException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import javafx.util.Pair;

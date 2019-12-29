@@ -1,6 +1,6 @@
-package cn.ma.cei.sdk.impl.utils;
+package cn.ma.cei.impl.utils;
 
-import cn.ma.cei.sdk.impl.RestfulRequest;
+import cn.ma.cei.impl.RestfulRequest;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;

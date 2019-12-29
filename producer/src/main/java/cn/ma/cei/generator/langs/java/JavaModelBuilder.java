@@ -8,26 +8,31 @@ import cn.ma.cei.generator.environment.Environment;
 import cn.ma.cei.generator.langs.java.tools.JavaClass;
 
 public class JavaModelBuilder extends ModelBuilder {
-    JavaClass javaClass = null;
+    
+    private final JavaClass mainClass;
+    private JavaClass modelClass;
 
+    public JavaModelBuilder(JavaClass mainClass) {
+        this.mainClass = mainClass;
+    }
+    
     @Override
     public void startModel(VariableType modelType) {
-        javaClass = new JavaClass(modelType.getDescriptor(), JavaKeyword.CURRENT_PACKAGE + Environment.getCurrentExchange() + ".models");
+        modelClass = new JavaClass(modelType.getDescriptor());
     }
 
     @Override
     public void registerMember(Variable variable) {
-        javaClass.addMemberVariable(JavaClass.AccessType.PUBLIC, variable);
+        modelClass.addMemberVariable(JavaClass.AccessType.PUBLIC, variable);
     }
 
     @Override
     public void endModel() {
-        CEIPath modelFileFolder = CEIPath.appendPath(Environment.getExchangeFolder(), "models");
-        javaClass.build(modelFileFolder);
+        mainClass.addInnerClass(modelClass);
     }
 
     @Override
     public String getRefrerence(VariableType modelType) {
-        return JavaKeyword.CURRENT_PACKAGE + Environment.getCurrentExchange() + ".models." + modelType.getDescriptor();
+        return JavaKeyword.CURRENT_PACKAGE + Environment.getCurrentExchange();
     }
 }

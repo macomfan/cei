@@ -11,10 +11,10 @@ import cn.ma.cei.generator.langs.java.tools.JavaMethod;
 public class JavaRestfulInterfaceBuilder extends RestfulInterfaceBuilder {
 
     private JavaMethod method;
-    private JavaClass javaClass;
+    private JavaClass clientClass;
 
     public JavaRestfulInterfaceBuilder(JavaClass javaClass) {
-        this.javaClass = javaClass;
+        this.clientClass = javaClass;
         method = new JavaMethod(javaClass);
     }
 
@@ -70,12 +70,12 @@ public class JavaRestfulInterfaceBuilder extends RestfulInterfaceBuilder {
 
     @Override
     public void endInterface() {
-        javaClass.addMethod(method.getCode());
+        clientClass.addMethod(method.getCode());
     }
 
     @Override
     public void onAddReference(VariableType variableType) {
-        javaClass.addReference(variableType);
+        clientClass.addReference(variableType);
     }
 
     @Override

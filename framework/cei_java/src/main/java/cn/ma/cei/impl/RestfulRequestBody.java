@@ -1,4 +1,4 @@
-package cn.ma.cei.sdk.impl;
+package cn.ma.cei.impl;
 
 public class RestfulRequestBody {
 }
