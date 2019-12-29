@@ -1,6 +1,5 @@
 package cn.ma.cei.generator.langs.java;
 
-import cn.ma.cei.generator.CEIPath;
 import cn.ma.cei.generator.environment.Variable;
 import cn.ma.cei.generator.environment.VariableType;
 import cn.ma.cei.generator.builder.ModelBuilder;

@@ -2,7 +2,6 @@ package cn.ma.cei.generator.langs.java;
 
 import cn.ma.cei.generator.environment.Variable;
 import cn.ma.cei.generator.builder.JsonParserBuilder;
-import cn.ma.cei.generator.langs.java.buildin.TheLinkedList;
 import cn.ma.cei.generator.langs.java.tools.JavaMethod;
 
 public class JavaJsonParserBuilder extends JsonParserBuilder {

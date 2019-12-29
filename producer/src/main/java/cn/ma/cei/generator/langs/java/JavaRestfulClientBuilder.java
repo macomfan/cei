@@ -1,10 +1,8 @@
 package cn.ma.cei.generator.langs.java;
 
-import cn.ma.cei.generator.CEIPath;
 import cn.ma.cei.generator.builder.RestfulClientBuilder;
 import cn.ma.cei.generator.builder.RestfulInterfaceBuilder;
 import cn.ma.cei.generator.buildin.RestfulOption;
-import cn.ma.cei.generator.environment.Environment;
 import cn.ma.cei.generator.environment.VariableFactory;
 import cn.ma.cei.generator.langs.java.tools.JavaClass;
 import cn.ma.cei.generator.langs.java.tools.JavaMethod;

@@ -45,11 +45,6 @@ public class JavaCode extends Code {
         return paramString;
     }
 
-//    public JavaCode invoke(String variable, String method, String... params) {
-//        appendln(variable + "." + method + "(" + invokeParamString(params) + ");");
-//        return this;
-//    }
-
     public String toJavaString(String str) {
         return "\"" + str + "\"";
     }
@@ -63,8 +58,6 @@ public class JavaCode extends Code {
         appendWords(args);
         appendln(";");
     }
-
-
 
     public void defineMethod(VariableType returnType, String methodName, VariableList params, MethodBuilder.MethodImplementation methodImplementation) {
         appendWordsln("public", returnType.getDescriptor(), methodName + "(" + defineParamString(params) + ") {");
@@ -82,6 +75,4 @@ public class JavaCode extends Code {
         });
         appendln("}");
     }
-
-
 }

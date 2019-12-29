@@ -3,14 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package cn.ma.cei.generator.builder;
+package cn.ma.cei.generator.langs.python3.tools;
 
 /**
  *
- * @author u0151316
+ * @author U0151316
  */
-public abstract class Framework {
-    public abstract String getFrameworkName();
+public class Python3Class {
     
-    public abstract ExchangeBuilder getExchangeBuilder();
 }

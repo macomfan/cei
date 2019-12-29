@@ -1,5 +1,7 @@
 from impl.restfulrequest import RestfulRequest
 from impl.restfulconnection import RestfulConnection
+from exchanges.test import Test
+
 import requests
 
 if __name__ == '__main__':
@@ -14,5 +16,5 @@ if __name__ == '__main__':
     request.add_query_string("ccc", 3)
     print(request.build_query_string())
     #RestfulConnection.query(request)
-
+    client = Test.MarketClient()
     pass
