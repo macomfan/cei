@@ -5,8 +5,13 @@
  */
 package cei.simulator.server;
 
+import cei.simulator.server.models.ExchangeInfo;
+import cei.simulator.server.models.LastTrade;
+import com.alibaba.fastjson.JSON;
 import io.vertx.core.Vertx;
+import io.vertx.core.http.HttpMethod;
 import io.vertx.core.http.HttpServer;
+import io.vertx.ext.web.Router;
 
 /**
  *
@@ -16,10 +21,12 @@ public class main {
     public static Vertx vertx = Vertx.vertx();
     
     public static void main(String[] args) {
-        HttpServer server = vertx.createHttpServer().listen(8081);
-        //server.listen(8081);
-        //server.requestHandler(request -> {});
-        //Route route = Route.
-        
+
+        Router router = Router.router(vertx);
+        ExchangeInfo.register(router);
+        LastTrade.register(router);
+
+        HttpServer server = vertx.createHttpServer().requestHandler(router).listen(8081);
+        System.out.println("Server started");
     }
 }
