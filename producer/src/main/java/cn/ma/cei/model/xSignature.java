@@ -7,12 +7,15 @@ package cn.ma.cei.model;
 
 import cn.ma.cei.model.base.xSignatureItem;
 import cn.ma.cei.model.signature.xAppendQueryString;
+import cn.ma.cei.model.signature.xAppendStringArray;
 import cn.ma.cei.model.signature.xCombineQueryString;
-import cn.ma.cei.model.signature.xGetMethod;
+import cn.ma.cei.model.signature.xCombineStringArray;
+import cn.ma.cei.model.signature.xGetRequestInfo;
 import cn.ma.cei.model.signature.xGetNow;
 import cn.ma.cei.xml.XmlAnyElementTypes;
 import java.util.List;
 import javax.xml.bind.annotation.XmlAnyElement;
+import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -22,11 +25,16 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement(name = "signature")
 public class xSignature {
 
+    @XmlAttribute(name = "name")
+    public String name;
+
     @XmlAnyElement(lax = true)
     @XmlAnyElementTypes({
         xGetNow.class,
         xAppendQueryString.class,
         xCombineQueryString.class,
-        xGetMethod.class})
+        xGetRequestInfo.class,
+        xAppendStringArray.class,
+        xCombineStringArray.class})
     public List<xSignatureItem> items;
 }

@@ -6,7 +6,8 @@ import cn.ma.cei.generator.environment.Variable;
 import cn.ma.cei.generator.environment.VariableList;
 import cn.ma.cei.generator.environment.VariableType;
 import cn.ma.cei.generator.langs.java.JavaCode;
-import cn.ma.cei.generator.langs.java.JavaKeyword;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 
 import java.util.HashSet;
@@ -133,8 +134,10 @@ public class JavaClass {
         });
         newImportList.addAll(importList);
 
-        newImportList.forEach((item) -> {
-            if (!item.equals(JavaKeyword.NO_REF)) {
+        List<String> list = new ArrayList<>(newImportList);
+        Collections.sort(list);
+        list.forEach((item) -> {
+            if (!item.equals(JavaCode.NO_REF) && !item.equals(packageName)) {
                 code.appendImport(item);
             }
         });
@@ -149,6 +152,7 @@ public class JavaClass {
             code.appendStatementWordsln("private", variable.type.getDescriptor(), variable.nameDescriptor);
         }
         code.endln();
+
     }
 
     @FunctionalInterface

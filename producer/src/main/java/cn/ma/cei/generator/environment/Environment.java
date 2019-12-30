@@ -7,6 +7,7 @@ package cn.ma.cei.generator.environment;
 
 import cn.ma.cei.exception.CEIException;
 import cn.ma.cei.generator.CEIPath;
+import cn.ma.cei.generator.naming.IDescriptionConverter;
 
 /**
  *
@@ -25,6 +26,7 @@ public class Environment {
     private static CEIPath exchangeFolder = null;
     private static String currentExchange = "";
     private static Language currentLanguage = Language.NA;
+    private static IDescriptionConverter naming = null;
 
     public static void setWorkingFolder(CEIPath folder) {
         if (!folder.exists()) {
@@ -63,5 +65,12 @@ public class Environment {
     public static void setCurrentLanguage(Language language) {
         Environment.currentLanguage = language;
     }
-
+    
+    public static void setCurrentDescriptionConverter(IDescriptionConverter descriptionConverter) {
+        naming = descriptionConverter;
+    }
+    
+    public static IDescriptionConverter getCurrentDescriptionConverter() {
+        return naming;
+    }
 }

@@ -24,7 +24,7 @@ public class Reference {
 
     public static String getTypeDescriptor(VariableType type) {
         if (!info().containsKey(type)) {
-            info().tryPut(type, Naming.get().getModelDescriptor(type.getName()), "TBD");
+            info().tryPut(type, Environment.getCurrentDescriptionConverter().getModelDescriptor(type.getName()), "TBD");
         }
         return info().get1(type);
     }

@@ -27,27 +27,6 @@
 		<boolean name="ocoAllowed"/>
 	</model>
 
-
-    <signature name="restful">
-        <get_now output="{timestamp}" format=""/>
-        <append_query_string key="AccessKeyId" value="{apikey}"/>
-        <append_query_string key="SignatureMethod" value="HmacSHA256"/>
-        <append_query_string key="SignatureVersion" value="2"/>
-        <append_query_string key="timestamp" value="{timestamp}"/>
-        <get_query_sting_list output="queryStringList"/>
-        <sort_list output="{queryStringList}" input="{output}" order="ASC"/>
-        <combine_string_list output="{newurlbuffer}" input="{queryStringList}" separator="&amp;"/>
-        <get_method output="{method}" uppercase="true"/>
-        <get_host output="{host}"/>
-        <get_path output="{path}"/>
-        <append_list input="{buffer}" item="{method}"/>
-        <append_list input="{buffer}" item="{host}"/>
-        <append_list input="{buffer}" item="{path}"/>
-        <append_list input="{buffer}" item="{newurlbuffer}"/>
-        <combine_string_list output="{newbuffer}" input="{buffer}" separator="\n"/>
-    </signature>
-
-
     <restful client_name="MarketClient" url="https://api.binance.com">
         <interface name="getExchangeInfo">
             <headers>

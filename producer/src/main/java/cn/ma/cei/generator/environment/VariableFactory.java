@@ -1,6 +1,7 @@
 package cn.ma.cei.generator.environment;
 
 import cn.ma.cei.exception.CEIException;
+import cn.ma.cei.model.types.xString;
 import cn.ma.cei.utils.NormalMap;
 import cn.ma.cei.utils.SecondLevelMap;
 
@@ -25,7 +26,8 @@ public class VariableFactory {
 
     private static final VariableTypeMap variableTypeMap = new VariableTypeMap();
 
-    /***
+    /**
+     * *
      * ModelType - MemberName - MemberType
      */
     private static final EnvironmentData<SecondLevelMap<VariableType, String, VariableType>> modelInfo = new EnvironmentData<>();
@@ -75,6 +77,10 @@ public class VariableFactory {
         return createVariable(type, name, Variable.Position.INPUT, null);
     }
 
+    public static Variable createHardcodeStringVariable(String name) {
+        return createVariable(xString.inst.getType(), name, Variable.Position.HARDCODE_STRING, null);
+    }
+
     public static Variable createMemberVariable(VariableType modelType, VariableType memberType, String name) {
         if (modelInfo.isNull()) {
             modelInfo.trySet(new SecondLevelMap<>());
@@ -88,7 +94,7 @@ public class VariableFactory {
             VariableType memberType = modelInfo.get().tryGet(parentVariable.type, name);
             return createVariable(memberType, name, Variable.Position.REFER, parentVariable);
         } catch (CEIException e) {
-            throw new CEIException("[VariableFactory] The model is not defined");
+            throw new CEIException("[VariableFactory] The model is not defined: " + parentVariable.type.getName());
         }
     }
 

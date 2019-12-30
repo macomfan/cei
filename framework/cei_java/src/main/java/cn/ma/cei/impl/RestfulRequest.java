@@ -13,12 +13,12 @@ public class RestfulRequest {
     private String url;
     private String target;
     private Method method;
-    private RestfulOption options;
+    private RestfulOptions options;
     private byte[] requestBody_ = null;
     private List<Pair<String, String>> queryString_ = new LinkedList<>();
     private List<Pair<String, String>> headers_ = new LinkedList<>();
 
-    public RestfulRequest(RestfulOption options) {
+    public RestfulRequest(RestfulOptions options) {
         this.options = options;
     }
 
@@ -76,6 +76,10 @@ public class RestfulRequest {
         return builder.toString();
     }
 
+    public List<Pair<String, String>> getQueryString() {
+        return queryString_;
+    }
+    
     public List<Pair<String, String>> getHeaders() {
         return headers_;
     }

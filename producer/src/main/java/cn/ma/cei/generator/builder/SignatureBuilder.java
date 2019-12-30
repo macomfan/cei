@@ -14,13 +14,13 @@ import cn.ma.cei.generator.environment.Variable;
 public abstract class SignatureBuilder extends MethodBuilder {
 
     public abstract void getNow(Variable output, String format);
+
+    public abstract void appendQueryString(Variable requestVariable, String key, Variable value);
+
+    public abstract void combineQueryString(Variable requestVariable, Variable output, String sortDescriptor, String separator);
+
+    public abstract void getRequestInfo(Variable requestVariable, Variable output, String infoDescriptor, String convertDescriptor);
     
-    public abstract void appendQueryStringByHardcode(Variable requestVariable, String key, String value);
-    
-    public abstract void appendQueryStringByVariable(Variable requestVariable, String key, Variable value);
-    
-    public abstract void combineQueryString(Variable requestVariable, Variable output, String sort, String separator);
-    
-    public abstract void getMethod(Variable requestVariable, Variable output, String convert);
+    public abstract void appendStringArray(Variable output, Variable input);
 
 }

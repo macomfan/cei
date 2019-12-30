@@ -23,17 +23,6 @@ public class CppRestfulInterfaceBuilder extends RestfulInterfaceBuilder {
     }
     
     @Override
-    public void startInterface(String restIfName) {
-        cppMethod = new CppMethod(cppClass.getClassName());
-        
-    }
-    
-    @Override
-    public void defineMethod(VariableType returnType, String methodDescriptor, VariableList params, MethodImplementation impl) {
-        cppMethod.defineMethod(returnType, methodDescriptor, params, impl);
-    }
-    
-    @Override
     public void setRequestTarget(Variable request, String target) {
         cppMethod.getCode().appendStatementWordsln(request.nameDescriptor + ".target", "=", cppMethod.getCode().toCppString(target));
     }
@@ -43,15 +32,6 @@ public class CppRestfulInterfaceBuilder extends RestfulInterfaceBuilder {
         cppMethod.getCode().appendStatementWordsln(request.type.getDescriptor(), request.nameDescriptor);
     }
     
-    @Override
-    public void addToQueryStringByVariable(Variable request, String queryStringName, Variable variable) {
-        cppMethod.getCode().appendStatementln(request.nameDescriptor + ".addQueryString(" + variable.nameDescriptor + ")");
-    }
-    
-    @Override
-    public void addToQueryStringByHardcode(Variable request, String queryStringName, String value) {
-        cppMethod.getCode().appendStatementln(request.nameDescriptor + ".addQueryString(" + cppMethod.getCode().toCppString(value) + ")");
-    }
     
     @Override
     public void invokeQuery(Variable request, Variable response) {
@@ -69,11 +49,6 @@ public class CppRestfulInterfaceBuilder extends RestfulInterfaceBuilder {
     }
     
     @Override
-    public void endInterface() {
-        cppClass.addMethod(cppMethod);
-    }
-    
-    @Override
     public void onAddReference(VariableType variableType) {
         
     }
@@ -83,13 +58,24 @@ public class CppRestfulInterfaceBuilder extends RestfulInterfaceBuilder {
         //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
+
     @Override
-    public void addHeaderByVariable(Variable request, String tag, Variable value) {
+    public void startMethod(VariableType returnType, String methodDescriptor, VariableList params) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void addHeaderByHardcode(Variable request, String tag, String value) {
+    public void endMethod() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void addHeader(Variable request, String tag, Variable value) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void addToQueryString(Variable request, String queryStringName, Variable variable) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

@@ -1,4 +1,9 @@
 
+import cn.ma.cei.exchanges.test;
+import cn.ma.cei.impl.RestfulOptions;
+import cn.ma.cei.impl.RestfulRequest;
+
+
 
 
 //import cn.ma.cei.sdk.exchanges.binance.models.ExchangeInfo;
@@ -15,8 +20,11 @@ public class main {
     }
 
     public static void main(String[] args) {
-//        huobipro.MarketClient huobiClient = new huobipro.MarketClient();
-//        huobipro.Currencies currencies = huobiClient.getCurrencies();
+        RestfulOptions options = new RestfulOptions();
+        RestfulRequest request = new RestfulRequest(options);
+        request.setMethod(RestfulRequest.Method.GET);
+        test.Signature.restful(request, options);
+        
         int a = 0;
         
 //        cn.ma.cei.sdk.exchanges.binance.services.MarketClient client = new cn.ma.cei.sdk.exchanges.binance.services.MarketClient();

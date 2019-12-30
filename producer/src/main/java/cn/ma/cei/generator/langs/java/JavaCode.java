@@ -8,7 +8,9 @@ import cn.ma.cei.generator.builder.MethodBuilder;
 import cn.ma.cei.generator.environment.VariableList;
 
 public class JavaCode extends Code {
-    public JavaKeyword keyword = new JavaKeyword();
+
+    public static final String NO_REF = "NO_REF";
+    public static final String CURRENT_PACKAGE = "cn.ma.cei.exchanges";
 
     public void appendPackage(String name) {
         if (name == null || name.equals("")) {
@@ -18,31 +20,13 @@ public class JavaCode extends Code {
     }
 
     public void appendImport(String name) {
-        if (name != null && !name.equals("") && !name.equals(JavaKeyword.NO_REF)) {
+        if (name != null && !name.equals("") && !name.equals(JavaCode.NO_REF)) {
             appendStatementWordsln("import", name);
         }
     }
 
     public void appendStatementln(String str) {
         appendln(str + ";");
-    }
-
-
-    private String defineParamString(VariableList params) {
-        if (params == null) {
-            return "";
-        }
-        String paramString = "";
-        boolean isFirst = true;
-        for (Variable variable : params.getVariableList()) {
-            if (isFirst) {
-                paramString += variable.type.getDescriptor() + " " + variable.name;
-                isFirst = false;
-            } else {
-                paramString += ", " + variable.type.getDescriptor() + " " + variable.name;
-            }
-        }
-        return paramString;
     }
 
     public String toJavaString(String str) {
@@ -57,22 +41,5 @@ public class JavaCode extends Code {
     public void appendStatementWordsln(String... args) {
         appendWords(args);
         appendln(";");
-    }
-
-    public void defineMethod(VariableType returnType, String methodName, VariableList params, MethodBuilder.MethodImplementation methodImplementation) {
-        appendWordsln("public", returnType.getDescriptor(), methodName + "(" + defineParamString(params) + ") {");
-        newBlock(() -> {
-            methodImplementation.inMethod();
-        });
-        appendln("}");
-        endln();
-    }
-
-    public void defineConstructor(String methodName, VariableList params, MethodBuilder.MethodImplementation methodImplementation) {
-        appendWordsln("public", methodName, "(" + defineParamString(params) + ") {");
-        newBlock(() -> {
-            methodImplementation.inMethod();
-        });
-        appendln("}");
     }
 }

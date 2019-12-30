@@ -25,12 +25,12 @@ public class CppMethod {
         return codeH;
     }
 
-    public void defineMethod(VariableType returnType, String methodName, VariableList params, MethodBuilder.MethodImplementation methodImplementation) {
+    public void defineMethod(VariableType returnType, String methodName, VariableList params) {
         codeH.appendStatementWordsln(returnType.getDescriptor(), methodName + "(" + defineParamString(params) + ")");
 
         codeCpp.appendWordsln(returnType.getDescriptor(), className + "::" + methodName + "(" + defineParamString(params) + ") {");
         codeCpp.newBlock(() -> {
-            methodImplementation.inMethod();
+            //methodImplementation.inMethod();
         });
         codeCpp.appendln("}");
         codeCpp.endln();

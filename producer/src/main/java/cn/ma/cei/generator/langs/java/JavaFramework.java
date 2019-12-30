@@ -7,6 +7,7 @@ package cn.ma.cei.generator.langs.java;
 
 import cn.ma.cei.generator.builder.Framework;
 import cn.ma.cei.generator.builder.ExchangeBuilder;
+import cn.ma.cei.generator.naming.IDescriptionConverter;
 
 /**
  *
@@ -22,6 +23,11 @@ public class JavaFramework extends Framework{
     @Override
     public ExchangeBuilder getExchangeBuilder() {
         return new JavaExchangeBuilder();
+    }
+
+    @Override
+    public IDescriptionConverter getDescriptionConverter() {
+        return new JavaDescriptionConverter();
     }
     
 }

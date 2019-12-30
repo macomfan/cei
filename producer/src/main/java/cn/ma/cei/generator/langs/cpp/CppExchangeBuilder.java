@@ -4,6 +4,7 @@ import cn.ma.cei.generator.builder.ExchangeBuilder;
 import cn.ma.cei.generator.builder.ModelBuilder;
 import cn.ma.cei.generator.builder.RestfulClientBuilder;
 import cn.ma.cei.generator.builder.RestfulInterfaceBuilder;
+import cn.ma.cei.generator.builder.SignatureBuilder;
 import cn.ma.cei.generator.buildin.RestfulConnection;
 import cn.ma.cei.generator.buildin.RestfulRequest;
 import cn.ma.cei.generator.buildin.RestfulResponse;
@@ -26,8 +27,8 @@ public class CppExchangeBuilder extends ExchangeBuilder {
         Environment.setCurrentExchange(exchangeName);
         Environment.setCurrentLanguage(Environment.Language.cpp);
 
-        Constant.requestMethod().tryPut(RestfulInterfaceBuilder.RequestMethod.GET, "RestfulRequest.Method.GET");
-        Constant.requestMethod().tryPut(RestfulInterfaceBuilder.RequestMethod.POST, "RestfulRequest.Method.GET");
+//        Constant.requestMethod().tryPut(RestfulInterfaceBuilder.RequestMethod.GET, "RestfulRequest.Method.GET");
+//        Constant.requestMethod().tryPut(RestfulInterfaceBuilder.RequestMethod.POST, "RestfulRequest.Method.POST");
 
         Reference.setupBuildinVariableType(xString.typeName, "CEIString", "\"impl/CEIString.h\"");
         Reference.setupBuildinVariableType(xBoolean.typeName, "CEIBool", "\"impl/CEIBool.h\"");
@@ -51,5 +52,10 @@ public class CppExchangeBuilder extends ExchangeBuilder {
     @Override
     public void endExchange() {
 
+    }
+
+    @Override
+    public SignatureBuilder getSignatureBuilder() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

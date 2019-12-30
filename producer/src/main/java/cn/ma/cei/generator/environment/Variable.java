@@ -1,7 +1,6 @@
 package cn.ma.cei.generator.environment;
 
 import cn.ma.cei.exception.CEIException;
-import cn.ma.cei.generator.environment.Naming;
 
 public class Variable {
 
@@ -10,6 +9,7 @@ public class Variable {
         LOCAL,
         MEMBER,
         REFER,
+        HARDCODE_STRING,
     }
 
     public Variable parent;
@@ -27,20 +27,33 @@ public class Variable {
             throw new CEIException("[Variable] name is null");
         }
         this.name = name;
-        if (Position.MEMBER == position) {
-            this.nameDescriptor = Naming.get().getMemberVariableDescriptor(name);
-        } else if (position == Position.REFER) {
-            // TODO
-            this.nameDescriptor = parentVariable.nameDescriptor + "." + Naming.get().getVariableDescriptor(name);
-        } else {
-            this.nameDescriptor = Naming.get().getVariableDescriptor(name);
+        if (position == null) {
+            throw new CEIException("[Variable] position is null");
+        }
+        switch (position) {
+            case MEMBER:
+                this.nameDescriptor = Environment.getCurrentDescriptionConverter().getMemberVariableDescriptor(name);
+                break;
+            case REFER:
+                // TODO
+                this.nameDescriptor = parentVariable.nameDescriptor + "." + Environment.getCurrentDescriptionConverter().getVariableDescriptor(name);
+                break;
+            case INPUT:
+            case LOCAL:
+                this.nameDescriptor = Environment.getCurrentDescriptionConverter().getVariableDescriptor(name);
+                break;
+            case HARDCODE_STRING:
+                this.nameDescriptor = Environment.getCurrentDescriptionConverter().toStringDescriptor(name);
+                break;
+            default:
+                throw new CEIException("[Variable] position is not suppotrd");
         }
 
         this.parent = parentVariable;
         this.type = type;
         this.position = position;
     }
-    
+
     public Variable queryMember(String name) {
         return VariableFactory.queryMemberVariable(this, name);
     }

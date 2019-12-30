@@ -23,44 +23,18 @@ public class Python3RestfulInterfaceBuilder extends RestfulInterfaceBuilder {
     }
 
     @Override
-    public void startInterface(String restIfName) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void defineMethod(VariableType returnType, String methodDescriptor, VariableList params, MethodImplementation impl) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
     public void setRequestTarget(Variable request, String target) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    @Override
-    public void addHeaderByVariable(Variable request, String tag, Variable value) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
 
-    @Override
-    public void addHeaderByHardcode(Variable request, String tag, String value) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
 
     @Override
     public void defineRequest(Variable request) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    @Override
-    public void addToQueryStringByVariable(Variable request, String queryStringName, Variable variable) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
 
-    @Override
-    public void addToQueryStringByHardcode(Variable request, String queryStringName, String value) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
 
     @Override
     public void invokeQuery(Variable request, Variable response) {
@@ -83,12 +57,27 @@ public class Python3RestfulInterfaceBuilder extends RestfulInterfaceBuilder {
     }
 
     @Override
-    public void endInterface() {
+    public void onAddReference(VariableType variableType) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void onAddReference(VariableType variableType) {
+    public void startMethod(VariableType returnType, String methodDescriptor, VariableList params) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void endMethod() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void addHeader(Variable request, String tag, Variable value) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void addToQueryString(Variable request, String queryStringName, Variable variable) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     

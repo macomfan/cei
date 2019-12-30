@@ -10,6 +10,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class xStringArray extends xType {
     public final static String typeName = VariableFactory.genericTypeName("array", "string");
 
+    public final static xStringArray inst = new xStringArray();
+    
     @Override
     public VariableType getType() {
         return VariableFactory.variableType("array", VariableFactory.variableType("string"));

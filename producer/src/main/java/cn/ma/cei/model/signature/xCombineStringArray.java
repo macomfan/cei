@@ -3,15 +3,15 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package cn.ma.cei.impl;
+package cn.ma.cei.model.signature;
+
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
  * @author u0151316
  */
-public class RestfulOption {
-    public String url = "";
-    public int connectionTimeout = 30;
-    public String apiKey = "";
-    public String secretKey = "";
+@XmlRootElement(name = "combine_string_array")
+public class xCombineStringArray {
+    
 }

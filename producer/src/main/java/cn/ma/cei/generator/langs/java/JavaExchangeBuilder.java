@@ -5,11 +5,13 @@ import cn.ma.cei.generator.builder.ExchangeBuilder;
 import cn.ma.cei.generator.builder.ModelBuilder;
 import cn.ma.cei.generator.builder.RestfulClientBuilder;
 import cn.ma.cei.generator.builder.RestfulInterfaceBuilder;
+import cn.ma.cei.generator.builder.SignatureBuilder;
 import cn.ma.cei.generator.buildin.JsonWrapper;
 import cn.ma.cei.generator.buildin.RestfulConnection;
-import cn.ma.cei.generator.buildin.RestfulOption;
+import cn.ma.cei.generator.buildin.RestfulOptions;
 import cn.ma.cei.generator.buildin.RestfulRequest;
 import cn.ma.cei.generator.buildin.RestfulResponse;
+import cn.ma.cei.generator.buildin.SignatureTool;
 import cn.ma.cei.generator.environment.Constant;
 import cn.ma.cei.generator.environment.Environment;
 import cn.ma.cei.generator.environment.Reference;
@@ -23,35 +25,43 @@ import cn.ma.cei.model.types.xString;
 
 public class JavaExchangeBuilder extends ExchangeBuilder {
 
-    private final String fileFolder = "C:\\dev\\cei\\framework\\cei_java";
     private JavaClass mainClass;
+    private JavaClass signatureClass;
 
     @Override
     public void startExchange(String exchangeName) {
-        Environment.setCurrentExchange(exchangeName);
-        Environment.setCurrentLanguage(Environment.Language.java);
 
-        Constant.requestMethod().tryPut(RestfulInterfaceBuilder.RequestMethod.GET, "RestfulRequest.Method.GET");
-        Constant.requestMethod().tryPut(RestfulInterfaceBuilder.RequestMethod.POST, "RestfulRequest.Method.GET");
+        Constant.requestMethod().tryPut(RestfulRequest.RequestMethod.GET, "RestfulRequest.Method.GET");
+        Constant.requestMethod().tryPut(RestfulRequest.RequestMethod.POST, "RestfulRequest.Method.POST");
 
-        Reference.setupBuildinVariableType(xString.typeName, "String", JavaKeyword.NO_REF);
-        Reference.setupBuildinVariableType(xBoolean.typeName, "Boolean", JavaKeyword.NO_REF);
-        Reference.setupBuildinVariableType(xInt.typeName, "Integer", JavaKeyword.NO_REF);
-        Reference.setupBuildinVariableType(xLong.typeName, "Long", JavaKeyword.NO_REF);
+        Constant.signatureMethod().tryPut(SignatureTool.Constant.ASC, "SignatureTool.Constant.ASC");
+        Constant.signatureMethod().tryPut(SignatureTool.Constant.DSC, "SignatureTool.Constant.DSC");
+        Constant.signatureMethod().tryPut(SignatureTool.Constant.HOST, "SignatureTool.Constant.HOST");
+        Constant.signatureMethod().tryPut(SignatureTool.Constant.METHOD, "SignatureTool.Constant.METHOD");
+        Constant.signatureMethod().tryPut(SignatureTool.Constant.TARGET, "SignatureTool.Constant.TARGET");
+        Constant.signatureMethod().tryPut(SignatureTool.Constant.UPPERCASE, "SignatureTool.Constant.UPPERCASE");
+        Constant.signatureMethod().tryPut(SignatureTool.Constant.LOWERCASE, "SignatureTool.Constant.LOWERCASE");
+        Constant.signatureMethod().tryPut(SignatureTool.Constant.NONE, "SignatureTool.Constant.NONE");
+
+        Reference.setupBuildinVariableType(xString.typeName, "String", JavaCode.NO_REF);
+        Reference.setupBuildinVariableType(xBoolean.typeName, "Boolean", JavaCode.NO_REF);
+        Reference.setupBuildinVariableType(xInt.typeName, "Integer", JavaCode.NO_REF);
+        Reference.setupBuildinVariableType(xLong.typeName, "Long", JavaCode.NO_REF);
         Reference.setupBuildinVariableType(xDecimal.typeName, "BigDecimal", "java.math.BigDecimal");
         Reference.setupBuildinVariableType("array", "List", "java.util.List");
         Reference.setupBuildinVariableType(TheLinkedList.typeName, "LinkedList", "java.util.LinkedList");
         Reference.setupBuildinVariableType(RestfulRequest.typeName, "RestfulRequest", "cn.ma.cei.impl.RestfulRequest");
         Reference.setupBuildinVariableType(RestfulResponse.typeName, "RestfulResponse", "cn.ma.cei.impl.RestfulResponse");
         Reference.setupBuildinVariableType(RestfulConnection.typeName, "RestfulConnection", "cn.ma.cei.impl.RestfulConnection");
-        Reference.setupBuildinVariableType(RestfulOption.typeName, "RestfulOption", "cn.ma.cei.impl.RestfulOption");
+        Reference.setupBuildinVariableType(RestfulOptions.typeName, "RestfulOptions", "cn.ma.cei.impl.RestfulOptions");
         Reference.setupBuildinVariableType(JsonWrapper.typeName, "JsonWrapper", "cn.ma.cei.impl.JsonWrapper");
+        Reference.setupBuildinVariableType(SignatureTool.typeName, "SignatureTool", "cn.ma.cei.impl.SignatureTool");
 
         CEIPath workingFolder = Environment.getWorkingFolder();
         CEIPath exchangeFolder = CEIPath.appendPath(workingFolder, "src", "main", "java", "cn", "ma", "cei", "exchanges");
         exchangeFolder.mkdirs();
         Environment.setExchangeFolder(exchangeFolder);
-        
+
         mainClass = new JavaClass(exchangeName, "cn.ma.cei.exchanges");
     }
 
@@ -66,8 +76,16 @@ public class JavaExchangeBuilder extends ExchangeBuilder {
     }
 
     @Override
-    public void endExchange() {
-        mainClass.build(Environment.getExchangeFolder());
+    public SignatureBuilder getSignatureBuilder() {
+        signatureClass = new JavaClass("Signature");
+        return new JavaSignatureBuilder(signatureClass);
     }
 
+    @Override
+    public void endExchange() {
+        if (signatureClass != null) {
+            mainClass.addInnerClass(signatureClass);
+        }
+        mainClass.build(Environment.getExchangeFolder());
+    }
 }

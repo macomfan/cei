@@ -7,6 +7,7 @@ package cn.ma.cei.generator;
 
 import cn.ma.cei.generator.builder.Framework;
 import cn.ma.cei.exception.CEIException;
+import cn.ma.cei.generator.buildin.RestfulOptions;
 import cn.ma.cei.generator.environment.Environment;
 import cn.ma.cei.model.xSDK;
 import java.text.SimpleDateFormat;
@@ -47,14 +48,12 @@ public class BuildSDK {
 //        }
 //        SimpleDateFormat df = new SimpleDateFormat("yyyyMMdd_HHmmssSSS");
 //        String date = df.format(new Date());
-
 //        CEIPath buildFolder = CEIPath.appendPath(folder, date);
 //        buildFolder.mkdirs();
 //        CEIPath buildFolder = CEIPath.appendPath(folder, date);
 //        buildFolder.mkdirs();
 //        CEIPath frameworkPath = new CEIPath(CEIPath.Type.FOLDER, "C:\\dev\\cei\\framework");
 //        frameworkPath.copyTo(buildFolder);
-
         CEIPath buildFolder = new CEIPath(CEIPath.Type.FOLDER, "C:\\dev\\cei\\framework");
         buildFolder.mkdirs();
 
@@ -63,6 +62,12 @@ public class BuildSDK {
         Environment.setWorkingFolder(CEIPath.appendPath(buildFolder, framework.getFrameworkName()));
 
         sdks.forEach((sdk) -> {
+            Environment.setCurrentExchange(sdk.exchange);
+            Environment.setCurrentLanguage(language);
+            Environment.setCurrentDescriptionConverter(framework.getDescriptionConverter());
+            
+            RestfulOptions.registryMember();
+            
             BuildExchange.build(sdk, framework.getExchangeBuilder());
         });
     }

@@ -17,6 +17,8 @@ public abstract class ExchangeBuilder {
     public abstract RestfulClientBuilder getRestfulClientBuilder();
 
     
+    public abstract SignatureBuilder getSignatureBuilder();
+    
     /***
      * To create the ModelBuilder for each model.
      * 

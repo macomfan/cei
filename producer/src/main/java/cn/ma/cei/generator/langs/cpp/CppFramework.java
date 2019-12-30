@@ -7,6 +7,7 @@ package cn.ma.cei.generator.langs.cpp;
 
 import cn.ma.cei.generator.builder.ExchangeBuilder;
 import cn.ma.cei.generator.builder.Framework;
+import cn.ma.cei.generator.naming.IDescriptionConverter;
 
 /**
  *
@@ -22,6 +23,11 @@ public class CppFramework extends Framework{
     @Override
     public ExchangeBuilder getExchangeBuilder() {
         return new CppExchangeBuilder();
+    }
+
+    @Override
+    public IDescriptionConverter getDescriptionConverter() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
 }

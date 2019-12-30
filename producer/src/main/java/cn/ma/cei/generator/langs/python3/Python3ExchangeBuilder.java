@@ -8,6 +8,7 @@ package cn.ma.cei.generator.langs.python3;
 import cn.ma.cei.generator.builder.ExchangeBuilder;
 import cn.ma.cei.generator.builder.ModelBuilder;
 import cn.ma.cei.generator.builder.RestfulClientBuilder;
+import cn.ma.cei.generator.builder.SignatureBuilder;
 
 /**
  *
@@ -32,6 +33,11 @@ public class Python3ExchangeBuilder extends ExchangeBuilder{
 
     @Override
     public void endExchange() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public SignatureBuilder getSignatureBuilder() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     

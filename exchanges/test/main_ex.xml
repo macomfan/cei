@@ -20,7 +20,26 @@
         <string name="ts"/>
     </model>
 
-    <restful client_name="MarketClient" url="https://api.huobi.so">
+    <signature name="restful">
+        <get_now output="{timestamp}" format=""/>
+        <append_query_string key="AccessKeyId" value="{apiKey}"/>
+        <append_query_string key="SignatureMethod" value="HmacSHA256"/>
+        <append_query_string key="SignatureVersion" value="2"/>
+        <append_query_string key="Timestamp" value="{timestamp}"/>
+		<combine_query_string output="{queryString}" sort="asc" separator="&amp;"/>
+        <get_request_info output="{method}" info="method" convert="uppercase"/>
+		<get_request_info output="{host}" info="host"/>
+		<get_request_info output="{target}" info="target"/>
+        <append_string_array output="{buffer}" input="{method}"/>
+        <append_string_array output="{buffer}" input="{host}"/>
+        <append_string_array output="{buffer}" input="{path}"/>
+        <append_string_array output="{buffer}" input="{newurlbuffer}"/>
+        <!--combine_string_array output="{newbuffer}" input="{buffer}" separator="\n"/-->
+		<append_query_string key="Signature" value="{timestamp}"/>
+		<!-- base64 -->
+    </signature>
+
+    <restful client_name="MarketClient" url="https://api.huobi.so">	
         <interface name="getSymbol">
             <request method="get" target="/v1/common/symbols">
 				<headers>
@@ -47,6 +66,7 @@
 				</headers>
                 <query_strings>
                     <query name="symbol" value="{symbol}"/>
+					<query name="test" value="test"/>
                 </query_strings>
             </request>
             <response type="model">

@@ -24,33 +24,18 @@ public class JavaRestfulInterfaceBuilder extends RestfulInterfaceBuilder {
     }
 
     @Override
-    public void startInterface(String restIfName) {
-
-    }
-
-    @Override
-    public void defineMethod(VariableType returnType, String methodDescriptor, VariableList params, MethodImplementation impl) {
-        method.getCode().defineMethod(returnType, methodDescriptor, params, impl);
-    }
-
-    @Override
     public void setRequestTarget(Variable request, String target) {
         method.getCode().appendStatementln(request.nameDescriptor + ".setTarget(" + method.getCode().toJavaString(target) + ")");
     }
 
     @Override
     public void defineRequest(Variable request) {
-        method.getCode().appendStatementWordsln(request.type.getDescriptor(), request.nameDescriptor, "=", "new", request.type.getDescriptor() + "(this.option)");
+        method.getCode().appendStatementWordsln(request.type.getDescriptor(), request.nameDescriptor, "=", "new", request.type.getDescriptor() + "(this.options)");
     }
 
     @Override
-    public void addToQueryStringByVariable(Variable request, String queryStringName, Variable variable) {
+    public void addToQueryString(Variable request, String queryStringName, Variable variable) {
         method.getCode().appendStatementln(request.nameDescriptor + "." + "addQueryString(" + method.getCode().toJavaString(queryStringName) + ", " + variable.nameDescriptor + ")");
-    }
-
-    @Override
-    public void addToQueryStringByHardcode(Variable request, String queryStringName, String value) {
-        method.getCode().appendStatementln(request.nameDescriptor + "." + "addQueryString(" + method.getCode().toJavaString(queryStringName) + ", " + method.getCode().toJavaString(value) + ")");
     }
 
     @Override
@@ -69,27 +54,28 @@ public class JavaRestfulInterfaceBuilder extends RestfulInterfaceBuilder {
     }
 
     @Override
-    public void endInterface() {
-        clientClass.addMethod(method.getCode());
-    }
-
-    @Override
     public void onAddReference(VariableType variableType) {
         clientClass.addReference(variableType);
     }
 
     @Override
     public void setUrl(Variable request) {
-        method.getCode().appendStatementWordsln(request.nameDescriptor + ".setUrl(this.option.url)");
+        method.getCode().appendStatementWordsln(request.nameDescriptor + ".setUrl(this.options.url)");
     }
 
     @Override
-    public void addHeaderByVariable(Variable request, String tag, Variable value) {
-       method.getCode().appendStatementWordsln(request.nameDescriptor + ".addHeader(" + method.getCode().toJavaString(tag) + ",", value.nameDescriptor + ")");
+    public void addHeader(Variable request, String tag, Variable value) {
+        method.getCode().appendStatementWordsln(request.nameDescriptor + ".addHeader(" + method.getCode().toJavaString(tag) + ",", value.nameDescriptor + ")");
     }
 
     @Override
-    public void addHeaderByHardcode(Variable request, String tag, String value) {
-        method.getCode().appendStatementWordsln(request.nameDescriptor + ".addHeader(" + method.getCode().toJavaString(tag) + ",", method.getCode().toJavaString(value) + ")");
+    public void startMethod(VariableType returnType, String methodDescriptor, VariableList params) {
+        method.startMethod(returnType, methodDescriptor, params);
+    }
+
+    @Override
+    public void endMethod() {
+        method.endMethod();
+        clientClass.addMethod(method.getCode());
     }
 }

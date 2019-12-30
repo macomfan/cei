@@ -13,13 +13,12 @@ import javax.xml.bind.annotation.XmlRootElement;
  *
  * @author u0151316
  */
-@XmlRootElement(name = "get_method")
-public class xGetMethod extends xSignatureItem {
+@XmlRootElement(name = "append_string_array")
+public class xAppendStringArray extends xSignatureItem {
+
+    @XmlAttribute(name = "input")
+    public String input;
 
     @XmlAttribute(name = "output")
     public String output;
-    
-    @XmlAttribute(name = "convert")
-    public String convert;
-
 }

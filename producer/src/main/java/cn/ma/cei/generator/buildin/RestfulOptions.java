@@ -14,17 +14,17 @@ import cn.ma.cei.model.types.xString;
  *
  * @author u0151316
  */
-public class RestfulOption {
+public class RestfulOptions {
 
-    public final static String typeName = "RestfulOption";
+    public final static String typeName = "RestfulOptions";
 
     public static VariableType getType() {
         return VariableFactory.variableType(typeName);
     }
 
     public static void registryMember() {
-        Variable option = VariableFactory.createLocalVariable(RestfulOption.getType(), "option");
-        VariableFactory.createMemberVariable(RestfulOption.getType(), VariableFactory.variableType(xString.typeName), "apiKey");
-        VariableFactory.createMemberVariable(RestfulOption.getType(), VariableFactory.variableType(xString.typeName), "secretKey");
+        Variable options = VariableFactory.createLocalVariable(RestfulOptions.getType(), "options");
+        VariableFactory.createMemberVariable(RestfulOptions.getType(), VariableFactory.variableType(xString.typeName), "apiKey");
+        VariableFactory.createMemberVariable(RestfulOptions.getType(), VariableFactory.variableType(xString.typeName), "secretKey");
     }
 }

@@ -26,8 +26,12 @@ public abstract class MethodBuilder {
         return variableList.queryVariable(name);
     }
 
-    @FunctionalInterface
-    public interface MethodImplementation {
-        void inMethod();
-    }
+//    @FunctionalInterface
+//    public interface MethodImplementation {
+//        void inMethod();
+//    }
+    
+    public abstract void startMethod(VariableType returnType, String methodDescriptor, VariableList params);
+    
+    public abstract void endMethod();
 }
