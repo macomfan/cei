@@ -35,10 +35,8 @@ public class BuildSignature {
         if (Checker.isEmpty(signature.name)) {
             throw new CEIException("[BuildSignature] name is null");
         }
-        Variable request = VariableFactory.createInputVariable(RestfulRequest.getType(), "request");
-        Variable options = VariableFactory.createInputVariable(RestfulOptions.getType(), "options");
-        builder.registerVariable(request);
-        builder.registerVariable(options);
+        Variable request = builder.newInputVariable(RestfulRequest.getType(), "{request}");
+        Variable options = builder.newInputVariable(RestfulOptions.getType(), "{options}");
 
         builder.startMethod(null, Environment.getCurrentDescriptionConverter().getMethodDescriptor(signature.name), builder.getVariableList());
         signature.items.forEach((item) -> {
@@ -57,17 +55,19 @@ public class BuildSignature {
         builder.endMethod();
     }
 
-    private static Variable createVariable(VariableType type, String name, SignatureBuilder builder) {
-        String variableName = VariableFactory.isReference(name);
-        if (variableName == null) {
-            throw new CEIException("[BuildSignature] The variable must be {}");
+    private static Variable queryVariable(String name, SignatureBuilder builder) {
+        Variable variable = builder.queryVariableAsParam(name);
+        if (variable == null) {
+            Variable options = builder.queryVariable("options");
+            if (options == null) {
+                throw new CEIException("[BuildSignature] Cannot query option");
+            }
+            String variableName = VariableFactory.isReference(name);
+            variable = options.queryMember(variableName);
+            if (variable == null) {
+                throw new CEIException("[BuildSignature] cannot query variable: " + name);
+            }
         }
-        Variable variable = builder.queryVariable(variableName);
-        if (variable != null) {
-            throw new CEIException("[BuildSignature] The variable redefined");
-        }
-        variable = VariableFactory.createLocalVariable(type, variableName);
-        builder.registerVariable(variable);
         return variable;
     }
 
@@ -75,7 +75,7 @@ public class BuildSignature {
         if (Checker.isEmpty(getNow.output)) {
             throw new CEIException("[BuildSignature] output must be defined for get_now");
         }
-        Variable output = createVariable(xString.inst.getType(), getNow.output, builder);
+        Variable output = builder.newLoaclVariable(xString.inst.getType(), getNow.output);
         builder.getNow(output, getNow.format);
     }
 
@@ -83,23 +83,7 @@ public class BuildSignature {
         if (Checker.isEmpty(appendQueryString.key) || Checker.isEmpty(appendQueryString.value)) {
             throw new CEIException("[BuildSignature] key and value must be defined for append_query_string");
         }
-        Variable variable;
-        String variableName = VariableFactory.isReference(appendQueryString.value);
-        if (variableName == null) {
-            variable = VariableFactory.createHardcodeStringVariable(appendQueryString.value);
-        } else {
-            variable = builder.queryVariable(variableName);
-            if (variable == null) {
-                Variable options = builder.queryVariable("options");
-                variable = options.queryMember(variableName);
-                if (variable == null) {
-                    throw new CEIException("[BuildSignature] cannot query variable");
-                }
-            }
-            if (variable.type != xString.inst.getType()) {
-                throw new CEIException("[BuildSignature] value must be string in append_query_string");
-            }
-        }
+        Variable variable = queryVariable(appendQueryString.value, builder);
         builder.appendQueryString(requestVariable, appendQueryString.key, variable);
     }
 
@@ -107,7 +91,7 @@ public class BuildSignature {
         if (Checker.isEmpty(combineQueryString.output)) {
             throw new CEIException("[BuildSignature] output must be defined for CombineQueryString");
         }
-        Variable output = createVariable(xString.inst.getType(), combineQueryString.output, builder);
+        Variable output = builder.newLoaclVariable(xString.inst.getType(), combineQueryString.output);
 
         String sortDescriptor = Constant.signatureMethod().tryGet(SignatureTool.Constant.NONE);
         if (!Checker.isEmpty(combineQueryString.sort)) {
@@ -123,7 +107,7 @@ public class BuildSignature {
         if (Checker.isEmpty(getRequestInfo.info)) {
             throw new CEIException("[BuildSignature] info must be defined for GetRequestInfo");
         }
-        Variable output = createVariable(xString.inst.getType(), getRequestInfo.output, builder);
+        Variable output = builder.newLoaclVariable(xString.inst.getType(), getRequestInfo.output);
 
         String infoDescriptor = Constant.signatureMethod().tryGet(SignatureTool.Constant.NONE);
         if (!Checker.isEmpty(getRequestInfo.info)) {
@@ -143,10 +127,17 @@ public class BuildSignature {
         if (Checker.isEmpty(appendStringArray.input)) {
             throw new CEIException("[BuildSignature] input must be defined for AppendStringArray");
         }
-        Variable output = builder.queryVariable(appendStringArray.output);
-        if (output == null) {
-            output = VariableFactory.createLocalVariable(xStringArray.inst.getType(), appendStringArray.output);
-            builder.registerVariable(output);
+        String outputName = VariableFactory.isReference(appendStringArray.output);
+        if (outputName == null) {
+            throw new CEIException("[BuildSignature] outpup must be {} AppendStringArray");
         }
+        Variable output = builder.queryVariable(outputName);
+        if (output == null) {
+            output = builder.newLoaclVariable(xStringArray.inst.getType(), appendStringArray.output);
+            builder.newStringArray(output);
+        }
+        
+        Variable input = queryVariable(appendStringArray.input, builder);
+        builder.appendStringArray(output, input);
     }
 }

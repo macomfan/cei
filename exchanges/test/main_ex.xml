@@ -32,8 +32,8 @@
 		<get_request_info output="{target}" info="target"/>
         <append_string_array output="{buffer}" input="{method}"/>
         <append_string_array output="{buffer}" input="{host}"/>
-        <append_string_array output="{buffer}" input="{path}"/>
-        <append_string_array output="{buffer}" input="{newurlbuffer}"/>
+        <append_string_array output="{buffer}" input="{target}"/>
+        <!--append_string_array output="{buffer}" input="{newurlbuffer}"/-->
         <!--combine_string_array output="{newbuffer}" input="{buffer}" separator="\n"/-->
 		<append_query_string key="Signature" value="{timestamp}"/>
 		<!-- base64 -->

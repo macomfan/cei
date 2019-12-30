@@ -12,6 +12,8 @@ import cn.ma.cei.generator.environment.Variable;
  * @author U0151316
  */
 public abstract class SignatureBuilder extends MethodBuilder {
+    
+    public abstract void newStringArray(Variable stringArray);
 
     public abstract void getNow(Variable output, String format);
 

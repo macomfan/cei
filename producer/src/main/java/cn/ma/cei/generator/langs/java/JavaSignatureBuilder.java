@@ -12,6 +12,7 @@ import cn.ma.cei.generator.environment.VariableList;
 import cn.ma.cei.generator.environment.VariableType;
 import cn.ma.cei.generator.langs.java.tools.JavaClass;
 import cn.ma.cei.generator.langs.java.tools.JavaMethod;
+import cn.ma.cei.model.types.xStringArray;
 
 /**
  *
@@ -84,6 +85,13 @@ public class JavaSignatureBuilder extends SignatureBuilder {
 
     @Override
     public void appendStringArray(Variable output, Variable input) {
-        //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        method.getCode().appendStatementWordsln(output.nameDescriptor, "=",
+                "SignatureTool.appendStringArray(" + output.nameDescriptor + ",", input.nameDescriptor + ")");
+    }
+
+    @Override
+    public void newStringArray(Variable stringArray) {
+        parent.addReference(xStringArray.inst.getType());
+        method.getCode().appendStatementWordsln("List<String>", stringArray.nameDescriptor, "=", "new", "LinkedList<>()");
     }
 }
