@@ -16,8 +16,11 @@ import javax.xml.bind.annotation.XmlRootElement;
  */
 @XmlRootElement(name = "decimal")
 public class xDecimal extends xType {
-        public final static String typeName = "decimal";
 
+    public final static String typeName = "decimal";
+
+    public final static xDecimal inst = new xDecimal();
+    
     @Override
     public VariableType getType() {
         return VariableFactory.variableType(typeName);

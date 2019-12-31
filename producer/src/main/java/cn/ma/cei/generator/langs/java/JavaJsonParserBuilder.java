@@ -4,6 +4,7 @@ import cn.ma.cei.generator.environment.Variable;
 import cn.ma.cei.generator.builder.JsonParserBuilder;
 import cn.ma.cei.generator.environment.VariableFactory;
 import cn.ma.cei.generator.langs.java.tools.JavaMethod;
+import cn.ma.cei.generator.langs.java.buildin.TheLinkedList;
 
 public class JavaJsonParserBuilder extends JsonParserBuilder {
 
@@ -44,7 +45,7 @@ public class JavaJsonParserBuilder extends JsonParserBuilder {
     @Override
     public void endJsonObjectArrayLoop(Variable to, Variable model) {
         method.startIf(to.nameDescriptor + " == null");
-        method.addAssign(method.useVariable(to), "new LinkedList<>()");
+        method.addAssign(method.useVariable(to), method.newInstance(TheLinkedList.getType()));
         method.endIf();
         method.addInvoke(to.nameDescriptor + ".add", model);
         method.endFor();
@@ -52,7 +53,7 @@ public class JavaJsonParserBuilder extends JsonParserBuilder {
 
     @Override
     public void defineModel(Variable model) {
-        method.addAssign(method.defineVariable(model), method.newInstance(model));
+        method.addAssign(method.defineVariable(model), method.newInstance(model.type));
     }
 
     @Override

@@ -67,4 +67,9 @@ public class Python3DescriptionConverter implements IDescriptionConverter {
         }
     }
 
+    @Override
+    public String getGenericTypeDescriptor(String name) {
+        return name;
+    }
+
 }

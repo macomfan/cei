@@ -1,6 +1,5 @@
 package cn.ma.cei.generator.environment;
 
-import cn.ma.cei.generator.environment.Reference;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
@@ -65,12 +64,14 @@ public class VariableType {
             if (!isGeneric()) {
                 typeDescriptor = Reference.getTypeDescriptor(this);
             } else {
-                // TODO
-                typeDescriptor = Reference.getTypeDescriptor(this) + "<";
+                String subTypeName = "";
                 for (VariableType generic : genericList) {
-                    typeDescriptor += Reference.getTypeDescriptor(generic);
+                    if (generic != null) {
+                        subTypeName += generic.getDescriptor();
+                    }
                 }
-                typeDescriptor += ">";
+                typeDescriptor = Reference.getTypeDescriptor(this)
+                        + Environment.getCurrentDescriptionConverter().getGenericTypeDescriptor(subTypeName);
             }
         }
         return typeDescriptor;

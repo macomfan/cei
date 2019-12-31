@@ -48,7 +48,9 @@ public class VariableFactory {
     public static VariableType variableType(String name, VariableType... argsTypes) {
         String finalName = name;
         for (VariableType argsType : argsTypes) {
-            finalName += "#" + argsType.getName();
+            if (argsType != null) {
+                finalName += "#" + argsType.getName();
+            }
         }
         if (variableTypeMap.get().containsKey(finalName)) {
             return variableTypeMap.get().get(finalName);

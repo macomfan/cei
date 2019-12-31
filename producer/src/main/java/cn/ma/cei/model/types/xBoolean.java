@@ -11,6 +11,8 @@ public class xBoolean extends xType {
 
     public final static String typeName = "boolean";
 
+    public final static xBoolean inst = new xBoolean();
+    
     @Override
     public VariableType getType() {
         return VariableFactory.variableType(typeName);

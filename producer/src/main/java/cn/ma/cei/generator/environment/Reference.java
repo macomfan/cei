@@ -33,8 +33,8 @@ public class Reference {
         return info().get2(type);
     }
 
-    public static void setupBuildinVariableType(String typeName, String typeDescriptor, String referenceName) {
-        info().tryPut(VariableFactory.variableType(typeName), typeDescriptor, referenceName);
+    public static void setupBuildinVariableType(VariableType type, String typeDescriptor, String referenceName) {
+        info().tryPut(type, typeDescriptor, referenceName);
     }
 
     public static void addReference(VariableType type, String referenceName) {

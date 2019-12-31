@@ -18,6 +18,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class xLong extends xType {
 
     public final static String typeName = "long";
+    
+    public final static xLong inst = new xLong();
 
     @Override
     public VariableType getType() {

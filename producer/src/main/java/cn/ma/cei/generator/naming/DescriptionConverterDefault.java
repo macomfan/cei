@@ -52,4 +52,9 @@ public class DescriptionConverterDefault implements IDescriptionConverter {
         return "\"" + name + "\"";
     }
 
+    @Override
+    public String getGenericTypeDescriptor(String name) {
+        return name;
+    }
+
 }

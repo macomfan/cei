@@ -22,5 +22,7 @@ public interface IDescriptionConverter {
     
     String toStringDescriptor(String name);
     
+    String getGenericTypeDescriptor(String name);
+    
     //String getTypeDescriptor(String name);
 }

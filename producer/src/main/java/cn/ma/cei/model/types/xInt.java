@@ -10,6 +10,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class xInt extends xType {
     public final static String typeName = "int";
 
+    public final static xInt inst = new xInt();
+    
     @Override
     public VariableType getType() {
         return VariableFactory.variableType(typeName);

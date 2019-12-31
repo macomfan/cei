@@ -5,7 +5,6 @@
  */
 package cn.ma.cei.generator.langs.java.tools;
 
-import cn.ma.cei.generator.Code;
 import cn.ma.cei.generator.environment.Variable;
 import cn.ma.cei.generator.environment.VariableList;
 import cn.ma.cei.generator.environment.VariableType;
@@ -60,8 +59,8 @@ public class JavaMethod {
         code.appendln("});");
     }
 
-    public String newInstance(Variable variable, Variable... params) {
-        return "new " + variable.type.getDescriptor() + "(" + invokeParamString(params) + ")";
+    public String newInstance(VariableType type, Variable... params) {
+        return "new " + type.getDescriptor() + "(" + invokeParamString(params) + ")";
     }
 
     public void addAssign(String left, String right) {

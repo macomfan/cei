@@ -68,4 +68,12 @@ public class JavaDescriptionConverter implements IDescriptionConverter {
         }
     }
 
+    @Override
+    public String getGenericTypeDescriptor(String name) {
+        if (name != null) {
+            return "<" + name + ">";
+        }
+        return "<>";
+    }
+
 }

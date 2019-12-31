@@ -30,13 +30,13 @@ public class CppExchangeBuilder extends ExchangeBuilder {
 //        Constant.requestMethod().tryPut(RestfulInterfaceBuilder.RequestMethod.GET, "RestfulRequest.Method.GET");
 //        Constant.requestMethod().tryPut(RestfulInterfaceBuilder.RequestMethod.POST, "RestfulRequest.Method.POST");
 
-        Reference.setupBuildinVariableType(xString.typeName, "CEIString", "\"impl/CEIString.h\"");
-        Reference.setupBuildinVariableType(xBoolean.typeName, "CEIBool", "\"impl/CEIBool.h\"");
-        Reference.setupBuildinVariableType(xInt.typeName, "CEIInt", "\"impl/CEIInt.h\"");
-        Reference.setupBuildinVariableType(RestfulRequest.typeName, "RestfulRequest", "\"impl/RestfulRequest.h\"");
-        Reference.setupBuildinVariableType(RestfulResponse.typeName, "RestfulResponse", "\"impl/RestfulResponse.h\"");
-        Reference.setupBuildinVariableType(RestfulConnection.typeName, "RestfulConnection", "\"impl/RestfulConnection.h\"");
-        Reference.setupBuildinVariableType("array", "std::vevtor", "<vector>");
+//        Reference.setupBuildinVariableType(xString.typeName, "CEIString", "\"impl/CEIString.h\"");
+//        Reference.setupBuildinVariableType(xBoolean.typeName, "CEIBool", "\"impl/CEIBool.h\"");
+//        Reference.setupBuildinVariableType(xInt.typeName, "CEIInt", "\"impl/CEIInt.h\"");
+//        Reference.setupBuildinVariableType(RestfulRequest.typeName, "RestfulRequest", "\"impl/RestfulRequest.h\"");
+//        Reference.setupBuildinVariableType(RestfulResponse.typeName, "RestfulResponse", "\"impl/RestfulResponse.h\"");
+//        Reference.setupBuildinVariableType(RestfulConnection.typeName, "RestfulConnection", "\"impl/RestfulConnection.h\"");
+//        Reference.setupBuildinVariableType("array", "std::vevtor", "<vector>");
     }
 
     @Override
