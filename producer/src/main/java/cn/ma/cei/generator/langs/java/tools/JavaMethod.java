@@ -28,18 +28,22 @@ public class JavaMethod {
     }
 
     public String defineVariable(Variable variable) {
+        parent.addReference(variable.type);
         return variable.type.getDescriptor() + " " + variable.nameDescriptor;
     }
 
     public String useVariable(Variable variable) {
+        parent.addReference(variable.type);
         return variable.nameDescriptor;
     }
 
     public void addReturn(Variable variable) {
+        parent.addReference(variable.type);
         code.appendJavaLine("return", variable.nameDescriptor);
     }
 
     public void startFor(Variable item, String statement) {
+        parent.addReference(item.type);
         code.appendWordsln(statement + ".forEach(" + item.nameDescriptor + " -> {");
         code.startBlock();
     }
@@ -60,6 +64,7 @@ public class JavaMethod {
     }
 
     public String newInstance(VariableType type, Variable... params) {
+        parent.addReference(type);
         return "new " + type.getDescriptor() + "(" + invokeParamString(params) + ")";
     }
 
@@ -79,6 +84,7 @@ public class JavaMethod {
         if (returnType == null) {
             code.appendWordsln("public", "void", methodName + "(" + defineParamString(params) + ")", "{");
         } else {
+            parent.addReference(returnType);
             code.appendWordsln("public", returnType.getDescriptor(), methodName + "(" + defineParamString(params) + ")", "{");
         }
         code.startBlock();
@@ -88,6 +94,7 @@ public class JavaMethod {
         if (returnType == null) {
             code.appendWordsln("public", "static", "void", methodName + "(" + defineParamString(params) + ")", "{");
         } else {
+            parent.addReference(returnType);
             code.appendWordsln("public", "static", returnType.getDescriptor(), methodName + "(" + defineParamString(params) + ")", "{");
         }
         code.startBlock();

@@ -92,7 +92,9 @@ public class VariableType {
         res.add(typeReference);
         if (isGeneric()) {
             genericList.forEach((item) -> {
-                res.addAll(item.getReferences());
+                if (item != null) {
+                    res.addAll(item.getReferences());
+                }
             });
         }
         return res;
