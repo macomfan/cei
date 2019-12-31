@@ -1,28 +1,60 @@
-from impl.restfulrequest import RestfulRequest
-from impl.restfuloption import RestfulOption
+from impl.jsonwrapper import JsonWrapper
 from impl.restfulconnection import RestfulConnection
+from impl.restfuloptions import RestfulOptions
+from impl.restfulrequest import RestfulRequest
+from impl.restfulresponse import RestfulResponse
+from impl.signaturetool import SignatureTool
 
 
-class Test:
-    class ExchangeInfo:
-        def __init__(self):
-            self.exchange_name = None
-            self.timestamp = None
-            self.symbols = None
+class test :
 
-    class Symbol:
-        def __init__(self):
-            self.name = None
-            self.status = None
-            self.occ_allowed = None
+    class LastTradeTick :
+        ts = None
 
-    class MarketClient:
-        def __init__(self, option: RestfulOption):
-            self.__option = option
-            pass
-
-        def get_exchange_info(self):
-            request = RestfulRequest(self.__option)
-            request.set_target("/api/v1/exchangeInfo")
+    class MarketClient :
+        def get_symbol(self, ):
+            request = RestfulRequest()
+            request.set_url(options.url)
+            request.set_target("/v1/common/symbols")
+            request.set_method(RestfulRequest.Method.GET)
+            request.add_header("accept-encoding", "gzip")
             response = RestfulConnection.query(request)
-            return response
+            symbols_var = Symbols()
+            root_obj = response.getJson()
+            symbols_var.status = root_obj.get_string("status")
+            for item in root_obj.get_items("data"):
+                symbols_data_var = SymbolsData()
+                symbols_data_var.base_currency = item.get_string("base-currency")
+            return symbols_var
+    
+        def get_last_trade(self):
+            request = RestfulRequest()
+            request.set_url(options.url)
+            request.set_target("/market/trade")
+            request.set_method(RestfulRequest.Method.GET)
+            request.add_header("accept-encoding", "gzip")
+            request.add_query_string("symbol", symbol)
+            request.add_query_string("test", "test")
+            response = RestfulConnection.query(request)
+            last_trade_var = LastTrade()
+            root_obj = response.getJson()
+            last_trade_var.status = root_obj.get_string("status")
+            last_trade_tick_var = LastTradeTick()
+            tick_obj = root_obj.getObject("tick")
+            last_trade_var.tick = last_trade_tick_var
+            last_trade_tick_var.ts = tick_obj.get_string("ts")
+            return last_trade_var
+    
+
+    class SymbolsData :
+        base_currency = None
+        quote_currency = None
+
+    class Symbols :
+        status = None
+        data = None
+
+    class LastTrade :
+        status = None
+        tick = None
+

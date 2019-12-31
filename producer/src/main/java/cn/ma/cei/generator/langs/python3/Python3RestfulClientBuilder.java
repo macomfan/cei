@@ -7,26 +7,34 @@ package cn.ma.cei.generator.langs.python3;
 
 import cn.ma.cei.generator.builder.RestfulClientBuilder;
 import cn.ma.cei.generator.builder.RestfulInterfaceBuilder;
+import cn.ma.cei.generator.langs.python3.tools.Python3Class;
 
 /**
  *
  * @author U0151316
  */
 public class Python3RestfulClientBuilder extends RestfulClientBuilder {
+    
+    private Python3Class mainClass;
+    private Python3Class clientClass = null;
+    
+    public Python3RestfulClientBuilder(Python3Class mainClass) {
+        this.mainClass = mainClass;
+    }
 
     @Override
     public void startClient(String clientDescriptor, String url) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        clientClass = new Python3Class(clientDescriptor);
     }
 
     @Override
     public RestfulInterfaceBuilder getRestfulInterfaceBuilder() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return new Python3RestfulInterfaceBuilder(clientClass);
     }
 
     @Override
     public void endClient() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        mainClass.addInnerClass(clientClass);
     }
     
 }

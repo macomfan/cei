@@ -22,10 +22,10 @@ public class CppRestfulInterfaceBuilder extends RestfulInterfaceBuilder {
         return new CppResponseBuilder();
     }
     
-    @Override
-    public void setRequestTarget(Variable request, String target) {
-        cppMethod.getCode().appendStatementWordsln(request.nameDescriptor + ".target", "=", cppMethod.getCode().toCppString(target));
-    }
+//    @Override
+//    public void setRequestTarget(Variable request, String target) {
+//        cppMethod.getCode().appendStatementWordsln(request.nameDescriptor + ".target", "=", cppMethod.getCode().toCppString(target));
+//    }
     
     @Override
     public void defineRequest(Variable request) {
@@ -39,11 +39,6 @@ public class CppRestfulInterfaceBuilder extends RestfulInterfaceBuilder {
     }
     
     @Override
-    public void setRequestMethod(Variable request, String requestMethodDescriptor) {
-        
-    }
-    
-    @Override
     public void returnResult(Variable returnVariable) {
         
     }
@@ -51,11 +46,6 @@ public class CppRestfulInterfaceBuilder extends RestfulInterfaceBuilder {
     @Override
     public void onAddReference(VariableType variableType) {
         
-    }
-
-    @Override
-    public void setUrl(Variable request) {
-        //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
 
@@ -70,12 +60,27 @@ public class CppRestfulInterfaceBuilder extends RestfulInterfaceBuilder {
     }
 
     @Override
-    public void addHeader(Variable request, String tag, Variable value) {
+    public void addHeader(Variable request, Variable tag, Variable value) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void addToQueryString(Variable request, String queryStringName, Variable variable) {
+    public void addToQueryString(Variable request, Variable queryStringName, Variable variable) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void setRequestTarget(Variable request, Variable target) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void setUrl(Variable request, Variable url) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void setRequestMethod(Variable request, Variable requestMethod) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

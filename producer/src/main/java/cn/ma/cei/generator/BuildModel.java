@@ -13,10 +13,10 @@ public class BuildModel {
         VariableType modelType = VariableFactory.variableType(model.name);
         // TODO
         // How to set reference
+        builder.startModel(modelType);
         Reference.getTypeDescriptor(modelType);
         String reference = builder.getRefrerence(modelType);
         Reference.addReference(modelType, reference);
-        builder.startModel(modelType);
         model.memberList.forEach((item) -> {
             Variable member = VariableFactory.createMemberVariable(modelType, item.getType(), item.name);
             member.defaultValue = item.defaultValue;

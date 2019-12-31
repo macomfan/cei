@@ -8,6 +8,7 @@ package cn.ma.cei.generator.langs.python3;
 import cn.ma.cei.generator.builder.ModelBuilder;
 import cn.ma.cei.generator.environment.Variable;
 import cn.ma.cei.generator.environment.VariableType;
+import cn.ma.cei.generator.langs.python3.tools.Python3Class;
 
 /**
  *
@@ -15,24 +16,31 @@ import cn.ma.cei.generator.environment.VariableType;
  */
 public class Python3ModelBuilder extends ModelBuilder {
 
+    private Python3Class mainClass;
+    private Python3Class modelClass;
+    
+    public Python3ModelBuilder(Python3Class mainClass) {
+        this.mainClass = mainClass;
+    }
+    
     @Override
     public String getRefrerence(VariableType modelType) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return Python3Code.NO_REF;
     }
 
     @Override
     public void startModel(VariableType modelType) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        modelClass = new Python3Class(modelType.getDescriptor());
     }
 
     @Override
     public void registerMember(Variable variable) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        modelClass.addMemberVariable(variable);
     }
 
     @Override
     public void endModel() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        mainClass.addInnerClass(modelClass);
     }
     
 }

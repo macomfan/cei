@@ -34,7 +34,6 @@ public class JavaClass {
 
     private VariableList privateMemberList = new VariableList();
     private VariableList publicMemberList = new VariableList();
-    //private Set<VariableType> importList = new HashSet<>();
     private Set<String> importList = new HashSet<>();
     private List<JavaCode> methodList = new LinkedList<>();
 
@@ -152,7 +151,6 @@ public class JavaClass {
             code.appendStatementWordsln("private", variable.type.getDescriptor(), variable.nameDescriptor);
         }
         code.endln();
-
     }
 
     @FunctionalInterface

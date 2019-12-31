@@ -7,6 +7,7 @@ package cn.ma.cei.generator.langs.python3;
 
 import cn.ma.cei.generator.builder.JsonParserBuilder;
 import cn.ma.cei.generator.builder.ResponseBuilder;
+import cn.ma.cei.generator.langs.python3.tools.Python3Method;
 
 /**
  *
@@ -14,9 +15,15 @@ import cn.ma.cei.generator.builder.ResponseBuilder;
  */
 public class Python3ResponseBuilder extends ResponseBuilder {
 
+    private Python3Method method;
+
+    public Python3ResponseBuilder(Python3Method method) {
+        this.method = method;
+    }
+
     @Override
     public JsonParserBuilder getJsonParserBuilder() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return new Python3JsonParserBuilder(method);
     }
     
 }

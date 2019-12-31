@@ -1,0 +1,2 @@
+class RestfulOptions:
+    pass

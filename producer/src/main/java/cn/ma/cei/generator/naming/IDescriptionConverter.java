@@ -1,6 +1,13 @@
 package cn.ma.cei.generator.naming;
 
 public interface IDescriptionConverter {
+    
+    /***
+     * Convert a file name to specified file name.
+     * 
+     * @param name The name of file.
+     * @return The converted name of file.
+     */
     String getFileDescriptor(String name);
     
     String getModelDescriptor(String name);

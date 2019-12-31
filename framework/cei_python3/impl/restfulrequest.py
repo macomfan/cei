@@ -1,12 +1,13 @@
 import urllib.parse
-from impl.restfuloption import RestfulOption
+from impl.restfuloptions import RestfulOptions
+
 
 class RestfulRequest:
     class Method:
         GET = "get"
         POST = "post"
 
-    def __init__(self, option: RestfulOption):
+    def __init__(self, option: RestfulOptions):
         self.__method = None
         self.__url = ""
         self.__target = ""

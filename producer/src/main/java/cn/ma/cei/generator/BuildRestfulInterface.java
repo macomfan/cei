@@ -7,6 +7,7 @@ import cn.ma.cei.generator.environment.VariableFactory;
 import cn.ma.cei.exception.CEIException;
 import cn.ma.cei.generator.builder.RestfulInterfaceBuilder;
 import cn.ma.cei.generator.buildin.RestfulConnection;
+import cn.ma.cei.generator.buildin.RestfulOptions;
 import cn.ma.cei.generator.buildin.RestfulRequest;
 import cn.ma.cei.generator.buildin.RestfulResponse;
 import cn.ma.cei.generator.environment.Constant;
@@ -14,13 +15,19 @@ import cn.ma.cei.generator.environment.Environment;
 import cn.ma.cei.model.xHeader;
 import cn.ma.cei.model.xInterface;
 import cn.ma.cei.model.xQuery;
+import cn.ma.cei.utils.Checker;
 import java.util.List;
 
 public class BuildRestfulInterface {
 
     public static void build(xInterface restIf, RestfulInterfaceBuilder builder) {
+        // Shoule be the member variable
+        Variable options = VariableFactory.createLocalVariable(RestfulOptions.getType(), "options");
+        builder.registerVariable(options);
+
         Variable request = VariableFactory.createLocalVariable(RestfulRequest.getType(), "request");
         Variable response = VariableFactory.createLocalVariable(RestfulResponse.getType(), "response");
+
         builder.registerVariable(request);
         builder.registerVariable(response);
         if (restIf.inputList != null) {
@@ -43,19 +50,21 @@ public class BuildRestfulInterface {
 
         builder.startMethod(returnType, Environment.getCurrentDescriptionConverter().getMethodDescriptor(restIf.name), inputVariableList);
         {
-            builder.defineRequest(request);
-            builder.setUrl(request);
-            builder.setRequestTarget(request, restIf.request.target);
-            
-            if (restIf.request.method.equals("get")) {
-                builder.setRequestMethod(request, Constant.requestMethod().tryGet(RestfulRequest.RequestMethod.GET));
-            } else if (restIf.request.method.equals("post")) {
-                builder.setRequestMethod(request, Constant.requestMethod().tryGet(RestfulRequest.RequestMethod.POST));
+            if (Checker.isEmpty(restIf.request.method)) {
+                throw new CEIException("[BuildRestfulInterface] Method is null");
             }
+            
+            builder.defineRequest(request);
+            builder.setUrl(request, options.queryMember("url"));
+            builder.setRequestTarget(request, VariableFactory.createHardcodeStringVariable(restIf.request.target));
+
+            Variable requestMethod = VariableFactory.createConstantVariable(Constant.requestMethod().tryGet(restIf.request.method));
+
+            builder.setRequestMethod(request, requestMethod);
             makeHeaders(restIf.request.headers, builder);
             makeQueryString(restIf.request.queryStrings, builder);
             builder.onAddReference(RestfulConnection.getType());
-            builder.invokeQuery(request, response);
+            builder.invokeQuery(response, request);
             Variable returnVariable = BuildResponse.build(restIf.response, response, builder);
             builder.returnResult(returnVariable);
         }
@@ -78,7 +87,8 @@ public class BuildRestfulInterface {
                     throw new CEIException("Cannot lookup variable: " + var);
                 }
             }
-            builder.addHeader(request, header.tag, var);
+            Variable tag = VariableFactory.createHardcodeStringVariable(header.tag);
+            builder.addHeader(request, tag, var);
         });
     }
 
@@ -88,7 +98,7 @@ public class BuildRestfulInterface {
         }
         Variable request = builder.queryVariable("request");
         queryStrings.forEach((queryString) -> {
-            
+
             Variable var;
             String value = VariableFactory.isReference(queryString.value);
             if (value == null) {
@@ -99,7 +109,8 @@ public class BuildRestfulInterface {
                     throw new CEIException("Cannot lookup variable: " + var);
                 }
             }
-            builder.addToQueryString(request, queryString.name, var);
+            Variable queryStringName = VariableFactory.createHardcodeStringVariable(queryString.name);
+            builder.addToQueryString(request, queryStringName, var);
         });
     }
 

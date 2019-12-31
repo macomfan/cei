@@ -10,6 +10,8 @@ import cn.ma.cei.generator.builder.RestfulInterfaceBuilder;
 import cn.ma.cei.generator.environment.Variable;
 import cn.ma.cei.generator.environment.VariableList;
 import cn.ma.cei.generator.environment.VariableType;
+import cn.ma.cei.generator.langs.python3.tools.Python3Class;
+import cn.ma.cei.generator.langs.python3.tools.Python3Method;
 
 /**
  *
@@ -17,68 +19,73 @@ import cn.ma.cei.generator.environment.VariableType;
  */
 public class Python3RestfulInterfaceBuilder extends RestfulInterfaceBuilder {
 
+    private Python3Method method;
+    private Python3Class clientClass;
+
+    public Python3RestfulInterfaceBuilder(Python3Class clientClass) {
+        this.clientClass = clientClass;
+        method = new Python3Method(clientClass);
+    }
+
     @Override
     public ResponseBuilder getResponseBuilder() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return new Python3ResponseBuilder(method);
     }
 
     @Override
-    public void setRequestTarget(Variable request, String target) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public void setRequestTarget(Variable request, Variable target) {
+        method.invoke(request.nameDescriptor + ".set_target", target);
     }
-
-
 
     @Override
     public void defineRequest(Variable request) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-
-
-    @Override
-    public void invokeQuery(Variable request, Variable response) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        method.newInstance(request);
     }
 
     @Override
-    public void setUrl(Variable request) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public void invokeQuery(Variable response, Variable request) {
+        method.newInstanceWithInvoke(response, "RestfulConnection.query", request);
     }
 
     @Override
-    public void setRequestMethod(Variable request, String requestMethodDescriptor) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public void setUrl(Variable request, Variable url) {
+        method.invoke(request.nameDescriptor + ".set_url", url);
+    }
+
+    @Override
+    public void setRequestMethod(Variable request, Variable requestMethod) {
+        method.invoke(request.nameDescriptor + ".set_method", requestMethod);
     }
 
     @Override
     public void returnResult(Variable returnVariable) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        method.returnVariable(returnVariable);
     }
 
     @Override
     public void onAddReference(VariableType variableType) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        clientClass.addReference(variableType);
     }
 
     @Override
     public void startMethod(VariableType returnType, String methodDescriptor, VariableList params) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        method.startMethod(returnType, methodDescriptor, params);
     }
 
     @Override
     public void endMethod() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        method.endMethod();
+        clientClass.addMethod(method);
     }
 
     @Override
-    public void addHeader(Variable request, String tag, Variable value) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public void addHeader(Variable request, Variable tag, Variable value) {
+        method.invoke(request.nameDescriptor + ".add_header", tag, value);
     }
 
     @Override
-    public void addToQueryString(Variable request, String queryStringName, Variable variable) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public void addToQueryString(Variable request, Variable queryStringName, Variable variable) {
+        method.invoke(request.nameDescriptor + ".add_query_string", queryStringName, variable);
     }
-    
+
 }

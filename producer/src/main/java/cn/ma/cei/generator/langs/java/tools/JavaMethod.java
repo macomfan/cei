@@ -40,14 +40,28 @@ public class JavaMethod {
         code.appendStatementWordsln(variable.nameDescriptor, "=", methodName + "(" + paramString + ")");
     }
 
+    public void assign(Variable variable, Variable value) {
+        code.appendStatementWordsln(variable.nameDescriptor, "=", value.nameDescriptor);
+    }
+
     public void newInstanceWithValue(Variable variable, Variable value) {
         code.appendStatementWordsln(variable.type.getDescriptor(), variable.nameDescriptor, "=", value.nameDescriptor);
     }
 
-    public void newInstance(VariableType type, String name, String... params) {
-        code.appendStatementWordsln(type.getDescriptor(), name, "= new", type.getDescriptor() + "(" + invokeParamString(params) + ")");
+    public void newInstance(Variable variable) {
+        code.appendStatementWordsln(variable.type.getDescriptor(), variable.nameDescriptor,
+                "= new", variable.type.getDescriptor() + "()");
     }
 
+    public void newInstance(Variable variable, Variable... params) {
+        String paramString = invokeParamString(params);
+        code.appendStatementWordsln(variable.type.getDescriptor(), variable.nameDescriptor,
+                "= new", variable.type.getDescriptor() + "(" + paramString + ")");
+    }
+
+//    public void newInstance(VariableType type, String name, String... params) {
+//        code.appendStatementWordsln(type.getDescriptor(), name, "= new", type.getDescriptor() + "(" + invokeParamString(params) + ")");
+//    }
     public void newListVariable(Variable variable) {
         code.appendStatementWordsln(
                 variable.nameDescriptor,
@@ -128,10 +142,10 @@ public class JavaMethod {
         boolean isFirst = true;
         for (Variable variable : params.getVariableList()) {
             if (isFirst) {
-                paramString += variable.type.getDescriptor() + " " + variable.name;
+                paramString += variable.type.getDescriptor() + " " + variable.nameDescriptor;
                 isFirst = false;
             } else {
-                paramString += ", " + variable.type.getDescriptor() + " " + variable.name;
+                paramString += ", " + variable.type.getDescriptor() + " " + variable.nameDescriptor;
             }
         }
         return paramString;

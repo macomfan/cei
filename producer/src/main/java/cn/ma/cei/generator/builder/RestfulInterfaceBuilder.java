@@ -11,19 +11,19 @@ public abstract class RestfulInterfaceBuilder extends MethodBuilder {
 //    public abstract void startInterface(String restIfName);
 //
 //    public abstract void defineMethod(VariableType returnType, String methodDescriptor, VariableList params, MethodImplementation impl);
-    public abstract void setRequestTarget(Variable request, String target);
+    public abstract void setRequestTarget(Variable request, Variable target);
 
-    public abstract void addHeader(Variable request, String tag, Variable value);
+    public abstract void addHeader(Variable request, Variable tag, Variable value);
 
     public abstract void defineRequest(Variable request);
 
-    public abstract void addToQueryString(Variable request, String queryStringName, Variable variable);
+    public abstract void addToQueryString(Variable request, Variable queryStringName, Variable variable);
 
-    public abstract void invokeQuery(Variable request, Variable response);
+    public abstract void invokeQuery(Variable response, Variable request);
 
-    public abstract void setUrl(Variable request);
+    public abstract void setUrl(Variable request, Variable url);
 
-    public abstract void setRequestMethod(Variable request, String requestMethodDescriptor);
+    public abstract void setRequestMethod(Variable request, Variable requestMethod);
 
     public abstract void returnResult(Variable returnVariable);
 

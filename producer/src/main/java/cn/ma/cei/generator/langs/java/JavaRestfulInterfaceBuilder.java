@@ -24,8 +24,9 @@ public class JavaRestfulInterfaceBuilder extends RestfulInterfaceBuilder {
     }
 
     @Override
-    public void setRequestTarget(Variable request, String target) {
-        method.getCode().appendStatementln(request.nameDescriptor + ".setTarget(" + method.getCode().toJavaString(target) + ")");
+    public void setRequestTarget(Variable request, Variable target) {
+        method.invoke(request.nameDescriptor + ".setTarget", target);
+        //method.getCode().appendStatementln(request.nameDescriptor + ".setTarget(" + method.getCode().toJavaString(target) + ")");
     }
 
     @Override
@@ -34,18 +35,18 @@ public class JavaRestfulInterfaceBuilder extends RestfulInterfaceBuilder {
     }
 
     @Override
-    public void addToQueryString(Variable request, String queryStringName, Variable variable) {
-        method.getCode().appendStatementln(request.nameDescriptor + "." + "addQueryString(" + method.getCode().toJavaString(queryStringName) + ", " + variable.nameDescriptor + ")");
+    public void addToQueryString(Variable request, Variable queryStringName, Variable variable) {
+        method.invoke(request.nameDescriptor + ".addQueryString", queryStringName, variable);
     }
 
     @Override
-    public void invokeQuery(Variable request, Variable response) {
+    public void invokeQuery(Variable response, Variable request) {
         method.getCode().appendStatementWordsln(response.type.getDescriptor(), response.nameDescriptor, "=", "RestfulConnection.query(" + request.nameDescriptor + ")");
     }
 
     @Override
-    public void setRequestMethod(Variable request, String requestMethodDescriptor) {
-        method.getCode().appendStatementWordsln(request.nameDescriptor + ".setMethod(" + requestMethodDescriptor + ")");
+    public void setRequestMethod(Variable request, Variable requestMethod) {
+        method.invoke(request.nameDescriptor + ".setMethod", requestMethod);
     }
 
     @Override
@@ -59,13 +60,14 @@ public class JavaRestfulInterfaceBuilder extends RestfulInterfaceBuilder {
     }
 
     @Override
-    public void setUrl(Variable request) {
-        method.getCode().appendStatementWordsln(request.nameDescriptor + ".setUrl(this.options.url)");
+    public void setUrl(Variable request, Variable url) {
+        method.invoke(request.nameDescriptor + ".setUrl", url);
     }
 
     @Override
-    public void addHeader(Variable request, String tag, Variable value) {
-        method.getCode().appendStatementWordsln(request.nameDescriptor + ".addHeader(" + method.getCode().toJavaString(tag) + ",", value.nameDescriptor + ")");
+    public void addHeader(Variable request, Variable tag, Variable value) {
+        method.invoke(request.nameDescriptor + ".addHeader", tag, value);
+        //method.getCode().appendStatementWordsln(request.nameDescriptor + ".addHeader(" + method.getCode().toJavaString(tag) + ",", value.nameDescriptor + ")");
     }
 
     @Override

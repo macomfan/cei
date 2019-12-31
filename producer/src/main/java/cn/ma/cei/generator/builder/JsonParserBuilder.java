@@ -11,21 +11,31 @@ public abstract class JsonParserBuilder {
      * @param jsonObject
      * @param itemName 
      */    
-    public abstract void getJsonString(Variable to, Variable jsonObject, String itemName);
+    public abstract void getJsonString(Variable to, Variable jsonObject, Variable itemName);
 
-    public abstract void getJsonInteger(Variable to, Variable jsonObject, String itemName);
+    public abstract void getJsonInteger(Variable to, Variable jsonObject, Variable itemName);
     
-    public abstract void getJsonLong(Variable to, Variable jsonObject, String itemName);
+    public abstract void getJsonLong(Variable to, Variable jsonObject, Variable itemName);
     
-    public abstract void getJsonBoolean(Variable to, Variable jsonObject, String itemName);
+    public abstract void getJsonBoolean(Variable to, Variable jsonObject, Variable itemName);
     
-    public abstract void getJsonDecimal(Variable to, Variable jsonObject, String itemName);
+    public abstract void getJsonDecimal(Variable to, Variable jsonObject, Variable itemName);
     
-    public abstract void getJsonStringArray(Variable to, Variable jsonObject, String itemName);
+    public abstract void getJsonStringArray(Variable to, Variable jsonObject, Variable itemName);
 
-    public abstract void getJsonObject(Variable to, Variable parentModel, Variable jsonObject, Variable parentJsonObject, String itemName);
+    /***
+     * jsonObject = parentJsonObject.getObject( itemName )
+     * to = parentModel
+     * 
+     * @param to
+     * @param parentModel
+     * @param jsonObject
+     * @param parentJsonObject
+     * @param itemName 
+     */
+    public abstract void getJsonObject(Variable to, Variable parentModel, Variable jsonObject, Variable parentJsonObject, Variable itemName);
 
-    public abstract void startJsonObjectArrayLoop(Variable eachItemJsonObject, Variable parentJsonObject, String itemName);
+    public abstract void startJsonObjectArrayLoop(Variable eachItemJsonObject, Variable parentJsonObject, Variable itemName);
 
     /***
      * parentModel.to.add(model)

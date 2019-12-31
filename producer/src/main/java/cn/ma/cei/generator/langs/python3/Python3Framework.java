@@ -17,17 +17,19 @@ public class Python3Framework extends Framework {
 
     @Override
     public String getFrameworkName() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return "cei_python3";
     }
 
     @Override
     public ExchangeBuilder getExchangeBuilder() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return new Python3ExchangeBuilder();
     }
 
     @Override
     public IDescriptionConverter getDescriptionConverter() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return new Python3DescriptionConverter();
     }
+
+
     
 }

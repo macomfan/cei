@@ -9,6 +9,7 @@ import cn.ma.cei.generator.langs.cpp.CppExchangeBuilder;
 import cn.ma.cei.generator.langs.cpp.CppFramework;
 import cn.ma.cei.generator.langs.java.JavaExchangeBuilder;
 import cn.ma.cei.generator.langs.java.JavaFramework;
+import cn.ma.cei.generator.langs.python3.Python3Framework;
 import cn.ma.cei.model.xSDK;
 import cn.ma.cei.xml.JAXBWrapper;
 
@@ -94,7 +95,9 @@ public class main {
 
         BuildSDK.registerFramework(Environment.Language.java, new JavaFramework());
         BuildSDK.registerFramework(Environment.Language.cpp, new CppFramework());
+        BuildSDK.registerFramework(Environment.Language.python3, new Python3Framework());
         BuildSDK.build(finalSDKs, Environment.Language.java, "C:\\dev\\cei\\output");
+        BuildSDK.build(finalSDKs, Environment.Language.python3, "C:\\dev\\cei\\output");
 
 //        
 //        

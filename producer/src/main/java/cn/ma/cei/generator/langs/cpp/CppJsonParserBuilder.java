@@ -15,22 +15,22 @@ import cn.ma.cei.generator.environment.Variable;
 public class CppJsonParserBuilder extends JsonParserBuilder {
 
     @Override
-    public void getJsonString(Variable to, Variable jsonObject, String itemName) {
+    public void getJsonString(Variable to, Variable jsonObject, Variable itemName) {
         //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void getJsonInteger(Variable to, Variable jsonObject, String itemName) {
+    public void getJsonInteger(Variable to, Variable jsonObject, Variable itemName) {
         //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void getJsonObject(Variable to, Variable parentModel, Variable jsonObject, Variable parentJsonObject, String itemName) {
+    public void getJsonObject(Variable to, Variable parentModel, Variable jsonObject, Variable parentJsonObject, Variable itemName) {
         //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void startJsonObjectArrayLoop(Variable eachItemJsonObject, Variable parentJsonObject, String itemName) {
+    public void startJsonObjectArrayLoop(Variable eachItemJsonObject, Variable parentJsonObject, Variable itemName) {
         //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
@@ -50,22 +50,22 @@ public class CppJsonParserBuilder extends JsonParserBuilder {
     }
 
     @Override
-    public void getJsonStringArray(Variable to, Variable jsonObject, String itemName) {
+    public void getJsonStringArray(Variable to, Variable jsonObject, Variable itemName) {
         //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void getJsonLong(Variable to, Variable jsonObject, String itemName) {
+    public void getJsonLong(Variable to, Variable jsonObject, Variable itemName) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void getJsonBoolean(Variable to, Variable jsonObject, String itemName) {
+    public void getJsonBoolean(Variable to, Variable jsonObject, Variable itemName) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void getJsonDecimal(Variable to, Variable jsonObject, String itemName) {
+    public void getJsonDecimal(Variable to, Variable jsonObject, Variable itemName) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }
