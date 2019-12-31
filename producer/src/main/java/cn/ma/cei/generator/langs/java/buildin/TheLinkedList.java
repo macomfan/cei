@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package cn.ma.cei.generator.langs.java.buildin;
+package cn.ma.cei.generator.langs.java_new.buildin;
 
 import cn.ma.cei.generator.environment.VariableFactory;
 import cn.ma.cei.generator.environment.VariableType;

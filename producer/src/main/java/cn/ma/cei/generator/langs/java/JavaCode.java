@@ -1,41 +1,37 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package cn.ma.cei.generator.langs.java;
 
 import cn.ma.cei.exception.CEIException;
 import cn.ma.cei.generator.Code;
 
+/**
+ *
+ * @author u0151316
+ */
 public class JavaCode extends Code {
 
-    public static final String NO_REF = "NO_REF";
     public static final String CURRENT_PACKAGE = "cn.ma.cei.exchanges";
+    public final static String NO_REF = "NO_REF";
 
     public void appendPackage(String name) {
         if (name == null || name.equals("")) {
             throw new CEIException("Java package is null");
         }
-        appendStatementWordsln("package", name);
+        appendJavaLine("package", name);
     }
 
     public void appendImport(String name) {
         if (name != null && !name.equals("") && !name.equals(JavaCode.NO_REF)) {
-            appendStatementWordsln("import", name);
+            appendJavaLine("import", name);
         }
     }
-
-    public void appendStatementln(String str) {
-        appendln(str + ";");
-    }
-
-    public String toJavaString(String str) {
-        return "\"" + str + "\"";
-    }
-
-    public JavaCode equalTo(String name, String value) {
-        appendStatementWordsln(name, "=", value);
-        return this;
-    }
-
-    public void appendStatementWordsln(String... args) {
-        appendWords(args);
+    
+    public void appendJavaLine(String... statements) {
+        appendWords(statements);
         appendln(";");
     }
 }

@@ -29,22 +29,22 @@ public class JavaSignatureBuilder extends SignatureBuilder {
 
     @Override
     public void getNow(Variable output, Variable format) {
-        method.newInstanceWithInvoke(output, "SignatureTool.getNow", format);
+        method.addAssign(method.defineVariable(output), method.invoke("SignatureTool.getNow", format));
     }
 
     @Override
     public void addQueryString(Variable requestVariable, Variable key, Variable value) {
-        method.invoke(requestVariable.nameDescriptor + ".addQueryString", key, value);
+        method.addInvoke(requestVariable.nameDescriptor + ".addQueryString", key, value);
     }
 
     @Override
     public void combineQueryString(Variable requestVariable, Variable output, Variable sort, Variable separator) {
-        method.newInstanceWithInvoke(output, "SignatureTool.combineQueryString", requestVariable, sort, separator);
+        method.addAssign(method.defineVariable(output), method.invoke("SignatureTool.combineQueryString", requestVariable, sort, separator));
     }
 
     @Override
     public void getRequestInfo(Variable requestVariable, Variable output, Variable info, Variable convert) {
-        method.newInstanceWithInvoke(output, "SignatureTool.getRequestInfo", requestVariable, info, convert);
+        method.addAssign(method.defineVariable(output), method.invoke("SignatureTool.getRequestInfo", requestVariable, info, convert));
     }
 
     @Override
@@ -62,41 +62,41 @@ public class JavaSignatureBuilder extends SignatureBuilder {
     @Override
     public void endMethod() {
         method.endMethod();
-        parent.addMethod(method.getCode());
+        parent.addMethod(method);
     }
 
     @Override
     public void addStringArray(Variable output, Variable input) {
-        method.assignWithInvoke(output, "SignatureTool.addStringArray", output, input);
+        method.addAssign(method.useVariable(output), method.invoke("SignatureTool.addStringArray", output, input));
     }
 
     @Override
     public void newStringArray(Variable stringArray) {
         parent.addReference(xStringArray.inst.getType());
-        method.getCode().appendStatementWordsln("List<String>", stringArray.nameDescriptor, "=", "new", "LinkedList<>()");
+        method.addAssign("List<String> " + stringArray.nameDescriptor, "new LinkedList<>()");
     }
 
     @Override
     public void combineStringArray(Variable output, Variable input, Variable separator) {
-        method.newInstanceWithInvoke(output, "SignatureTool.combineStringArray", input, separator);
+        method.addAssign(method.defineVariable(output), method.invoke("SignatureTool.combineStringArray", input, separator));
     }
 
     @Override
     public void base64(Variable output, Variable input) {
-        method.newInstanceWithInvoke(output, "SignatureTool.base64", input);
+        method.addAssign(method.defineVariable(output), method.invoke("SignatureTool.base64", input));
     }
 
     @Override
     public void hmacsha265(Variable output, Variable input, Variable key) {
-        method.newInstanceWithInvoke(output, "SignatureTool.hmacsha256", input, key);
+        method.addAssign(method.defineVariable(output), method.invoke("SignatureTool.hmacsha256", input, key));
     }
 
     @Override
     public void appendToString(boolean needDefineNewOutput, Variable output, Variable input) {
         if (needDefineNewOutput) {
-            method.newInstanceWithValue(output, input);
+            method.addAssign(method.defineVariable(output), method.useVariable(input));
         } else {
-            method.assignWithInvoke(output, "SignatureTool.appendToString", output, input);
+            method.addAssign(method.useVariable(output), method.invoke("SignatureTool.appendToString", output, input));
         }
     }
 }

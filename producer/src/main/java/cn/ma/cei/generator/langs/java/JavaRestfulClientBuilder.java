@@ -3,6 +3,7 @@ package cn.ma.cei.generator.langs.java;
 import cn.ma.cei.generator.builder.RestfulClientBuilder;
 import cn.ma.cei.generator.builder.RestfulInterfaceBuilder;
 import cn.ma.cei.generator.buildin.RestfulOptions;
+import cn.ma.cei.generator.environment.Variable;
 import cn.ma.cei.generator.environment.VariableFactory;
 import cn.ma.cei.generator.langs.java.tools.JavaClass;
 import cn.ma.cei.generator.langs.java.tools.JavaMethod;
@@ -27,19 +28,20 @@ public class JavaRestfulClientBuilder extends RestfulClientBuilder {
         defauleConstructor = new JavaMethod(clientClass);
         defauleConstructor.getCode().appendWordsln("public", clientDescriptor + "() {");
         defauleConstructor.getCode().newBlock(() -> {
-            defauleConstructor.getCode().appendStatementWordsln("this.options", "=", "new", RestfulOptions.getType().getDescriptor() + "()");
-            defauleConstructor.getCode().appendStatementWordsln("this.options.url", "=", defauleConstructor.getCode().toJavaString(url));
+            defauleConstructor.getCode().appendJavaLine("this.options", "=", "new", RestfulOptions.getType().getDescriptor() + "()");
+            Variable urlVar = VariableFactory.createHardcodeStringVariable(url);
+            defauleConstructor.getCode().appendJavaLine("this.options.url", "=", urlVar.nameDescriptor);
         });
         defauleConstructor.getCode().appendln("}");
-        clientClass.addMethod(defauleConstructor.getCode());
+        clientClass.addMethod(defauleConstructor);
 
         optionConstructor = new JavaMethod(clientClass);
         optionConstructor.getCode().appendWordsln("public", clientDescriptor + "(" + RestfulOptions.getType().getDescriptor() + " options) {");
         optionConstructor.getCode().newBlock(() -> {
-            optionConstructor.getCode().appendStatementWordsln("this.options ", "=", "options");
+            optionConstructor.getCode().appendJavaLine("this.options ", "=", "options");
         });
         optionConstructor.getCode().appendln("}");
-        clientClass.addMethod(optionConstructor.getCode());
+        clientClass.addMethod(optionConstructor);
         
 
     }

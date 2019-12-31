@@ -35,7 +35,7 @@ public class JavaClass {
     private VariableList privateMemberList = new VariableList();
     private VariableList publicMemberList = new VariableList();
     private Set<String> importList = new HashSet<>();
-    private List<JavaCode> methodList = new LinkedList<>();
+    private List<JavaMethod> methodList = new LinkedList<>();
 
     private Map<String, JavaClass> innerClasses = new HashMap<>();
 
@@ -77,8 +77,8 @@ public class JavaClass {
         addReference(memberVariable.type);
     }
 
-    public void addMethod(JavaCode code) {
-        methodList.add(code);
+    public void addMethod(JavaMethod method) {
+        methodList.add(method);
     }
 
     public void build(CEIPath folder) {
@@ -116,10 +116,10 @@ public class JavaClass {
     }
 
     private void writeMethods(JavaCode code) {
-        for (JavaCode method : methodList) {
-            code.appendCode(method);
+        methodList.forEach(method -> {
+            code.appendCode(method.getCode());
             code.endln();
-        }
+        });
     }
 
     private void writeReference(JavaCode code) {
@@ -144,12 +144,12 @@ public class JavaClass {
     }
 
     private void writeMemberVariable(JavaCode code) {
-        for (Variable variable : publicMemberList.getVariableList()) {
-            code.appendStatementWordsln("public", variable.type.getDescriptor(), variable.nameDescriptor);
-        }
-        for (Variable variable : privateMemberList.getVariableList()) {
-            code.appendStatementWordsln("private", variable.type.getDescriptor(), variable.nameDescriptor);
-        }
+        publicMemberList.getVariableList().forEach(variable -> {
+            code.appendJavaLine("public", variable.type.getDescriptor(), variable.nameDescriptor);
+        });
+        privateMemberList.getVariableList().forEach(variable -> {
+            code.appendJavaLine("private", variable.type.getDescriptor(), variable.nameDescriptor);
+        });
         code.endln();
     }
 
@@ -160,13 +160,13 @@ public class JavaClass {
     }
 
     private void defineClass(String clsName, ClassContent classContent) {
-        String header = "";
+        String header;
         if (type == ClassType.INNER) {
-            header = "static public";
+            header = "static public class";
         } else {
-            header = "public";
+            header = "public class";
         }
-        code.appendWordsln(header, "class", clsName, "{");
+        code.appendWordsln(header, clsName, "{");
         code.newBlock(() -> {
             classContent.inClass();
         });

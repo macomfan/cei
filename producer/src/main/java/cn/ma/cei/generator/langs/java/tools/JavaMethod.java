@@ -1,12 +1,20 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package cn.ma.cei.generator.langs.java.tools;
 
-import cn.ma.cei.generator.builder.MethodBuilder;
+import cn.ma.cei.generator.Code;
 import cn.ma.cei.generator.environment.Variable;
 import cn.ma.cei.generator.environment.VariableList;
 import cn.ma.cei.generator.environment.VariableType;
 import cn.ma.cei.generator.langs.java.JavaCode;
-import cn.ma.cei.generator.langs.java.buildin.TheLinkedList;
 
+/**
+ *
+ * @author u0151316
+ */
 public class JavaMethod {
 
     private JavaCode code = new JavaCode();
@@ -20,54 +28,75 @@ public class JavaMethod {
         return code;
     }
 
-    public void newInstanceWithSpecialType(Variable variable, VariableType specialType, Variable... params) {
-        String paramString = invokeParamString(params);
-        code.appendStatementWordsln(variable.type.getDescriptor(), variable.nameDescriptor, "=", "new", specialType.getDescriptor() + "(" + paramString + ")");
+    public String defineVariable(Variable variable) {
+        return variable.type.getDescriptor() + " " + variable.nameDescriptor;
     }
 
-    public void newInstanceWithInvoke(Variable variable, String methodName, Variable... params) {
-        String paramString = invokeParamString(params);
-        code.appendStatementWordsln(variable.type.getDescriptor(), variable.nameDescriptor, "=", methodName + "(" + paramString + ")");
+    public String useVariable(Variable variable) {
+        return variable.nameDescriptor;
     }
 
-    public void invoke(String methodName, Variable... params) {
-        String paramString = invokeParamString(params);
-        code.appendStatementWordsln(methodName + "(" + paramString + ")");
+    public void addReturn(Variable variable) {
+        code.appendJavaLine("return", variable.nameDescriptor);
     }
 
-    public void assignWithInvoke(Variable variable, String methodName, Variable... params) {
-        String paramString = invokeParamString(params);
-        code.appendStatementWordsln(variable.nameDescriptor, "=", methodName + "(" + paramString + ")");
+    public void startFor(Variable item, String statement) {
+        code.appendWordsln(statement + ".forEach(" + item.nameDescriptor + " -> {");
+        code.startBlock();
     }
 
-    public void assign(Variable variable, Variable value) {
-        code.appendStatementWordsln(variable.nameDescriptor, "=", value.nameDescriptor);
+    public void startIf(String statement) {
+        code.appendWordsln("if (" + statement + ") {");
+        code.startBlock();
+    }
+    
+    public void endIf() {
+        code.endBlock();
+        code.appendln("}");
     }
 
-    public void newInstanceWithValue(Variable variable, Variable value) {
-        code.appendStatementWordsln(variable.type.getDescriptor(), variable.nameDescriptor, "=", value.nameDescriptor);
+    public void endFor() {
+        code.endBlock();
+        code.appendln("});");
     }
 
-    public void newInstance(Variable variable) {
-        code.appendStatementWordsln(variable.type.getDescriptor(), variable.nameDescriptor,
-                "= new", variable.type.getDescriptor() + "()");
+    public String newInstance(Variable variable, Variable... params) {
+        return "new " + variable.type.getDescriptor() + "(" + invokeParamString(params) + ")";
     }
 
-    public void newInstance(Variable variable, Variable... params) {
-        String paramString = invokeParamString(params);
-        code.appendStatementWordsln(variable.type.getDescriptor(), variable.nameDescriptor,
-                "= new", variable.type.getDescriptor() + "(" + paramString + ")");
+    public void addAssign(String left, String right) {
+        code.appendJavaLine(left, "=", right);
     }
 
-//    public void newInstance(VariableType type, String name, String... params) {
-//        code.appendStatementWordsln(type.getDescriptor(), name, "= new", type.getDescriptor() + "(" + invokeParamString(params) + ")");
-//    }
-    public void newListVariable(Variable variable) {
-        code.appendStatementWordsln(
-                variable.nameDescriptor,
-                "= new",
-                TheLinkedList.getType().getDescriptor() + "<>()");
-        parent.addReference(TheLinkedList.getType());
+    public void addInvoke(String method, Variable... params) {
+        code.appendJavaLine(invoke(method, params));
+    }
+
+    public String invoke(String method, Variable... params) {
+        return method + "(" + invokeParamString(params) + ")";
+    }
+
+    public void startMethod(VariableType returnType, String methodName, VariableList params) {
+        if (returnType == null) {
+            code.appendWordsln("public", "void", methodName + "(" + defineParamString(params) + ")", "{");
+        } else {
+            code.appendWordsln("public", returnType.getDescriptor(), methodName + "(" + defineParamString(params) + ")", "{");
+        }
+        code.startBlock();
+    }
+
+    public void startStaticMethod(VariableType returnType, String methodName, VariableList params) {
+        if (returnType == null) {
+            code.appendWordsln("public", "static", "void", methodName + "(" + defineParamString(params) + ")", "{");
+        } else {
+            code.appendWordsln("public", "static", returnType.getDescriptor(), methodName + "(" + defineParamString(params) + ")", "{");
+        }
+        code.startBlock();
+    }
+
+    public void endMethod() {
+        code.endBlock();
+        code.appendln("}");
     }
 
     private String invokeParamString(Variable... params) {
@@ -88,62 +117,14 @@ public class JavaMethod {
         return paramString;
     }
 
-    private String invokeParamString(String... params) {
-        if (params == null) {
-            return "";
-        }
-        String paramString = "";
-        boolean isFirst = true;
-        for (String p : params) {
-            if (isFirst) {
-                paramString += p;
-                isFirst = false;
-            } else {
-                paramString += ", " + p;
-            }
-        }
-        return paramString;
-    }
-
-    public void startConstructor(String methodName, VariableList params) {
-        code.appendWordsln("public", methodName, "(" + defineParamString(params) + ") {");
-        code.startBlock();
-    }
-
-    public void startMethod(VariableType returnType, String methodName, VariableList params) {
-        if (returnType == null) {
-            code.appendWordsln("public", "void", methodName + "(" + defineParamString(params) + ") {");
-        } else {
-            code.appendWordsln("public", returnType.getDescriptor(), methodName + "(" + defineParamString(params) + ") {");
-        }
-        code.startBlock();
-    }
-
-    public void startStaticMethod(VariableType returnType, String methodName, VariableList params) {
-        if (returnType == null) {
-            code.appendWordsln("public static", "void", methodName + "(" + defineParamString(params) + ") {");
-        } else {
-            code.appendWordsln("public static", returnType.getDescriptor(), methodName + "(" + defineParamString(params) + ") {");
-        }
-        code.startBlock();
-    }
-
-    public void endMethod() {
-        code.endBlock();
-        code.appendln("}");
-        code.endln();
-    }
-
     private String defineParamString(VariableList params) {
         if (params == null) {
             return "";
         }
         String paramString = "";
-        boolean isFirst = true;
         for (Variable variable : params.getVariableList()) {
-            if (isFirst) {
+            if (paramString.equals("")) {
                 paramString += variable.type.getDescriptor() + " " + variable.nameDescriptor;
-                isFirst = false;
             } else {
                 paramString += ", " + variable.type.getDescriptor() + " " + variable.nameDescriptor;
             }

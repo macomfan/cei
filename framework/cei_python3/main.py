@@ -1,13 +1,15 @@
 from impl.restfulrequest import RestfulRequest
 from impl.restfulconnection import RestfulConnection
-from exchanges.test import Test
+import exchanges.test
+from exchanges.test import MarketClient as huobi_M
 from impl.signaturetool import SignatureTool
 
 import requests
 
 if __name__ == '__main__':
+    aaa = LastTrade()
     SignatureTool.Constant.ASC = "ccc"
-    aaaaaa = Test.ExchangeInfo()
+
     request = RestfulRequest()
     request.set_method(RestfulRequest.Method.GET)
     response = RestfulConnection.query(request)

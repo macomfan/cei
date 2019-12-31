@@ -15,66 +15,64 @@ public class JavaJsonParserBuilder extends JsonParserBuilder {
 
     @Override
     public void getJsonString(Variable to, Variable jsonObject, Variable itemName) {
-        method.assignWithInvoke(to, jsonObject.nameDescriptor + ".getString", itemName);
+        method.addAssign(method.useVariable(to), method.invoke(jsonObject.nameDescriptor + ".getString", itemName));
     }
 
     @Override
     public void getJsonInteger(Variable to, Variable jsonObject, Variable itemName) {
-        method.assignWithInvoke(to, jsonObject.nameDescriptor + ".getInteger", itemName);
+        method.addAssign(method.useVariable(to), method.invoke(jsonObject.nameDescriptor + ".getInteger", itemName));
     }
 
     @Override
     public void getJsonStringArray(Variable to, Variable jsonObject, Variable itemName) {
-        method.assignWithInvoke(to, jsonObject.nameDescriptor + ".getStringArray", itemName);
+        method.addAssign(method.useVariable(to), method.invoke(jsonObject.nameDescriptor + ".getStringArray", itemName));
     }
 
     @Override
     public void getJsonObject(Variable to, Variable parentModel, Variable jsonObject, Variable parentJsonObject, Variable itemName) {
-        method.newInstanceWithInvoke(jsonObject, parentJsonObject.nameDescriptor + ".getObject", itemName);
+        method.addAssign(method.defineVariable(jsonObject), method.invoke(parentJsonObject.nameDescriptor + ".getObject", itemName));
         if (to != null) {
-            method.assign(to, parentModel);
+            method.addAssign(method.useVariable(to), method.useVariable(parentModel));
         }
     }
 
     @Override
     public void startJsonObjectArrayLoop(Variable eachItemJsonObject, Variable parentJsonObject, Variable itemName) {
-        method.getCode().appendWordsln("for (" + eachItemJsonObject.type.getDescriptor(), eachItemJsonObject.nameDescriptor, ":", parentJsonObject.nameDescriptor + ".getObjectArray(" + itemName.nameDescriptor + ")) {");
-        method.getCode().startBlock();
+        method.startFor(eachItemJsonObject, method.invoke(parentJsonObject.nameDescriptor + ".getObjectArray", itemName));
     }
 
     @Override
     public void endJsonObjectArrayLoop(Variable to, Variable model) {
-        method.getCode().appendWordsln("if (" + to.nameDescriptor, "==", "null) {");
-        method.getCode().newBlock(() -> method.newListVariable(to));
-        method.getCode().appendln("}");
-        method.getCode().appendStatementWordsln(to.nameDescriptor + ".add(" + model.nameDescriptor + ")");
-        method.getCode().endBlock();
-        method.getCode().appendln("}");
+        method.startIf(to.nameDescriptor + " == null");
+        method.addAssign(method.useVariable(to), "new LinkedList<>()");
+        method.endIf();
+        method.addInvoke(to.nameDescriptor + ".add", model);
+        method.endFor();
     }
 
     @Override
     public void defineModel(Variable model) {
-        method.newInstance(model);
+        method.addAssign(method.defineVariable(model), method.newInstance(model));
     }
 
     @Override
     public void defineRootJsonObject(Variable jsonObject, Variable responseVariable) {
         Variable value = VariableFactory.createConstantVariable(responseVariable.nameDescriptor + ".getJson()");
-        method.newInstanceWithValue(jsonObject, value);
+        method.addAssign(method.defineVariable(jsonObject), method.useVariable(value));
     }
 
     @Override
     public void getJsonLong(Variable to, Variable jsonObject, Variable itemName) {
-        method.assignWithInvoke(to, jsonObject.nameDescriptor + ".getLong", itemName);
+        method.addAssign(method.useVariable(to), method.invoke(jsonObject.nameDescriptor + ".getLong", itemName));
     }
 
     @Override
     public void getJsonBoolean(Variable to, Variable jsonObject, Variable itemName) {
-        method.assignWithInvoke(to, jsonObject.nameDescriptor + ".getBoolean", itemName);
+        method.addAssign(method.useVariable(to), method.invoke(jsonObject.nameDescriptor + ".getBoolean", itemName));
     }
 
     @Override
     public void getJsonDecimal(Variable to, Variable jsonObject, Variable itemName) {
-        method.assignWithInvoke(to, jsonObject.nameDescriptor + ".getDecimal", itemName);
+        method.addAssign(method.useVariable(to), method.invoke(jsonObject.nameDescriptor + ".getDecimal", itemName));
     }
 }

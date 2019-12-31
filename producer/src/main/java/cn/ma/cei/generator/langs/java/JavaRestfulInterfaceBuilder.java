@@ -10,8 +10,10 @@ import cn.ma.cei.generator.langs.java.tools.JavaMethod;
 
 public class JavaRestfulInterfaceBuilder extends RestfulInterfaceBuilder {
 
-    private JavaMethod method;
+    //private JavaMethod method;
     private JavaClass clientClass;
+
+    private JavaMethod method;
 
     public JavaRestfulInterfaceBuilder(JavaClass javaClass) {
         this.clientClass = javaClass;
@@ -25,33 +27,33 @@ public class JavaRestfulInterfaceBuilder extends RestfulInterfaceBuilder {
 
     @Override
     public void setRequestTarget(Variable request, Variable target) {
-        method.invoke(request.nameDescriptor + ".setTarget", target);
-        //method.getCode().appendStatementln(request.nameDescriptor + ".setTarget(" + method.getCode().toJavaString(target) + ")");
+        method.addInvoke(request.nameDescriptor + ".setTarget", target);
     }
 
     @Override
     public void defineRequest(Variable request) {
-        method.getCode().appendStatementWordsln(request.type.getDescriptor(), request.nameDescriptor, "=", "new", request.type.getDescriptor() + "(this.options)");
+        
+        method.addAssign(method.defineVariable(request), method.newInstance(request, this.queryVariable("options")));
     }
 
     @Override
     public void addToQueryString(Variable request, Variable queryStringName, Variable variable) {
-        method.invoke(request.nameDescriptor + ".addQueryString", queryStringName, variable);
+        method.addInvoke(request.nameDescriptor + ".addQueryString", queryStringName, variable);
     }
 
     @Override
     public void invokeQuery(Variable response, Variable request) {
-        method.getCode().appendStatementWordsln(response.type.getDescriptor(), response.nameDescriptor, "=", "RestfulConnection.query(" + request.nameDescriptor + ")");
+        method.addAssign(method.defineVariable(response), method.invoke("RestfulConnection.query", request));
     }
 
     @Override
     public void setRequestMethod(Variable request, Variable requestMethod) {
-        method.invoke(request.nameDescriptor + ".setMethod", requestMethod);
+        method.addInvoke(request.nameDescriptor + ".setMethod", requestMethod);
     }
 
     @Override
     public void returnResult(Variable returnVariable) {
-        method.getCode().appendStatementWordsln("return", returnVariable.nameDescriptor);
+        method.addReturn(returnVariable);
     }
 
     @Override
@@ -61,13 +63,12 @@ public class JavaRestfulInterfaceBuilder extends RestfulInterfaceBuilder {
 
     @Override
     public void setUrl(Variable request, Variable url) {
-        method.invoke(request.nameDescriptor + ".setUrl", url);
+        method.addInvoke(request.nameDescriptor + ".setUrl", url);
     }
 
     @Override
     public void addHeader(Variable request, Variable tag, Variable value) {
-        method.invoke(request.nameDescriptor + ".addHeader", tag, value);
-        //method.getCode().appendStatementWordsln(request.nameDescriptor + ".addHeader(" + method.getCode().toJavaString(tag) + ",", value.nameDescriptor + ")");
+        method.addInvoke(request.nameDescriptor + ".addHeader", tag, value);
     }
 
     @Override
@@ -78,6 +79,6 @@ public class JavaRestfulInterfaceBuilder extends RestfulInterfaceBuilder {
     @Override
     public void endMethod() {
         method.endMethod();
-        clientClass.addMethod(method.getCode());
+        clientClass.addMethod(method);
     }
 }
