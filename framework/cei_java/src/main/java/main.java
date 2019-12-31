@@ -22,7 +22,12 @@ public class main {
     public static void main(String[] args) {
         RestfulOptions options = new RestfulOptions();
         RestfulRequest request = new RestfulRequest(options);
+        options.apiKey = "ABC";
+        options.secretKey = "abc";
+        request.setUrl("https://127.0.0.1");
+        request.setTarget("/Target");
         request.setMethod(RestfulRequest.Method.GET);
+        request.addQueryString("Test", "Test");
         test.Signature.restful(request, options);
         
         int a = 0;

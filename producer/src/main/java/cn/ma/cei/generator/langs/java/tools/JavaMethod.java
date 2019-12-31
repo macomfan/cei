@@ -20,6 +20,30 @@ public class JavaMethod {
         return code;
     }
 
+    public void newInstanceWithSpecialType(Variable variable, VariableType specialType, Variable... params) {
+        String paramString = invokeParamString(params);
+        code.appendStatementWordsln(variable.type.getDescriptor(), variable.nameDescriptor, "=", "new", specialType.getDescriptor() + "(" + paramString + ")");
+    }
+
+    public void newInstanceWithInvoke(Variable variable, String methodName, Variable... params) {
+        String paramString = invokeParamString(params);
+        code.appendStatementWordsln(variable.type.getDescriptor(), variable.nameDescriptor, "=", methodName + "(" + paramString + ")");
+    }
+
+    public void invoke(String methodName, Variable... params) {
+        String paramString = invokeParamString(params);
+        code.appendStatementWordsln(methodName + "(" + paramString + ")");
+    }
+
+    public void assignWithInvoke(Variable variable, String methodName, Variable... params) {
+        String paramString = invokeParamString(params);
+        code.appendStatementWordsln(variable.nameDescriptor, "=", methodName + "(" + paramString + ")");
+    }
+
+    public void newInstanceWithValue(Variable variable, Variable value) {
+        code.appendStatementWordsln(variable.type.getDescriptor(), variable.nameDescriptor, "=", value.nameDescriptor);
+    }
+
     public void newInstance(VariableType type, String name, String... params) {
         code.appendStatementWordsln(type.getDescriptor(), name, "= new", type.getDescriptor() + "(" + invokeParamString(params) + ")");
     }
@@ -30,7 +54,24 @@ public class JavaMethod {
                 "= new",
                 TheLinkedList.getType().getDescriptor() + "<>()");
         parent.addReference(TheLinkedList.getType());
+    }
 
+    private String invokeParamString(Variable... params) {
+        if (params == null) {
+            return "";
+        }
+        String paramString = "";
+        for (Variable p : params) {
+            if (p == null) {
+                continue;
+            }
+            if (paramString.equals("")) {
+                paramString += p.nameDescriptor;
+            } else {
+                paramString += ", " + p.nameDescriptor;
+            }
+        }
+        return paramString;
     }
 
     private String invokeParamString(String... params) {

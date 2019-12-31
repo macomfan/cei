@@ -60,8 +60,12 @@ public class JavaDescriptionConverter implements IDescriptionConverter {
 
     @Override
     public String toStringDescriptor(String name) {
-        checkInput(name);
-        return "\"" + name + "\"";
+        if (name != null) {
+            return "\"" + name + "\"";
+        }
+        else {
+            throw new CEIException("Name is null in NameConverter");
+        }
     }
 
 }

@@ -15,14 +15,22 @@ public abstract class SignatureBuilder extends MethodBuilder {
     
     public abstract void newStringArray(Variable stringArray);
 
-    public abstract void getNow(Variable output, String format);
+    public abstract void getNow(Variable output, Variable format);
 
-    public abstract void appendQueryString(Variable requestVariable, String key, Variable value);
-
-    public abstract void combineQueryString(Variable requestVariable, Variable output, String sortDescriptor, String separator);
-
-    public abstract void getRequestInfo(Variable requestVariable, Variable output, String infoDescriptor, String convertDescriptor);
+    public abstract void addQueryString(Variable requestVariable, Variable key, Variable value);
     
-    public abstract void appendStringArray(Variable output, Variable input);
+    public abstract void appendToString(boolean needDefineNewOutput, Variable output, Variable input);
+
+    public abstract void combineQueryString(Variable requestVariable, Variable output, Variable sortDescriptor, Variable separator);
+
+    public abstract void getRequestInfo(Variable requestVariable, Variable output, Variable info, Variable convert);
+    
+    public abstract void addStringArray(Variable output, Variable input);
+    
+    public abstract void combineStringArray(Variable output, Variable input, Variable separator);
+    
+    public abstract void base64(Variable output, Variable input);
+    
+    public abstract void hmacsha265(Variable output, Variable input, Variable key);
 
 }

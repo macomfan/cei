@@ -13,15 +13,11 @@ import javax.xml.bind.annotation.XmlRootElement;
  *
  * @author u0151316
  */
-@XmlRootElement(name = "combine_string_array")
-public class xCombineStringArray extends xSignatureItem {
+@XmlRootElement(name = "append_to_string")
+public class xAppendToString extends xSignatureItem {
 
     @XmlAttribute(name = "output")
     public String output;
-
     @XmlAttribute(name = "input")
     public String input;
-
-    @XmlAttribute(name = "separator")
-    public String separator;
 }

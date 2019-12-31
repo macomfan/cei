@@ -12,6 +12,7 @@ import cn.ma.cei.generator.buildin.RestfulOptions;
 import cn.ma.cei.generator.buildin.RestfulRequest;
 import cn.ma.cei.generator.buildin.RestfulResponse;
 import cn.ma.cei.generator.buildin.SignatureTool;
+import cn.ma.cei.generator.buildin.TheStream;
 import cn.ma.cei.generator.environment.Constant;
 import cn.ma.cei.generator.environment.Environment;
 import cn.ma.cei.generator.environment.Reference;
@@ -56,6 +57,7 @@ public class JavaExchangeBuilder extends ExchangeBuilder {
         Reference.setupBuildinVariableType(RestfulOptions.typeName, "RestfulOptions", "cn.ma.cei.impl.RestfulOptions");
         Reference.setupBuildinVariableType(JsonWrapper.typeName, "JsonWrapper", "cn.ma.cei.impl.JsonWrapper");
         Reference.setupBuildinVariableType(SignatureTool.typeName, "SignatureTool", "cn.ma.cei.impl.SignatureTool");
+        Reference.setupBuildinVariableType(TheStream.typeName, "byte[]", JavaCode.NO_REF);
 
         CEIPath workingFolder = Environment.getWorkingFolder();
         CEIPath exchangeFolder = CEIPath.appendPath(workingFolder, "src", "main", "java", "cn", "ma", "cei", "exchanges");

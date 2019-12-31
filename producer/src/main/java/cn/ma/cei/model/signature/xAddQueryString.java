@@ -11,14 +11,13 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
- * @author u0151316
+ * @author U0151316
  */
-@XmlRootElement(name = "append_string_array")
-public class xAppendStringArray extends xSignatureItem {
-
-    @XmlAttribute(name = "input")
-    public String input;
-
-    @XmlAttribute(name = "output")
-    public String output;
+@XmlRootElement(name = "add_query_string")
+public class xAddQueryString extends xSignatureItem {
+    @XmlAttribute(name = "key")
+    public String key;
+    
+    @XmlAttribute(name = "value")
+    public String value;
 }

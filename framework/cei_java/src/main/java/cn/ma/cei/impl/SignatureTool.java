@@ -6,15 +6,19 @@ import cn.ma.cei.impl.RestfulRequest;
 import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import java.util.Base64;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import javafx.util.Pair;
+import javax.crypto.Mac;
+import javax.crypto.spec.SecretKeySpec;
 
 public class SignatureTool {
 
@@ -29,25 +33,6 @@ public class SignatureTool {
         NONE
     }
 
-    public String combineString(String separator, List<String> strings) {
-        String result = "";
-        boolean isFirst = true;
-        for (String item : strings) {
-            if (!isFirst) {
-                result += separator;
-            }
-            result += item;
-            isFirst = false;
-        }
-        return result;
-    }
-
-//    public List<String> getQueryStringList(RestfulRequest request) {
-//
-//    }
-//    public List<String> SortList(List<String> inputList) {
-//
-//    }
     public String escapeURL(String input) {
         try {
             return URLEncoder.encode(input, "UTF-8").replaceAll("\\+", "%20");
@@ -56,6 +41,40 @@ public class SignatureTool {
         }
     }
 
+    public static String combineStringArray(List<String> list, String separator) {
+        StringBuilder sb = new StringBuilder();
+        list.forEach(item -> {
+            if (sb.length() == 0) {
+                sb.append(item);
+            } else {
+                sb.append(separator);
+                sb.append(item);
+            }
+        });
+        return sb.toString();
+    }
+
+    public static byte[] hmacsha256(String input, String key) {
+        try {
+            Mac hmacSha256;
+            hmacSha256 = Mac.getInstance("HmacSHA256");
+            SecretKeySpec secKey = new SecretKeySpec(key.getBytes(StandardCharsets.UTF_8), "HmacSHA256");
+            hmacSha256.init(secKey);
+            return hmacSha256.doFinal(input.getBytes(StandardCharsets.UTF_8));
+        } catch (Exception e) {
+            throw new CEIException("hmacsha256 error");
+        }
+    }
+
+    public static String base64(byte[] input) {
+        return Base64.getEncoder().encodeToString(input);
+    }
+
+    public static List<String> addStringArray(List<String> list, String value) {
+        List<String> res = new LinkedList<>(list);
+        res.add(value);
+        return res;
+    }
     /**
      * *
      * Convert current date/time to string
@@ -75,7 +94,8 @@ public class SignatureTool {
     private static final ZoneId ZONE_GMT = ZoneId.of("Z");
 
     public static String getNow(String format) {
-        return Instant.ofEpochSecond(Instant.now().getEpochSecond()).atZone(ZONE_GMT).format(DT_FORMAT);
+        return "2019-12-31T02%3A23%3A25";
+        //return Instant.ofEpochSecond(Instant.now().getEpochSecond()).atZone(ZONE_GMT).format(DT_FORMAT);
     }
 
     public static String combineQueryString(RestfulRequest request, Constant sort, String separator) {
@@ -123,22 +143,38 @@ public class SignatureTool {
         }
     }
 
+    public static String appendToString(String obj, String value) {
+        return obj + value;
+    }
+    
     public static String getRequestInfo(RestfulRequest request, Constant method, Constant convert) {
+        String res = "";
         switch (method) {
             case HOST:
                 try {
                     URL url = new URL(request.getUrl());
-                    return url.getHost();
+                    res = url.getHost();
                 } catch (Exception e) {
                 }
                 break;
             case TARGET:
-                return request.getTarget();
-            case METHOD:
-                return request.getMethod().toString();
-            default:
+                res = request.getTarget();
                 break;
+            case METHOD:
+                res = request.getMethod().toString();
+                break;
+            default:
+                throw new CEIException(method.toString());
         }
-        return "";
+        switch (convert) {
+            case UPPERCASE:
+                return res.toUpperCase();
+            case LOWERCASE:
+                return res.toLowerCase();
+            case NONE:
+                return res;
+            default:
+                throw new CEIException(convert.toString());
+        }
     }
 }

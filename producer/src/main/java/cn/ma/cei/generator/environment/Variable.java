@@ -9,6 +9,7 @@ public class Variable {
         LOCAL,
         MEMBER,
         REFER,
+        CONSTANT,
         HARDCODE_STRING,
     }
 
@@ -20,10 +21,11 @@ public class Variable {
     public Position position;
 
     private Variable(VariableType type, String name, Position position, Variable parentVariable) {
+        
         if (type == null || !type.isValid()) {
             throw new CEIException("[Variable] type is null");
         }
-        if (name == null || name.equals("")) {
+        if ((name == null || name.equals("")) && position != Position.HARDCODE_STRING) {
             throw new CEIException("[Variable] name is null");
         }
         this.name = name;
@@ -41,6 +43,9 @@ public class Variable {
             case INPUT:
             case LOCAL:
                 this.nameDescriptor = Environment.getCurrentDescriptionConverter().getVariableDescriptor(name);
+                break;
+            case CONSTANT:
+                this.nameDescriptor = name;
                 break;
             case HARDCODE_STRING:
                 this.nameDescriptor = Environment.getCurrentDescriptionConverter().toStringDescriptor(name);
