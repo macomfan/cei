@@ -17,7 +17,7 @@ public abstract class MethodBuilder {
             throw new CEIException("Variable re-defined: " + variable.name);
         }
         variableList.registerVariable(variable);
-        onAddReference(variable.type);
+        //onAddReference(variable.type);
     }
 
     public VariableList getVariableList() {

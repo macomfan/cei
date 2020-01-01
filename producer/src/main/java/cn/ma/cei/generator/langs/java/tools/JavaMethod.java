@@ -33,17 +33,14 @@ public class JavaMethod {
     }
 
     public String useVariable(Variable variable) {
-        parent.addReference(variable.type);
         return variable.nameDescriptor;
     }
 
     public void addReturn(Variable variable) {
-        parent.addReference(variable.type);
         code.appendJavaLine("return", variable.nameDescriptor);
     }
 
     public void startFor(Variable item, String statement) {
-        parent.addReference(item.type);
         code.appendWordsln(statement + ".forEach(" + item.nameDescriptor + " -> {");
         code.startBlock();
     }
@@ -129,6 +126,7 @@ public class JavaMethod {
         }
         String paramString = "";
         for (Variable variable : params.getVariableList()) {
+            parent.addReference(variable.type);
             if (paramString.equals("")) {
                 paramString += variable.type.getDescriptor() + " " + variable.nameDescriptor;
             } else {

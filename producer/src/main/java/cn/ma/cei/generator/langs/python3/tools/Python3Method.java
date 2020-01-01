@@ -24,12 +24,10 @@ public class Python3Method {
     }
 
     public String defineVariable(Variable variable) {
-        parent.addReference(variable.type);
         return variable.nameDescriptor;
     }
 
     public String useVariable(Variable variable) {
-        parent.addReference(variable.type);
         return variable.nameDescriptor;
     }
 
@@ -39,7 +37,6 @@ public class Python3Method {
     }
 
     public void addReturn(Variable variable) {
-        parent.addReference(variable.type);
         code.appendWordsln("return", variable.nameDescriptor);
     }
 

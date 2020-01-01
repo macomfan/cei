@@ -1,8 +1,5 @@
-from impl.jsonwrapper import JsonWrapper
 from impl.restfulconnection import RestfulConnection
-from impl.restfuloptions import RestfulOptions
 from impl.restfulrequest import RestfulRequest
-from impl.restfulresponse import RestfulResponse
 
 
 class LastTradeTick:
