@@ -1,6 +1,7 @@
 package cn.ma.cei.generator.langs.java;
 
 import cn.ma.cei.generator.environment.Variable;
+import cn.ma.cei.generator.environment.VariableFactory;
 import cn.ma.cei.generator.environment.VariableList;
 import cn.ma.cei.generator.environment.VariableType;
 import cn.ma.cei.generator.builder.ResponseBuilder;
@@ -32,7 +33,8 @@ public class JavaRestfulInterfaceBuilder extends RestfulInterfaceBuilder {
 
     @Override
     public void defineRequest(Variable request) {
-        method.addAssign(method.defineVariable(request), method.newInstance(request.type, this.queryVariable("options")));
+        Variable options = VariableFactory.createConstantVariable("this.options");
+        method.addAssign(method.defineVariable(request), method.newInstance(request.type, options));
     }
 
     @Override
@@ -61,7 +63,8 @@ public class JavaRestfulInterfaceBuilder extends RestfulInterfaceBuilder {
     }
 
     @Override
-    public void setUrl(Variable request, Variable url) {
+    public void setUrl(Variable request) {
+        Variable url = VariableFactory.createConstantVariable("this.options.url");
         method.addInvoke(request.nameDescriptor + ".setUrl", url);
     }
 

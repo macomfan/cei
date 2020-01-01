@@ -8,6 +8,7 @@ package cn.ma.cei.generator.langs.python3;
 import cn.ma.cei.generator.builder.ResponseBuilder;
 import cn.ma.cei.generator.builder.RestfulInterfaceBuilder;
 import cn.ma.cei.generator.environment.Variable;
+import cn.ma.cei.generator.environment.VariableFactory;
 import cn.ma.cei.generator.environment.VariableList;
 import cn.ma.cei.generator.environment.VariableType;
 import cn.ma.cei.generator.langs.python3.tools.Python3Class;
@@ -39,7 +40,8 @@ public class Python3RestfulInterfaceBuilder extends RestfulInterfaceBuilder {
 
     @Override
     public void defineRequest(Variable request) {
-        method.addAssign(method.defineVariable(request), method.newInstance(request.type, this.queryVariable("options")));
+        Variable options = VariableFactory.createConstantVariable("self.options");
+        method.addAssign(method.defineVariable(request), method.newInstance(request.type, options));
     }
 
     @Override
@@ -48,7 +50,8 @@ public class Python3RestfulInterfaceBuilder extends RestfulInterfaceBuilder {
     }
 
     @Override
-    public void setUrl(Variable request, Variable url) {
+    public void setUrl(Variable request) {
+        Variable url = VariableFactory.createConstantVariable("self.options.url");
         method.addInvoke(request.nameDescriptor + ".set_url", url);
     }
 

@@ -21,7 +21,7 @@ public abstract class RestfulInterfaceBuilder extends MethodBuilder {
 
     public abstract void invokeQuery(Variable response, Variable request);
 
-    public abstract void setUrl(Variable request, Variable url);
+    public abstract void setUrl(Variable request);
 
     public abstract void setRequestMethod(Variable request, Variable requestMethod);
 

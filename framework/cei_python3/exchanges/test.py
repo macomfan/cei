@@ -11,8 +11,8 @@ class LastTradeTick:
 
 class MarketClient:
     def get_symbol(self):
-        request = RestfulRequest(options)
-        request.set_url(options.url)
+        request = RestfulRequest(self.options)
+        request.set_url(self.options.url)
         request.set_method(RestfulRequest.Method.GET)
         request.add_header("accept-encoding", "gzip")
         response = RestfulConnection.query(request)
@@ -28,8 +28,8 @@ class MarketClient:
         return symbols_var
 
     def get_last_trade(self, symbol):
-        request = RestfulRequest(options)
-        request.set_url(options.url)
+        request = RestfulRequest(self.options)
+        request.set_url(self.options.url)
         request.set_method(RestfulRequest.Method.GET)
         request.add_header("accept-encoding", "gzip")
         request.add_query_string("symbol", symbol)

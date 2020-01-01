@@ -12,5 +12,5 @@ import cn.ma.cei.generator.Code;
  * @author U0151316
  */
 public class Python3Code extends Code {
-    public final static String NO_REF = "NO_REF";
+
 }

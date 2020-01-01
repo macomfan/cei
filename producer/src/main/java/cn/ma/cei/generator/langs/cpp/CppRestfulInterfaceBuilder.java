@@ -37,7 +37,7 @@ public class CppRestfulInterfaceBuilder extends RestfulInterfaceBuilder {
     public void invokeQuery(Variable request, Variable response) {
         
     }
-    
+
     @Override
     public void returnResult(Variable returnVariable) {
         
@@ -75,7 +75,7 @@ public class CppRestfulInterfaceBuilder extends RestfulInterfaceBuilder {
     }
 
     @Override
-    public void setUrl(Variable request, Variable url) {
+    public void setUrl(Variable request) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

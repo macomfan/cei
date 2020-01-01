@@ -87,6 +87,10 @@ public class VariableFactory {
         return createVariable(xString.inst.getType(), name, Variable.Position.CONSTANT, null);
     }
 
+//    public static Variable createThisVariable(VariableType type, String name) {
+//        return createVariable(type, name, Variable.Position.THIS, null);
+//    }
+
     public static Variable createMemberVariable(VariableType modelType, VariableType memberType, String name) {
         if (modelInfo.isNull()) {
             modelInfo.trySet(new SecondLevelMap<>());

@@ -9,6 +9,7 @@ public class Variable {
         LOCAL,
         MEMBER,
         REFER,
+        THIS,
         CONSTANT,
         HARDCODE_STRING,
     }
@@ -40,6 +41,10 @@ public class Variable {
                 // TODO
                 this.nameDescriptor = parentVariable.nameDescriptor + "." + Environment.getCurrentDescriptionConverter().getVariableDescriptor(name);
                 break;
+            //case THIS:
+                //TODO
+                //this.nameDescriptor = "self";
+                //break;
             case INPUT:
             case LOCAL:
                 this.nameDescriptor = Environment.getCurrentDescriptionConverter().getVariableDescriptor(name);

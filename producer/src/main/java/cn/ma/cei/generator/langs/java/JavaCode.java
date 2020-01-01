@@ -7,6 +7,7 @@ package cn.ma.cei.generator.langs.java;
 
 import cn.ma.cei.exception.CEIException;
 import cn.ma.cei.generator.Code;
+import cn.ma.cei.generator.environment.Reference;
 
 /**
  *
@@ -15,7 +16,6 @@ import cn.ma.cei.generator.Code;
 public class JavaCode extends Code {
 
     public static final String CURRENT_PACKAGE = "cn.ma.cei.exchanges";
-    public final static String NO_REF = "NO_REF";
 
     public void appendPackage(String name) {
         if (name == null || name.equals("")) {
@@ -25,7 +25,7 @@ public class JavaCode extends Code {
     }
 
     public void appendImport(String name) {
-        if (name != null && !name.equals("") && !name.equals(JavaCode.NO_REF)) {
+        if (name != null && !name.equals("") && !name.equals(Reference.NO_REF)) {
             appendJavaLine("import", name);
         }
     }

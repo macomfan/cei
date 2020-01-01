@@ -21,7 +21,7 @@ import java.util.List;
 public class BuildRestfulInterface {
 
     public static void build(xInterface restIf, RestfulInterfaceBuilder builder) {
-        // Shoule be the member variable
+        // Should be the member variable
         Variable options = VariableFactory.createLocalVariable(RestfulOptions.getType(), "options");
         builder.registerVariable(options);
 
@@ -55,7 +55,7 @@ public class BuildRestfulInterface {
             }
             
             builder.defineRequest(request);
-            builder.setUrl(request, options.queryMember("url"));
+            builder.setUrl(request);
             builder.setRequestTarget(request, VariableFactory.createHardcodeStringVariable(restIf.request.target));
 
             Variable requestMethod = VariableFactory.createConstantVariable(Constant.requestMethod().tryGet(restIf.request.method));

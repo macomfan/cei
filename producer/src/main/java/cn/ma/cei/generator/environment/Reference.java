@@ -12,6 +12,7 @@ import cn.ma.cei.utils.MapWithValue2;
  * @author u0151316
  */
 public class Reference {
+    public final static String NO_REF = "NO_REF";
 
     private static final EnvironmentData<MapWithValue2<VariableType, String, String>> info = new EnvironmentData<>();
 

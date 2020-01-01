@@ -52,19 +52,19 @@ public class Python3ExchangeBuilder extends ExchangeBuilder {
         Constant.signatureMethod().tryPut(SignatureTool.Constant.LOWERCASE, "SignatureTool.Constant.LOWERCASE");
         Constant.signatureMethod().tryPut(SignatureTool.Constant.NONE, "SignatureTool.Constant.NONE");
 
-        Reference.setupBuildinVariableType(xString.inst.getType(), "String", Python3Code.NO_REF);
-        Reference.setupBuildinVariableType(xBoolean.inst.getType(), "Boolean", Python3Code.NO_REF);
-        Reference.setupBuildinVariableType(xInt.inst.getType(), "Integer", Python3Code.NO_REF);
-        Reference.setupBuildinVariableType(xLong.inst.getType(), "Long", Python3Code.NO_REF);
-        Reference.setupBuildinVariableType(xDecimal.inst.getType(), "Decimal", Python3Code.NO_REF);
-        Reference.setupBuildinVariableType(TheArray.getType(), "list", Python3Code.NO_REF);
+        Reference.setupBuildinVariableType(xString.inst.getType(), "String", Reference.NO_REF);
+        Reference.setupBuildinVariableType(xBoolean.inst.getType(), "Boolean", Reference.NO_REF);
+        Reference.setupBuildinVariableType(xInt.inst.getType(), "Integer", Reference.NO_REF);
+        Reference.setupBuildinVariableType(xLong.inst.getType(), "Long", Reference.NO_REF);
+        Reference.setupBuildinVariableType(xDecimal.inst.getType(), "Decimal", Reference.NO_REF);
+        Reference.setupBuildinVariableType(TheArray.getType(), "list", Reference.NO_REF);
         Reference.setupBuildinVariableType(RestfulRequest.getType(), "RestfulRequest", "from impl.restfulrequest import RestfulRequest");
         Reference.setupBuildinVariableType(RestfulResponse.getType(), "RestfulResponse", "from impl.restfulresponse import RestfulResponse");
         Reference.setupBuildinVariableType(RestfulConnection.getType(), "RestfulConnection", "from impl.restfulconnection import RestfulConnection");
         Reference.setupBuildinVariableType(RestfulOptions.getType(), "RestfulOptions", "from impl.restfuloptions import RestfulOptions");
         Reference.setupBuildinVariableType(JsonWrapper.getType(), "JsonWrapper", "from impl.jsonwrapper import JsonWrapper");
         Reference.setupBuildinVariableType(SignatureTool.getType(), "SignatureTool", "from impl.signaturetool import SignatureTool");
-        Reference.setupBuildinVariableType(TheStream.getType(), "byte[]", Python3Code.NO_REF);
+        Reference.setupBuildinVariableType(TheStream.getType(), "byte[]", Reference.NO_REF);
 
         CEIPath workingFolder = Environment.getWorkingFolder();
         CEIPath exchangeFolder = CEIPath.appendPath(workingFolder, "exchanges");

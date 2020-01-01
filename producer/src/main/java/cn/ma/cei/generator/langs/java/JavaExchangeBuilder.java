@@ -44,10 +44,10 @@ public class JavaExchangeBuilder extends ExchangeBuilder {
         Constant.signatureMethod().tryPut(SignatureTool.Constant.LOWERCASE, "SignatureTool.Constant.LOWERCASE");
         Constant.signatureMethod().tryPut(SignatureTool.Constant.NONE, "SignatureTool.Constant.NONE");
 
-        Reference.setupBuildinVariableType(xString.inst.getType(), "String", JavaCode.NO_REF);
-        Reference.setupBuildinVariableType(xBoolean.inst.getType(), "Boolean", JavaCode.NO_REF);
-        Reference.setupBuildinVariableType(xInt.inst.getType(), "Integer", JavaCode.NO_REF);
-        Reference.setupBuildinVariableType(xLong.inst.getType(), "Long", JavaCode.NO_REF);
+        Reference.setupBuildinVariableType(xString.inst.getType(), "String", Reference.NO_REF);
+        Reference.setupBuildinVariableType(xBoolean.inst.getType(), "Boolean", Reference.NO_REF);
+        Reference.setupBuildinVariableType(xInt.inst.getType(), "Integer", Reference.NO_REF);
+        Reference.setupBuildinVariableType(xLong.inst.getType(), "Long", Reference.NO_REF);
         Reference.setupBuildinVariableType(xDecimal.inst.getType(), "BigDecimal", "java.math.BigDecimal");
         Reference.setupBuildinVariableType(TheArray.getType(), "List", "java.util.List");
         Reference.setupBuildinVariableType(TheLinkedList.getType(), "LinkedList", "java.util.LinkedList");
@@ -57,7 +57,7 @@ public class JavaExchangeBuilder extends ExchangeBuilder {
         Reference.setupBuildinVariableType(RestfulOptions.getType(), "RestfulOptions", "cn.ma.cei.impl.RestfulOptions");
         Reference.setupBuildinVariableType(JsonWrapper.getType(), "JsonWrapper", "cn.ma.cei.impl.JsonWrapper");
         Reference.setupBuildinVariableType(SignatureTool.getType(), "SignatureTool", "cn.ma.cei.impl.SignatureTool");
-        Reference.setupBuildinVariableType(TheStream.getType(), "byte[]", JavaCode.NO_REF);
+        Reference.setupBuildinVariableType(TheStream.getType(), "byte[]", Reference.NO_REF);
 
         CEIPath workingFolder = Environment.getWorkingFolder();
         CEIPath exchangeFolder = CEIPath.appendPath(workingFolder, "src", "main", "java", "cn", "ma", "cei", "exchanges");

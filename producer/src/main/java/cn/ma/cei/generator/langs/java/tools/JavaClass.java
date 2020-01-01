@@ -2,6 +2,7 @@ package cn.ma.cei.generator.langs.java.tools;
 
 import cn.ma.cei.exception.CEIException;
 import cn.ma.cei.generator.CEIPath;
+import cn.ma.cei.generator.environment.Reference;
 import cn.ma.cei.generator.environment.Variable;
 import cn.ma.cei.generator.environment.VariableList;
 import cn.ma.cei.generator.environment.VariableType;
@@ -136,7 +137,7 @@ public class JavaClass {
         List<String> list = new ArrayList<>(newImportList);
         Collections.sort(list);
         list.forEach((item) -> {
-            if (!item.equals(JavaCode.NO_REF) && !item.equals(packageName)) {
+            if (!item.equals(Reference.NO_REF) && !item.equals(packageName)) {
                 code.appendImport(item);
             }
         });

@@ -2,6 +2,7 @@ package cn.ma.cei.generator.langs.python3.tools;
 
 import cn.ma.cei.exception.CEIException;
 import cn.ma.cei.generator.CEIPath;
+import cn.ma.cei.generator.environment.Reference;
 import cn.ma.cei.generator.langs.python3.Python3Code;
 
 import java.util.*;
@@ -33,7 +34,7 @@ public class Python3File {
         List<String> list = new ArrayList<>(newImportList);
         Collections.sort(list);
         list.forEach((item) -> {
-            if (!item.equals(Python3Code.NO_REF)) {
+            if (!item.equals(Reference.NO_REF)) {
                 code.appendln(item);
             }
         });
