@@ -68,7 +68,7 @@ public class Python3JsonParserBuilder extends JsonParserBuilder {
 
     @Override
     public void endJsonObjectArrayLoop(Variable to, Variable model) {
-        method.startIf(to.nameDescriptor + " == None");
+        method.startIf(to.nameDescriptor + " is None");
         method.addAssign(method.useVariable(to), method.newInstance(TheArray.getType()));
         method.endIf();
         method.addInvoke(to.nameDescriptor + ".append", model);

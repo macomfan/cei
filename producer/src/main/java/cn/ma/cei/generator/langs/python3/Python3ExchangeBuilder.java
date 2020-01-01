@@ -22,6 +22,7 @@ import cn.ma.cei.generator.environment.Constant;
 import cn.ma.cei.generator.environment.Environment;
 import cn.ma.cei.generator.environment.Reference;
 import cn.ma.cei.generator.langs.python3.tools.Python3Class;
+import cn.ma.cei.generator.langs.python3.tools.Python3File;
 import cn.ma.cei.model.types.xBoolean;
 import cn.ma.cei.model.types.xDecimal;
 import cn.ma.cei.model.types.xInt;
@@ -34,7 +35,8 @@ import cn.ma.cei.model.types.xString;
  */
 public class Python3ExchangeBuilder extends ExchangeBuilder {
 
-    private Python3Class mainClass;
+    private Python3File mainFile;
+    private Python3Class signatureClass;
 
     @Override
     public void startExchange(String exchangeName) {
@@ -55,7 +57,7 @@ public class Python3ExchangeBuilder extends ExchangeBuilder {
         Reference.setupBuildinVariableType(xInt.inst.getType(), "Integer", Python3Code.NO_REF);
         Reference.setupBuildinVariableType(xLong.inst.getType(), "Long", Python3Code.NO_REF);
         Reference.setupBuildinVariableType(xDecimal.inst.getType(), "Decimal", Python3Code.NO_REF);
-        Reference.setupBuildinVariableType(TheArray.getType(), "List", Python3Code.NO_REF);
+        Reference.setupBuildinVariableType(TheArray.getType(), "list", Python3Code.NO_REF);
         Reference.setupBuildinVariableType(RestfulRequest.getType(), "RestfulRequest", "from impl.restfulrequest import RestfulRequest");
         Reference.setupBuildinVariableType(RestfulResponse.getType(), "RestfulResponse", "from impl.restfulresponse import RestfulResponse");
         Reference.setupBuildinVariableType(RestfulConnection.getType(), "RestfulConnection", "from impl.restfulconnection import RestfulConnection");
@@ -69,27 +71,28 @@ public class Python3ExchangeBuilder extends ExchangeBuilder {
         exchangeFolder.mkdirs();
         Environment.setExchangeFolder(exchangeFolder);
 
-        mainClass = new Python3Class(exchangeName);
+        mainFile = new Python3File(exchangeName);
     }
 
     @Override
     public RestfulClientBuilder getRestfulClientBuilder() {
-        return new Python3RestfulClientBuilder(mainClass);
+        return new Python3RestfulClientBuilder(mainFile);
     }
 
     @Override
     public ModelBuilder getModelBuilder() {
-        return new Python3ModelBuilder(mainClass);
+        return new Python3ModelBuilder(mainFile);
     }
 
     @Override
     public void endExchange() {
-        mainClass.build(Environment.getExchangeFolder());
+        mainFile.build(Environment.getExchangeFolder());
     }
 
     @Override
     public SignatureBuilder getSignatureBuilder() {
-        return new Python3SignatureBuilder(mainClass);
+        signatureClass = new Python3Class("Signature");
+        return new Python3SignatureBuilder(signatureClass);
     }
 
 }

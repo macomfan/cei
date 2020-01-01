@@ -9,6 +9,7 @@ import cn.ma.cei.generator.builder.ModelBuilder;
 import cn.ma.cei.generator.environment.Variable;
 import cn.ma.cei.generator.environment.VariableType;
 import cn.ma.cei.generator.langs.python3.tools.Python3Class;
+import cn.ma.cei.generator.langs.python3.tools.Python3File;
 
 /**
  *
@@ -16,11 +17,11 @@ import cn.ma.cei.generator.langs.python3.tools.Python3Class;
  */
 public class Python3ModelBuilder extends ModelBuilder {
 
-    private Python3Class mainClass;
+    private Python3File mainFile;
     private Python3Class modelClass;
     
-    public Python3ModelBuilder(Python3Class mainClass) {
-        this.mainClass = mainClass;
+    public Python3ModelBuilder(Python3File mainFile) {
+        this.mainFile = mainFile;
     }
     
     @Override
@@ -40,7 +41,7 @@ public class Python3ModelBuilder extends ModelBuilder {
 
     @Override
     public void endModel() {
-        mainClass.addInnerClass(modelClass);
+        mainFile.addInnerClass(modelClass);
     }
     
 }

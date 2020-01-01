@@ -8,7 +8,7 @@ if __name__ == '__main__':
     lll = list()
     lll.append()
     SignatureTool.Constant.ASC = "ccc"
-    if 
+
 
     request = RestfulRequest()
     request.set_method(RestfulRequest.Method.GET)

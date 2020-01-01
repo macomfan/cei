@@ -74,12 +74,12 @@ public class Python3Method {
     }
 
     public void startMethod(VariableType returnType, String methodName, VariableList params) {
-        if (params.isEmpty()) {
-            code.appendWordsln("def", methodName + "(self, " + defineParamString(params) + "):");
-        } else {
+        String paramString = defineParamString(params);
+        if (paramString.isEmpty()) {
             code.appendWordsln("def", methodName + "(self):");
+        } else {
+            code.appendWordsln("def", methodName + "(self, " + defineParamString(params) + "):");
         }
-        
         code.startBlock();
     }
 
@@ -94,7 +94,6 @@ public class Python3Method {
 
     public void endMethod() {
         code.endBlock();
-        code.endln();
     }
 
     private String invokeParamString(Variable... params) {
@@ -116,7 +115,7 @@ public class Python3Method {
     }
 
     private String defineParamString(VariableList params) {
-        if (params == null) {
+        if (params == null || params.isEmpty()) {
             return "";
         }
         String paramString = "";
