@@ -23,6 +23,56 @@ public class Python3Method {
         this.parent = parent;
     }
 
+    public String defineVariable(Variable variable) {
+        parent.addReference(variable.type);
+        return variable.nameDescriptor;
+    }
+
+    public String useVariable(Variable variable) {
+        parent.addReference(variable.type);
+        return variable.nameDescriptor;
+    }
+
+    public String newInstance(VariableType type, Variable... params) {
+        parent.addReference(type);
+        return type.getDescriptor() + "(" + invokeParamString(params) + ")";
+    }
+
+    public void addReturn(Variable variable) {
+        parent.addReference(variable.type);
+        code.appendWordsln("return", variable.nameDescriptor);
+    }
+
+    public void startFor(Variable item, String statement) {
+        code.appendWordsln("for", item.nameDescriptor, "in", statement);
+        code.startBlock();
+    }
+
+    public void endFor() {
+        code.endBlock();
+    }
+
+    public void startIf(String statement) {
+        code.appendWordsln("if", statement + ":");
+        code.startBlock();
+    }
+
+    public void endIf() {
+        code.endBlock();
+    }
+
+    public void addAssign(String left, String right) {
+        code.appendWordsln(left, "=", right);
+    }
+
+    public void addInvoke(String method, Variable... params) {
+        code.appendWordsln(invoke(method, params));
+    }
+
+    public String invoke(String method, Variable... params) {
+        return method + "(" + invokeParamString(params) + ")";
+    }
+
     public void startMethod(VariableType returnType, String methodName, VariableList params) {
         if (params.isEmpty()) {
             code.appendWordsln("def", methodName + "(self, " + defineParamString(params) + "):");
@@ -38,41 +88,6 @@ public class Python3Method {
         startMethod(returnType, methodName, params);
     }
 
-    public void newInstance(Variable variable) {
-        code.appendWordsln(variable.nameDescriptor, "=", variable.type.getDescriptor() + "()");
-    }
-
-    public void invoke(String methodName, Variable... params) {
-        String paramsString = invokeParamString(params);
-        code.appendWordsln(methodName + "(" + paramsString + ")");
-    }
-
-    public void newInstanceWithInvoke(Variable variable, String methodName, Variable... params) {
-        String paramString = invokeParamString(params);
-        code.appendWordsln(variable.nameDescriptor, "=", methodName + "(" + paramString + ")");
-    }
-
-    public void assign(Variable variable, Variable value) {
-        code.appendWordsln(variable.nameDescriptor, "=", value.nameDescriptor);
-    }
-
-    public void newInstanceWithValue(Variable variable, Variable value) {
-        code.appendWordsln(variable.nameDescriptor, "=", value.nameDescriptor);
-    }
-
-    public void startFor(Variable item, String loopStatement) {
-        code.appendWordsln("for", item.nameDescriptor, "in", loopStatement);
-        code.startBlock();
-    }
-
-    public void endFor() {
-        code.endBlock();
-    }
-
-    public void returnVariable(Variable variable) {
-        code.appendWords("return", variable.nameDescriptor);
-    }
-
     public Python3Code getCode() {
         return code;
     }
@@ -80,11 +95,6 @@ public class Python3Method {
     public void endMethod() {
         code.endBlock();
         code.endln();
-    }
-
-    public void assignWithInvoke(Variable variable, String methodName, Variable... params) {
-        String paramString = invokeParamString(params);
-        code.appendWordsln(variable.nameDescriptor, "=", methodName + "(" + paramString + ")");
     }
 
     private String invokeParamString(Variable... params) {

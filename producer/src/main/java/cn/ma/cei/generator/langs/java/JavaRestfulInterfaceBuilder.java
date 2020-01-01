@@ -32,7 +32,6 @@ public class JavaRestfulInterfaceBuilder extends RestfulInterfaceBuilder {
 
     @Override
     public void defineRequest(Variable request) {
-        
         method.addAssign(method.defineVariable(request), method.newInstance(request.type, this.queryVariable("options")));
     }
 

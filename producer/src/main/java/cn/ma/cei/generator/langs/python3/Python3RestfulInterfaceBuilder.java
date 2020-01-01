@@ -39,27 +39,27 @@ public class Python3RestfulInterfaceBuilder extends RestfulInterfaceBuilder {
 
     @Override
     public void defineRequest(Variable request) {
-        method.newInstance(request);
+        method.addAssign(method.defineVariable(request), method.newInstance(request.type, this.queryVariable("options")));
     }
 
     @Override
     public void invokeQuery(Variable response, Variable request) {
-        method.newInstanceWithInvoke(response, "RestfulConnection.query", request);
+        method.addAssign(method.defineVariable(response), method.invoke("RestfulConnection.query", request));
     }
 
     @Override
     public void setUrl(Variable request, Variable url) {
-        method.invoke(request.nameDescriptor + ".set_url", url);
+        method.addInvoke(request.nameDescriptor + ".set_url", url);
     }
 
     @Override
     public void setRequestMethod(Variable request, Variable requestMethod) {
-        method.invoke(request.nameDescriptor + ".set_method", requestMethod);
+        method.addInvoke(request.nameDescriptor + ".set_method", requestMethod);
     }
 
     @Override
     public void returnResult(Variable returnVariable) {
-        method.returnVariable(returnVariable);
+        method.addReturn(returnVariable);
     }
 
     @Override
@@ -80,12 +80,12 @@ public class Python3RestfulInterfaceBuilder extends RestfulInterfaceBuilder {
 
     @Override
     public void addHeader(Variable request, Variable tag, Variable value) {
-        method.invoke(request.nameDescriptor + ".add_header", tag, value);
+        method.addInvoke(request.nameDescriptor + ".add_header", tag, value);
     }
 
     @Override
     public void addToQueryString(Variable request, Variable queryStringName, Variable variable) {
-        method.invoke(request.nameDescriptor + ".add_query_string", queryStringName, variable);
+        method.addInvoke(request.nameDescriptor + ".add_query_string", queryStringName, variable);
     }
 
 }

@@ -22,7 +22,7 @@ import java.util.Map;
  */
 public class BuildSDK {
 
-    public class Request {
+    public static class Request {
 
         public String outputFolder = "C:\\dev\\cei\\output";
         public boolean addTimestamp = true;

@@ -29,7 +29,5 @@ public class Python3Framework extends Framework {
     public IDescriptionConverter getDescriptionConverter() {
         return new Python3DescriptionConverter();
     }
-
-
     
 }

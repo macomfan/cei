@@ -6,6 +6,7 @@
 package cn.ma.cei.generator.langs.python3;
 
 import cn.ma.cei.generator.builder.JsonParserBuilder;
+import cn.ma.cei.generator.buildin.TheArray;
 import cn.ma.cei.generator.environment.Variable;
 import cn.ma.cei.generator.environment.VariableFactory;
 import cn.ma.cei.generator.langs.python3.tools.Python3Method;
@@ -24,39 +25,39 @@ public class Python3JsonParserBuilder extends JsonParserBuilder {
 
     @Override
     public void getJsonString(Variable to, Variable jsonObject, Variable itemName) {
-        method.assignWithInvoke(to, jsonObject.nameDescriptor + ".get_string", itemName);
+        method.addAssign(method.useVariable(to), method.invoke(jsonObject.nameDescriptor + ".get_string", itemName));
     }
 
     @Override
     public void getJsonInteger(Variable to, Variable jsonObject, Variable itemName) {
-        method.assignWithInvoke(to, jsonObject.nameDescriptor + ".get_integer", itemName);
+        method.addAssign(method.useVariable(to), method.invoke(jsonObject.nameDescriptor + ".get_integer", itemName));
     }
 
     @Override
     public void getJsonLong(Variable to, Variable jsonObject, Variable itemName) {
-        method.assignWithInvoke(to, jsonObject.nameDescriptor + ".get_long", itemName);
+        method.addAssign(method.useVariable(to), method.invoke(jsonObject.nameDescriptor + ".get_long", itemName));
     }
 
     @Override
     public void getJsonBoolean(Variable to, Variable jsonObject, Variable itemName) {
-        method.assignWithInvoke(to, jsonObject.nameDescriptor + ".get_boolean", itemName);
+        method.addAssign(method.useVariable(to), method.invoke(jsonObject.nameDescriptor + ".get_boolean", itemName));
     }
 
     @Override
     public void getJsonDecimal(Variable to, Variable jsonObject, Variable itemName) {
-        method.assignWithInvoke(to, jsonObject.nameDescriptor + ".get_decimal", itemName);
+        method.addAssign(method.useVariable(to), method.invoke(jsonObject.nameDescriptor + ".get_decimal", itemName));
     }
 
     @Override
     public void getJsonStringArray(Variable to, Variable jsonObject, Variable itemName) {
-        method.assignWithInvoke(to, jsonObject.nameDescriptor + ".get_string_array", itemName);
+        method.addAssign(method.useVariable(to), method.invoke(jsonObject.nameDescriptor + ".get_string_array", itemName));
     }
 
     @Override
     public void getJsonObject(Variable to, Variable parentModel, Variable jsonObject, Variable parentJsonObject, Variable itemName) {
-        method.newInstanceWithInvoke(jsonObject, parentJsonObject.nameDescriptor + ".getObject", itemName);
+        method.addAssign(method.defineVariable(jsonObject), method.invoke(parentJsonObject.nameDescriptor + ".get_object", itemName));
         if (to != null) {
-            method.assign(to, parentModel);
+            method.addAssign(method.useVariable(to), method.useVariable(parentModel));
         }
     }
 
@@ -67,18 +68,22 @@ public class Python3JsonParserBuilder extends JsonParserBuilder {
 
     @Override
     public void endJsonObjectArrayLoop(Variable to, Variable model) {
+        method.startIf(to.nameDescriptor + " == None");
+        method.addAssign(method.useVariable(to), method.newInstance(TheArray.getType()));
+        method.endIf();
+        method.addInvoke(to.nameDescriptor + ".append", model);
         method.endFor();
     }
 
     @Override
     public void defineModel(Variable model) {
-        method.newInstance(model);
+        method.addAssign(method.defineVariable(model), method.newInstance(model.type));
     }
 
     @Override
     public void defineRootJsonObject(Variable jsonObject, Variable responseVariable) {
-        Variable value = VariableFactory.createConstantVariable(responseVariable.nameDescriptor + ".getJson()");
-        method.newInstanceWithValue(jsonObject, value);
+        Variable value = VariableFactory.createConstantVariable(responseVariable.nameDescriptor + ".get_json()");
+        method.addAssign(method.defineVariable(jsonObject), method.useVariable(value));
     }
 
 }

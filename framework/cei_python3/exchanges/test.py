@@ -13,37 +13,40 @@ class test :
 
     class MarketClient :
         def get_symbol(self, ):
-            request = RestfulRequest()
+            request = RestfulRequest(options)
             request.set_url(options.url)
-            request.set_target("/v1/common/symbols")
             request.set_method(RestfulRequest.Method.GET)
             request.add_header("accept-encoding", "gzip")
             response = RestfulConnection.query(request)
             symbols_var = Symbols()
-            root_obj = response.getJson()
+            root_obj = response.get_json()
             symbols_var.status = root_obj.get_string("status")
             for item in root_obj.get_items("data"):
                 symbols_data_var = SymbolsData()
                 symbols_data_var.base_currency = item.get_string("base-currency")
+                if symbols_var.data == None:
+                    symbols_var.data = List()
+                symbols_var.data.append(symbols_data_var)
             return symbols_var
+        
     
         def get_last_trade(self):
-            request = RestfulRequest()
+            request = RestfulRequest(options)
             request.set_url(options.url)
-            request.set_target("/market/trade")
             request.set_method(RestfulRequest.Method.GET)
             request.add_header("accept-encoding", "gzip")
             request.add_query_string("symbol", symbol)
             request.add_query_string("test", "test")
             response = RestfulConnection.query(request)
             last_trade_var = LastTrade()
-            root_obj = response.getJson()
+            root_obj = response.get_json()
             last_trade_var.status = root_obj.get_string("status")
             last_trade_tick_var = LastTradeTick()
-            tick_obj = root_obj.getObject("tick")
+            tick_obj = root_obj.get_object("tick")
             last_trade_var.tick = last_trade_tick_var
             last_trade_tick_var.ts = tick_obj.get_string("ts")
             return last_trade_var
+        
     
 
     class SymbolsData :

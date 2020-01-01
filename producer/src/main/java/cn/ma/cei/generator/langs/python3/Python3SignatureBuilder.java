@@ -36,51 +36,51 @@ public class Python3SignatureBuilder extends SignatureBuilder {
 
     @Override
     public void getNow(Variable output, Variable format) {
-        method.newInstanceWithInvoke(output, "SignatureTool.get_now", format);
+        method.addAssign(method.defineVariable(output), method.invoke("SignatureTool.get_now", format));
     }
 
     @Override
     public void addQueryString(Variable requestVariable, Variable key, Variable value) {
-        method.invoke(requestVariable.nameDescriptor + ".add_query_string", key, value);
+        method.addInvoke(requestVariable.nameDescriptor + ".add_query_string", key, value);
     }
 
     @Override
     public void appendToString(boolean needDefineNewOutput, Variable output, Variable input) {
         if (needDefineNewOutput) {
-            method.newInstanceWithValue(output, input);
+            method.addAssign(method.defineVariable(output), method.useVariable(input));
         } else {
-            method.assignWithInvoke(output, "SignatureTool.append_to_string", output, input);
+            method.addAssign(method.useVariable(output), method.invoke("SignatureTool.append_to_string", output, input));
         }
     }
 
     @Override
     public void combineQueryString(Variable requestVariable, Variable output, Variable sort, Variable separator) {
-        method.newInstanceWithInvoke(output, "SignatureTool.combine_query_string", requestVariable, sort, separator);
+        method.addAssign(method.defineVariable(output), method.invoke("SignatureTool.combine_query_string", requestVariable, sort, separator));
     }
 
     @Override
     public void getRequestInfo(Variable requestVariable, Variable output, Variable info, Variable convert) {
-        method.newInstanceWithInvoke(output, "SignatureTool.get_request_info", requestVariable, info, convert);
+        method.addAssign(method.defineVariable(output), method.invoke("SignatureTool.get_request_info", requestVariable, info, convert));
     }
 
     @Override
     public void addStringArray(Variable output, Variable input) {
-        method.assignWithInvoke(output, "SignatureTool.add_string_array", output, input);
+        method.addAssign(method.useVariable(output), method.invoke("SignatureTool.add_string_array", output, input));
     }
 
     @Override
     public void combineStringArray(Variable output, Variable input, Variable separator) {
-        method.newInstanceWithInvoke(output, "SignatureTool.combineStringArray", input, separator);
+        method.addAssign(method.defineVariable(output), method.invoke("SignatureTool.combine_string_array", input, separator));
     }
 
     @Override
     public void base64(Variable output, Variable input) {
-        method.newInstanceWithInvoke(output, "SignatureTool.base64", input);
+        method.addAssign(method.defineVariable(output), method.invoke("SignatureTool.base64", input));
     }
 
     @Override
     public void hmacsha265(Variable output, Variable input, Variable key) {
-        method.newInstanceWithInvoke(output, "SignatureTool.hmacsha256", input, key);
+        method.addAssign(method.defineVariable(output), method.invoke("SignatureTool.hmacsha256", input, key));
     }
 
     @Override

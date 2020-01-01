@@ -64,8 +64,7 @@ public class Finalizer {
         }
         // Check error
         System.out.println("-- Start end");
-        List<xSDK> res = new LinkedList<>();
-        res.addAll(sdkMap.values());
+        List<xSDK> res = new LinkedList<>(sdkMap.values());
         return orgSDKList;
     }
 }
