@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <sdk exchange="huobipro" document="https://huobiapi.github.io/docs/spot/v1/en/">
 
+	<mappings>
+		<map name="huobiMappingKLine">
+			<string client="1m" server="1min"/>
+		</map>
+	</mappings>
+
     <model name="Symbols">
         <string name="status"/>
         <object_array name="data" refer="SymbolsData"/>
@@ -138,7 +144,7 @@
             </response>
         </interface-->
 
-        <interface name="placeOrder">
+        <!--interface name="placeOrder">
             <inputs>
                 <string name="account_id" mandatory="true"/>
                 <string name="symbol" mandatory="true"/>
@@ -154,6 +160,6 @@
                 </post_body>
             </request>
             <response type="raw"/>
-        </interface>
+        </interface-->
     </restful>
 </sdk>

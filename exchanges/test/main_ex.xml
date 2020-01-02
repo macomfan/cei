@@ -46,6 +46,50 @@
     </signature>
 
     <restful client_name="MarketClient" url="http://127.0.0.1:8081">	
+		<compound name="getSymbols">
+		    <inputs>
+                <string name="symbol" mandatory="true"/>
+            </inputs>
+			<entity>
+				<request method="get" target="/api/v1/exchangeInfo">
+					<headers>
+						<header tag="accept-encoding" value="gzip"/>
+					</headers>
+				</request>
+				<response type="model">
+					<json_parser model="ExchangeInfo">
+						<json_auto copy="ExchangeName"/>
+						<json_auto copy="Timestamp"/>
+						<json_auto copy="Symbols" model="Symbols">
+							<json_auto copy="Name"/>
+							<json_auto copy="Status"/>
+							<json_auto copy="OCOAllowed"/>
+							<json_auto copy="Precision"/>
+						</json_auto>
+					</json_parser>
+				</response>
+			</entity>
+			<entity>
+				<request method="get" target="/api/v1/exchangeInfo">
+					<headers>
+						<header tag="accept-encoding" value="gzip"/>
+					</headers>
+				</request>
+				<response type="model">
+					<json_parser model="ExchangeInfo">
+						<json_auto copy="ExchangeName"/>
+						<json_auto copy="Timestamp"/>
+						<json_auto copy="Symbols" model="Symbols">
+							<json_auto copy="Name"/>
+							<json_auto copy="Status"/>
+							<json_auto copy="OCOAllowed"/>
+							<json_auto copy="Precision"/>
+						</json_auto>
+					</json_parser>
+				</response>
+			</entity>
+		</compound>
+	
         <interface name="getExchangeInfo">
             <request method="get" target="/api/v1/exchangeInfo">
 				<headers>

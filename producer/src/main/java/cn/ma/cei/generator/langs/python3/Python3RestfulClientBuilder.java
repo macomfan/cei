@@ -7,6 +7,7 @@ package cn.ma.cei.generator.langs.python3;
 
 import cn.ma.cei.generator.builder.RestfulClientBuilder;
 import cn.ma.cei.generator.builder.RestfulInterfaceBuilder;
+import cn.ma.cei.generator.buildin.RestfulOptions;
 import cn.ma.cei.generator.langs.python3.tools.Python3Class;
 import cn.ma.cei.generator.langs.python3.tools.Python3File;
 
@@ -24,7 +25,7 @@ public class Python3RestfulClientBuilder extends RestfulClientBuilder {
     }
 
     @Override
-    public void startClient(String clientDescriptor, String url) {
+    public void startClient(String clientDescriptor, RestfulOptions options) {
         clientClass = new Python3Class(clientDescriptor);
     }
 

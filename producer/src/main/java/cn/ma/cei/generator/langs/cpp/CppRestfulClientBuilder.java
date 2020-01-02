@@ -1,5 +1,6 @@
 package cn.ma.cei.generator.langs.cpp;
 
+import cn.ma.cei.generator.buildin.RestfulOptions;
 import cn.ma.cei.generator.builder.RestfulClientBuilder;
 import cn.ma.cei.generator.builder.RestfulInterfaceBuilder;
 import cn.ma.cei.generator.langs.cpp.tools.CppClass;
@@ -12,7 +13,8 @@ public class CppRestfulClientBuilder extends RestfulClientBuilder {
         this.exchangeName = exchangeName;
     }
     
-    public void startClient(String clientName, String url) {
+    @Override
+    public void startClient(String clientName, RestfulOptions options) {
         cppClass = new CppClass(exchangeName, clientName);
     }
 

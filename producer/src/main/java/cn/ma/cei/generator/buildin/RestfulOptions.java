@@ -16,6 +16,9 @@ import cn.ma.cei.model.types.xString;
  */
 public class RestfulOptions {
 
+    public String url = null;
+    public Integer connectionTimeout = null;
+
     public final static String typeName = "RestfulOptions";
 
     public static VariableType getType() {

@@ -21,7 +21,7 @@ public class JavaRestfulClientBuilder extends RestfulClientBuilder {
     }
 
     @Override
-    public void startClient(String clientDescriptor, String url) {
+    public void startClient(String clientDescriptor, RestfulOptions options) {
         clientClass = new JavaClass(clientDescriptor);
         clientClass.addMemberVariable(JavaClass.AccessType.PRIVATE, VariableFactory.createLocalVariable(RestfulOptions.getType(), "options"));
 
@@ -29,8 +29,11 @@ public class JavaRestfulClientBuilder extends RestfulClientBuilder {
         defauleConstructor.getCode().appendWordsln("public", clientDescriptor + "() {");
         defauleConstructor.getCode().newBlock(() -> {
             defauleConstructor.getCode().appendJavaLine("this.options", "=", "new", RestfulOptions.getType().getDescriptor() + "()");
-            Variable urlVar = VariableFactory.createHardcodeStringVariable(url);
-            defauleConstructor.getCode().appendJavaLine("this.options.url", "=", urlVar.nameDescriptor);
+            Variable url = VariableFactory.createHardcodeStringVariable(options.url);
+            defauleConstructor.getCode().appendJavaLine("this.options.url", "=", url.nameDescriptor);
+            if (options.connectionTimeout != null) {
+                defauleConstructor.getCode().appendJavaLine("this.options.connectionTimeout", "=", options.connectionTimeout.toString());
+            }
         });
         defauleConstructor.getCode().appendln("}");
         clientClass.addMethod(defauleConstructor);
@@ -38,7 +41,13 @@ public class JavaRestfulClientBuilder extends RestfulClientBuilder {
         optionConstructor = new JavaMethod(clientClass);
         optionConstructor.getCode().appendWordsln("public", clientDescriptor + "(" + RestfulOptions.getType().getDescriptor() + " options) {");
         optionConstructor.getCode().newBlock(() -> {
-            optionConstructor.getCode().appendJavaLine("this.options ", "=", "options");
+            optionConstructor.getCode().appendJavaLine("this.options", "=", "new", RestfulOptions.getType().getDescriptor() + "()");
+            Variable url = VariableFactory.createHardcodeStringVariable(options.url);
+            optionConstructor.getCode().appendJavaLine("this.options.url", "=", url.nameDescriptor);
+            if (options.connectionTimeout != null) {
+                optionConstructor.getCode().appendJavaLine("this.options.connectionTimeout", "=", options.connectionTimeout.toString());
+            }
+            optionConstructor.getCode().appendJavaLine("this.options.setFrom(options)");
         });
         optionConstructor.getCode().appendln("}");
         clientClass.addMethod(optionConstructor);

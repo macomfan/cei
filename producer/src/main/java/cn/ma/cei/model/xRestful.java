@@ -18,7 +18,7 @@ public class xRestful extends xElement {
     public String successfulCode;
 
     @XmlAttribute(name = "timeout")
-    public int timeout;
+    public Integer timeout;
 
     @XmlElement(name = "interface")
     public List<xInterface> interfaceList;
