@@ -8,7 +8,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class ExchangeInfo {
-    public String exchangeName = "TestExchange";
+    public String ExchangeName = "TestExchange";
     public long Timestamp = 123;
     public List<Symbol> Symbols = new LinkedList<>();
 

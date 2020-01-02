@@ -1,5 +1,6 @@
 package cn.ma.cei.impl;
 
+import cn.ma.cei.exception.CEIException;
 import javafx.util.Pair;
 import okhttp3.*;
 
@@ -29,9 +30,8 @@ public class RestfulConnection {
             //System.out.println(response.body().string());
             return new RestfulResponse(response);
         } catch (Exception e) {
-
+            throw new CEIException("Query error");
         }
-        return null;
     }
 
     private static Headers buildHeaders(RestfulRequest restfulRequest) {

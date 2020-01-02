@@ -36,7 +36,7 @@ public class Python3RestfulInterfaceBuilder extends RestfulInterfaceBuilder {
 
     @Override
     public void setRequestTarget(Variable request, Variable target) {
-        method.invoke(request.nameDescriptor + ".set_target", target);
+        method.addInvoke(request.nameDescriptor + ".set_target", target);
     }
 
     @Override

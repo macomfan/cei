@@ -12,6 +12,8 @@ package cn.ma.cei.impl;
 public class RestfulOptions {
     public String url = "";
     public int connectionTimeout = 30;
-    public String apiKey = "";
-    public String secretKey = "";
+    public String apiKey = "ABC";
+    public String secretKey = "abc";
+    
+    
 }

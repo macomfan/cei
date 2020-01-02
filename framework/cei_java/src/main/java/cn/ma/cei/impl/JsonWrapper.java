@@ -65,7 +65,11 @@ public class JsonWrapper {
     public void addJsonString(String name, String value) {
         jsonObject.put(name, value);
     }
-    
+
+    public void addJsonDecimal(String name, BigDecimal value) {
+        jsonObject.put(name, value);
+    }
+
     private void checkMandatoryField(String name) {
         if (!containsKey(name)) {
             throw new CEIException("[Json] Get json item field: " + name + "does not exist");
@@ -167,7 +171,7 @@ public class JsonWrapper {
         });
         return res;
     }
-    
+
     public byte[] toBytes() {
         return JSON.toJSONBytes(jsonObject);
     }

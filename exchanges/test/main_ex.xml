@@ -1,23 +1,28 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <sdk exchange="test" document="https://huobiapi.github.io/docs/spot/v1/en/">
 
-    <model name="Symbols">
-        <string name="status"/>
-        <object_array name="data" refer="SymbolsData"/>
+    <model name="ExchangeInfo">
+        <string name="ExchangeName"/>
+		<long name="Timestamp"/>
+        <object_array name="Symbols" refer="Symbols"/>
     </model>
 
-    <model name="SymbolsData">
-        <string name="base_currency"/>
-        <string name="quote_currency"/>
+    <model name="Symbols">
+        <string name="Name"/>
+        <string name="Status"/>
+		<boolean name="OCOAllowed"/>
+		<int name="Precision"/>
     </model>
 
     <model name="LastTrade">
-        <string name="status"/>
-        <object name="tick" refer="LastTradeTick"/>
+        <decimal name="Price"/>
+        <decimal name="Volume"/>
+		<long name="Timestamp"/>
+		<string name="Symbol"/>
     </model>
 
-    <model name="LastTradeTick">
-        <string name="ts"/>
+    <model name="Order">
+        <int name="OrderId"/>
     </model>
 
     <signature name="restful">
@@ -40,18 +45,22 @@
 		<add_query_string key="Signature" value="{result}"/>
     </signature>
 
-    <restful client_name="MarketClient" url="https://api.huobi.so">	
-        <interface name="getSymbol">
-            <request method="get" target="/v1/common/symbols">
+    <restful client_name="MarketClient" url="http://127.0.0.1:8081">	
+        <interface name="getExchangeInfo">
+            <request method="get" target="/api/v1/exchangeInfo">
 				<headers>
 					<header tag="accept-encoding" value="gzip"/>
 				</headers>
 			</request>
             <response type="model">
-                <json_parser model="Symbols">
-                    <json_auto from="status" to="{status}"/>
-                    <json_auto from="data" to="{data}" model="SymbolsData">
-                        <json_auto from="base-currency" to="{base_currency}"/>
+                <json_parser model="ExchangeInfo">
+                    <json_auto copy="ExchangeName"/>
+					<json_auto copy="Timestamp"/>
+                    <json_auto copy="Symbols" model="Symbols">
+                        <json_auto copy="Name"/>
+						<json_auto copy="Status"/>
+						<json_auto copy="OCOAllowed"/>
+						<json_auto copy="Precision"/>
                     </json_auto>
                 </json_parser>
             </response>
@@ -61,41 +70,42 @@
             <inputs>
                 <string name="symbol" mandatory="true"/>
             </inputs>
-            <request method="get" target="/market/trade">
+            <request method="get" target="/api/v1/lastTrade">
 				<headers>
 					<header tag="accept-encoding" value="gzip"/>
 				</headers>
                 <query_strings>
                     <query name="symbol" value="{symbol}"/>
-					<query name="test" value="test"/>
                 </query_strings>
             </request>
             <response type="model">
                 <json_parser model="LastTrade">
-                    <json_auto copy="status"/>
-                    <json_auto copy="tick" model="LastTradeTick">
-                        <json_auto copy="ts"/>
-                    </json_auto>
+                    <json_auto copy="Price"/>
+					<json_auto copy="Volume"/>
+					<json_auto copy="Timestamp"/>
+					<json_auto copy="Symbol"/>
                 </json_parser>
             </response>
         </interface>
 		
         <interface name="placeOrder">
-            <inputs>
+		    <inputs>
                 <string name="account_id" mandatory="true"/>
-                <string name="symbol" mandatory="true"/>
-                <string name="type" mandatory="true"/>
-                <string name="amount" mandatory="true"/>
-                <string name="price"/>
+				<decimal name="price" mandatory="true"/>
             </inputs>
-            <request method="post" target="/placeOrder" signature="restful">
+            <request method="post" target="/api/v1/placeOrder" signature="restful">
                 <post_body>
                     <json_builder>
                         <json_string to="account-id" from="{account_id}"/>
+						<json_decimal copy="price"/>
                     </json_builder>
                 </post_body>
             </request>
-            <response type="raw"/>
+            <response type="model">
+                <json_parser model="Order">
+                    <json_auto copy="OrderId"/>
+                </json_parser>
+            </response>
         </interface>
     </restful>
 </sdk>

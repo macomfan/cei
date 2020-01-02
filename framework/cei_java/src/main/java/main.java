@@ -2,15 +2,12 @@
 import cn.ma.cei.exchanges.test;
 import cn.ma.cei.impl.RestfulOptions;
 import cn.ma.cei.impl.RestfulRequest;
-
-
-
+import java.math.BigDecimal;
 
 //import cn.ma.cei.sdk.exchanges.binance.models.ExchangeInfo;
 //import cn.ma.cei.sdk.exchanges.bittrex.models.Markets;
 //import cn.ma.cei.sdk.exchanges.bittrex.services.BittrexClient;
 //import cn.ma.cei.sdk.exchanges.huobipro.models.LastTrade;
-
 public class main {
 
     @FunctionalInterface
@@ -20,18 +17,22 @@ public class main {
     }
 
     public static void main(String[] args) {
-        RestfulOptions options = new RestfulOptions();
-        RestfulRequest request = new RestfulRequest(options);
-        options.apiKey = "ABC";
-        options.secretKey = "abc";
-        request.setUrl("https://127.0.0.1");
-        request.setTarget("/Target");
-        request.setMethod(RestfulRequest.Method.GET);
-        request.addQueryString("Test", "Test");
-        test.Signature.restful(request, options);
-        
+//        RestfulOptions options = new RestfulOptions();
+//        RestfulRequest request = new RestfulRequest(options);
+//        options.apiKey = "ABC";
+//        options.secretKey = "abc";
+//        request.setUrl("https://127.0.0.1");
+//        request.setTarget("/Target");
+//        request.setMethod(RestfulRequest.Method.GET);
+//        request.addQueryString("Test", "Test");
+//        test.Signature.restful(request, options);
+//        RestfulOptions options = new RestfulOptions();
+//        options.apiKey = "ABC";
+//        options.secretKey = "abc";
+        test.MarketClient client = new test.MarketClient();
+        test.Order o = client.placeOrder("aaa", new BigDecimal("123.456"));
         int a = 0;
-        
+
 //        cn.ma.cei.sdk.exchanges.binance.services.MarketClient client = new cn.ma.cei.sdk.exchanges.binance.services.MarketClient();
 //        ExchangeInfo ex = client.getExchangeInfo();
 //        int a = 0;
