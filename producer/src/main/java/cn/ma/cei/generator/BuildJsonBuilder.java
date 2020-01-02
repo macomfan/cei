@@ -26,7 +26,7 @@ import cn.ma.cei.model.json.xJsonType;
 public class BuildJsonBuilder {
 
     public static Variable build(xJsonBuilder jsonBuilder, JsonBuilderBuilder jsonBuilderBuilder, MethodBuilder method) {
-        Variable jsonObject = method.newLoaclVariable(JsonWrapper.getType(), "{jsonBuilder}");
+        Variable jsonObject = method.newLocalVariable(JsonWrapper.getType(), "{jsonBuilder}");
         jsonBuilderBuilder.defineRootJsonObject(jsonObject);
         jsonBuilder.itemList.forEach(item -> {
             if (item.copy == null) {

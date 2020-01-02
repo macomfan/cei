@@ -15,7 +15,6 @@ import cn.ma.cei.generator.environment.Constant;
 import cn.ma.cei.generator.environment.Environment;
 import cn.ma.cei.generator.environment.Variable;
 import cn.ma.cei.generator.environment.VariableFactory;
-import cn.ma.cei.generator.environment.VariableType;
 import cn.ma.cei.model.signature.xAddQueryString;
 import cn.ma.cei.model.signature.xAddStringArray;
 import cn.ma.cei.model.signature.xAppendToString;
@@ -88,7 +87,7 @@ public class BuildSignature {
         if (Checker.isEmpty(getNow.output)) {
             throw new CEIException("[BuildSignature] output must be defined for get_now");
         }
-        Variable output = builder.newLoaclVariable(xString.inst.getType(), getNow.output);
+        Variable output = builder.newLocalVariable(xString.inst.getType(), getNow.output);
         Variable format = queryVariable(getNow.format, builder);
         builder.getNow(output, format);
     }
@@ -106,7 +105,7 @@ public class BuildSignature {
         if (Checker.isEmpty(combineQueryString.output)) {
             throw new CEIException("[BuildSignature] output must be defined for CombineQueryString");
         }
-        Variable output = builder.newLoaclVariable(xString.inst.getType(), combineQueryString.output);
+        Variable output = builder.newLocalVariable(xString.inst.getType(), combineQueryString.output);
 
         Variable sort;
         if (!Checker.isEmpty(combineQueryString.sort)) {
@@ -125,7 +124,7 @@ public class BuildSignature {
         if (Checker.isEmpty(getRequestInfo.info)) {
             throw new CEIException("[BuildSignature] info must be defined for GetRequestInfo");
         }
-        Variable output = builder.newLoaclVariable(xString.inst.getType(), getRequestInfo.output);
+        Variable output = builder.newLocalVariable(xString.inst.getType(), getRequestInfo.output);
 
         Variable info;
         if (!Checker.isEmpty(getRequestInfo.info)) {
@@ -155,7 +154,7 @@ public class BuildSignature {
         }
         Variable output = builder.queryVariable(outputName);
         if (output == null) {
-            output = builder.newLoaclVariable(xStringArray.inst.getType(), appendStringArray.output);
+            output = builder.newLocalVariable(xStringArray.inst.getType(), appendStringArray.output);
             builder.newStringArray(output);
         }
 
@@ -171,7 +170,7 @@ public class BuildSignature {
             throw new CEIException("[BuildSignature] input must be defined for CombineStringArray");
         }
         Variable input = queryVariable(combineQueryString.input, builder);
-        Variable output = builder.newLoaclVariable(xString.inst.getType(), combineQueryString.output);
+        Variable output = builder.newLocalVariable(xString.inst.getType(), combineQueryString.output);
         Variable separator = queryVariable(combineQueryString.separator, builder);
         builder.combineStringArray(output, input, separator);
 
@@ -192,7 +191,7 @@ public class BuildSignature {
         Variable input = queryVariable(appendToString.input, builder);
         Variable output = builder.queryVariable(outputName);
         if (output == null) {
-            output = builder.newLoaclVariable(xString.inst.getType(), appendToString.output);
+            output = builder.newLocalVariable(xString.inst.getType(), appendToString.output);
             builder.appendToString(true, output, input);
         } else {
             builder.appendToString(false, output, input);
@@ -207,7 +206,7 @@ public class BuildSignature {
             throw new CEIException("[BuildSignature] input must be defined for base64");
         }
         Variable input = queryVariable(base64.input, builder);
-        Variable output = builder.newLoaclVariable(xString.inst.getType(), base64.output);
+        Variable output = builder.newLocalVariable(xString.inst.getType(), base64.output);
         builder.base64(output, input);
     }
 
@@ -223,7 +222,7 @@ public class BuildSignature {
         }
         Variable input = queryVariable(hmacsha256.input, builder);
         Variable key = queryVariable(hmacsha256.key, builder);
-        Variable output = builder.newLoaclVariable(TheStream.getType(), hmacsha256.output);
+        Variable output = builder.newLocalVariable(TheStream.getType(), hmacsha256.output);
         builder.hmacsha265(output, input, key);
     }
 }

@@ -49,7 +49,7 @@ public abstract class MethodBuilder {
         return variableList.queryVariable(variableName);
     }
 
-    public Variable newLoaclVariable(VariableType type, String name) {
+    public Variable newLocalVariable(VariableType type, String name) {
         String variableName = VariableFactory.isReference(name);
         if (variableName == null) {
             throw new CEIException("[MethodBuilder] Variable name must be {}");

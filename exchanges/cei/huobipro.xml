@@ -26,7 +26,7 @@
             <request method="get" target="/v1/common/timestamp"/>
             <response type="model">
                 <json_parser model="Timestamp">
-					<json_auto from="data" to="ts"/>
+					<json_auto from="data" to="{ts}"/>
                 </json_parser>
             </response>
 		</interface>

@@ -25,8 +25,8 @@ public class Finalizer {
         //  - Model
         //  - Restful
         //  - Signature
-        for (xModel model : sdk.modelList) {
-            XMLDatabase.registerModel(sdk.exchange, model.name, model);
+        if (sdk.modelList != null) {
+            sdk.modelList.forEach(model -> XMLDatabase.registerModel(sdk.exchange, model.name, model));
         }
         orgSDKList.add(sdk);
     }
@@ -37,6 +37,14 @@ public class Finalizer {
 
     public List<xSDK> finalizeSDK() {
         System.out.println("-- Start finalize");
+        orgSDKList.forEach(sdk-> {
+            if (sdkMap.containsKey(sdk.exchange)) {
+                xSDK orgSdk = sdkMap.get(sdk.exchange);
+                orgSdk.merge(sdk);
+            } else {
+                sdkMap.put(sdk.exchange, sdk);
+            }
+        });
         // Merge SDK
 //        if (sdkMap.containsKey(sdk.exchange)) {
 //            // Merge
@@ -45,7 +53,7 @@ public class Finalizer {
 //            sdkMap.put(sdk.exchange, sdk);
 //        }
         // Model dependence decision.
-        for (xSDK sdk : orgSDKList) {
+        sdkMap.values().forEach(sdk -> {
             Dependence<xModel> dependence = new Dependence<>();
             for (xModel model : sdk.modelList) {
                 boolean referToOther = false;
@@ -61,10 +69,9 @@ public class Finalizer {
                 }
             }
             sdk.modelList = dependence.decision();
-        }
+        });
         // Check error
         System.out.println("-- Start end");
-        List<xSDK> res = new LinkedList<>(sdkMap.values());
-        return orgSDKList;
+        return new LinkedList<>(sdkMap.values());
     }
 }

@@ -6,7 +6,7 @@
             <request method="get" target="/api/v3/time"/>
             <response type="model">
                 <json_parser model="Timestamp">
-					<json_auto from="serverTime" to="ts"/>
+					<json_auto from="serverTime" to="{ts}"/>
                 </json_parser>
             </response>
 		</interface>
