@@ -77,13 +77,13 @@ public class BuildJsonParser {
             throw new CEIException("[BuildJsonParser] null");
         }
         if (context.jsonItem.copy == null) {
-            if (context.jsonItem.from == null || context.jsonItem.to == null) {
+            if (context.jsonItem.from == null && context.jsonItem.to == null) {
                 // throw new CEIException("[BuildJsonParser] from, to and copy cannot null");
             }
         }
         else {
             if (context.jsonItem.from != null && context.jsonItem.to != null) {
-                throw new CEIException("[BuildJsonParser] from, to can exist with copy");
+                throw new CEIException("[BuildJsonParser] from, to cannot exist with copy");
             } else {
                 context.jsonItem.from = context.jsonItem.copy;
                 context.jsonItem.to = "{" + context.jsonItem.copy + "}";

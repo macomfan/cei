@@ -80,7 +80,7 @@
             </response>
         </interface>
 		
-        <!--interface name="placeOrder">
+        <interface name="placeOrder">
             <inputs>
                 <string name="account_id" mandatory="true"/>
                 <string name="symbol" mandatory="true"/>
@@ -91,11 +91,11 @@
             <request method="post" target="/placeOrder" signature="restful">
                 <post_body>
                     <json_builder>
-                        <json_string name="account-id" value="{account_id}"/>
+                        <json_string to="account-id" from="{account_id}"/>
                     </json_builder>
                 </post_body>
             </request>
             <response type="raw"/>
-        </interface-->
+        </interface>
     </restful>
 </sdk>

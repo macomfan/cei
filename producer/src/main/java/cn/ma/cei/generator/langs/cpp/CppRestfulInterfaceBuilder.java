@@ -1,5 +1,6 @@
 package cn.ma.cei.generator.langs.cpp;
 
+import cn.ma.cei.generator.builder.JsonBuilderBuilder;
 import cn.ma.cei.generator.environment.Variable;
 import cn.ma.cei.generator.environment.VariableList;
 import cn.ma.cei.generator.environment.VariableType;
@@ -81,6 +82,21 @@ public class CppRestfulInterfaceBuilder extends RestfulInterfaceBuilder {
 
     @Override
     public void setRequestMethod(Variable request, Variable requestMethod) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void setPostBody(Variable request, Variable postBody) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public JsonBuilderBuilder getJsonBuilderBuilder() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void invokeSignature(Variable request, String methodName) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

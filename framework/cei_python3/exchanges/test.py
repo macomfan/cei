@@ -1,3 +1,4 @@
+from impl.jsonwrapper import JsonWrapper
 from impl.restfulconnection import RestfulConnection
 from impl.restfulrequest import RestfulRequest
 
@@ -40,6 +41,17 @@ class MarketClient:
         last_trade_var.tick = last_trade_tick_var
         last_trade_tick_var.ts = tick_obj.get_string("ts")
         return last_trade_var
+
+    def place_order(self, account_id, symbol, type, amount, price):
+        request = RestfulRequest(self.options)
+        request.set_url(self.options.url)
+        request.set_method(RestfulRequest.Method.POST)
+        json_builder = JsonWrapper()
+        json_builder.add_json_string("account-id", account_id)
+        request.set_post_body(json_builder)
+        Signature.restful(request)
+        response = RestfulConnection.query(request)
+        return response
 
 
 

@@ -5,6 +5,7 @@
  */
 package cn.ma.cei.generator.langs.python3;
 
+import cn.ma.cei.generator.builder.JsonBuilderBuilder;
 import cn.ma.cei.generator.builder.ResponseBuilder;
 import cn.ma.cei.generator.builder.RestfulInterfaceBuilder;
 import cn.ma.cei.generator.environment.Variable;
@@ -89,6 +90,21 @@ public class Python3RestfulInterfaceBuilder extends RestfulInterfaceBuilder {
     @Override
     public void addToQueryString(Variable request, Variable queryStringName, Variable variable) {
         method.addInvoke(request.nameDescriptor + ".add_query_string", queryStringName, variable);
+    }
+
+    @Override
+    public void setPostBody(Variable request, Variable postBody) {
+        method.addInvoke(request.nameDescriptor + ".set_post_body", postBody);
+    }
+
+    @Override
+    public JsonBuilderBuilder getJsonBuilderBuilder() {
+        return new Python3JsonBuilderBuilder(method);
+    }
+
+    @Override
+    public void invokeSignature(Variable request, String methodName) {
+        method.addInvoke("Signature." + methodName, request);
     }
 
 }

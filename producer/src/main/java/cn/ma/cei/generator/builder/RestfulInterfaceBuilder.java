@@ -4,9 +4,9 @@ import cn.ma.cei.generator.environment.Variable;
 
 public abstract class RestfulInterfaceBuilder extends MethodBuilder {
 
-
-
     public abstract ResponseBuilder getResponseBuilder();
+    
+    public abstract JsonBuilderBuilder getJsonBuilderBuilder();
 
 //    public abstract void startInterface(String restIfName);
 //
@@ -19,7 +19,11 @@ public abstract class RestfulInterfaceBuilder extends MethodBuilder {
 
     public abstract void addToQueryString(Variable request, Variable queryStringName, Variable variable);
 
+    public abstract void setPostBody(Variable request, Variable postBody);
+
     public abstract void invokeQuery(Variable response, Variable request);
+    
+    public abstract void invokeSignature(Variable request, String methodName);
 
     public abstract void setUrl(Variable request);
 

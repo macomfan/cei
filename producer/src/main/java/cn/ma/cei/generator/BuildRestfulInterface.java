@@ -14,6 +14,7 @@ import cn.ma.cei.generator.environment.Constant;
 import cn.ma.cei.generator.environment.Environment;
 import cn.ma.cei.model.xHeader;
 import cn.ma.cei.model.xInterface;
+import cn.ma.cei.model.xPostBody;
 import cn.ma.cei.model.xQuery;
 import cn.ma.cei.utils.Checker;
 import java.util.List;
@@ -53,7 +54,7 @@ public class BuildRestfulInterface {
             if (Checker.isEmpty(restIf.request.method)) {
                 throw new CEIException("[BuildRestfulInterface] Method is null");
             }
-            
+
             builder.defineRequest(request);
             builder.setUrl(request);
             builder.setRequestTarget(request, VariableFactory.createHardcodeStringVariable(restIf.request.target));
@@ -63,6 +64,8 @@ public class BuildRestfulInterface {
             builder.setRequestMethod(request, requestMethod);
             makeHeaders(restIf.request.headers, builder);
             makeQueryString(restIf.request.queryStrings, builder);
+            makePostBody(restIf.request.postBody, request, builder);
+            makeSignature(restIf.request.signature, request, builder);
             builder.onAddReference(RestfulConnection.getType());
             builder.invokeQuery(response, request);
             Variable returnVariable = BuildResponse.build(restIf.response, response, builder);
@@ -114,4 +117,18 @@ public class BuildRestfulInterface {
         });
     }
 
+    private static void makePostBody(xPostBody postBody, Variable request, RestfulInterfaceBuilder builder) {
+        if (postBody != null && postBody.jsonBuilder != null) {
+            Variable result = BuildJsonBuilder.build(postBody.jsonBuilder, builder.getJsonBuilderBuilder(), builder);
+            if (result != null) {
+                builder.setPostBody(request, result);
+            }
+        }
+    }
+
+    private static void makeSignature(String signatureName, Variable request, RestfulInterfaceBuilder builder) {
+        if (signatureName != null && !signatureName.equals("")) {
+            builder.invokeSignature(request, Environment.getCurrentDescriptionConverter().getMethodDescriptor(signatureName));
+        }
+    }
 }

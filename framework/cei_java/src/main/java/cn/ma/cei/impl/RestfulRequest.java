@@ -79,13 +79,21 @@ public class RestfulRequest {
     public List<Pair<String, String>> getQueryString() {
         return queryString_;
     }
-    
+
     public List<Pair<String, String>> getHeaders() {
         return headers_;
     }
 
-    public void setRequestBody(byte[] body) {
+    public void setPostBody(byte[] body) {
         requestBody_ = body;
+    }
+
+    public void setPostBody(JsonWrapper jsonObject) {
+        requestBody_ = jsonObject.toBytes();
+    }
+
+    public byte[] getPostBody() {
+        return requestBody_;
     }
 
     private static String urlEncode(String s) {

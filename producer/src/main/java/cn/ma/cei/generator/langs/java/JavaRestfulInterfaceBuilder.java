@@ -1,5 +1,6 @@
 package cn.ma.cei.generator.langs.java;
 
+import cn.ma.cei.generator.builder.JsonBuilderBuilder;
 import cn.ma.cei.generator.environment.Variable;
 import cn.ma.cei.generator.environment.VariableFactory;
 import cn.ma.cei.generator.environment.VariableList;
@@ -82,5 +83,21 @@ public class JavaRestfulInterfaceBuilder extends RestfulInterfaceBuilder {
     public void endMethod() {
         method.endMethod();
         clientClass.addMethod(method);
+    }
+
+    @Override
+    public void setPostBody(Variable request, Variable postBody) {
+        method.addInvoke(request.nameDescriptor + ".setPostBody", postBody);
+    }
+
+    @Override
+    public JsonBuilderBuilder getJsonBuilderBuilder() {
+        return new JavaJsonBuilderBuilder(method);
+    }
+
+    @Override
+    public void invokeSignature(Variable request, String methodName) {
+        Variable option = VariableFactory.createConstantVariable("this.options");
+        method.addInvoke("Signature." + methodName, request, option);
     }
 }

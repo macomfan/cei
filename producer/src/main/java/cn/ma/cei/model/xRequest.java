@@ -12,8 +12,11 @@ public class xRequest {
     @XmlAttribute(name = "method")
     public String method;
 
-    @XmlAttribute
+    @XmlAttribute(name = "target")
     public String target;
+    
+    @XmlAttribute(name = "signature")
+    public String signature;
 
     @XmlElementWrapper(name = "headers")
     @XmlElement(name = "header")

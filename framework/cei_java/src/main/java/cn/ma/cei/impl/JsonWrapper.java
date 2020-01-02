@@ -38,6 +38,10 @@ public class JsonWrapper {
         }
     }
 
+    public JsonWrapper() {
+        this.jsonObject = new JSONObject();
+    }
+
     public JsonWrapper(JSONObject jsonObject) {
         this.jsonObject = jsonObject;
     }
@@ -58,6 +62,10 @@ public class JsonWrapper {
         }
     }
 
+    public void addJsonString(String name, String value) {
+        jsonObject.put(name, value);
+    }
+    
     private void checkMandatoryField(String name) {
         if (!containsKey(name)) {
             throw new CEIException("[Json] Get json item field: " + name + "does not exist");
@@ -118,7 +126,7 @@ public class JsonWrapper {
         checkMandatoryField(itemName);
         try {
             JSONArray array = jsonObject.getJSONArray(itemName);
-            return new JsonWrapper(jsonArray);
+            return new JsonWrapper(array);
         } catch (Exception e) {
             throw new CEIException("[Json] Get array: " + itemName + " error");
         }
@@ -158,5 +166,9 @@ public class JsonWrapper {
             res.add((String) object);
         });
         return res;
+    }
+    
+    public byte[] toBytes() {
+        return JSON.toJSONBytes(jsonObject);
     }
 }

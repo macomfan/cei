@@ -22,6 +22,7 @@ public class RestfulConnection {
                     break;
                 }
                 case POST:
+                    builder.post(RequestBody.create(null, restfulRequest.getPostBody()));
                     break;
             }
             Response response = client_.newCall(builder.build()).execute();
