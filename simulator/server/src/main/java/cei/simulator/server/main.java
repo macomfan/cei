@@ -8,6 +8,7 @@ package cei.simulator.server;
 import cei.simulator.server.models.ExchangeInfo;
 import cei.simulator.server.models.LastTrade;
 import cei.simulator.server.models.PlaceOrder;
+import cei.simulator.server.models.Timestamp;
 import com.alibaba.fastjson.JSON;
 import io.vertx.core.Vertx;
 import io.vertx.core.http.HttpMethod;
@@ -27,6 +28,7 @@ public class main {
         ExchangeInfo.register(router);
         LastTrade.register(router);
         PlaceOrder.register(router);
+        Timestamp.register(router);
 
         HttpServer server = vertx.createHttpServer().requestHandler(router).listen(8081);
         System.out.println("Server started");

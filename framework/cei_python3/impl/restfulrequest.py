@@ -9,7 +9,7 @@ class RestfulRequest:
 
     def __init__(self, option: RestfulOptions):
         self.__method = None
-        self.__url = ""
+        self.__url = option.url
         self.__target = ""
         self.__post_body = ""
         self.__header = dict()

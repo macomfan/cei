@@ -11,7 +11,7 @@ class JsonWrapper:
         self.__json_object = json_object
 
     def contains_key(self, name):
-        if name in self.json_object:
+        if name in self.__json_object:
             return True
         else:
             return False
@@ -23,3 +23,7 @@ class JsonWrapper:
     def get_string(self, key: str):
         self.__check_mandatory_field(key)
         return str(self.__json_object[key])
+
+    def get_long(self, key: str):
+        self.__check_mandatory_field(key)
+        return int(self.__json_object[key])

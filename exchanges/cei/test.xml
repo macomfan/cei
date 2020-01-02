@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<sdk exchange="cei" document="https://github.com/macomfan/cei">
+
+	<signature name="testSignature">
+        <get_now output="{timestamp}" format=""/>
+        <add_query_string key="accessKeyId" value="{apiKey}"/>
+        <add_query_string key="signatureMethod" value="HmacSHA256"/>
+        <add_query_string key="signatureVersion" value="2"/>
+        <add_query_string key="timestamp" value="{timestamp}"/>
+		<combine_query_string output="{queryString}" sort="asc" separator="&amp;"/>
+        <get_request_info output="{method}" info="method" convert="uppercase"/>
+		<get_request_info output="{host}" info="host"/>
+		<get_request_info output="{target}" info="target"/>
+        <add_string_array output="{buffer}" input="{method}"/>
+        <add_string_array output="{buffer}" input="{host}"/>
+        <add_string_array output="{buffer}" input="{target}"/>
+		<add_string_array output="{buffer}" input="{queryString}"/>
+        <combine_string_array output="{newbuffer}" input="{buffer}" separator="\n"/>
+		<hmacsha256 output="{hmacsha256}" input="{newbuffer}" key="{secretKey}"/>
+		<base64 output="{result}" input="{hmacsha256}"/>
+		<add_query_string key="Signature" value="{result}"/>
+    </signature>
+
+	<restful client_name="testClient" url="http://127.0.0.1:8081">
+		<interface name="getTimestamp">
+            <request method="get" target="/api/v1/timestamp"/>
+            <response type="model">
+                <json_parser model="Timestamp">
+					<json_auto from="Timestamp" to="{ts}"/>
+                </json_parser>
+            </response>
+		</interface>
+	</restful>
+</sdk>

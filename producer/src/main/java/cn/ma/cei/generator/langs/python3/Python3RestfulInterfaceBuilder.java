@@ -41,7 +41,7 @@ public class Python3RestfulInterfaceBuilder extends RestfulInterfaceBuilder {
 
     @Override
     public void defineRequest(Variable request) {
-        Variable options = VariableFactory.createConstantVariable("self.options");
+        Variable options = VariableFactory.createConstantVariable("self.__options");
         method.addAssign(method.defineVariable(request), method.newInstance(request.type, options));
     }
 
@@ -52,7 +52,7 @@ public class Python3RestfulInterfaceBuilder extends RestfulInterfaceBuilder {
 
     @Override
     public void setUrl(Variable request) {
-        Variable url = VariableFactory.createConstantVariable("self.options.url");
+        Variable url = VariableFactory.createConstantVariable("self.__options.url");
         method.addInvoke(request.nameDescriptor + ".set_url", url);
     }
 
