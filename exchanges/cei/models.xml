@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<sdk exchange="cei" document="https://github.com/macomfan/cei">
+	<model name="Timestamp">
+		<long name="ts" />
+	</model>
+</sdk>
