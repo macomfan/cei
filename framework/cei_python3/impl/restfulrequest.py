@@ -52,4 +52,4 @@ class RestfulRequest:
         if value is None:
             # TODO
             pass
-        self.__header.append[key], str(value)
+        self.__header[key] = str(value)
