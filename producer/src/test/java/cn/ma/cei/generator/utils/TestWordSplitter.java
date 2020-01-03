@@ -22,7 +22,7 @@ public class TestWordSplitter {
         assertEquals("My_Name_Is", WordSplitter.getUpperCamelCase("myNameIs", "_"));
         assertEquals("TESTTYPEFLAG",WordSplitter.getUppercase("TestTypeFlag"));
         assertEquals("TEST_TYPE_FLAG",WordSplitter.getUppercase("TestTypeFlag", "_"));
-        assertEquals("test_type_flag",WordSplitter.getLowercase("TestTypeFlag", "_"));
+        assertEquals("test_type_flag",WordSplitter.getLowercase("testTypeFlag", "_"));
         assertEquals("test_type_flag",WordSplitter.getLowercase("Test_Type_Flag"));
         assertEquals("Test_type_flag",WordSplitter.getUpperCamelCase("test_type_flag"));
         int aa = 0;

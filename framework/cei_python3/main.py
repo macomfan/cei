@@ -23,7 +23,14 @@ if __name__ == '__main__':
     # print(request.build_query_string())
     # #RestfulConnection.query(request)
     # client = Test.MarketClient()
-    testClient = TestClient()
+    options = RestfulOptions()
+    options.api_key = "ABC"
+    options.secret_key = "abc"
+    testClient = TestClient(options)
     timestamp = testClient.get_timestamp()
-    print(timestamp.ts)
+    hClient = HuobiProClient()
+    bClient = BinanceClient()
+    print('Test ts: ' + str(timestamp.ts))
+    print('H ts: ' + str(hClient.get_timestamp().ts))
+    print('B ts: ' + str(bClient.get_timestamp().ts))
     pass

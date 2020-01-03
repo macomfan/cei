@@ -37,6 +37,7 @@ public class Python3ExchangeBuilder extends ExchangeBuilder {
 
     private Python3File mainFile;
     private Python3Class signatureClass;
+    
 
     @Override
     public void startExchange(String exchangeName) {
@@ -72,6 +73,7 @@ public class Python3ExchangeBuilder extends ExchangeBuilder {
         Environment.setExchangeFolder(exchangeFolder);
 
         mainFile = new Python3File(exchangeName);
+        signatureClass = new Python3Class("Signature");
     }
 
     @Override
@@ -86,12 +88,13 @@ public class Python3ExchangeBuilder extends ExchangeBuilder {
 
     @Override
     public void endExchange() {
+        mainFile.addInnerClass(signatureClass);
         mainFile.build(Environment.getExchangeFolder());
+        
     }
 
     @Override
     public SignatureBuilder getSignatureBuilder() {
-        signatureClass = new Python3Class("Signature");
         return new Python3SignatureBuilder(signatureClass);
     }
 

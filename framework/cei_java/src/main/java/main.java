@@ -1,5 +1,5 @@
 
-import cn.ma.cei.exchanges.test;
+import cn.ma.cei.exchanges.cei;
 import cn.ma.cei.impl.RestfulOptions;
 import cn.ma.cei.impl.RestfulRequest;
 import java.math.BigDecimal;
@@ -29,9 +29,11 @@ public class main {
 //        RestfulOptions options = new RestfulOptions();
 //        options.apiKey = "ABC";
 //        options.secretKey = "abc";
-        test.MarketClient client = new test.MarketClient();
-        test.Order o = client.placeOrder("aaa", new BigDecimal("123.456"));
-        int a = 0;
+        RestfulOptions options = new RestfulOptions();
+        options.apiKey = "ABC";
+        options.secretKey = "abc";
+        cei.TestClient testClient = new cei.TestClient(options);
+        System.out.println(testClient.getTimestamp().ts);
 
 //        cn.ma.cei.sdk.exchanges.binance.services.MarketClient client = new cn.ma.cei.sdk.exchanges.binance.services.MarketClient();
 //        ExchangeInfo ex = client.getExchangeInfo();

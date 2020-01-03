@@ -13,12 +13,15 @@ class RestfulRequest:
         self.__target = ""
         self.__post_body = ""
         self.__header = dict()
-        self.__queryString = dict()
+        self.__queryString = list()
 
     def build_query_string(self):
         if len(self.__queryString) == 0:
             return ""
-        encoded_param = urllib.parse.urlencode(self.__queryString)
+        tmp = dict()
+        for item in self.__queryString:
+            tmp[item[0]]= item[1]
+        encoded_param = urllib.parse.urlencode(tmp)
         return "?" + encoded_param
 
     def get_header(self):
@@ -43,10 +46,11 @@ class RestfulRequest:
         self.__method = method
 
     def add_query_string(self, key: str, value):
-        if value is None:
-            # TODO
-            pass
-        self.__queryString[key] = str(value)
+        if value is not None:
+            self.__queryString.append([key, value])
+
+    def get_query_string(self):
+        return self.__queryString
 
     def add_header(self, key: str, value):
         if value is None:

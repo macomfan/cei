@@ -7,10 +7,10 @@ import cn.ma.cei.generator.builder.RestfulClientBuilder;
 import cn.ma.cei.generator.builder.SignatureBuilder;
 import cn.ma.cei.generator.buildin.JsonWrapper;
 import cn.ma.cei.generator.buildin.RestfulConnection;
-import cn.ma.cei.generator.buildin.RestfulOptions;
 import cn.ma.cei.generator.buildin.RestfulRequest;
 import cn.ma.cei.generator.buildin.RestfulResponse;
 import cn.ma.cei.generator.buildin.SignatureTool;
+import cn.ma.cei.generator.buildin.RestfulOptions;
 import cn.ma.cei.generator.buildin.TheArray;
 import cn.ma.cei.generator.buildin.TheStream;
 import cn.ma.cei.generator.environment.Constant;
@@ -65,6 +65,7 @@ public class JavaExchangeBuilder extends ExchangeBuilder {
         Environment.setExchangeFolder(exchangeFolder);
 
         mainClass = new JavaClass(exchangeName, "cn.ma.cei.exchanges");
+        signatureClass = new JavaClass("Signature");
     }
 
     @Override
@@ -79,7 +80,6 @@ public class JavaExchangeBuilder extends ExchangeBuilder {
 
     @Override
     public SignatureBuilder getSignatureBuilder() {
-        signatureClass = new JavaClass("Signature");
         return new JavaSignatureBuilder(signatureClass);
     }
 

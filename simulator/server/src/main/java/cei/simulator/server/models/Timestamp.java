@@ -10,6 +10,7 @@ public class Timestamp {
 
 
         router.route(HttpMethod.GET, "/api/v1/timestamp").handler(routingContext -> {
+            System.out.println(routingContext.request().params());
             JSONObject jsonObject = new JSONObject();
             jsonObject.put("Timestamp", System.currentTimeMillis());
             routingContext.response().end(jsonObject.toJSONString());

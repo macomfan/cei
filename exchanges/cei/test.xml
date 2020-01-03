@@ -3,10 +3,10 @@
 
 	<signature name="testSignature">
         <get_now output="{timestamp}" format=""/>
-        <add_query_string key="accessKeyId" value="{apiKey}"/>
-        <add_query_string key="signatureMethod" value="HmacSHA256"/>
-        <add_query_string key="signatureVersion" value="2"/>
-        <add_query_string key="timestamp" value="{timestamp}"/>
+        <add_query_string key="AccessKeyId" value="{apiKey}"/>
+        <add_query_string key="SignatureMethod" value="HmacSHA256"/>
+        <add_query_string key="SignatureVersion" value="2"/>
+        <add_query_string key="Timestamp" value="{timestamp}"/>
 		<combine_query_string output="{queryString}" sort="asc" separator="&amp;"/>
         <get_request_info output="{method}" info="method" convert="uppercase"/>
 		<get_request_info output="{host}" info="host"/>
@@ -23,7 +23,7 @@
 
 	<restful client_name="testClient" url="http://127.0.0.1:8081">
 		<interface name="getTimestamp">
-            <request method="get" target="/api/v1/timestamp"/>
+            <request method="get" target="/api/v1/timestamp" signature="testSignature"/>
             <response type="model">
                 <json_parser model="Timestamp">
 					<json_auto from="Timestamp" to="{ts}"/>

@@ -30,7 +30,7 @@ public class Python3SignatureBuilder extends SignatureBuilder {
     @Override
     public void newStringArray(Variable stringArray) {
         parent.addReference(xStringArray.inst.getType());
-        // TODO
+        method.addAssign(stringArray.nameDescriptor, "list()");
         //method.getCode().appendStatementWordsln("List<String>", stringArray.nameDescriptor, "=", "new", "LinkedList<>()");
     }
 
@@ -98,6 +98,7 @@ public class Python3SignatureBuilder extends SignatureBuilder {
     @Override
     public void endMethod() {
         method.endMethod();
+        parent.addMethod(method);
     }
 
 }

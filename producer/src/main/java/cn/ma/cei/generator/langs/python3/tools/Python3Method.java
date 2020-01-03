@@ -82,7 +82,13 @@ public class Python3Method {
 
     public void startStaticMethod(VariableType returnType, String methodName, VariableList params) {
         code.appendln("@staticmethod");
-        startMethod(returnType, methodName, params);
+        String paramString = defineParamString(params);
+        if (paramString.isEmpty()) {
+            code.appendWordsln("def", methodName + "():");
+        } else {
+            code.appendWordsln("def", methodName + "(" + defineParamString(params) + "):");
+        }
+        code.startBlock();
     }
 
     public Python3Code getCode() {

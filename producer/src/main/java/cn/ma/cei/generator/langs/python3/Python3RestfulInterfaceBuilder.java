@@ -104,7 +104,8 @@ public class Python3RestfulInterfaceBuilder extends RestfulInterfaceBuilder {
 
     @Override
     public void invokeSignature(Variable request, String methodName) {
-        method.addInvoke("Signature." + methodName, request);
+        Variable option = VariableFactory.createConstantVariable("self.__options");
+        method.addInvoke("Signature." + methodName, request, option);
     }
 
 }

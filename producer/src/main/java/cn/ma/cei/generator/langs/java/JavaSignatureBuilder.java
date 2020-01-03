@@ -10,6 +10,7 @@ import cn.ma.cei.generator.buildin.SignatureTool;
 import cn.ma.cei.generator.environment.Variable;
 import cn.ma.cei.generator.environment.VariableList;
 import cn.ma.cei.generator.environment.VariableType;
+import cn.ma.cei.generator.langs.java.buildin.TheLinkedList;
 import cn.ma.cei.generator.langs.java.tools.JavaClass;
 import cn.ma.cei.generator.langs.java.tools.JavaMethod;
 import cn.ma.cei.model.types.xStringArray;
@@ -73,6 +74,7 @@ public class JavaSignatureBuilder extends SignatureBuilder {
     @Override
     public void newStringArray(Variable stringArray) {
         parent.addReference(xStringArray.inst.getType());
+        parent.addReference(TheLinkedList.getType());
         method.addAssign("List<String> " + stringArray.nameDescriptor, "new LinkedList<>()");
     }
 
