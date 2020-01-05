@@ -19,6 +19,7 @@ public class Environment {
         java,
         cpp,
         python3,
+        golang,
         NA,
     }
 

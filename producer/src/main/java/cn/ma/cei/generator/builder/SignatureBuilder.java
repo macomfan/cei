@@ -21,7 +21,7 @@ public abstract class SignatureBuilder extends MethodBuilder {
     
     public abstract void appendToString(boolean needDefineNewOutput, Variable output, Variable input);
 
-    public abstract void combineQueryString(Variable requestVariable, Variable output, Variable sortDescriptor, Variable separator);
+    public abstract void combineQueryString(Variable requestVariable, Variable output, Variable sort, Variable separator);
 
     public abstract void getRequestInfo(Variable requestVariable, Variable output, Variable info, Variable convert);
     

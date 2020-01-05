@@ -6,6 +6,7 @@ import cn.ma.cei.generator.BuildSDK;
 import cn.ma.cei.generator.CEIPath;
 import cn.ma.cei.generator.environment.Environment;
 import cn.ma.cei.generator.langs.cpp.CppFramework;
+import cn.ma.cei.generator.langs.golang.GoFramework;
 import cn.ma.cei.generator.langs.java.JavaFramework;
 import cn.ma.cei.generator.langs.python3.Python3Framework;
 import cn.ma.cei.model.xSDK;
@@ -94,8 +95,10 @@ public class main {
         BuildSDK.registerFramework(Environment.Language.java, new JavaFramework());
         BuildSDK.registerFramework(Environment.Language.cpp, new CppFramework());
         BuildSDK.registerFramework(Environment.Language.python3, new Python3Framework());
-        BuildSDK.build(finalSDKs, Environment.Language.java, "C:\\dev\\cei\\output");
-        BuildSDK.build(finalSDKs, Environment.Language.python3, "C:\\dev\\cei\\output");
+        BuildSDK.registerFramework(Environment.Language.golang, new GoFramework());
+//        BuildSDK.build(finalSDKs, Environment.Language.java, "C:\\dev\\cei\\output");
+//        BuildSDK.build(finalSDKs, Environment.Language.python3, "C:\\dev\\cei\\output");
+        BuildSDK.build(finalSDKs, Environment.Language.golang, "C:\\dev\\cei\\output");
 
 //        
 //        

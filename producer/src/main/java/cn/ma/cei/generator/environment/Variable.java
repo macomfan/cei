@@ -39,7 +39,7 @@ public class Variable {
                 break;
             case REFER:
                 // TODO
-                this.nameDescriptor = parentVariable.nameDescriptor + "." + Environment.getCurrentDescriptionConverter().getVariableDescriptor(name);
+                this.nameDescriptor = parentVariable.nameDescriptor + "." + Environment.getCurrentDescriptionConverter().getMemberVariableDescriptor(name);
                 break;
             //case THIS:
                 //TODO
