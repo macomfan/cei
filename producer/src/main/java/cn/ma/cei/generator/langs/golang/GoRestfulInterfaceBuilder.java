@@ -15,6 +15,7 @@ import cn.ma.cei.generator.environment.VariableType;
 import cn.ma.cei.generator.langs.golang.tools.GoMethod;
 import cn.ma.cei.generator.langs.golang.tools.GoStruct;
 import cn.ma.cei.model.types.xString;
+import cn.ma.cei.utils.WordSplitter;
 
 /**
  *
@@ -51,8 +52,7 @@ public class GoRestfulInterfaceBuilder extends RestfulInterfaceBuilder {
 
     @Override
     public void defineRequest(Variable request) {
-        Variable options = VariableFactory.createConstantVariable("this.options");
-        method.addAssignAndDeclare(method.useVariable(request), method.newInstacneByConstructor("restful", request.type, options));
+        method.addAssignAndDeclare(method.useVariable(request), "restful.NewRestfulRequest(this.options)");
     }
 
     @Override
@@ -77,7 +77,7 @@ public class GoRestfulInterfaceBuilder extends RestfulInterfaceBuilder {
     @Override
     public void invokeSignature(Variable request, String methodName) {
         Variable option = VariableFactory.createConstantVariable("this.options");
-        method.addInvoke("signature." + methodName, request, option);
+        method.addInvoke(WordSplitter.getLowerCamelCase(methodName), request, option);
     }
 
     @Override

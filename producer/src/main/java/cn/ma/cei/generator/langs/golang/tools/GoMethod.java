@@ -18,11 +18,16 @@ public class GoMethod {
 
     private GoStruct parent = null;
     private GoCode code = new GoCode();
+    private String methodName;
 
     public GoMethod(GoStruct parent) {
         this.parent = parent;
     }
 
+    public String getMethodName() {
+        return methodName;
+    }
+    
     public GoCode getCode() {
         return code;
     }
@@ -36,7 +41,7 @@ public class GoMethod {
     }
 
     public String defineVariable(Variable variable) {
-        parent.addReference(variable.type);
+        //parent.addReference(variable.type);
         return "var " + variable.nameDescriptor + " " + variable.type.getDescriptor();
     }
 
@@ -65,9 +70,11 @@ public class GoMethod {
     }
 
     public void startMethod(VariableType returnType, String methodName, VariableList params) {
+        this.methodName = methodName;
         String returnString = "";
         if (returnType != null) {
-            returnString = returnType.getDescriptor();
+            returnString += "*";
+            returnString += returnType.getDescriptor();
             returnString += " ";
         }
         if (parent != null) {
@@ -114,7 +121,7 @@ public class GoMethod {
         }
         String paramString = "";
         for (Variable variable : params.getVariableList()) {
-            parent.addReference(variable.type);
+            //parent.addReference(variable.type);
             if (paramString.equals("")) {
                 paramString += variable.nameDescriptor + " " + variable.type.getDescriptor();
             } else {

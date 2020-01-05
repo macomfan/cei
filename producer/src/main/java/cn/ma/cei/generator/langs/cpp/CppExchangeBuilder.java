@@ -16,7 +16,6 @@ import cn.ma.cei.model.types.xInt;
 import cn.ma.cei.model.types.xString;
 
 public class CppExchangeBuilder extends ExchangeBuilder {
-    public final static String NO_REF = "NO_REF";
     
     private String exchangeName;
     

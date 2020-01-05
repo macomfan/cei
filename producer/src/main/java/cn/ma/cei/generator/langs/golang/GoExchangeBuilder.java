@@ -58,12 +58,12 @@ public class GoExchangeBuilder extends ExchangeBuilder {
         Reference.setupBuildinVariableType(xLong.inst.getType(), "int64", Reference.NO_REF);
         Reference.setupBuildinVariableType(xDecimal.inst.getType(), "float64", Reference.NO_REF);
         Reference.setupBuildinVariableType(TheArray.getType(), "[]", Reference.NO_REF);
-        Reference.setupBuildinVariableType(RestfulRequest.getType(), "RestfulRequest", "impl/restful");
+        Reference.setupBuildinVariableType(RestfulRequest.getType(), "restful.RestfulRequest", "impl/restful");
         Reference.setupBuildinVariableType(RestfulResponse.getType(), "RestfulResponse", "impl/restful");
-        Reference.setupBuildinVariableType(RestfulConnection.getType(), "RestfulConnection", "impl/restful");
-        Reference.setupBuildinVariableType(RestfulOptions.getType(), "RestfulOptions", "impl/restful");
+        Reference.setupBuildinVariableType(RestfulConnection.getType(), "restful", "impl/restful");
+        Reference.setupBuildinVariableType(RestfulOptions.getType(), "restful.RestfulOptions", "impl/restful");
         Reference.setupBuildinVariableType(JsonWrapper.getType(), "JsonWrapper", "impl/json");
-        Reference.setupBuildinVariableType(SignatureTool.getType(), "SignatureTool", "impl/signature");
+        Reference.setupBuildinVariableType(SignatureTool.getType(), "signature", "impl/signature");
 
         CEIPath workingFolder = Environment.getWorkingFolder();
         CEIPath exchangeFolder = CEIPath.appendPath(workingFolder, "src", "exchanges");
@@ -71,7 +71,6 @@ public class GoExchangeBuilder extends ExchangeBuilder {
         Environment.setExchangeFolder(exchangeFolder);
 
         mainFile = new GoFile(exchangeName, "exchanges");
-        signatureStruct = new GoStruct("Signature");
     }
 
     @Override
@@ -81,7 +80,7 @@ public class GoExchangeBuilder extends ExchangeBuilder {
 
     @Override
     public SignatureBuilder getSignatureBuilder() {
-        return new GoSignatureBuilder(signatureStruct);
+        return new GoSignatureBuilder(mainFile);
     }
 
     @Override
@@ -91,9 +90,6 @@ public class GoExchangeBuilder extends ExchangeBuilder {
 
     @Override
     public void endExchange() {
-        if (signatureStruct != null) {
-            mainFile.addStruct(signatureStruct);
-        }
         mainFile.build(Environment.getExchangeFolder());
     }
 

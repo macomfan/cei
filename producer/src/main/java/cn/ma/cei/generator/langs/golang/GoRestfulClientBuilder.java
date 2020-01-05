@@ -8,6 +8,7 @@ package cn.ma.cei.generator.langs.golang;
 import cn.ma.cei.generator.builder.RestfulClientBuilder;
 import cn.ma.cei.generator.builder.RestfulInterfaceBuilder;
 import cn.ma.cei.generator.buildin.RestfulOptions;
+import cn.ma.cei.generator.environment.VariableFactory;
 import cn.ma.cei.generator.langs.golang.tools.GoFile;
 import cn.ma.cei.generator.langs.golang.tools.GoStruct;
 
@@ -27,6 +28,7 @@ public class GoRestfulClientBuilder extends RestfulClientBuilder {
     @Override
     public void startClient(String clientDescriptor, RestfulOptions options) {
         clinetStruct = new GoStruct(clientDescriptor);
+        clinetStruct.addMember(VariableFactory.createLocalVariable(RestfulOptions.getType(), "options"));
         // TODO
         // Add new instance method
         

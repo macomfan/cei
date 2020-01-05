@@ -26,6 +26,7 @@ public class GoFile {
     private GoCode code = new GoCode();
 
     private IndexedList<String, GoStruct> structList = new IndexedList<>();
+    private IndexedList<String, GoMethod> methodList = new IndexedList<>();
 
     public GoFile(String filename, String packageName) {
         this.filename = filename;
@@ -34,6 +35,10 @@ public class GoFile {
 
     public void addStruct(GoStruct struct) {
         structList.put(struct.getStructName(), struct);
+    }
+
+    public void addMethod(GoMethod method) {
+        methodList.put(method.getMethodName(), method);
     }
 
     public void build(CEIPath folder) {
@@ -47,6 +52,11 @@ public class GoFile {
             code.endln();
         });
 
+        methodList.values().forEach(method -> {
+            code.appendCode(method.getCode());
+            code.endln();
+        });
+        
         CEIPath file = CEIPath.appendFile(folder, filename + ".go");
         file.write(code.toString());
     }

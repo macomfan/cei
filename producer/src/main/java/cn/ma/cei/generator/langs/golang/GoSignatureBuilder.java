@@ -9,8 +9,10 @@ import cn.ma.cei.generator.builder.SignatureBuilder;
 import cn.ma.cei.generator.environment.Variable;
 import cn.ma.cei.generator.environment.VariableList;
 import cn.ma.cei.generator.environment.VariableType;
+import cn.ma.cei.generator.langs.golang.tools.GoFile;
 import cn.ma.cei.generator.langs.golang.tools.GoMethod;
 import cn.ma.cei.generator.langs.golang.tools.GoStruct;
+import cn.ma.cei.utils.WordSplitter;
 
 /**
  *
@@ -18,11 +20,11 @@ import cn.ma.cei.generator.langs.golang.tools.GoStruct;
  */
 public class GoSignatureBuilder extends SignatureBuilder {
 
-    private GoStruct signatureStruct;
+    private GoFile mainFile;
     private GoMethod method;
 
-    public GoSignatureBuilder(GoStruct signatureStruct) {
-        this.signatureStruct = signatureStruct;
+    public GoSignatureBuilder(GoFile mainFile) {
+        this.mainFile = mainFile;
     }
 
     @Override
@@ -45,13 +47,13 @@ public class GoSignatureBuilder extends SignatureBuilder {
         if (needDefineNewOutput) {
             method.addAssignAndDeclare(method.useVariable(output), "make([]string, 10)");
         } else {
-            method.addAssign(method.useVariable(output), method.invoke("SignatureTool.appendToString", output, input));
+            method.addAssign(method.useVariable(output), method.invoke("signature.AppendToString", output, input));
         }
     }
 
     @Override
     public void combineQueryString(Variable requestVariable, Variable output, Variable sort, Variable separator) {
-        method.addAssignAndDeclare(method.useVariable(output), method.invoke("SignatureTool.combineQueryString", requestVariable, sort, separator));
+        method.addAssignAndDeclare(method.useVariable(output), method.invoke("signature.CombineQueryString", requestVariable, sort, separator));
     }
 
     @Override
@@ -81,18 +83,19 @@ public class GoSignatureBuilder extends SignatureBuilder {
 
     @Override
     public void onAddReference(VariableType variableType) {
-        signatureStruct.addReference(variableType);
+        //signatureStruct.addReference(variableType);
     }
 
     @Override
     public void startMethod(VariableType returnType, String methodDescriptor, VariableList params) {
-        method = new GoMethod(signatureStruct);
-        method.startMethod(returnType, methodDescriptor, params);
+        method = new GoMethod(null);
+        method.startMethod(returnType, WordSplitter.getLowerCamelCase(methodDescriptor), params);
     }
 
     @Override
     public void endMethod() {
         method.endMethod();
+        mainFile.addMethod(method);
     }
 
 }
