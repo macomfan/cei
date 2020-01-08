@@ -8,7 +8,7 @@ package cn.ma.cei.generator.langs.golang.tools;
 import cn.ma.cei.generator.CEIPath;
 import cn.ma.cei.generator.environment.Reference;
 import cn.ma.cei.generator.langs.golang.GoCode;
-import cn.ma.cei.utils.IndexedList;
+import cn.ma.cei.utils.UniquetList;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
@@ -25,8 +25,8 @@ public class GoFile {
     private String packageName;
     private GoCode code = new GoCode();
 
-    private IndexedList<String, GoStruct> structList = new IndexedList<>();
-    private IndexedList<String, GoMethod> methodList = new IndexedList<>();
+    private UniquetList<String, GoStruct> structList = new UniquetList<>();
+    private UniquetList<String, GoMethod> methodList = new UniquetList<>();
 
     public GoFile(String filename, String packageName) {
         this.filename = filename;

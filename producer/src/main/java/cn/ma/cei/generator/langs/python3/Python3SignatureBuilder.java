@@ -8,11 +8,11 @@ package cn.ma.cei.generator.langs.python3;
 import cn.ma.cei.generator.builder.SignatureBuilder;
 import cn.ma.cei.generator.buildin.SignatureTool;
 import cn.ma.cei.generator.environment.Variable;
-import cn.ma.cei.generator.environment.VariableList;
 import cn.ma.cei.generator.environment.VariableType;
 import cn.ma.cei.generator.langs.python3.tools.Python3Class;
 import cn.ma.cei.generator.langs.python3.tools.Python3Method;
 import cn.ma.cei.model.types.xStringArray;
+import java.util.List;
 
 /**
  *
@@ -30,8 +30,8 @@ public class Python3SignatureBuilder extends SignatureBuilder {
     @Override
     public void newStringArray(Variable stringArray) {
         parent.addReference(xStringArray.inst.getType());
-        method.addAssign(stringArray.nameDescriptor, "list()");
-        //method.getCode().appendStatementWordsln("List<String>", stringArray.nameDescriptor, "=", "new", "LinkedList<>()");
+        method.addAssign(stringArray.getDescriptor(), "list()");
+        //method.getCode().appendStatementWordsln("List<String>", stringArray.getNameDescriptor(), "=", "new", "LinkedList<>()");
     }
 
     @Override
@@ -41,7 +41,7 @@ public class Python3SignatureBuilder extends SignatureBuilder {
 
     @Override
     public void addQueryString(Variable requestVariable, Variable key, Variable value) {
-        method.addInvoke(requestVariable.nameDescriptor + ".add_query_string", key, value);
+        method.addInvoke(requestVariable.getDescriptor() + ".add_query_string", key, value);
     }
 
     @Override
@@ -89,7 +89,7 @@ public class Python3SignatureBuilder extends SignatureBuilder {
     }
 
     @Override
-    public void startMethod(VariableType returnType, String methodDescriptor, VariableList params) {
+    public void startMethod(VariableType returnType, String methodDescriptor, List<Variable> params) {
         method = new Python3Method(parent);
         parent.addReference(SignatureTool.getType());
         method.startStaticMethod(null, methodDescriptor, params);

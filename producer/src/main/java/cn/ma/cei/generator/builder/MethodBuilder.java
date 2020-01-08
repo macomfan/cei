@@ -3,29 +3,30 @@ package cn.ma.cei.generator.builder;
 import cn.ma.cei.exception.CEIException;
 import cn.ma.cei.generator.environment.Variable;
 import cn.ma.cei.generator.environment.VariableFactory;
-import cn.ma.cei.generator.environment.VariableList;
 import cn.ma.cei.generator.environment.VariableType;
+import cn.ma.cei.utils.UniquetList;
+import java.util.List;
 
 public abstract class MethodBuilder {
 
     public abstract void onAddReference(VariableType variableType);
 
-    private VariableList variableList = new VariableList();
+    private final UniquetList<String, Variable> variableList = new UniquetList<>();
 
     public void registerVariable(Variable variable) {
-        if (variableList.contains(variable.name)) {
-            throw new CEIException("Variable re-defined: " + variable.name);
+        if (variableList.containsKey(variable.getName())) {
+            throw new CEIException("Variable re-defined: " + variable.getName());
         }
-        variableList.registerVariable(variable);
+        variableList.put(variable.getName(), variable);
         //onAddReference(variable.type);
     }
 
-    public VariableList getVariableList() {
-        return variableList;
+    public List<Variable> getVariableList() {
+        return variableList.values();
     }
 
     public Variable queryVariable(String name) {
-        return variableList.queryVariable(name);
+        return variableList.get(name);
     }
 
     public Variable newInputVariable(VariableType type, String name) {
@@ -33,7 +34,7 @@ public abstract class MethodBuilder {
         if (variableName == null) {
             throw new CEIException("[MethodBuilder] Variable name must be {}");
         }
-        if (variableList.contains(variableName)) {
+        if (variableList.containsKey(variableName)) {
             throw new CEIException("[MethodBuilder] Variable re-defined: " + variableName);
         }
         Variable variable = VariableFactory.createInputVariable(type, variableName);
@@ -46,7 +47,7 @@ public abstract class MethodBuilder {
         if (variableName == null) {
             return VariableFactory.createHardcodeStringVariable(name);
         }
-        return variableList.queryVariable(variableName);
+        return variableList.get(variableName);
     }
 
     public Variable newLocalVariable(VariableType type, String name) {
@@ -54,7 +55,7 @@ public abstract class MethodBuilder {
         if (variableName == null) {
             throw new CEIException("[MethodBuilder] Variable name must be {}");
         }
-        if (variableList.contains(variableName)) {
+        if (variableList.containsKey(variableName)) {
             throw new CEIException("[MethodBuilder] Variable re-defined: " + variableName);
         }
         Variable variable = VariableFactory.createLocalVariable(type, variableName);
@@ -62,7 +63,7 @@ public abstract class MethodBuilder {
         return variable;
     }
 
-    public abstract void startMethod(VariableType returnType, String methodDescriptor, VariableList params);
+    public abstract void startMethod(VariableType returnType, String methodDescriptor, List<Variable> params);
 
     public abstract void endMethod();
 }

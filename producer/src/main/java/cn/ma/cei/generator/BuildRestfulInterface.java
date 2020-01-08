@@ -1,7 +1,6 @@
 package cn.ma.cei.generator;
 
 import cn.ma.cei.generator.environment.Variable;
-import cn.ma.cei.generator.environment.VariableList;
 import cn.ma.cei.generator.environment.VariableType;
 import cn.ma.cei.generator.environment.VariableFactory;
 import cn.ma.cei.exception.CEIException;
@@ -17,6 +16,7 @@ import cn.ma.cei.model.xInterface;
 import cn.ma.cei.model.xPostBody;
 import cn.ma.cei.model.xQuery;
 import cn.ma.cei.utils.Checker;
+import java.util.LinkedList;
 import java.util.List;
 
 public class BuildRestfulInterface {
@@ -42,10 +42,10 @@ public class BuildRestfulInterface {
             returnType = BuildResponse.getReturnType(restIf.response);
         }
 
-        VariableList inputVariableList = new VariableList();
-        builder.getVariableList().getVariableList().forEach((variable) -> {
+        List<Variable> inputVariableList = new LinkedList<>();
+        builder.getVariableList().forEach((variable) -> {
             if (variable.position == Variable.Position.INPUT) {
-                inputVariableList.registerVariable(variable);
+                inputVariableList.add(variable);
             }
         });
 

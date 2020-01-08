@@ -30,7 +30,7 @@ public class JavaRestfulClientBuilder extends RestfulClientBuilder {
         defauleConstructor.getCode().newBlock(() -> {
             defauleConstructor.getCode().appendJavaLine("this.options", "=", "new", RestfulOptions.getType().getDescriptor() + "()");
             Variable url = VariableFactory.createHardcodeStringVariable(options.url);
-            defauleConstructor.getCode().appendJavaLine("this.options.url", "=", url.nameDescriptor);
+            defauleConstructor.getCode().appendJavaLine("this.options.url", "=", url.getDescriptor());
             if (options.connectionTimeout != null) {
                 defauleConstructor.getCode().appendJavaLine("this.options.connectionTimeout", "=", options.connectionTimeout.toString());
             }
@@ -43,7 +43,7 @@ public class JavaRestfulClientBuilder extends RestfulClientBuilder {
         optionConstructor.getCode().newBlock(() -> {
             optionConstructor.getCode().appendJavaLine("this.options", "=", "new", RestfulOptions.getType().getDescriptor() + "()");
             Variable url = VariableFactory.createHardcodeStringVariable(options.url);
-            optionConstructor.getCode().appendJavaLine("this.options.url", "=", url.nameDescriptor);
+            optionConstructor.getCode().appendJavaLine("this.options.url", "=", url.getDescriptor());
             if (options.connectionTimeout != null) {
                 optionConstructor.getCode().appendJavaLine("this.options.connectionTimeout", "=", options.connectionTimeout.toString());
             }

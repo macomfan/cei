@@ -3,27 +3,36 @@ package main
 import (
 	"fmt"
 	"impl/restful"
+	//"strconv"
+	//"exchanges"
 )
 
-type TestClient struct {
-	options string
-}
-
-func (this *TestClient) GetLastTrade(symbol string) {
-	res := new(restful.RestfulRequest)
-	res.SetURL("http://127.0.0.1:8081")
-	res.SetTarget("/api/v1/lastTrade")
-	res.SetMethod(restful.GET)
-	res.AddQueryStringByString("symbol", symbol)
-	fmt.Println(res.BuildQueryString())
-	response := restful.Query(res)
-	json := response.GetJson()
-	fmt.Println(json.GetString("Symbol"))
+func TTT(a, b interface{}) []string {
+	fmt.Println(a)
+	fmt.Println(b)
+	var strlist []string
+	strlist = append(strlist, "AAA")
+	return strlist
 }
 
 func main() {
-	testClient := new(TestClient)
-	testClient.GetLastTrade("ethusdt")
+	for index, value := range TTT(3.141, "aaa") {
+		fmt.Printf("index: %d value: %s\n", index, value)
+	}
+	strlist := TTT(3.141, "aaa")
+	for index := 0; index < len(strlist); index += 1 {
+		fmt.Printf("value: %s\n", strlist[index])
+	}
+
+	options := new(restful.RestfulOptions)
+	request := restful.NewRestfulRequest(options)
+	request.AddQueryString("1", "A")
+	request.AddQueryString("2", "B")
+	request.AddQueryString("3", 12345.67890)
+	fmt.Println(request.BuildQueryString())
+	// testClient := cei.NewTestClient(nil)
+	// timestamp := testClient.GetTimestamp()
+	// fmt.Println(timestamp.Ts)
 
 	// j := new(json.JsonWrapper)
 	// j.Test()
@@ -40,7 +49,5 @@ func main() {
 	// tmp1 = append(tmp1, 4)
 	// fmt.Println(len(tmp1))
 	// fmt.Println(cap(tmp1))
-
-
 
 }

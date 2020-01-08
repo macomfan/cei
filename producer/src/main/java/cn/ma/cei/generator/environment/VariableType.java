@@ -11,7 +11,7 @@ public class VariableType {
     private String typeDescriptor = null;
     private String typeReference = null;
 
-    private VariableType(String type) {
+    public VariableType(String type) {
         this.type = type;
     }
 

@@ -2,10 +2,10 @@ package cn.ma.cei.generator.langs.cpp.tools;
 
 import cn.ma.cei.generator.builder.MethodBuilder;
 import cn.ma.cei.generator.environment.Variable;
-import cn.ma.cei.generator.environment.VariableList;
 import cn.ma.cei.generator.environment.VariableType;
 import cn.ma.cei.generator.langs.cpp.CodeForCpp;
 import cn.ma.cei.generator.langs.cpp.CodeForHpp;
+import java.util.List;
 
 public class CppMethod {
 
@@ -25,7 +25,7 @@ public class CppMethod {
         return codeH;
     }
 
-    public void defineMethod(VariableType returnType, String methodName, VariableList params) {
+    public void defineMethod(VariableType returnType, String methodName, List<Variable> params) {
         codeH.appendStatementWordsln(returnType.getDescriptor(), methodName + "(" + defineParamString(params) + ")");
 
         codeCpp.appendWordsln(returnType.getDescriptor(), className + "::" + methodName + "(" + defineParamString(params) + ") {");
@@ -36,18 +36,18 @@ public class CppMethod {
         codeCpp.endln();
     }
 
-    private String defineParamString(VariableList params) {
-        if (params == null) {
+    private String defineParamString(List<Variable> params) {
+        if (params == null || params.isEmpty()) {
             return "";
         }
         String paramString = "";
         boolean isFirst = true;
-        for (Variable variable : params.getVariableList()) {
+        for (Variable variable : params) {
             if (isFirst) {
-                paramString += "const " + variable.type.getDescriptor() + "& " + variable.name;
+                paramString += "const " + variable.getTypeDescriptor() + "& " + variable.getDescriptor();
                 isFirst = false;
             } else {
-                paramString += ", " + "const " + variable.type.getDescriptor() + "& " + variable.name;
+                paramString += ", " + "const " + variable.getTypeDescriptor() + "& " + variable.getDescriptor();
             }
         }
         return paramString;

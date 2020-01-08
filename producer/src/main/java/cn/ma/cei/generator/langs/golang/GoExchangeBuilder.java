@@ -70,7 +70,7 @@ public class GoExchangeBuilder extends ExchangeBuilder {
         exchangeFolder.mkdirs();
         Environment.setExchangeFolder(exchangeFolder);
 
-        mainFile = new GoFile(exchangeName, "exchanges");
+        mainFile = new GoFile(exchangeName, exchangeName);
     }
 
     @Override

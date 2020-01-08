@@ -21,10 +21,8 @@ type RestfulRequest struct {
 	queryStrings []string
 }
 
-func NewRestfulRequest() *RestfulRequest {
+func NewRestfulRequest(options *RestfulOptions) *RestfulRequest {
 	instance := new(RestfulRequest)
-	instance.queryStrings = make([]string, 10)
-	instance.headers = make([]string, 10)
 	return instance
 }
 
@@ -44,16 +42,48 @@ func (this *RestfulRequest) GetMethod() Method {
 	return this.method
 }
 
-func (this *RestfulRequest) AddHeader(key string, value string) {
-	this.headers = append(this.headers, key, value)
+func (this *RestfulRequest) AddHeader(key string, value interface{}) {
+	this.headers = append(this.headers, key, toString(value))
 }
 
-func (this *RestfulRequest) AddQueryStringByString(key string, value string) {
-	this.queryStrings = append(this.queryStrings, key, value)
+func (this *RestfulRequest) AddQueryString(key string, value interface{}) {
+	this.queryStrings = append(this.queryStrings, key, toString(value))
 }
 
-func (this *RestfulRequest) AddQueryStringByInt(key string, value int) {
-	this.queryStrings = append(this.queryStrings, key, strconv.Itoa(value))
+func toString(value interface{}) string {
+	switch v := value.(type) {
+	case string:
+		return string(v)
+	case bool:
+		return strconv.FormatBool(v)
+	case uint8:
+		return strconv.FormatUint(uint64(v), 10)
+	case uint16:
+		return strconv.FormatUint(uint64(v), 10)
+	case uint32:
+		return strconv.FormatUint(uint64(v), 10)
+	case uint64:
+		return strconv.FormatUint(uint64(v), 10)
+	case uint:
+		return strconv.FormatUint(uint64(v), 10)
+	case int8:
+		return strconv.FormatInt(int64(v), 10)
+	case int16:
+		return strconv.FormatInt(int64(v), 10)
+	case int32:
+		return strconv.FormatInt(int64(v), 10)
+	case int64:
+		return strconv.FormatInt(int64(v), 10)
+	case int:
+		return strconv.FormatInt(int64(v), 10)
+	case float32:
+		return strconv.FormatFloat(float64(v), 'f', -1, 64)
+	case float64:
+		return strconv.FormatFloat(float64(v), 'f', -1, 64)
+	default:
+		// TODO not supported
+		return ""
+	}
 }
 
 func (this *RestfulRequest) GetHeaders() []string {

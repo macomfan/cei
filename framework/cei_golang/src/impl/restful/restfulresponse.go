@@ -20,12 +20,12 @@ func newRestfulResponse(response *http.Response) *RestfulResponse {
 
 func (this *RestfulResponse) GetJson() *json.JsonWrapper {
 	var body []byte
+	defer this.response.Body.Close()
 	body, err := ioutil.ReadAll(this.response.Body)
 	if err != nil {
 		fmt.Println(err)
 		return nil
 	}
-	this.response.Body.Close()
 	json := json.NewJsonWrapper(body)
 	return json
 }

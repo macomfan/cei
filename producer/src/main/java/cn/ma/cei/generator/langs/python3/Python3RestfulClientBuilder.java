@@ -36,7 +36,7 @@ public class Python3RestfulClientBuilder extends RestfulClientBuilder {
         defaultConstructor.getCode().newBlock(() -> {
             defaultConstructor.getCode().appendWordsln("self.__options", "=", RestfulOptions.getType().getDescriptor() + "()");
             Variable url = VariableFactory.createHardcodeStringVariable(options.url);
-            defaultConstructor.getCode().appendWordsln("self.__options.url", "=", url.nameDescriptor);
+            defaultConstructor.getCode().appendWordsln("self.__options.url", "=", url.getDescriptor());
             if (options.connectionTimeout != null) {
                 defaultConstructor.getCode().appendWordsln("self__.options.connectionTimeout", "=", options.connectionTimeout.toString());
             }

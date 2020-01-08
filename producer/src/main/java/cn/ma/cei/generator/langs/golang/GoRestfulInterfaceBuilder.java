@@ -10,12 +10,16 @@ import cn.ma.cei.generator.builder.ResponseBuilder;
 import cn.ma.cei.generator.builder.RestfulInterfaceBuilder;
 import cn.ma.cei.generator.environment.Variable;
 import cn.ma.cei.generator.environment.VariableFactory;
-import cn.ma.cei.generator.environment.VariableList;
 import cn.ma.cei.generator.environment.VariableType;
+import cn.ma.cei.generator.langs.golang.tools.GoInterfaceVar;
 import cn.ma.cei.generator.langs.golang.tools.GoMethod;
+import cn.ma.cei.generator.langs.golang.tools.GoPtrType;
 import cn.ma.cei.generator.langs.golang.tools.GoStruct;
+import cn.ma.cei.generator.langs.golang.tools.GoVar;
 import cn.ma.cei.model.types.xString;
 import cn.ma.cei.utils.WordSplitter;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  *
@@ -37,63 +41,64 @@ public class GoRestfulInterfaceBuilder extends RestfulInterfaceBuilder {
 
     @Override
     public JsonBuilderBuilder getJsonBuilderBuilder() {
-        return new GoJsonBuilderBuilder();
+        return new GoJsonBuilderBuilder(method);
     }
 
     @Override
     public void setRequestTarget(Variable request, Variable target) {
-        method.addInvoke(request.nameDescriptor + ".SetTarget", target);
+        method.addInvoke(request.getDescriptor() + ".SetTarget", new GoVar(target));
     }
 
     @Override
     public void addHeader(Variable request, Variable tag, Variable value) {
-        method.addInvoke(request.nameDescriptor + ".AddHeader", tag, value);
+        method.addInvoke(request.getDescriptor() + ".AddHeader", new GoVar(tag), new GoVar(value));
     }
 
     @Override
     public void defineRequest(Variable request) {
-        method.addAssignAndDeclare(method.useVariable(request), "restful.NewRestfulRequest(this.options)");
+        Variable options = VariableFactory.createConstantVariable("this.options");
+        method.addAssignAndDeclare(method.useVariable(new GoVar(request)), "restful.NewRestfulRequest(&this.options)");
     }
 
     @Override
     public void addToQueryString(Variable request, Variable queryStringName, Variable variable) {
-        if (variable.type == xString.inst.getType()) {
-            method.addInvoke(request.nameDescriptor + ".AddQueryString", queryStringName, variable);
+        if (variable.getType() == xString.inst.getType()) {
+            method.addInvoke(request.getDescriptor() + ".AddQueryString", new GoVar(queryStringName), new GoVar(variable));
         } else {
-            method.addInvoke(request.nameDescriptor + ".AddQueryStringTODO", queryStringName, variable);
+            method.addInvoke(request.getDescriptor() + ".AddQueryStringTODO", new GoVar(queryStringName), new GoVar(variable));
         }
     }
 
     @Override
     public void setPostBody(Variable request, Variable postBody) {
-        method.addInvoke(request.nameDescriptor + ".SetPostBody", postBody);
+        method.addInvoke(request.getDescriptor() + ".SetPostBody", new GoVar(postBody));
     }
 
     @Override
     public void invokeQuery(Variable response, Variable request) {
-        method.addAssign(method.useVariable(response), method.invoke("restful.Query", request));
+        method.addAssignAndDeclare(method.useVariable(new GoVar(response)), method.invoke("restful.Query", new GoVar(request)));
     }
 
     @Override
     public void invokeSignature(Variable request, String methodName) {
         Variable option = VariableFactory.createConstantVariable("this.options");
-        method.addInvoke(WordSplitter.getLowerCamelCase(methodName), request, option);
+        method.addInvoke(WordSplitter.getLowerCamelCase(methodName), new GoVar(request), new GoVar(option));
     }
 
     @Override
     public void setUrl(Variable request) {
         Variable url = VariableFactory.createConstantVariable("this.options.URL");
-        method.addInvoke(request.nameDescriptor + ".SetURL", url);
+        method.addInvoke(request.getDescriptor() + ".SetURL", new GoVar(url));
     }
 
     @Override
     public void setRequestMethod(Variable request, Variable requestMethod) {
-        method.addInvoke(request.nameDescriptor + ".SetMethod", requestMethod);
+        method.addInvoke(request.getDescriptor() + ".SetMethod", new GoVar(requestMethod));
     }
 
     @Override
     public void returnResult(Variable returnVariable) {
-        method.addReturn(returnVariable);
+        method.addReturn(new GoVar(returnVariable));
     }
 
     @Override
@@ -102,9 +107,13 @@ public class GoRestfulInterfaceBuilder extends RestfulInterfaceBuilder {
     }
 
     @Override
-    public void startMethod(VariableType returnType, String methodDescriptor, VariableList params) {
+    public void startMethod(VariableType returnType, String methodDescriptor, List<Variable> params) {
         method = new GoMethod(clientStruct);
-        method.startMethod(returnType, methodDescriptor, params);
+        List<GoVar> tmp = new LinkedList<>();
+        params.forEach(item ->{
+            tmp.add(new GoInterfaceVar(item));
+        });
+        method.startMethod(new GoPtrType(returnType), methodDescriptor, tmp);
     }
 
     @Override

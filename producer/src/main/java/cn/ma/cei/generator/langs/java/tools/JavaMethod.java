@@ -6,9 +6,10 @@
 package cn.ma.cei.generator.langs.java.tools;
 
 import cn.ma.cei.generator.environment.Variable;
-import cn.ma.cei.generator.environment.VariableList;
 import cn.ma.cei.generator.environment.VariableType;
 import cn.ma.cei.generator.langs.java.JavaCode;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  *
@@ -28,20 +29,20 @@ public class JavaMethod {
     }
 
     public String defineVariable(Variable variable) {
-        parent.addReference(variable.type);
-        return variable.type.getDescriptor() + " " + variable.nameDescriptor;
+        parent.addReference(variable.getType());
+        return variable.getTypeDescriptor() + " " + variable.getDescriptor();
     }
 
     public String useVariable(Variable variable) {
-        return variable.nameDescriptor;
+        return variable.getDescriptor();
     }
 
     public void addReturn(Variable variable) {
-        code.appendJavaLine("return", variable.nameDescriptor);
+        code.appendJavaLine("return", variable.getDescriptor());
     }
 
     public void startFor(Variable item, String statement) {
-        code.appendWordsln(statement + ".forEach(" + item.nameDescriptor + " -> {");
+        code.appendWordsln(statement + ".forEach(" + item.getDescriptor() + " -> {");
         code.startBlock();
     }
 
@@ -62,7 +63,8 @@ public class JavaMethod {
 
     public String newInstance(VariableType type, Variable... params) {
         parent.addReference(type);
-        return "new " + type.getDescriptor() + "(" + invokeParamString(params) + ")";
+        List<Variable> tmp = Arrays.asList(params);
+        return "new " + type.getDescriptor() + "(" + invokeParamString(tmp) + ")";
     }
 
     public void addAssign(String left, String right) {
@@ -74,10 +76,11 @@ public class JavaMethod {
     }
 
     public String invoke(String method, Variable... params) {
-        return method + "(" + invokeParamString(params) + ")";
+        List<Variable> tmp = Arrays.asList(params);
+        return method + "(" + invokeParamString(tmp) + ")";
     }
 
-    public void startMethod(VariableType returnType, String methodName, VariableList params) {
+    public void startMethod(VariableType returnType, String methodName, List<Variable> params) {
         if (returnType == null) {
             code.appendWordsln("public", "void", methodName + "(" + defineParamString(params) + ")", "{");
         } else {
@@ -87,7 +90,7 @@ public class JavaMethod {
         code.startBlock();
     }
 
-    public void startStaticMethod(VariableType returnType, String methodName, VariableList params) {
+    public void startStaticMethod(VariableType returnType, String methodName, List<Variable> params) {
         if (returnType == null) {
             code.appendWordsln("public", "static", "void", methodName + "(" + defineParamString(params) + ")", "{");
         } else {
@@ -102,8 +105,8 @@ public class JavaMethod {
         code.appendln("}");
     }
 
-    private String invokeParamString(Variable... params) {
-        if (params == null) {
+    private String invokeParamString(List<Variable> params) {
+        if (params.isEmpty()) {
             return "";
         }
         String paramString = "";
@@ -112,25 +115,25 @@ public class JavaMethod {
                 continue;
             }
             if (paramString.equals("")) {
-                paramString += p.nameDescriptor;
+                paramString += p.getDescriptor();
             } else {
-                paramString += ", " + p.nameDescriptor;
+                paramString += ", " + p.getDescriptor();
             }
         }
         return paramString;
     }
 
-    private String defineParamString(VariableList params) {
-        if (params == null) {
+    private String defineParamString(List<Variable> params) {
+        if (params.isEmpty()) {
             return "";
         }
         String paramString = "";
-        for (Variable variable : params.getVariableList()) {
-            parent.addReference(variable.type);
+        for (Variable variable : params) {
+            parent.addReference(variable.getType());
             if (paramString.equals("")) {
-                paramString += variable.type.getDescriptor() + " " + variable.nameDescriptor;
+                paramString += variable.getTypeDescriptor() + " " + variable.getDescriptor();
             } else {
-                paramString += ", " + variable.type.getDescriptor() + " " + variable.nameDescriptor;
+                paramString += ", " + variable.getTypeDescriptor() + " " + variable.getDescriptor();
             }
         }
         return paramString;

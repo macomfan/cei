@@ -2,12 +2,12 @@ package cn.ma.cei.generator.langs.cpp;
 
 import cn.ma.cei.generator.builder.JsonBuilderBuilder;
 import cn.ma.cei.generator.environment.Variable;
-import cn.ma.cei.generator.environment.VariableList;
 import cn.ma.cei.generator.environment.VariableType;
 import cn.ma.cei.generator.builder.ResponseBuilder;
 import cn.ma.cei.generator.builder.RestfulInterfaceBuilder;
 import cn.ma.cei.generator.langs.cpp.tools.CppClass;
 import cn.ma.cei.generator.langs.cpp.tools.CppMethod;
+import java.util.List;
 
 public class CppRestfulInterfaceBuilder extends RestfulInterfaceBuilder {
     
@@ -30,7 +30,7 @@ public class CppRestfulInterfaceBuilder extends RestfulInterfaceBuilder {
     
     @Override
     public void defineRequest(Variable request) {
-        cppMethod.getCode().appendStatementWordsln(request.type.getDescriptor(), request.nameDescriptor);
+        cppMethod.getCode().appendStatementWordsln(request.getTypeDescriptor(), request.getDescriptor());
     }
     
     
@@ -51,7 +51,7 @@ public class CppRestfulInterfaceBuilder extends RestfulInterfaceBuilder {
 
 
     @Override
-    public void startMethod(VariableType returnType, String methodDescriptor, VariableList params) {
+    public void startMethod(VariableType returnType, String methodDescriptor, List<Variable> params) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

@@ -23,32 +23,32 @@ public class JavaJsonBuilderBuilder extends JsonBuilderBuilder {
     
     @Override
     public void defineRootJsonObject(Variable jsonObject) {
-        method.addAssign(method.defineVariable(jsonObject), method.newInstance(jsonObject.type));
+        method.addAssign(method.defineVariable(jsonObject), method.newInstance(jsonObject.getType()));
     }
 
     @Override
     public void addJsonString(Variable from, Variable jsonObject, Variable itemName) {
-        method.addInvoke(jsonObject.nameDescriptor + ".addJsonString", itemName, from);
+        method.addInvoke(jsonObject.getDescriptor() + ".addJsonString", itemName, from);
     }
 
     @Override
     public void addJsonInteger(Variable from, Variable jsonObject, Variable itemName) {
-        method.addInvoke(jsonObject.nameDescriptor + ".addJsonInteger", itemName, from);
+        method.addInvoke(jsonObject.getDescriptor() + ".addJsonInteger", itemName, from);
     }
 
     @Override
     public void addJsonLong(Variable from, Variable jsonObject, Variable itemName) {
-        method.addInvoke(jsonObject.nameDescriptor + ".addJsonLong", itemName, from);
+        method.addInvoke(jsonObject.getDescriptor() + ".addJsonLong", itemName, from);
     }
 
     @Override
     public void addJsonBoolean(Variable from, Variable jsonObject, Variable itemName) {
-        method.addInvoke(jsonObject.nameDescriptor + ".addJsonBoolean", itemName, from);
+        method.addInvoke(jsonObject.getDescriptor() + ".addJsonBoolean", itemName, from);
     }
 
     @Override
     public void addJsonDecimal(Variable from, Variable jsonObject, Variable itemName) {
-        method.addInvoke(jsonObject.nameDescriptor + ".addJsonDecimal", itemName, from);
+        method.addInvoke(jsonObject.getDescriptor() + ".addJsonDecimal", itemName, from);
     }
     
 }

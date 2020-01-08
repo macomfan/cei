@@ -11,6 +11,7 @@ import cn.ma.cei.generator.environment.Variable;
 import cn.ma.cei.generator.environment.VariableType;
 import cn.ma.cei.generator.langs.golang.tools.GoFile;
 import cn.ma.cei.generator.langs.golang.tools.GoStruct;
+import cn.ma.cei.generator.langs.golang.tools.GoVar;
 
 /**
  *
@@ -38,7 +39,7 @@ public class GoModelBuilder extends ModelBuilder {
 
     @Override
     public void registerMember(Variable variable) {
-        modelStruct.addMember(variable);
+        modelStruct.addMember(new GoVar(variable));
     }
 
     @Override

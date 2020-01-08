@@ -80,7 +80,7 @@ public class VariableFactory {
     }
 
     public static Variable createHardcodeStringVariable(String name) {
-        return createVariable(xString.inst.getType(), name, Variable.Position.HARDCODE_STRING, null);
+        return createVariable(xString.inst.getType(), name, Variable.Position.STRING, null);
     }
 
     public static Variable createConstantVariable(String name) {
@@ -101,10 +101,10 @@ public class VariableFactory {
 
     public static Variable queryMemberVariable(Variable parentVariable, String name) {
         try {
-            VariableType memberType = modelInfo.get().tryGet(parentVariable.type, name);
+            VariableType memberType = modelInfo.get().tryGet(parentVariable.getType(), name);
             return createVariable(memberType, name, Variable.Position.REFER, parentVariable);
         } catch (CEIException e) {
-            throw new CEIException("[VariableFactory] The model is not defined: " + parentVariable.type.getName());
+            throw new CEIException("[VariableFactory] The model is not defined: " + parentVariable.getTypeName());
         }
     }
 

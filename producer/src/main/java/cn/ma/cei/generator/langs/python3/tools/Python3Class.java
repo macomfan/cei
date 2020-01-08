@@ -9,9 +9,9 @@ import cn.ma.cei.exception.CEIException;
 import cn.ma.cei.generator.CEIPath;
 import cn.ma.cei.generator.environment.Environment;
 import cn.ma.cei.generator.environment.Variable;
-import cn.ma.cei.generator.environment.VariableList;
 import cn.ma.cei.generator.environment.VariableType;
 import cn.ma.cei.generator.langs.python3.Python3Code;
+import cn.ma.cei.utils.UniquetList;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -34,7 +34,7 @@ public class Python3Class {
 
     private final String className;
     private Python3Code code = new Python3Code();
-    private VariableList memberList = new VariableList();
+    private UniquetList<String, Variable> memberList = new UniquetList<>();
     private Set<String> importList = new HashSet<>();
     private List<Python3Code> methodList = new LinkedList<>();
 
@@ -47,8 +47,8 @@ public class Python3Class {
     }
 
     public void addMemberVariable(Variable memberVariable) {
-        memberList.registerVariable(memberVariable);
-        addReference(memberVariable.type);
+        memberList.put(memberVariable.getName(), memberVariable);
+        addReference(memberVariable.getType());
     }
 
     public void addReference(VariableType type) {
@@ -86,8 +86,8 @@ public class Python3Class {
     }
 
     private void writeMemberVariable(Python3Code code) {
-        memberList.getVariableList().forEach(item -> {
-            code.appendWordsln(item.nameDescriptor, "=", "None");
+        memberList.values().forEach(item -> {
+            code.appendWordsln(item.getDescriptor(), "=", "None");
         });
     }
 

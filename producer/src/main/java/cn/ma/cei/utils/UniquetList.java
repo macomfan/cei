@@ -8,9 +8,9 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-public class IndexedList<IndexType, ValueType> {
-    private List<ValueType> indexedList = new LinkedList<>();
-    private Map<IndexType, ValueType> indexed = new HashMap<>();
+public class UniquetList<IndexType, ValueType> {
+    private final List<ValueType> indexedList = new LinkedList<>();
+    private final Map<IndexType, ValueType> indexed = new HashMap<>();
 
     public boolean containsKey(IndexType key) {
         return indexed.containsKey(key);

@@ -4,9 +4,9 @@ import cn.ma.cei.exception.CEIException;
 import cn.ma.cei.generator.CEIPath;
 import cn.ma.cei.generator.environment.Reference;
 import cn.ma.cei.generator.environment.Variable;
-import cn.ma.cei.generator.environment.VariableList;
 import cn.ma.cei.generator.environment.VariableType;
 import cn.ma.cei.generator.langs.java.JavaCode;
+import cn.ma.cei.utils.UniquetList;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -33,8 +33,8 @@ public class JavaClass {
     private String packageName = "";
     private ClassType type = ClassType.STANDARD;
 
-    private VariableList privateMemberList = new VariableList();
-    private VariableList publicMemberList = new VariableList();
+    private UniquetList<String, Variable> privateMemberList = new UniquetList<>();
+    private UniquetList<String, Variable> publicMemberList = new UniquetList<>();
     private Set<String> importList = new HashSet<>();
     private List<JavaMethod> methodList = new LinkedList<>();
 
@@ -71,11 +71,11 @@ public class JavaClass {
 
     public void addMemberVariable(AccessType accessType, Variable memberVariable) {
         if (accessType == AccessType.PUBLIC) {
-            publicMemberList.registerVariable(memberVariable);
+            publicMemberList.put(memberVariable.getName(), memberVariable);
         } else if (accessType == AccessType.PRIVATE) {
-            privateMemberList.registerVariable(memberVariable);
+            privateMemberList.put(memberVariable.getName(), memberVariable);
         }
-        addReference(memberVariable.type);
+        addReference(memberVariable.getType());
     }
 
     public void addMethod(JavaMethod method) {
@@ -145,11 +145,11 @@ public class JavaClass {
     }
 
     private void writeMemberVariable(JavaCode code) {
-        publicMemberList.getVariableList().forEach(variable -> {
-            code.appendJavaLine("public", variable.type.getDescriptor(), variable.nameDescriptor);
+        publicMemberList.values().forEach(variable -> {
+            code.appendJavaLine("public", variable.getTypeDescriptor(), variable.getDescriptor());
         });
-        privateMemberList.getVariableList().forEach(variable -> {
-            code.appendJavaLine("private", variable.type.getDescriptor(), variable.nameDescriptor);
+        privateMemberList.values().forEach(variable -> {
+            code.appendJavaLine("private", variable.getTypeDescriptor(), variable.getDescriptor());
         });
         code.endln();
     }

@@ -23,31 +23,31 @@ public class Python3JsonBuilderBuilder extends JsonBuilderBuilder {
 
     @Override
     public void defineRootJsonObject(Variable jsonObject) {
-        method.addAssign(method.defineVariable(jsonObject), method.newInstance(jsonObject.type));
+        method.addAssign(method.defineVariable(jsonObject), method.newInstance(jsonObject.getType()));
     }
 
     @Override
     public void addJsonString(Variable from, Variable jsonObject, Variable itemName) {
-        method.addInvoke(jsonObject.nameDescriptor + ".add_json_string", itemName, from);
+        method.addInvoke(jsonObject.getDescriptor() + ".add_json_string", itemName, from);
     }
 
     @Override
     public void addJsonInteger(Variable from, Variable jsonObject, Variable itemName) {
-        method.addInvoke(jsonObject.nameDescriptor + ".add_json_integer", itemName, from);
+        method.addInvoke(jsonObject.getDescriptor() + ".add_json_integer", itemName, from);
     }
 
     @Override
     public void addJsonLong(Variable from, Variable jsonObject, Variable itemName) {
-        method.addInvoke(jsonObject.nameDescriptor + ".add_json_long", itemName, from);
+        method.addInvoke(jsonObject.getDescriptor() + ".add_json_long", itemName, from);
     }
 
     @Override
     public void addJsonBoolean(Variable from, Variable jsonObject, Variable itemName) {
-        method.addInvoke(jsonObject.nameDescriptor + ".add_json_boolean", itemName, from);
+        method.addInvoke(jsonObject.getDescriptor() + ".add_json_boolean", itemName, from);
     }
 
     @Override
     public void addJsonDecimal(Variable from, Variable jsonObject, Variable itemName) {
-        method.addInvoke(jsonObject.nameDescriptor + ".add_json_decimal", itemName, from);
+        method.addInvoke(jsonObject.getDescriptor() + ".add_json_decimal", itemName, from);
     }
 }

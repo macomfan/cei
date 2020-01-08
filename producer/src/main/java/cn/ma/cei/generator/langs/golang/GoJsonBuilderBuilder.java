@@ -7,41 +7,50 @@ package cn.ma.cei.generator.langs.golang;
 
 import cn.ma.cei.generator.builder.JsonBuilderBuilder;
 import cn.ma.cei.generator.environment.Variable;
+import cn.ma.cei.generator.langs.golang.tools.GoMethod;
+import cn.ma.cei.generator.langs.golang.tools.GoType;
+import cn.ma.cei.generator.langs.golang.tools.GoVar;
 
 /**
  *
  * @author U0151316
  */
 public class GoJsonBuilderBuilder extends JsonBuilderBuilder {
+    
+    private GoMethod method;
+    
+    public GoJsonBuilderBuilder(GoMethod method) {
+        this.method = method;
+    }
 
     @Override
     public void defineRootJsonObject(Variable jsonObject) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        method.addAssignAndDeclare(method.useVariable(new GoVar(jsonObject)), method.newInstance(new GoType(jsonObject.getType())));
     }
 
     @Override
     public void addJsonString(Variable from, Variable jsonObject, Variable itemName) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        method.addInvoke(jsonObject.getDescriptor() + ".AddToJson", new GoVar(itemName), new GoVar(from));
     }
 
     @Override
     public void addJsonInteger(Variable from, Variable jsonObject, Variable itemName) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        method.addInvoke(jsonObject.getDescriptor() + ".AddToJson", new GoVar(itemName), new GoVar(from));
     }
 
     @Override
     public void addJsonLong(Variable from, Variable jsonObject, Variable itemName) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        method.addInvoke(jsonObject.getDescriptor() + ".AddToJson", new GoVar(itemName), new GoVar(from));
     }
 
     @Override
     public void addJsonBoolean(Variable from, Variable jsonObject, Variable itemName) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        method.addInvoke(jsonObject.getDescriptor() + ".AddToJson", new GoVar(itemName), new GoVar(from));
     }
 
     @Override
     public void addJsonDecimal(Variable from, Variable jsonObject, Variable itemName) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        method.addInvoke(jsonObject.getDescriptor() + ".AddToJson", new GoVar(itemName), new GoVar(from));
     }
     
 }

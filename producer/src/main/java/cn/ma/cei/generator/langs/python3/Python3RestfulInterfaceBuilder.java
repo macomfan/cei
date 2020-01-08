@@ -10,10 +10,10 @@ import cn.ma.cei.generator.builder.ResponseBuilder;
 import cn.ma.cei.generator.builder.RestfulInterfaceBuilder;
 import cn.ma.cei.generator.environment.Variable;
 import cn.ma.cei.generator.environment.VariableFactory;
-import cn.ma.cei.generator.environment.VariableList;
 import cn.ma.cei.generator.environment.VariableType;
 import cn.ma.cei.generator.langs.python3.tools.Python3Class;
 import cn.ma.cei.generator.langs.python3.tools.Python3Method;
+import java.util.List;
 
 /**
  *
@@ -36,13 +36,13 @@ public class Python3RestfulInterfaceBuilder extends RestfulInterfaceBuilder {
 
     @Override
     public void setRequestTarget(Variable request, Variable target) {
-        method.addInvoke(request.nameDescriptor + ".set_target", target);
+        method.addInvoke(request.getDescriptor() + ".set_target", target);
     }
 
     @Override
     public void defineRequest(Variable request) {
         Variable options = VariableFactory.createConstantVariable("self.__options");
-        method.addAssign(method.defineVariable(request), method.newInstance(request.type, options));
+        method.addAssign(method.defineVariable(request), method.newInstance(request.getType(), options));
     }
 
     @Override
@@ -53,12 +53,12 @@ public class Python3RestfulInterfaceBuilder extends RestfulInterfaceBuilder {
     @Override
     public void setUrl(Variable request) {
         Variable url = VariableFactory.createConstantVariable("self.__options.url");
-        method.addInvoke(request.nameDescriptor + ".set_url", url);
+        method.addInvoke(request.getDescriptor() + ".set_url", url);
     }
 
     @Override
     public void setRequestMethod(Variable request, Variable requestMethod) {
-        method.addInvoke(request.nameDescriptor + ".set_method", requestMethod);
+        method.addInvoke(request.getDescriptor() + ".set_method", requestMethod);
     }
 
     @Override
@@ -72,7 +72,7 @@ public class Python3RestfulInterfaceBuilder extends RestfulInterfaceBuilder {
     }
 
     @Override
-    public void startMethod(VariableType returnType, String methodDescriptor, VariableList params) {
+    public void startMethod(VariableType returnType, String methodDescriptor, List<Variable> params) {
         method.startMethod(returnType, methodDescriptor, params);
     }
 
@@ -84,17 +84,17 @@ public class Python3RestfulInterfaceBuilder extends RestfulInterfaceBuilder {
 
     @Override
     public void addHeader(Variable request, Variable tag, Variable value) {
-        method.addInvoke(request.nameDescriptor + ".add_header", tag, value);
+        method.addInvoke(request.getDescriptor() + ".add_header", tag, value);
     }
 
     @Override
     public void addToQueryString(Variable request, Variable queryStringName, Variable variable) {
-        method.addInvoke(request.nameDescriptor + ".add_query_string", queryStringName, variable);
+        method.addInvoke(request.getDescriptor() + ".add_query_string", queryStringName, variable);
     }
 
     @Override
     public void setPostBody(Variable request, Variable postBody) {
-        method.addInvoke(request.nameDescriptor + ".set_post_body", postBody);
+        method.addInvoke(request.getDescriptor() + ".set_post_body", postBody);
     }
 
     @Override

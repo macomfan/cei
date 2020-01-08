@@ -11,22 +11,44 @@ public class Variable {
         REFER,
         THIS,
         CONSTANT,
-        HARDCODE_STRING,
+        STRING,
     }
 
     public Variable parent;
-    public String name;
-    public String nameDescriptor;
-    public VariableType type;
+
     public String defaultValue;
     public Position position;
 
+    private VariableType type;
+    private String name;
+    private String nameDescriptor;
+
+    public String getDescriptor() {
+        return nameDescriptor;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public VariableType getType() {
+        return type;
+    }
+
+    public String getTypeDescriptor() {
+        return type.getDescriptor();
+    }
+
+    public String getTypeName() {
+        return type.getName();
+    }
+
     private Variable(VariableType type, String name, Position position, Variable parentVariable) {
-        
+
         if (type == null || !type.isValid()) {
             throw new CEIException("[Variable] type is null");
         }
-        if ((name == null || name.equals("")) && position != Position.HARDCODE_STRING) {
+        if ((name == null || name.equals("")) && position != Position.STRING) {
             throw new CEIException("[Variable] name is null");
         }
         this.name = name;
@@ -42,9 +64,9 @@ public class Variable {
                 this.nameDescriptor = parentVariable.nameDescriptor + "." + Environment.getCurrentDescriptionConverter().getMemberVariableDescriptor(name);
                 break;
             //case THIS:
-                //TODO
-                //this.nameDescriptor = "self";
-                //break;
+            //TODO
+            //this.nameDescriptor = "self";
+            //break;
             case INPUT:
             case LOCAL:
                 this.nameDescriptor = Environment.getCurrentDescriptionConverter().getVariableDescriptor(name);
@@ -52,7 +74,7 @@ public class Variable {
             case CONSTANT:
                 this.nameDescriptor = name;
                 break;
-            case HARDCODE_STRING:
+            case STRING:
                 this.nameDescriptor = Environment.getCurrentDescriptionConverter().toStringDescriptor(name);
                 break;
             default:

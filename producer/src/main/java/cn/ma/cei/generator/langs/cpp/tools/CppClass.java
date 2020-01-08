@@ -2,10 +2,10 @@ package cn.ma.cei.generator.langs.cpp.tools;
 
 import cn.ma.cei.generator.environment.Reference;
 import cn.ma.cei.generator.environment.Variable;
-import cn.ma.cei.generator.environment.VariableList;
 import cn.ma.cei.generator.environment.VariableType;
 import cn.ma.cei.generator.langs.cpp.CodeForCpp;
 import cn.ma.cei.generator.langs.cpp.CodeForHpp;
+import cn.ma.cei.utils.UniquetList;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -20,8 +20,8 @@ public class CppClass {
     private final CodeForCpp codeCpp = new CodeForCpp();
     private final CodeForHpp codeH = new CodeForHpp();
 
-    private final VariableList privateMemberList = new VariableList();
-    private final VariableList publicMemberList = new VariableList();
+    private final UniquetList<String, Variable> privateMemberList = new UniquetList();
+    private final UniquetList<String, Variable> publicMemberList = new UniquetList();
     private final Set<VariableType> importList = new HashSet<>();
     private final List<CppMethod> methodList = new LinkedList<>();
 
@@ -71,11 +71,11 @@ public class CppClass {
 
     public void addMemberVariable(AccessType accessType, Variable memberVariable) {
         if (accessType == AccessType.PUBLIC) {
-            publicMemberList.registerVariable(memberVariable);
+            publicMemberList.put(memberVariable.getName(), memberVariable);
         } else if (accessType == AccessType.PRIVATE) {
-            privateMemberList.registerVariable(memberVariable);
+            privateMemberList.put(memberVariable.getName(), memberVariable);
         }
-        addReference(memberVariable.type);
+        addReference(memberVariable.getType());
     }
 
     public void addReference(VariableType type) {
@@ -90,14 +90,14 @@ public class CppClass {
         if (!publicMemberList.isEmpty()) {
             codeH.appendln("public:");
             codeH.newBlock(() -> {
-                publicMemberList.getVariableList().forEach((variable) -> {
-                    codeH.appendStatementWordsln(variable.type.getDescriptor(), variable.nameDescriptor);
+                publicMemberList.values().forEach((variable) -> {
+                    codeH.appendStatementWordsln(variable.getTypeDescriptor(), variable.getDescriptor());
                 });
             });
         }
         if (!privateMemberList.isEmpty()) {
-            privateMemberList.getVariableList().forEach((variable) -> {
-                codeH.appendStatementWordsln(variable.type.getDescriptor(), variable.nameDescriptor);
+            privateMemberList.values().forEach((variable) -> {
+                codeH.appendStatementWordsln(variable.getTypeDescriptor(), variable.getDescriptor());
             });
         }
     }

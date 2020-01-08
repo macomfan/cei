@@ -53,21 +53,21 @@ public class BuildJsonParser {
             throw new CEIException("[BuildJsonParser] no to or copy defined in json");
         }
 
-        if (to.type.equalTo(xString.typeName)) {
+        if (to.getType().equalTo(xString.typeName)) {
             processJsonString(to, context);
-        } else if (to.type.equalTo(xInt.typeName)) {
+        } else if (to.getType().equalTo(xInt.typeName)) {
             processJsonInt(to, context);
-        } else if (to.type.equalTo(xLong.typeName)) {
+        } else if (to.getType().equalTo(xLong.typeName)) {
             processJsonLong(to, context);
-        } else if (to.type.equalTo(xBoolean.typeName)) {
+        } else if (to.getType().equalTo(xBoolean.typeName)) {
             processJsonBoolean(to, context);
-        } else if (to.type.equalTo(xDecimal.typeName)) {
+        } else if (to.getType().equalTo(xDecimal.typeName)) {
             processJsonDecimal(to, context);
-        } else if (to.type.equalTo(xStringArray.typeName)) {
+        } else if (to.getType().equalTo(xStringArray.typeName)) {
             processJsonStringArray(to, context);
-        } else if (to.type.isObject()) {
+        } else if (to.getType().isObject()) {
             processJsonObject(to, context);
-        } else if (to.type.isObjectList()) {
+        } else if (to.getType().isObjectList()) {
             processJsonObjectArray(to, context);
         }
     }

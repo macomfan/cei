@@ -5,7 +5,14 @@ from exchanges.cei import *
 
 import requests
 
+
+def place_order(account_id, price):
+    print(account_id + price)
+
+
 if __name__ == '__main__':
+
+    place_order(None, None)
     # lll = list()
     # lll.append()
     # SignatureTool.Constant.ASC = "ccc"
@@ -30,6 +37,7 @@ if __name__ == '__main__':
     timestamp = testClient.get_timestamp()
     hClient = HuobiProClient()
     bClient = BinanceClient()
+
     print('Test ts: ' + str(timestamp.ts))
     print('H ts: ' + str(hClient.get_timestamp().ts))
     print('B ts: ' + str(bClient.get_timestamp().ts))

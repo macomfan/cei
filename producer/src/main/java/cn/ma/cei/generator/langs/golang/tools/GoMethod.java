@@ -5,10 +5,12 @@
  */
 package cn.ma.cei.generator.langs.golang.tools;
 
-import cn.ma.cei.generator.environment.Variable;
-import cn.ma.cei.generator.environment.VariableList;
 import cn.ma.cei.generator.environment.VariableType;
 import cn.ma.cei.generator.langs.golang.GoCode;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 /**
  *
@@ -27,30 +29,26 @@ public class GoMethod {
     public String getMethodName() {
         return methodName;
     }
-    
+
     public GoCode getCode() {
         return code;
     }
 
-    public String newInstacneByConstructor(String packageName, VariableType type, Variable... params) {
-        return packageName + ".New" + type.getDescriptor() + "(" + invokeParamString(params) + ")";
-    }
-
-    public String newInstance(VariableType type) {
+    public String newInstance(GoType type) {
         return "new(" + type.getDescriptor() + ")";
     }
 
-    public String defineVariable(Variable variable) {
+    public String defineVariable(GoVar variable) {
         //parent.addReference(variable.type);
-        return "var " + variable.nameDescriptor + " " + variable.type.getDescriptor();
+        return "var " + variable.getNameDescriptor() + " " + variable.getTypeDescriptor();
     }
 
-    public String useVariable(Variable variable) {
-        return variable.nameDescriptor;
+    public String useVariable(GoVar variable) {
+        return variable.getNameDescriptor();
     }
 
-    public void addReturn(Variable variable) {
-        code.appendWordsln("return", variable.nameDescriptor);
+    public void addReturn(GoVar variable) {
+        code.appendWordsln("return", variable.getNameDescriptor());
     }
 
     public void addAssign(String left, String right) {
@@ -61,19 +59,19 @@ public class GoMethod {
         code.appendWordsln(left, ":=", right);
     }
 
-    public void addInvoke(String method, Variable... params) {
+    public void addInvoke(String method, GoVar... params) {
         code.appendln(invoke(method, params));
     }
 
-    public String invoke(String method, Variable... params) {
-        return method + "(" + invokeParamString(params) + ")";
+    public String invoke(String method, GoVar... params) {
+        List<GoVar> tmp = Arrays.asList(params);
+        return method + "(" + invokeParamString(tmp) + ")";
     }
 
-    public void startMethod(VariableType returnType, String methodName, VariableList params) {
+    public void startMethod(GoType returnType, String methodName, List<GoVar> params) {
         this.methodName = methodName;
         String returnString = "";
         if (returnType != null) {
-            returnString += "*";
             returnString += returnType.getDescriptor();
             returnString += " ";
         }
@@ -90,6 +88,16 @@ public class GoMethod {
         code.appendln("}");
     }
 
+    public void startFor(GoVar item, String statement) {
+        code.appendWordsln("for _, " + item.getNameDescriptor() + " := range " + statement, "{");
+        code.startBlock();
+    }
+    
+    public void endFor() {
+        code.endBlock();
+        code.appendln("}");
+    }
+
     private String methodBelongTo() {
         if (parent == null) {
             return "";
@@ -97,35 +105,49 @@ public class GoMethod {
         return "(this " + "*" + parent.getStructName() + ")";
     }
 
-    private String invokeParamString(Variable... params) {
+    private String invokeParamString(List<GoVar> params) {
         if (params == null) {
             return "";
         }
         String paramString = "";
-        for (Variable p : params) {
+        for (GoVar p : params) {
             if (p == null) {
                 continue;
             }
             if (paramString.equals("")) {
-                paramString += p.nameDescriptor;
+                paramString += p.getNameDescriptor();
             } else {
-                paramString += ", " + p.nameDescriptor;
+                paramString += ", " + p.getNameDescriptor();
             }
         }
         return paramString;
     }
 
-    private String defineParamString(VariableList params) {
+    private String defineParamString(List<GoVar> params) {
         if (params == null) {
             return "";
         }
         String paramString = "";
-        for (Variable variable : params.getVariableList()) {
-            //parent.addReference(variable.type);
-            if (paramString.equals("")) {
-                paramString += variable.nameDescriptor + " " + variable.type.getDescriptor();
-            } else {
-                paramString += ", " + variable.nameDescriptor + " " + variable.type.getDescriptor();
+        Set<String> commonTypeString = new HashSet<>();
+        params.forEach((param) -> {
+            commonTypeString.add(param.getTypeDescriptor());
+        });
+        if (commonTypeString.size() == 1) {
+            for (GoVar param : params) {
+                if (paramString.equals("")) {
+                    paramString += param.getNameDescriptor();
+                } else {
+                    paramString += ", " + param.getNameDescriptor();
+                }
+            }
+            paramString += " " + params.get(0).getTypeDescriptor();
+        } else {
+            for (GoVar param : params) {
+                if (paramString.equals("")) {
+                    paramString += param.getNameDescriptor() + " " + param.getTypeDescriptor();
+                } else {
+                    paramString += ", " + param.getNameDescriptor() + " " + param.getTypeDescriptor();
+                }
             }
         }
         return paramString;

@@ -7,12 +7,14 @@ package cn.ma.cei.generator.langs.golang;
 
 import cn.ma.cei.generator.builder.SignatureBuilder;
 import cn.ma.cei.generator.environment.Variable;
-import cn.ma.cei.generator.environment.VariableList;
 import cn.ma.cei.generator.environment.VariableType;
 import cn.ma.cei.generator.langs.golang.tools.GoFile;
 import cn.ma.cei.generator.langs.golang.tools.GoMethod;
 import cn.ma.cei.generator.langs.golang.tools.GoStruct;
+import cn.ma.cei.generator.langs.golang.tools.GoVar;
 import cn.ma.cei.utils.WordSplitter;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  *
@@ -29,56 +31,60 @@ public class GoSignatureBuilder extends SignatureBuilder {
 
     @Override
     public void newStringArray(Variable stringArray) {
-        method.addAssignAndDeclare(method.useVariable(stringArray), "make([]string, 10)");
+        method.addAssignAndDeclare(method.useVariable(new GoVar(stringArray)), "make([]string, 10)");
     }
 
     @Override
     public void getNow(Variable output, Variable format) {
-        method.addAssignAndDeclare(method.useVariable(output), method.invoke("signature.GetNow", format));
+        method.addAssignAndDeclare(method.useVariable(new GoVar(output)), method.invoke("signature.GetNow", new GoVar(format)));
     }
 
     @Override
     public void addQueryString(Variable requestVariable, Variable key, Variable value) {
-        method.addInvoke(requestVariable.nameDescriptor + ".AddQueryString", key, value);
+        method.addInvoke(requestVariable.getDescriptor() + ".AddQueryString", new GoVar(key), new GoVar(value));
     }
 
     @Override
     public void appendToString(boolean needDefineNewOutput, Variable output, Variable input) {
         if (needDefineNewOutput) {
-            method.addAssignAndDeclare(method.useVariable(output), "make([]string, 10)");
+            method.addAssignAndDeclare(method.useVariable(new GoVar(output)), "make([]string, 10)");
         } else {
-            method.addAssign(method.useVariable(output), method.invoke("signature.AppendToString", output, input));
+            method.addAssign(method.useVariable(new GoVar(output)), method.invoke("signature.AppendToString", new GoVar(output), new GoVar(input)));
         }
     }
 
     @Override
     public void combineQueryString(Variable requestVariable, Variable output, Variable sort, Variable separator) {
-        method.addAssignAndDeclare(method.useVariable(output), method.invoke("signature.CombineQueryString", requestVariable, sort, separator));
+        method.addAssignAndDeclare(method.useVariable(new GoVar(output)),
+                method.invoke("signature.CombineQueryString", new GoVar(requestVariable), new GoVar(sort), new GoVar(separator)));
     }
 
     @Override
     public void getRequestInfo(Variable requestVariable, Variable output, Variable info, Variable convert) {
-        method.addAssignAndDeclare(method.useVariable(output), method.invoke("signature.GetRequestInfo", requestVariable, info, convert));
+        method.addAssignAndDeclare(method.useVariable(new GoVar(output)),
+                method.invoke("signature.GetRequestInfo", new GoVar(requestVariable), new GoVar(info), new GoVar(convert)));
     }
 
     @Override
     public void addStringArray(Variable output, Variable input) {
-        method.addAssign(method.useVariable(output), method.invoke("signature.addStringArray", output, input));
+        method.addAssign(method.useVariable(new GoVar(output)),
+                method.invoke("signature.addStringArray", new GoVar(output), new GoVar(input)));
     }
 
     @Override
     public void combineStringArray(Variable output, Variable input, Variable separator) {
-         method.addAssignAndDeclare(method.useVariable(output), method.invoke("signature.CombineStringArray", input, separator));
+        method.addAssignAndDeclare(method.useVariable(new GoVar(output)),
+                method.invoke("signature.CombineStringArray", new GoVar(input), new GoVar(separator)));
     }
 
     @Override
     public void base64(Variable output, Variable input) {
-        method.addAssignAndDeclare(method.useVariable(output), method.invoke("signature.Base64", input));
+        method.addAssignAndDeclare(method.useVariable(new GoVar(output)), method.invoke("signature.Base64", new GoVar(input)));
     }
 
     @Override
     public void hmacsha265(Variable output, Variable input, Variable key) {
-        method.addAssignAndDeclare(method.useVariable(output), method.invoke("signature,hmacsha256", input, key));
+        method.addAssignAndDeclare(method.useVariable(new GoVar(output)), method.invoke("signature,hmacsha256", new GoVar(input), new GoVar(key)));
     }
 
     @Override
@@ -87,9 +93,13 @@ public class GoSignatureBuilder extends SignatureBuilder {
     }
 
     @Override
-    public void startMethod(VariableType returnType, String methodDescriptor, VariableList params) {
+    public void startMethod(VariableType returnType, String methodDescriptor, List<Variable> params) {
         method = new GoMethod(null);
-        method.startMethod(returnType, WordSplitter.getLowerCamelCase(methodDescriptor), params);
+        List<GoVar> tmp = new LinkedList<>();
+        params.forEach(item -> {
+            tmp.add(new GoVar(item));
+        });
+        method.startMethod(null, WordSplitter.getLowerCamelCase(methodDescriptor), tmp);
     }
 
     @Override

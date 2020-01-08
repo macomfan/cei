@@ -6,9 +6,10 @@
 package cn.ma.cei.generator.langs.python3.tools;
 
 import cn.ma.cei.generator.environment.Variable;
-import cn.ma.cei.generator.environment.VariableList;
 import cn.ma.cei.generator.environment.VariableType;
 import cn.ma.cei.generator.langs.python3.Python3Code;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  *
@@ -24,24 +25,25 @@ public class Python3Method {
     }
 
     public String defineVariable(Variable variable) {
-        return variable.nameDescriptor;
+        return variable.getDescriptor();
     }
 
     public String useVariable(Variable variable) {
-        return variable.nameDescriptor;
+        return variable.getDescriptor();
     }
 
     public String newInstance(VariableType type, Variable... params) {
         parent.addReference(type);
-        return type.getDescriptor() + "(" + invokeParamString(params) + ")";
+        List<Variable> tmp = Arrays.asList(params);
+        return type.getDescriptor() + "(" + invokeParamString(tmp) + ")";
     }
 
     public void addReturn(Variable variable) {
-        code.appendWordsln("return", variable.nameDescriptor);
+        code.appendWordsln("return", variable.getDescriptor());
     }
 
     public void startFor(Variable item, String statement) {
-        code.appendWordsln("for", item.nameDescriptor, "in", statement);
+        code.appendWordsln("for", item.getDescriptor(), "in", statement);
         code.startBlock();
     }
 
@@ -67,10 +69,11 @@ public class Python3Method {
     }
 
     public String invoke(String method, Variable... params) {
-        return method + "(" + invokeParamString(params) + ")";
+        List<Variable> tmp = Arrays.asList(params);
+        return method + "(" + invokeParamString(tmp) + ")";
     }
 
-    public void startMethod(VariableType returnType, String methodName, VariableList params) {
+    public void startMethod(VariableType returnType, String methodName, List<Variable> params) {
         String paramString = defineParamString(params);
         if (paramString.isEmpty()) {
             code.appendWordsln("def", methodName + "(self):");
@@ -80,7 +83,7 @@ public class Python3Method {
         code.startBlock();
     }
 
-    public void startStaticMethod(VariableType returnType, String methodName, VariableList params) {
+    public void startStaticMethod(VariableType returnType, String methodName, List<Variable> params) {
         code.appendln("@staticmethod");
         String paramString = defineParamString(params);
         if (paramString.isEmpty()) {
@@ -99,8 +102,8 @@ public class Python3Method {
         code.endBlock();
     }
 
-    private String invokeParamString(Variable... params) {
-        if (params == null) {
+    private String invokeParamString(List<Variable> params) {
+        if (params == null || params.isEmpty()) {
             return "";
         }
         String paramString = "";
@@ -109,24 +112,24 @@ public class Python3Method {
                 continue;
             }
             if (paramString.equals("")) {
-                paramString += p.nameDescriptor;
+                paramString += p.getDescriptor();
             } else {
-                paramString += ", " + p.nameDescriptor;
+                paramString += ", " + p.getDescriptor();
             }
         }
         return paramString;
     }
 
-    private String defineParamString(VariableList params) {
+    private String defineParamString(List<Variable> params) {
         if (params == null || params.isEmpty()) {
             return "";
         }
         String paramString = "";
-        for (Variable variable : params.getVariableList()) {
+        for (Variable variable : params) {
             if (paramString.equals("")) {
-                paramString += variable.nameDescriptor;
+                paramString += variable.getDescriptor();
             } else {
-                paramString += ", " + variable.nameDescriptor;
+                paramString += ", " + variable.getDescriptor();
             }
         }
         return paramString;
