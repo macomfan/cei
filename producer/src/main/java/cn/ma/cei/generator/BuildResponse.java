@@ -34,8 +34,11 @@ public class BuildResponse {
         }
         ResponseBuilder responseBuilder = interfaceBuilder.getResponseBuilder();
         if (response.jsonParser != null) {
+            response.jsonParser.startBuilding();
             JsonParserBuilder jsonParserBuilder = interfaceBuilder.getResponseBuilder().getJsonParserBuilder();
-            return BuildJsonParser.build(response.jsonParser, responseVariable, jsonParserBuilder, interfaceBuilder);
+            Variable returnVariable = BuildJsonParser.build(response.jsonParser, responseVariable, jsonParserBuilder, interfaceBuilder);
+            response.jsonParser.endBuilding();
+            return returnVariable;
         }
         //BuildJsonParser.build(response.jsonParser, );
         // TODO

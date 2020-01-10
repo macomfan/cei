@@ -44,10 +44,11 @@ public class BuildSignature {
 
         builder.startMethod(null, Environment.getCurrentDescriptionConverter().getMethodDescriptor(signature.name), builder.getVariableList());
         signature.items.forEach(item -> {
+            item.startBuilding();
             if (item instanceof xGetNow) {
                 processGetNow((xGetNow) item, builder);
             } else if (item instanceof xAddQueryString) {
-                processAppendQueryString((xAddQueryString) item, request, builder);
+                processAddQueryString((xAddQueryString) item, request, builder);
             } else if (item instanceof xCombineQueryString) {
                 processCombineQueryString((xCombineQueryString) item, request, builder);
             } else if (item instanceof xGetRequestInfo) {
@@ -63,6 +64,7 @@ public class BuildSignature {
             } else if (item instanceof xAppendToString) {
                 processAppendToString((xAppendToString) item, builder);
             }
+            item.endBuilding();
         });
         builder.endMethod();
     }
@@ -92,7 +94,7 @@ public class BuildSignature {
         builder.getNow(output, format);
     }
 
-    public static void processAppendQueryString(xAddQueryString appendQueryString, Variable requestVariable, SignatureBuilder builder) {
+    public static void processAddQueryString(xAddQueryString appendQueryString, Variable requestVariable, SignatureBuilder builder) {
         if (Checker.isEmpty(appendQueryString.key) || Checker.isEmpty(appendQueryString.value)) {
             throw new CEIException("[BuildSignature] key and value must be defined for append_query_string");
         }

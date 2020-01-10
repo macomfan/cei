@@ -1,7 +1,5 @@
 package cn.ma.cei.utils;
 
-import java.util.HashMap;
-import java.util.Map;
 
 public class SecondLevelMap<Level1, Level2, Value> {
 

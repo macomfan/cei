@@ -1,10 +1,9 @@
 package cn.ma.cei.utils;
 
-import cn.ma.cei.exception.CEIException;
 import javafx.util.Pair;
 
 public class MapWithValue2<Key, Value1, Value2> {
-    private NormalMap<Key, Pair<Value1, Value2>> valueMap = new NormalMap<>();
+    private final NormalMap<Key, Pair<Value1, Value2>> valueMap = new NormalMap<>();
 
     public boolean containsKey(Key key) {
         return valueMap.containsKey(key);

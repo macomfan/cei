@@ -5,8 +5,6 @@
  */
 package cn.ma.cei.generator.environment;
 
-import cn.ma.cei.generator.builder.RestfulInterfaceBuilder;
-import cn.ma.cei.generator.builder.SignatureBuilder;
 import cn.ma.cei.utils.NormalMap;
 
 /**

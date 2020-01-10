@@ -63,10 +63,23 @@ public class JsonWrapper {
     }
 
     public void addJsonString(String name, String value) {
+        if (value == null) {
+            return;
+        }
         jsonObject.put(name, value);
     }
 
-    public void addJsonDecimal(String name, BigDecimal value) {
+    public void addJsonNumber(String name, Integer value) {
+        if (value == null) {
+            return;
+        }
+        jsonObject.put(name, value);
+    }
+
+    public void addJsonNumber(String name, BigDecimal value) {
+        if (value == null) {
+            return;
+        }
         jsonObject.put(name, value);
     }
 
@@ -111,7 +124,7 @@ public class JsonWrapper {
     public BigDecimal getDecimal(String itemName) {
         checkMandatoryField(itemName);
         try {
-            return jsonObject.getBigDecimal(itemName);
+            return new BigDecimal(jsonObject.getBigDecimal(itemName).stripTrailingZeros().toPlainString());
         } catch (Exception e) {
             throw new CEIException("[Json] Get item error: " + itemName + " " + e.getMessage());
         }

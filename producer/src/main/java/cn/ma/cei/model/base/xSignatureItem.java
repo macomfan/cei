@@ -11,6 +11,6 @@ package cn.ma.cei.model.base;
  * @author U0151316
  */
 
-public class xSignatureItem {
+public abstract class xSignatureItem extends xElement {
     
 }

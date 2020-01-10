@@ -11,6 +11,8 @@ import cn.ma.cei.generator.builder.MethodBuilder;
 import cn.ma.cei.generator.buildin.JsonWrapper;
 import cn.ma.cei.generator.environment.Variable;
 import cn.ma.cei.generator.environment.VariableFactory;
+import cn.ma.cei.generator.environment.VariableType;
+import cn.ma.cei.model.json.xJsonAuto;
 import cn.ma.cei.model.json.xJsonBoolean;
 import cn.ma.cei.model.json.xJsonBuilder;
 import cn.ma.cei.model.json.xJsonDecimal;
@@ -18,6 +20,8 @@ import cn.ma.cei.model.json.xJsonInteger;
 import cn.ma.cei.model.json.xJsonLong;
 import cn.ma.cei.model.json.xJsonString;
 import cn.ma.cei.model.json.xJsonType;
+import cn.ma.cei.model.types.xInt;
+import cn.ma.cei.model.types.xString;
 
 /**
  *
@@ -29,8 +33,9 @@ public class BuildJsonBuilder {
         Variable jsonObject = method.newLocalVariable(JsonWrapper.getType(), "{jsonBuilder}");
         jsonBuilderBuilder.defineRootJsonObject(jsonObject);
         jsonBuilder.itemList.forEach(item -> {
+            item.startBuilding();
             if (item.copy == null) {
-                if (item.from == null && item.to == null) {
+                if (item.from == null || item.to == null) {
                     throw new CEIException("[BuildJsonBuilder] from, to and copy cannot be null");
                 }
             } else {
@@ -47,17 +52,26 @@ public class BuildJsonBuilder {
                 throw new CEIException("[BuildJsonBuilder] cannot process from");
             }
             Variable to = VariableFactory.createHardcodeStringVariable(item.to);
-            if (item instanceof xJsonString) {
+
+            if (item instanceof xJsonAuto) {
+                if (from.getType() == xString.inst.getType()) {
+                    jsonBuilderBuilder.addJsonString(from, jsonObject, to);
+                } else if (from.getType() == xInt.inst.getType()) {
+                    jsonBuilderBuilder.addJsonNumber(from, jsonObject, to);
+                }
+                // TODO
+            } else if (item instanceof xJsonString) {
                 jsonBuilderBuilder.addJsonString(from, jsonObject, to);
             } else if (item instanceof xJsonInteger) {
-                jsonBuilderBuilder.addJsonInteger(from, jsonObject, to);
+                jsonBuilderBuilder.addJsonNumber(from, jsonObject, to);
             } else if (item instanceof xJsonLong) {
-                jsonBuilderBuilder.addJsonLong(from, jsonObject, to);
+                jsonBuilderBuilder.addJsonNumber(from, jsonObject, to);
             } else if (item instanceof xJsonBoolean) {
                 jsonBuilderBuilder.addJsonBoolean(from, jsonObject, to);
             } else if (item instanceof xJsonDecimal) {
-                jsonBuilderBuilder.addJsonDecimal(from, jsonObject, to);
+                jsonBuilderBuilder.addJsonNumber(from, jsonObject, to);
             }
+            item.endBuilding();
         });
         return jsonObject;
     }

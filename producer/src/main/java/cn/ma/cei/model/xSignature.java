@@ -5,6 +5,7 @@
  */
 package cn.ma.cei.model;
 
+import cn.ma.cei.model.base.xElement;
 import cn.ma.cei.model.base.xSignatureItem;
 import cn.ma.cei.model.signature.xAddQueryString;
 import cn.ma.cei.model.signature.xAddStringArray;
@@ -26,7 +27,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author U0151316
  */
 @XmlRootElement(name = "signature")
-public class xSignature {
+public class xSignature extends xElement {
 
     @XmlAttribute(name = "name")
     public String name;

@@ -23,7 +23,9 @@ public class BuildRestfulInterfaceClient {
         builder.startClient(Environment.getCurrentDescriptionConverter().getClientDescriptor(client.clientName), options);
 
         client.interfaceList.forEach((restIf) -> {
+            restIf.startBuilding();
             BuildRestfulInterface.build(restIf, builder.getRestfulInterfaceBuilder());
+            restIf.endBuilding();
         });
 
         builder.endClient();

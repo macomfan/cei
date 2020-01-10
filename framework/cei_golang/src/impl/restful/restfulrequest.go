@@ -1,8 +1,6 @@
 package restful
 
 import (
-	"fmt"
-	"net/http"
 	"strconv"
 )
 
@@ -26,28 +24,28 @@ func NewRestfulRequest(options *RestfulOptions) *RestfulRequest {
 	return instance
 }
 
-func (this *RestfulRequest) SetTarget(target string) {
-	this.target = target
+func (inst *RestfulRequest) SetTarget(target string) {
+	inst.target = target
 }
 
-func (this *RestfulRequest) GetTarget() string {
+func (inst *RestfulRequest) GetTarget() string {
 	return this.target
 }
 
-func (this *RestfulRequest) SetMethod(method Method) {
-	this.method = method
+func (inst *RestfulRequest) SetMethod(method Method) {
+	inst.method = method
 }
 
-func (this *RestfulRequest) GetMethod() Method {
-	return this.method
+func (inst *RestfulRequest) GetMethod() Method {
+	return inst.method
 }
 
-func (this *RestfulRequest) AddHeader(key string, value interface{}) {
-	this.headers = append(this.headers, key, toString(value))
+func (inst *RestfulRequest) AddHeader(key string, value interface{}) {
+	inst.headers = append(inst.headers, key, toString(value))
 }
 
-func (this *RestfulRequest) AddQueryString(key string, value interface{}) {
-	this.queryStrings = append(this.queryStrings, key, toString(value))
+func (inst *RestfulRequest) AddQueryString(key string, value interface{}) {
+	inst.queryStrings = append(inst.queryStrings, key, toString(value))
 }
 
 func toString(value interface{}) string {
@@ -86,43 +84,27 @@ func toString(value interface{}) string {
 	}
 }
 
-func (this *RestfulRequest) GetHeaders() []string {
-	return this.headers
+func (inst *RestfulRequest) GetHeaders() []string {
+	return inst.headers
 }
 
-func (this *RestfulRequest) SetURL(value string) {
-	this.url = value
+func (inst *RestfulRequest) SetURL(value string) {
+	inst.url = value
 }
 
-func (this *RestfulRequest) GetURL() string {
-	return this.url
+func (inst *RestfulRequest) GetURL() string {
+	return inst.url
 }
 
-func (this *RestfulRequest) BuildQueryString() string {
+func (inst *RestfulRequest) BuildQueryString() string {
 	result := ""
-	for index := 0; index < len(this.queryStrings); index += 2 {
+	for index := 0; index < len(inst.queryStrings); index += 2 {
 		if len(result) != 0 {
 			result += "&"
 		}
-		result += this.queryStrings[index]
+		result += inst.queryStrings[index]
 		result += "="
-		result += this.queryStrings[index+1]
+		result += inst.queryStrings[index+1]
 	}
 	return "?" + result
-}
-
-func Query(request *RestfulRequest) *RestfulResponse {
-	var resp *http.Response
-	var err error
-	if request.GetMethod() == GET {
-		resp, err = http.Get(request.GetURL() + request.GetTarget() + request.BuildQueryString())
-		if err != nil {
-			fmt.Println(err)
-			return nil
-		}
-	} else if request.GetMethod() == POST {
-		fmt.Println("POST")
-	}
-	response := newRestfulResponse(resp)
-	return response
 }

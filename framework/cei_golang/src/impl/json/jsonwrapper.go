@@ -16,16 +16,22 @@ func NewJsonWrapper(data []byte) *JsonWrapper {
 	return instance
 }
 
-func (this *JsonWrapper) GetString(key string) string {
+func (t *JsonWrapper) GetString(key string) string {
 	fmt.Println("get json string")
-	res, _ := jsonparser.GetString(this.data, key)
+	res, _ := jsonparser.GetString(t.data, key)
 	return res
 }
 
-func (this *JsonWrapper) GetInt64(key string) int64 {
+func (t *JsonWrapper) GetInt64(key string) int64 {
 	fmt.Println("get json int64")
-	res, _ := jsonparser.GetInt(this.data, key)
+	res, _ := jsonparser.GetInt(t.data, key)
 	return res
+}
+
+func (t *JsonWrapper) GetObject(key string) *JsonWrapper {
+	fmt.Println("get json object")
+	res, _ := jsonparser.Get(t.data, key)
+	return NewJsonWrapper(data)
 }
 
 func (this *JsonWrapper) Test() {

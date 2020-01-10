@@ -57,6 +57,13 @@ public class RestfulRequest {
         queryString_.add(new Pair<>(name, value));
     }
 
+    public void addQueryString(String name, Integer value) {
+        if (value == null) {
+            return;
+        }
+        queryString_.add(new Pair<>(name, value.toString()));
+    }
+
     public void addQueryString(String name, Boolean value) {
         addQueryString(name, value.toString());
     }

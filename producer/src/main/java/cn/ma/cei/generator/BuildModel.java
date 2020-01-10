@@ -18,9 +18,11 @@ public class BuildModel {
         String reference = builder.getRefrerence(modelType);
         Reference.addReference(modelType, reference);
         model.memberList.forEach((item) -> {
+            item.startBuilding();
             Variable member = VariableFactory.createMemberVariable(modelType, item.getType(), item.name);
             member.defaultValue = item.defaultValue;
             builder.registerMember(member);
+            item.endBuilding();
         });
         builder.endModel();
     }

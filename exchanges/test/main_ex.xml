@@ -44,8 +44,17 @@
 		<base64 output="{result}" input="{hmacsha256}"/>
 		<add_query_string key="Signature" value="{result}"/>
     </signature>
+	<restful_interface_definition>
+		<interface name="getTimestamp">
+			<resopnse type="">
+		</interface>
+	</restful_interface_definition>
 
-    <restful client_name="MarketClient" url="http://127.0.0.1:8081">	
+    <restful client_name="MarketClient" url="http://127.0.0.1:8081">
+		<urls>
+			<url key="default" value="http://127.0.0.1:8081"/>
+			<url key="private" value="http://127.0.0.1:8081/sign"/>
+		</urls>
 		<compound name="getSymbols">
 		    <inputs>
                 <string name="symbol" mandatory="true"/>
@@ -137,7 +146,7 @@
                 <string name="account_id" mandatory="true"/>
 				<decimal name="price" mandatory="true"/>
             </inputs>
-            <request method="post" target="/api/v1/placeOrder" signature="restful">
+            <request method="post" target="/api/v1/placeOrder" url="private" signature="restful">
                 <post_body>
                     <json_builder>
                         <json_string to="account-id" from="{account_id}"/>

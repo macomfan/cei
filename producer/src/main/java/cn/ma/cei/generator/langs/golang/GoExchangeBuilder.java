@@ -36,8 +36,7 @@ import cn.ma.cei.model.types.xString;
 public class GoExchangeBuilder extends ExchangeBuilder {
 
     private GoFile mainFile;
-    private GoStruct signatureStruct;
-
+    
     @Override
     public void startExchange(String exchangeName) {
         Constant.requestMethod().tryPut(RestfulRequest.RequestMethod.GET, "restful.GET");

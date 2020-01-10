@@ -19,6 +19,7 @@ import java.util.Map;
 import javafx.util.Pair;
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
+import javax.tools.OptionChecker;
 
 public class SignatureTool {
 
@@ -56,6 +57,9 @@ public class SignatureTool {
 
     public static byte[] hmacsha256(String input, String key) {
         try {
+            if (key == null || "".equals(key)) {
+                throw new CEIException("Key is null");
+            }
             Mac hmacSha256;
             hmacSha256 = Mac.getInstance("HmacSHA256");
             SecretKeySpec secKey = new SecretKeySpec(key.getBytes(StandardCharsets.UTF_8), "HmacSHA256");

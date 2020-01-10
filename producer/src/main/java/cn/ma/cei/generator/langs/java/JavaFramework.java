@@ -8,6 +8,7 @@ package cn.ma.cei.generator.langs.java;
 import cn.ma.cei.generator.builder.Framework;
 import cn.ma.cei.generator.builder.ExchangeBuilder;
 import cn.ma.cei.generator.naming.IDescriptionConverter;
+import java.util.Set;
 
 /**
  *
@@ -28,6 +29,11 @@ public class JavaFramework extends Framework{
     @Override
     public IDescriptionConverter getDescriptionConverter() {
         return new JavaDescriptionConverter();
+    }
+
+    @Override
+    public Set<String> getKeywords() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
 }

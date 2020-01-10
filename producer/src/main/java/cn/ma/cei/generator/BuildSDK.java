@@ -62,6 +62,7 @@ public class BuildSDK {
         Environment.setWorkingFolder(CEIPath.appendPath(buildFolder, framework.getFrameworkName()));
 
         sdks.forEach((sdk) -> {
+            sdk.startBuilding();
             Environment.setCurrentExchange(sdk.exchange);
             Environment.setCurrentLanguage(language);
             Environment.setCurrentDescriptionConverter(framework.getDescriptionConverter());
@@ -69,6 +70,7 @@ public class BuildSDK {
             RestfulOptions.registryMember();
             
             BuildExchange.build(sdk, framework.getExchangeBuilder());
+            sdk.endBuilding();
         });
     }
 }

@@ -6,6 +6,7 @@
 package cn.ma.cei.generator.builder;
 
 import cn.ma.cei.generator.naming.IDescriptionConverter;
+import java.util.Set;
 
 /**
  *
@@ -28,4 +29,10 @@ public abstract class Framework {
     public abstract ExchangeBuilder getExchangeBuilder();
     
     public abstract IDescriptionConverter getDescriptionConverter();
+    
+    /***
+     * List all keywords here, to check if the variable name is conflicting with the keyword.
+     * @return Set of keywords.
+     */
+    public abstract Set<String> getKeywords();
 }

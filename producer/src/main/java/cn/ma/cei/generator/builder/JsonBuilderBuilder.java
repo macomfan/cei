@@ -17,12 +17,7 @@ public abstract class JsonBuilderBuilder {
     
     public abstract void addJsonString(Variable from, Variable jsonObject, Variable itemName);
     
-    public abstract void addJsonInteger(Variable from, Variable jsonObject, Variable itemName);
-    
-    public abstract void addJsonLong(Variable from, Variable jsonObject, Variable itemName);
+    public abstract void addJsonNumber(Variable from, Variable jsonObject, Variable itemName);
     
     public abstract void addJsonBoolean(Variable from, Variable jsonObject, Variable itemName);
-    
-    public abstract void addJsonDecimal(Variable from, Variable jsonObject, Variable itemName);
-
 }

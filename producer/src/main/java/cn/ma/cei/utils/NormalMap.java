@@ -6,7 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class NormalMap<Key, Value> {
-    private Map<Key, Value> map = new HashMap<>();
+    private final Map<Key, Value> map = new HashMap<>();
 
     public Value get(Key key) { return map.get(key); }
 

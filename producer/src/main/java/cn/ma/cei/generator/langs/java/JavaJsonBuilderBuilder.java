@@ -32,23 +32,12 @@ public class JavaJsonBuilderBuilder extends JsonBuilderBuilder {
     }
 
     @Override
-    public void addJsonInteger(Variable from, Variable jsonObject, Variable itemName) {
-        method.addInvoke(jsonObject.getDescriptor() + ".addJsonInteger", itemName, from);
-    }
-
-    @Override
-    public void addJsonLong(Variable from, Variable jsonObject, Variable itemName) {
-        method.addInvoke(jsonObject.getDescriptor() + ".addJsonLong", itemName, from);
+    public void addJsonNumber(Variable from, Variable jsonObject, Variable itemName) {
+        method.addInvoke(jsonObject.getDescriptor() + ".addJsonNumber", itemName, from);
     }
 
     @Override
     public void addJsonBoolean(Variable from, Variable jsonObject, Variable itemName) {
         method.addInvoke(jsonObject.getDescriptor() + ".addJsonBoolean", itemName, from);
-    }
-
-    @Override
-    public void addJsonDecimal(Variable from, Variable jsonObject, Variable itemName) {
-        method.addInvoke(jsonObject.getDescriptor() + ".addJsonDecimal", itemName, from);
-    }
-    
+    }    
 }

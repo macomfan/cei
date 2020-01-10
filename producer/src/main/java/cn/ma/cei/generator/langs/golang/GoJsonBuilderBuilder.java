@@ -30,27 +30,17 @@ public class GoJsonBuilderBuilder extends JsonBuilderBuilder {
 
     @Override
     public void addJsonString(Variable from, Variable jsonObject, Variable itemName) {
-        method.addInvoke(jsonObject.getDescriptor() + ".AddToJson", new GoVar(itemName), new GoVar(from));
+        method.addInvoke(jsonObject.getDescriptor() + ".AddJsonString", new GoVar(itemName), new GoVar(from));
     }
 
     @Override
-    public void addJsonInteger(Variable from, Variable jsonObject, Variable itemName) {
-        method.addInvoke(jsonObject.getDescriptor() + ".AddToJson", new GoVar(itemName), new GoVar(from));
-    }
-
-    @Override
-    public void addJsonLong(Variable from, Variable jsonObject, Variable itemName) {
-        method.addInvoke(jsonObject.getDescriptor() + ".AddToJson", new GoVar(itemName), new GoVar(from));
+    public void addJsonNumber(Variable from, Variable jsonObject, Variable itemName) {
+        method.addInvoke(jsonObject.getDescriptor() + ".AddJsonNumber", new GoVar(itemName), new GoVar(from));
     }
 
     @Override
     public void addJsonBoolean(Variable from, Variable jsonObject, Variable itemName) {
-        method.addInvoke(jsonObject.getDescriptor() + ".AddToJson", new GoVar(itemName), new GoVar(from));
-    }
-
-    @Override
-    public void addJsonDecimal(Variable from, Variable jsonObject, Variable itemName) {
-        method.addInvoke(jsonObject.getDescriptor() + ".AddToJson", new GoVar(itemName), new GoVar(from));
+        method.addInvoke(jsonObject.getDescriptor() + ".AddJsonBoolean", new GoVar(itemName), new GoVar(from));
     }
     
 }

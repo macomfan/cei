@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <sdk exchange="huobipro" document="https://huobiapi.github.io/docs/spot/v1/en/">
 
-	<mappings>
-		<map name="huobiMappingKLine">
-			<string client="1m" server="1min"/>
-		</map>
-	</mappings>
+	<model name="Timestamp">
+		<string name="status"/>
+		<long name="data"/>
+	</model>
 
     <model name="Symbols">
         <string name="status"/>
@@ -13,19 +12,50 @@
     </model>
 
     <model name="SymbolsData">
-        <string name="base_currency"/>
-        <string name="quote_currency"/>
+        <string name="baseCurrency"/>
+        <string name="quoteCurrency"/>
+        <int name="pricePrecision"/>
+        <int name="amountPrecision"/>
+        <string name="symbolPartition"/>
+        <string name="symbol"/>
+        <string name="state"/>
+        <int name="valuePrecision"/>
+        <decimal name="minOrderAmt"/>
+        <decimal name="maxOrderAmt"/>
+        <decimal name="minOrderValue"/>
+        <int name="leverageRatio"/>
     </model>
 
     <model name="Currencies">
         <string name="status"/>
         <string_array name="data"/>
     </model>
+	
+	<model name="Candlestick">
+		<string name="status"/>
+		<object_array name="data" refer="CandlestickData"/>
+	</model>
+	
+	<model name="CandlestickData">
+		<long name="id"/>
+		<decimal name="amount"/>
+		<int name="count"/>
+		<decimal name="open"/>
+		<decimal name="close"/>
+		<decimal name="low"/>
+		<decimal name="high"/>
+		<decimal name="vol"/>
+	</model>
 
     <model name="LastTrade">
         <string name="status"/>
         <object name="tick" refer="LastTradeTick"/>
     </model>
+	
+	<model name="OrderID">
+		<string name="status"/>
+		<long name="data"/>
+	</model>
 
     <model name="LastTradeTick">
         <string name="ts"/>
@@ -41,14 +71,55 @@
         <object name="data" refer="LastTradeData"/>
     </model>
 
+	<signature name="restful">
+        <get_now output="{timestamp}" format=""/>
+        <add_query_string key="AccessKeyId" value="{apiKey}"/>
+        <add_query_string key="SignatureMethod" value="HmacSHA256"/>
+        <add_query_string key="SignatureVersion" value="2"/>
+        <add_query_string key="Timestamp" value="{timestamp}"/>
+		<combine_query_string output="{queryString}" sort="asc" separator="&amp;"/>
+        <get_request_info output="{method}" info="method" convert="uppercase"/>
+		<get_request_info output="{host}" info="host"/>
+		<get_request_info output="{target}" info="target"/>
+        <add_string_array output="{buffer}" input="{method}"/>
+        <add_string_array output="{buffer}" input="{host}"/>
+        <add_string_array output="{buffer}" input="{target}"/>
+		<add_string_array output="{buffer}" input="{queryString}"/>
+        <combine_string_array output="{newbuffer}" input="{buffer}" separator="\n"/>
+		<hmacsha256 output="{hmacsha256}" input="{newbuffer}" key="{secretKey}"/>
+		<base64 output="{result}" input="{hmacsha256}"/>
+		<add_query_string key="Signature" value="{result}"/>
+    </signature>
+
     <restful client_name="MarketClient" url="https://api.huobi.so">
+		<interface name="getTimestamp">
+			<request method="get" target="/v1/common/timestamp"/>
+			<response type="model">
+				<json_parser model="Timestamp">
+					<json_auto copy="status"/>
+					<json_auto copy="data"/>
+				</json_parser>
+			</response>
+		</interface>
+	
         <interface name="getSymbol">
             <request method="get" target="/v1/common/symbols"/>
             <response type="model">
                 <json_parser model="Symbols">
                     <json_auto copy="status"/>
-                    <json_auto from="data" to="{data}" model="SymbolsData">
-                        <json_auto from="base-currency" to="{base_currency}"/>
+                    <json_auto copy="data" model="SymbolsData">
+                        <json_auto from="base-currency" to="{baseCurrency}"/>
+                        <json_auto from="quote-currency" to="{quoteCurrency}"/>
+                        <json_auto from="price-precision" to="{pricePrecision}"/>
+                        <json_auto from="amount-precision" to="{amountPrecision}"/>
+                        <json_auto from="symbol-partition" to="{symbolPartition}"/>
+                        <json_auto copy="symbol"/>
+                        <json_auto copy="state"/>
+                        <json_auto from="value-precision" to="{valuePrecision}"/>
+                        <json_auto from="min-order-amt" to="{minOrderAmt}"/>
+                        <json_auto from="max-order-amt" to="{maxOrderAmt}"/>
+                        <json_auto from="min-order-value" to="{minOrderValue}"/>
+                        <!--json_auto from="leverage-ratio" to="{leverageRatio}" optional="true"/-->
                     </json_auto>
                 </json_parser>
             </response>
@@ -63,6 +134,36 @@
                 </json_parser>
             </response>
         </interface>
+		
+		<interface name="getCandlestick">
+			<inputs>
+				<string name="symbol"/>
+				<string name="period"/>
+				<int name="size"/>
+			</inputs>
+			<request method="get" target="/market/history/kline">
+                <query_strings>
+                    <query name="symbol" value="{symbol}"/>
+                    <query name="period" value="{period}"/>
+                    <query name="size" value="{size}"/>
+                </query_strings>
+			</request>
+		    <response type="model">
+				<json_parser model="Candlestick">
+					<json_auto copy="status"/>
+					<json_auto copy="data" model="CandlestickData">
+						<json_auto copy="id"/>
+						<json_auto copy="amount"/>
+						<json_auto copy="count"/>
+						<json_auto copy="open"/>
+						<json_auto copy="close"/>
+						<json_auto copy="low"/>
+						<json_auto copy="high"/>
+						<json_auto copy="vol"/>
+					</json_auto>
+				</json_parser>
+			</response>
+		</interface>
 
         <!--interface name="getCurrencyInfo">
             <inputs>
@@ -144,22 +245,31 @@
             </response>
         </interface-->
 
-        <!--interface name="placeOrder">
+        <interface name="placeOrder">
             <inputs>
-                <string name="account_id" mandatory="true"/>
+                <string name="accountId" mandatory="true"/>
                 <string name="symbol" mandatory="true"/>
                 <string name="type" mandatory="true"/>
                 <string name="amount" mandatory="true"/>
                 <string name="price"/>
             </inputs>
-            <request method="post" target="/placeOrder" signature="restful">
+            <request method="post" target="/v1/order/orders/place" signature="restful">
                 <post_body>
                     <json_builder>
-                        <json_string name="account-id" value="{account_id}"/>
+                        <json_auto from="{accountId}" to="account-id"/>
+						<json_auto copy="symbol"/>
+						<json_auto copy="type"/>
+						<json_auto copy="amount"/>
+						<json_auto copy="price"/>
                     </json_builder>
                 </post_body>
             </request>
-            <response type="raw"/>
-        </interface-->
+            <response type="model">
+				<json_parser model="OrderID">
+					<json_auto copy="status"/>
+					<json_auto copy="data"/>
+				</json_parser>
+			</response>
+        </interface>
     </restful>
 </sdk>

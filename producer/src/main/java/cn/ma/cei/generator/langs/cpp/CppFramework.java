@@ -8,6 +8,7 @@ package cn.ma.cei.generator.langs.cpp;
 import cn.ma.cei.generator.builder.ExchangeBuilder;
 import cn.ma.cei.generator.builder.Framework;
 import cn.ma.cei.generator.naming.IDescriptionConverter;
+import java.util.Set;
 
 /**
  *
@@ -27,6 +28,11 @@ public class CppFramework extends Framework{
 
     @Override
     public IDescriptionConverter getDescriptionConverter() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Set<String> getKeywords() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     

@@ -87,7 +87,7 @@ public class main {
 //        });
 //        code.appendln("}");
         JAXBWrapper wrapper = new JAXBWrapper();
-        List<xSDK> sdks = wrapper.loadFromFolder("C:\\dev\\cei\\exchanges", xSDK.class);
+        List<xSDK> sdks = wrapper.loadFromFolder("C:\\dev\\cei\\exchanges\\huobipro", xSDK.class);
         Finalizer finalizer = new Finalizer();
         finalizer.addSDK(sdks);
         List<xSDK> finalSDKs = finalizer.finalizeSDK();
@@ -98,7 +98,9 @@ public class main {
         BuildSDK.registerFramework(Environment.Language.golang, new GoFramework());
 //        BuildSDK.build(finalSDKs, Environment.Language.java, "C:\\dev\\cei\\output");
 //        BuildSDK.build(finalSDKs, Environment.Language.python3, "C:\\dev\\cei\\output");
+        BuildSDK.build(finalSDKs, Environment.Language.java, "C:\\dev\\cei\\output");
         BuildSDK.build(finalSDKs, Environment.Language.golang, "C:\\dev\\cei\\output");
+        BuildSDK.build(finalSDKs, Environment.Language.python3, "C:\\dev\\cei\\output");
 
 //        
 //        

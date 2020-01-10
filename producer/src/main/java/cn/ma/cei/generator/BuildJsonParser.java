@@ -73,6 +73,7 @@ public class BuildJsonParser {
     }
 
     private static Variable processJsonItem(JsonItemContext context) {
+        //context.jsonItem.startBuilding();
         if (context.jsonItem == null || context.method == null || context.jsonParserBuilder == null) {
             throw new CEIException("[BuildJsonParser] null");
         }

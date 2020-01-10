@@ -33,13 +33,17 @@ public class BuildRestfulInterface {
         builder.registerVariable(response);
         if (restIf.inputList != null) {
             restIf.inputList.forEach((input) -> {
+                input.startBuilding();
                 builder.registerVariable(VariableFactory.createInputVariable(input.getType(), input.name));
+                input.endBuilding();
             });
         }
 
         VariableType returnType = null;
         if (restIf.response != null) {
+            restIf.response.startBuilding();
             returnType = BuildResponse.getReturnType(restIf.response);
+            restIf.response.endBuilding();
         }
 
         List<Variable> inputVariableList = new LinkedList<>();
@@ -80,6 +84,7 @@ public class BuildRestfulInterface {
         }
         Variable request = builder.queryVariable("request");
         headers.forEach((header) -> {
+            header.startBuilding();
             Variable var;
             String value = VariableFactory.isReference(header.value);
             if (value == null) {
@@ -92,6 +97,7 @@ public class BuildRestfulInterface {
             }
             Variable tag = VariableFactory.createHardcodeStringVariable(header.tag);
             builder.addHeader(request, tag, var);
+            header.endBuilding();
         });
     }
 
@@ -101,7 +107,7 @@ public class BuildRestfulInterface {
         }
         Variable request = builder.queryVariable("request");
         queryStrings.forEach((queryString) -> {
-
+            queryString.startBuilding();
             Variable var;
             String value = VariableFactory.isReference(queryString.value);
             if (value == null) {
@@ -114,15 +120,18 @@ public class BuildRestfulInterface {
             }
             Variable queryStringName = VariableFactory.createHardcodeStringVariable(queryString.name);
             builder.addToQueryString(request, queryStringName, var);
+            queryString.endBuilding();
         });
     }
 
     private static void makePostBody(xPostBody postBody, Variable request, RestfulInterfaceBuilder builder) {
         if (postBody != null && postBody.jsonBuilder != null) {
+            postBody.startBuilding();
             Variable result = BuildJsonBuilder.build(postBody.jsonBuilder, builder.getJsonBuilderBuilder(), builder);
             if (result != null) {
                 builder.setPostBody(request, result);
             }
+            postBody.endBuilding();
         }
     }
 

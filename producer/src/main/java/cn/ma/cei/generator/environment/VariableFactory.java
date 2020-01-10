@@ -101,10 +101,13 @@ public class VariableFactory {
 
     public static Variable queryMemberVariable(Variable parentVariable, String name) {
         try {
+            if (!modelInfo.get().containsKey1(parentVariable.getType())) {
+                throw new CEIException("[VariableFactory] The model is not defined: " + parentVariable.getTypeName());
+            }
             VariableType memberType = modelInfo.get().tryGet(parentVariable.getType(), name);
             return createVariable(memberType, name, Variable.Position.REFER, parentVariable);
         } catch (CEIException e) {
-            throw new CEIException("[VariableFactory] The model is not defined: " + parentVariable.getTypeName());
+            throw new CEIException("[VariableFactory] The memeber is not defined: " + name + " in model: " + parentVariable.getTypeName());
         }
     }
 

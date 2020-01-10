@@ -1,6 +1,6 @@
 package cn.ma.cei.model.base;
 
 
-public class xBuilder {
+public abstract class xBuilder extends xElement {
 
 }
