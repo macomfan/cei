@@ -11,35 +11,29 @@ import cn.ma.cei.utils.MapWithValue2;
  *
  * @author u0151316
  */
+// TODO can be merged to VariableFactory?
 public class Reference {
     public final static String NO_REF = "NO_REF";
 
-    private static final EnvironmentData<MapWithValue2<VariableType, String, String>> info = new EnvironmentData<>();
-
-    private static MapWithValue2<VariableType, String, String> info() {
-        if (info.isNull()) {
-            info.trySet(new MapWithValue2<>());
-        }
-        return info.get();
-    }
+    private static final EnvironmentData<MapWithValue2<VariableType, String, String>> info = new EnvironmentData<>(MapWithValue2::new);
 
     public static String getTypeDescriptor(VariableType type) {
-        if (!info().containsKey(type)) {
-            info().tryPut(type, Environment.getCurrentDescriptionConverter().getModelDescriptor(type.getName()), "TBD");
+        if (!info.get().containsKey(type)) {
+            info.get().tryPut(type, Environment.getCurrentDescriptionConverter().getModelDescriptor(type.getName()), "TBD");
         }
-        return info().get1(type);
+        return info.get().get1(type);
     }
 
     public static String getReference(VariableType type) {
-        return info().get2(type);
+        return info.get().get2(type);
     }
 
     public static void setupBuildinVariableType(VariableType type, String typeDescriptor, String referenceName) {
-        info().tryPut(type, typeDescriptor, referenceName);
+        info.get().tryPut(type, typeDescriptor, referenceName);
     }
 
     public static void addReference(VariableType type, String referenceName) {
-        String typeDescriptor = info().get1(type);
-        info().put(type, typeDescriptor, referenceName);
+        String typeDescriptor = info.get().get1(type);
+        info.get().put(type, typeDescriptor, referenceName);
     }
 }

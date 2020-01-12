@@ -12,25 +12,13 @@ import java.util.regex.Pattern;
 
 public class VariableFactory {
 
-    static class VariableTypeMap {
-
-        private EnvironmentData<NormalMap<String, VariableType>> map = new EnvironmentData<>();
-
-        public NormalMap<String, VariableType> get() {
-            if (map.isNull()) {
-                map.trySet(new NormalMap<>());
-            }
-            return map.get();
-        }
-    }
-
-    private static final VariableTypeMap variableTypeMap = new VariableTypeMap();
+    private static final EnvironmentData<NormalMap<String, VariableType>> variableTypeMap = new EnvironmentData(NormalMap::new);
 
     /**
      * *
      * ModelType - MemberName - MemberType
      */
-    private static final EnvironmentData<SecondLevelMap<VariableType, String, VariableType>> modelInfo = new EnvironmentData<>();
+    private static final EnvironmentData<SecondLevelMap<VariableType, String, VariableType>> modelInfo = new EnvironmentData<>(SecondLevelMap::new);
 
     public static String genericTypeName(String name, String... names) {
         // TODO
@@ -87,9 +75,6 @@ public class VariableFactory {
 //    }
 
     public static Variable createMemberVariable(VariableType modelType, VariableType memberType, String name) {
-        if (modelInfo.isNull()) {
-            modelInfo.trySet(new SecondLevelMap<>());
-        }
         modelInfo.get().tryPut(modelType, name, memberType);
         return createVariable(memberType, name, Variable.Position.MEMBER, null);
     }

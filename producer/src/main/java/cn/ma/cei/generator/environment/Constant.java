@@ -13,20 +13,14 @@ import cn.ma.cei.utils.NormalMap;
  */
 public class Constant {
 
-    private static final EnvironmentData<NormalMap<String, String>> requestMethod = new EnvironmentData<>();
-    private static final EnvironmentData<NormalMap<String, String>> signatureMethod = new EnvironmentData<>();
+    private static final EnvironmentData<NormalMap<String, String>> requestMethod = new EnvironmentData<>(NormalMap::new);
+    private static final EnvironmentData<NormalMap<String, String>> signatureMethod = new EnvironmentData<>(NormalMap::new);
 
     public static NormalMap<String, String> requestMethod() {
-        if (requestMethod.isNull()) {
-            requestMethod.trySet(new NormalMap<>());
-        }
         return requestMethod.get();
     }
 
     public static NormalMap<String, String> signatureMethod() {
-        if (signatureMethod.isNull()) {
-            signatureMethod.trySet(new NormalMap<>());
-        }
         return signatureMethod.get();
     }
 }

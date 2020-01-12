@@ -2,23 +2,20 @@ package cn.ma.cei.generator.environment;
 
 import cn.ma.cei.utils.NormalMap;
 
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
 
 public class VariableType {
 
-    private final static EnvironmentData<NormalMap<String, String>> variableTypeDescriptor = new EnvironmentData<>();
+    private final static EnvironmentData<NormalMap<String, String>> variableTypeDescriptor = new EnvironmentData<>(NormalMap::new);
     private final String typeName;
     private final List<VariableType> genericList = new LinkedList<>();
-    private String typeDescriptor = null;
-    private String typeReference = null;
 
     public VariableType(String typeName, VariableType... subTypes) {
         if (subTypes != null && subTypes.length != 0) {
-            for (VariableType generic : subTypes) {
-                genericList.add(generic);
-            }
+            Collections.addAll(genericList, subTypes);
         }
         this.typeName = typeName;
     }
@@ -28,9 +25,7 @@ public class VariableType {
     }
 
     public List<VariableType> getGenericList() {
-        List<VariableType> res = new LinkedList<>();
-        res.addAll(genericList);
-        return res;
+        return new LinkedList<>(genericList);
     }
 
     public String getName() {
@@ -64,7 +59,10 @@ public class VariableType {
     }
 
     public String getDescriptor() {
-        if (typeDescriptor == null) {
+        if (variableTypeDescriptor.get().containsKey(typeName)) {
+            return variableTypeDescriptor.get().get(typeName);
+        } else {
+            String typeDescriptor = "";
             if (!isGeneric()) {
                 typeDescriptor = Reference.getTypeDescriptor(this);
             } else {
@@ -77,21 +75,17 @@ public class VariableType {
                 typeDescriptor = Reference.getTypeDescriptor(this)
                         + Environment.getCurrentDescriptionConverter().getGenericTypeDescriptor(subTypeName);
             }
+            variableTypeDescriptor.get().put(typeName, typeDescriptor);
+            return typeDescriptor;
         }
-        return typeDescriptor;
     }
 
     public String getReference() {
-        if (typeReference == null) {
-            typeReference = Reference.getReference(this);
-        }
-        return typeReference;
+        return Reference.getReference(this);
     }
 
     public List<String> getReferences() {
-        if (typeReference == null) {
-            typeReference = Reference.getReference(this);
-        }
+        String typeReference = Reference.getReference(this);
         List<String> res = new LinkedList<>();
         res.add(typeReference);
         if (isGeneric()) {

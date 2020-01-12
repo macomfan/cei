@@ -8,7 +8,10 @@ import java.util.Map;
 public class NormalMap<Key, Value> {
     private final Map<Key, Value> map = new HashMap<>();
 
-    public Value get(Key key) { return map.get(key); }
+
+    public Value get(Key key) {
+        return map.get(key);
+    }
 
     public Value tryGet(Key key) {
         Value res = map.get(key);

@@ -5,25 +5,42 @@
  */
 package cn.ma.cei.generator.environment;
 
+import cn.ma.cei.utils.NormalMap;
 import cn.ma.cei.utils.SecondLevelMap;
 
 /**
  *
  * @author u0151316
  */
-public class EnvironmentData<T> {
+class EnvironmentData<T> {
     
     private SecondLevelMap<String, Environment.Language, T> data = new SecondLevelMap<>();
+    private Creation<T> creation = null;
 
-    public boolean isNull() {
-        return !data.containsKey(Environment.getCurrentExchange(), Environment.getCurrentLanguage());
+    public EnvironmentData(Creation<T> creation) {
+        this.creation = creation;
+    }
+
+    public EnvironmentData() {
+    }
+
+    @FunctionalInterface
+    public interface Creation<T> {
+        T create();
     }
     
     public T get() {
+        if (isNull()) {
+            data.tryPut(Environment.getCurrentExchange(), Environment.getCurrentLanguage(), creation.create());
+        }
         return data.get(Environment.getCurrentExchange(), Environment.getCurrentLanguage());
     }
 
     public void trySet(T value) {
         data.tryPut(Environment.getCurrentExchange(), Environment.getCurrentLanguage(), value);
+    }
+
+    private boolean isNull() {
+        return !data.containsKey(Environment.getCurrentExchange(), Environment.getCurrentLanguage());
     }
 }

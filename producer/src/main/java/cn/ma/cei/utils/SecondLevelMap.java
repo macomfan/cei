@@ -25,6 +25,13 @@ public class SecondLevelMap<Level1, Level2, Value> {
         return true;
     }
 
+    /***
+     * Get the value by key1, key2
+     *
+     * @param key1
+     * @param key2
+     * @return The value by key1, key2, return null if the cannot find the value.
+     */
     public Value get(Level1 key1, Level2 key2) {
         NormalMap<Level2, Value> map2 = map.get(key1);
         if (map2 == null) {
