@@ -7,7 +7,6 @@ package cn.ma.cei.exception;
 
 import com.alibaba.fastjson.JSONObject;
 import java.lang.reflect.Field;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
@@ -26,7 +25,6 @@ public class BuildTracer {
     private static final Stack<Pair<Integer, JSONObject>> info = new Stack<>();
 
     public static void startBuilding(Object obj) {
-
         if (obj.getClass().isAnnotationPresent(XmlRootElement.class)) {
             String name = obj.getClass().getAnnotation(XmlRootElement.class).name();
             List<Field> fields = getAllFields(obj);
@@ -50,7 +48,7 @@ public class BuildTracer {
         }
     }
 
-    public static List<Field> getAllFields(Object obj) {
+    private static List<Field> getAllFields(Object obj) {
         Class c = obj.getClass();
         List<Field> fieldList = new LinkedList<>();
         while (c != null) {
@@ -58,6 +56,19 @@ public class BuildTracer {
             c = c.getSuperclass();
         }
         return fieldList;
+    }
+
+    public static String getTraceString() {
+        StringBuilder stringBuilder = new StringBuilder();
+        info.forEach(item -> {
+            int level = item.getKey();
+            for (int i = 0; i < level; i++) {
+                stringBuilder.append("  ");
+            }
+            stringBuilder.append(item.getValue().toJSONString());
+            stringBuilder.append("\n");
+        });
+        return stringBuilder.toString();
     }
 
     public static void endBuilding() {

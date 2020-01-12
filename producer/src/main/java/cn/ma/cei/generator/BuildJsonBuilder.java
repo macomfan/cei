@@ -11,7 +11,6 @@ import cn.ma.cei.generator.builder.MethodBuilder;
 import cn.ma.cei.generator.buildin.JsonWrapper;
 import cn.ma.cei.generator.environment.Variable;
 import cn.ma.cei.generator.environment.VariableFactory;
-import cn.ma.cei.generator.environment.VariableType;
 import cn.ma.cei.model.json.xJsonAuto;
 import cn.ma.cei.model.json.xJsonBoolean;
 import cn.ma.cei.model.json.xJsonBuilder;

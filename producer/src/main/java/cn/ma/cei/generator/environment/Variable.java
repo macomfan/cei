@@ -1,8 +1,11 @@
 package cn.ma.cei.generator.environment;
 
 import cn.ma.cei.exception.CEIException;
+import cn.ma.cei.utils.SecondLevelMap;
 
 public class Variable {
+
+    private EnvironmentData<SecondLevelMap<String, Position, String>> variableDescriptor = new EnvironmentData<>();
 
     public enum Position {
         INPUT,

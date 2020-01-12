@@ -1,26 +1,30 @@
 package cn.ma.cei.generator.environment;
 
+import cn.ma.cei.utils.NormalMap;
+
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
 
 public class VariableType {
 
-    private final String type;
+    private final static EnvironmentData<NormalMap<String, String>> variableTypeDescriptor = new EnvironmentData<>();
+    private final String typeName;
     private final List<VariableType> genericList = new LinkedList<>();
     private String typeDescriptor = null;
     private String typeReference = null;
 
-    public VariableType(String type) {
-        this.type = type;
+    public VariableType(String typeName, VariableType... subTypes) {
+        if (subTypes != null && subTypes.length != 0) {
+            for (VariableType generic : subTypes) {
+                genericList.add(generic);
+            }
+        }
+        this.typeName = typeName;
     }
 
     public boolean isGeneric() {
         return !genericList.isEmpty();
-    }
-
-    private void addGeneric(VariableType variableType) {
-        genericList.add(variableType);
     }
 
     public List<VariableType> getGenericList() {
@@ -30,11 +34,11 @@ public class VariableType {
     }
 
     public String getName() {
-        return type;
+        return typeName;
     }
 
     public boolean isValid() {
-        return !(type == null || type.equals(""));
+        return !(typeName == null || typeName.equals(""));
     }
 
     public boolean equalTo(VariableType obj) {
@@ -42,7 +46,7 @@ public class VariableType {
     }
 
     public boolean equalTo(String typeName) {
-        return type.equals(typeName);
+        return this.typeName.equals(typeName);
     }
 
     public boolean isObject() {
@@ -50,7 +54,7 @@ public class VariableType {
     }
 
     public boolean isObjectList() {
-        if (!type.equals("array")) {
+        if (!typeName.equals("array")) {
             return false;
         }
         if (genericList.isEmpty()) {
@@ -109,13 +113,13 @@ public class VariableType {
             return false;
         }
         VariableType tmp = (VariableType) o;
-        return type.equals(tmp.type);
+        return typeName.equals(tmp.typeName);
     }
 
     @Override
     public int hashCode() {
         int hash = 5;
-        hash = 67 * hash + Objects.hashCode(this.type);
+        hash = 67 * hash + Objects.hashCode(this.typeName);
         return hash;
     }
 }

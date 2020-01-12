@@ -56,14 +56,9 @@ public class VariableFactory {
             return variableTypeMap.get().get(finalName);
         }
         try {
-            Constructor<?> cons = VariableType.class.getDeclaredConstructor(String.class);
+            Constructor<?> cons = VariableType.class.getDeclaredConstructor(String.class, VariableType[].class);
             cons.setAccessible(true);
-            VariableType type = (VariableType) cons.newInstance(name);
-            Method method = VariableType.class.getDeclaredMethod("addGeneric", VariableType.class);
-            method.setAccessible(true);
-            for (VariableType argsType : argsTypes) {
-                method.invoke(type, argsType);
-            }
+            VariableType type = (VariableType) cons.newInstance(name, argsTypes);
             variableTypeMap.get().tryPut(finalName, type);
             return type;
         } catch (Exception e) {

@@ -17,4 +17,8 @@ public abstract class xElement {
     public void endBuilding() {
         BuildTracer.endBuilding();
     }
+    
+    public void check() {
+        
+    }
 }

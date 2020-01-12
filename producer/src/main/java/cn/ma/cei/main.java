@@ -1,5 +1,6 @@
 package cn.ma.cei;
 
+import cn.ma.cei.exception.BuildTracer;
 import cn.ma.cei.finalizer.Finalizer;
 import cn.ma.cei.generator.BuildExchange;
 import cn.ma.cei.generator.BuildSDK;
@@ -25,26 +26,28 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class main {
+
     int aaa = 0;
 
     static class base {
+
         public static String aaa;
     }
-    
+
     static class D1<T> extends base {
-        
+
     }
-    
+
     static class D2<T> extends base {
-        
+
     }
-    
+
     public static void main(String[] args) throws NoSuchFieldException, JAXBException {
         D1<Integer> di = new D1<>();
         D2<String> ds = new D2<>();
         di.aaa = "aaa";
         System.err.println(ds.aaa);
-        
+
         StringBuilder sb = new StringBuilder();
         sb.append("111111\r\n");
 //        sb.append("222222\r\n");
@@ -64,17 +67,12 @@ public class main {
             from = index + "\r\n".length();
         }
 
-
-
         String pattern = "\\{.*\\}";
         Pattern r = Pattern.compile(pattern);
         Matcher m = r.matcher("{aaa}");
         if (m.find()) {
             System.out.println("find");
         }
-
-
-
 
 //        Code code = new Code();
 //        code.appendln("import cn.macomfan.ccei.sdk.impl.RestfulConnection;");
@@ -98,24 +96,25 @@ public class main {
         BuildSDK.registerFramework(Environment.Language.golang, new GoFramework());
 //        BuildSDK.build(finalSDKs, Environment.Language.java, "C:\\dev\\cei\\output");
 //        BuildSDK.build(finalSDKs, Environment.Language.python3, "C:\\dev\\cei\\output");
-        BuildSDK.build(finalSDKs, Environment.Language.java, "C:\\dev\\cei\\output");
-        BuildSDK.build(finalSDKs, Environment.Language.golang, "C:\\dev\\cei\\output");
-        BuildSDK.build(finalSDKs, Environment.Language.python3, "C:\\dev\\cei\\output");
+        try {
+            BuildSDK.build(finalSDKs, Environment.Language.java, "C:\\dev\\cei\\output");
+            BuildSDK.build(finalSDKs, Environment.Language.golang, "C:\\dev\\cei\\output");
+            BuildSDK.build(finalSDKs, Environment.Language.python3, "C:\\dev\\cei\\output");
+        } catch (Exception e) {
+            System.err.println(BuildTracer.getTraceString());
+        }
 
 //        
 //        
 //        
 //        BuildExchange.build(finalSDK.get(0), new CppExchangeBuilder());
 //        BuildExchange.build(finalSDK.get(0), new JavaExchangeBuilder());
-
 //        File file = new File("C:\\dev\\cei\\src\\main\\resources\\main_ex.xml");
 //        xSDK sdk = wrapper.loadFromXML(file, xSDK.class);
-
 //        System.out.println("--------");
 //        JavaCodeBuilder builder = new JavaCodeBuilder();
 //        builder.build(sdks.get(0));
 //        System.out.println("--------");
-
         //XMLDecoder decoder = new XMLDecoder();
         //xSDK sdk = (xSDK) decoder.decode(document, xSDK.class);
         System.out.println("End");

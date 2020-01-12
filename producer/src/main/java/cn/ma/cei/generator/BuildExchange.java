@@ -5,7 +5,6 @@ import cn.ma.cei.generator.builder.ExchangeBuilder;
 import cn.ma.cei.generator.builder.ModelBuilder;
 import cn.ma.cei.generator.builder.RestfulClientBuilder;
 import cn.ma.cei.generator.builder.SignatureBuilder;
-import cn.ma.cei.generator.buildin.RestfulOptions;
 import cn.ma.cei.model.xSDK;
 
 public class BuildExchange {
@@ -15,8 +14,6 @@ public class BuildExchange {
             throw new CEIException("[BuildExchange] ExchangeBuilder is null");
         }
 
-//        Reference.setupBuildinVariableType(TheThis.getType(), "THIS", Reference.NO_REF);
-//        VariableFactory.createMemberVariable(TheThis.getType(), RestfulOptions.getType(), "options");
         builder.startExchange(sdk.exchange);
 
         if (sdk.modelList != null) {
