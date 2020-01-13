@@ -1,21 +1,18 @@
 package cn.ma.cei.generator;
 
-import cn.ma.cei.generator.environment.Variable;
-import cn.ma.cei.generator.environment.VariableType;
-import cn.ma.cei.generator.environment.VariableFactory;
 import cn.ma.cei.exception.CEIException;
 import cn.ma.cei.generator.builder.RestfulInterfaceBuilder;
 import cn.ma.cei.generator.buildin.RestfulConnection;
 import cn.ma.cei.generator.buildin.RestfulOptions;
 import cn.ma.cei.generator.buildin.RestfulRequest;
 import cn.ma.cei.generator.buildin.RestfulResponse;
-import cn.ma.cei.generator.environment.Constant;
-import cn.ma.cei.generator.environment.Environment;
+import cn.ma.cei.generator.environment.*;
 import cn.ma.cei.model.xHeader;
 import cn.ma.cei.model.xInterface;
 import cn.ma.cei.model.xPostBody;
 import cn.ma.cei.model.xQuery;
 import cn.ma.cei.utils.Checker;
+
 import java.util.LinkedList;
 import java.util.List;
 
@@ -72,7 +69,7 @@ public class BuildRestfulInterface {
             makeSignature(restIf.request.signature, request, builder);
             builder.onAddReference(RestfulConnection.getType());
             builder.invokeQuery(response, request);
-            Variable returnVariable = BuildResponse.build(restIf.response, response, builder);
+            Variable returnVariable = BuildResponse.build(restIf.response, response, returnType, builder);
             builder.returnResult(returnVariable);
         }
         builder.endMethod();

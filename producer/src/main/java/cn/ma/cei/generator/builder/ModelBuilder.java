@@ -4,7 +4,7 @@ import cn.ma.cei.generator.environment.Variable;
 import cn.ma.cei.generator.environment.VariableType;
 
 public abstract class ModelBuilder {
-    public abstract String getRefrerence(VariableType modelType);
+    public abstract String getRefrerence(String modelName);
 
     public abstract void startModel(VariableType modelType);
 

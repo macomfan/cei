@@ -17,17 +17,32 @@ import cn.ma.cei.model.types.xStringArray;
 
 public class BuildJsonParser {
 
-    public static VariableType getModelType(xJsonParser parser) {
-        return VariableFactory.variableType(parser.model);
-    }
+    public static Variable build(xJsonParser jsonParser,
+            Variable responseVariable,
+            VariableType outputModelType,
+            JsonParserBuilder jsonParserBuilder,
+            MethodBuilder method) {
+        if (jsonParser == null) {
+            throw new CEIException("[BuildJsonParser] The root is not json parser");
+        }
+        Variable newJsonObject = defineRootJsonObject(method);
+        jsonParserBuilder.defineRootJsonObject(newJsonObject, responseVariable);
+        Variable model = VariableFactory.createLocalVariable(outputModelType, outputModelType.getDescriptor() + "_var");
+        method.registerVariable(model);
+        jsonParserBuilder.defineModel(model);
 
-    public static Variable build(xJsonParser jsonParser, Variable responseVariable, JsonParserBuilder jsonParserBuilder, MethodBuilder method) {
-        JsonItemContext context = new JsonItemContext();
-        context.jsonParserBuilder = jsonParserBuilder;
-        context.responseVariable = responseVariable;
-        context.jsonItem = jsonParser;
-        context.method = method;
-        return processJsonItem(context);
+        jsonParser.itemList.forEach((item) -> {
+            item.startBuilding();
+            JsonItemContext newContext = new JsonItemContext();
+            newContext.jsonItem = item;
+            newContext.parentModel = model;
+            newContext.parentJsonObject = newJsonObject;
+            newContext.jsonParserBuilder = jsonParserBuilder;
+            newContext.method = method;
+            processJsonItem(newContext);
+            item.endBuilding();
+        });
+        return model;
     }
 
     private static Variable getToVariable(Variable parentModel, xJsonType jsonItem) {
@@ -65,9 +80,9 @@ public class BuildJsonParser {
             processJsonDecimal(to, context);
         } else if (to.getType().equalTo(xStringArray.typeName)) {
             processJsonStringArray(to, context);
-        } else if (to.getType().isObject()) {
+        } else if (to.getType().isCustomModel()) {
             processJsonObject(to, context);
-        } else if (to.getType().isObjectList()) {
+        } else if (to.getType().isCustomModelArray()) {
             processJsonObjectArray(to, context);
         }
     }
@@ -81,8 +96,7 @@ public class BuildJsonParser {
             if (context.jsonItem.from == null && context.jsonItem.to == null) {
                 // throw new CEIException("[BuildJsonParser] from, to and copy cannot null");
             }
-        }
-        else {
+        } else {
             if (context.jsonItem.from != null && context.jsonItem.to != null) {
                 throw new CEIException("[BuildJsonParser] from, to cannot exist with copy");
             } else {
@@ -92,9 +106,7 @@ public class BuildJsonParser {
             }
         }
 
-        if (context.jsonItem instanceof xJsonParser) {
-            return processRootJsonObject(context);
-        } else if (context.jsonItem instanceof xJsonAuto) {
+        if (context.jsonItem instanceof xJsonAuto) {
             processJsonAuto(context);
         } else if (context.jsonItem instanceof xJsonObject) {
             Variable to = getToVariable(context.parentModel, context.jsonItem);
@@ -135,9 +147,9 @@ public class BuildJsonParser {
         return null;
     }
 
-    private static Variable defineRootJsonObject(JsonItemContext context) {
+    private static Variable defineRootJsonObject(MethodBuilder method) {
         Variable jsonObject = VariableFactory.createLocalVariable(JsonWrapper.getType(), "root_obj");
-        context.method.registerVariable(jsonObject);
+        method.registerVariable(jsonObject);
         return jsonObject;
     }
 
@@ -238,28 +250,6 @@ public class BuildJsonParser {
             newContext.method = context.method;
             processJsonItem(newContext);
         }
-        return;
-    }
-
-    private static Variable processRootJsonObject(JsonItemContext context) {
-        xJsonParser jsonParser = (xJsonParser) context.jsonItem;
-        if (jsonParser == null) {
-            throw new CEIException("[BuildJsonParser] The root is not json parser");
-        }
-        Variable newJsonObject = defineRootJsonObject(context);
-        Variable newModel = defineModel(context);
-        context.jsonParserBuilder.defineRootJsonObject(newJsonObject, context.responseVariable);
-
-        jsonParser.itemList.forEach((item) -> {
-            JsonItemContext newContext = new JsonItemContext();
-            newContext.jsonItem = item;
-            newContext.parentModel = newModel;
-            newContext.parentJsonObject = newJsonObject;
-            newContext.jsonParserBuilder = context.jsonParserBuilder;
-            newContext.method = context.method;
-            processJsonItem(newContext);
-        });
-        return newModel;
     }
 
     static class JsonItemContext {

@@ -94,8 +94,8 @@
     <restful client_name="MarketClient" url="https://api.huobi.so">
 		<interface name="getTimestamp">
 			<request method="get" target="/v1/common/timestamp"/>
-			<response type="model">
-				<json_parser model="Timestamp">
+			<response model="Timestamp">
+				<json_parser>
 					<json_auto copy="status"/>
 					<json_auto copy="data"/>
 				</json_parser>
@@ -104,8 +104,8 @@
 	
         <interface name="getSymbol">
             <request method="get" target="/v1/common/symbols"/>
-            <response type="model">
-                <json_parser model="Symbols">
+            <response model="Symbols">
+                <json_parser>
                     <json_auto copy="status"/>
                     <json_auto copy="data" model="SymbolsData">
                         <json_auto from="base-currency" to="{baseCurrency}"/>
@@ -127,8 +127,8 @@
 
         <interface name="getCurrencies">
             <request method="get" target="/v1/common/currencys"/>
-            <response type="model">
-                <json_parser model="Currencies">
+            <response model="Currencies">
+                <json_parser>
                     <json_string from="status" to="{status}"/>
                     <json_string_array from="data" to="{data}"/>
                 </json_parser>
@@ -148,8 +148,8 @@
                     <query name="size" value="{size}"/>
                 </query_strings>
 			</request>
-		    <response type="model">
-				<json_parser model="Candlestick">
+		    <response model="Candlestick">
+				<json_parser>
 					<json_auto copy="status"/>
 					<json_auto copy="data" model="CandlestickData">
 						<json_auto copy="id"/>
@@ -211,8 +211,8 @@
                     <query name="symbol" value="{symbol}"/>
                 </query_strings>
             </request>
-            <response type="model">
-                <json_parser model="LastTrade">
+            <response model="LastTrade">
+                <json_parser>
                     <json_string from="status" to="{status}"/>
                     <json_object from="tick" to="{tick}" model="LastTradeTick">
                         <json_string from="ts" to="{ts}"/>
@@ -264,8 +264,8 @@
                     </json_builder>
                 </post_body>
             </request>
-            <response type="model">
-				<json_parser model="OrderID">
+            <response model="OrderID">
+				<json_parser>
 					<json_auto copy="status"/>
 					<json_auto copy="data"/>
 				</json_parser>

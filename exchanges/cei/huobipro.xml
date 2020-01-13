@@ -24,8 +24,8 @@
 	<restful client_name="huobiProClient" url="https://api.huobi.so">
 		<interface name="getTimestamp">
             <request method="get" target="/v1/common/timestamp"/>
-            <response type="model">
-                <json_parser model="Timestamp">
+            <response model="Timestamp">
+                <json_parser>
 					<json_auto from="data" to="{ts}"/>
                 </json_parser>
             </response>

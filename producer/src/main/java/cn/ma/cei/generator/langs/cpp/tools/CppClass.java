@@ -1,7 +1,7 @@
 package cn.ma.cei.generator.langs.cpp.tools;
 
-import cn.ma.cei.generator.environment.Reference;
 import cn.ma.cei.generator.environment.Variable;
+import cn.ma.cei.generator.environment.VariableFactory;
 import cn.ma.cei.generator.environment.VariableType;
 import cn.ma.cei.generator.langs.cpp.CodeForCpp;
 import cn.ma.cei.generator.langs.cpp.CodeForHpp;
@@ -56,13 +56,13 @@ public class CppClass {
         importList.forEach((type) -> {
             if (type.isGeneric()) {
                 for (VariableType generic : type.getGenericList()) {
-                    String typename = Reference.getReference(generic);
+                    String typename = VariableFactory.getModelReference(generic);
                     if (!typename.equals("")) {
                         codeH.appendInclude(typename);
                     }
                 }
             } else {
-                String typename = Reference.getReference(type);
+                String typename = VariableFactory.getModelReference(type);
                 codeH.appendInclude(typename);
             }
         });

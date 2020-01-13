@@ -4,8 +4,8 @@
 	<restful client_name="binanceClient" url="https://api.binance.com/">
 		<interface name="getTimestamp">
             <request method="get" target="/api/v3/time"/>
-            <response type="model">
-                <json_parser model="Timestamp">
+            <response model="Timestamp">
+                <json_parser>
 					<json_auto from="serverTime" to="{ts}"/>
                 </json_parser>
             </response>

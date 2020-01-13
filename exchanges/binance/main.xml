@@ -33,8 +33,8 @@
                 <header tag="accept-encoding" value="gzip"/>
             </headers>
             <request method="get" target="/api/v3/exchangeInfo"/>
-            <response type="model">
-                <json_parser model="ExchangeInfo">
+            <response model="ExchangeInfo">
+                <json_parser>
                     <json_auto copy="timezone"/>
 					<json_auto copy="serverTime"/>
 					<json_auto copy="rateLimits" model="RateLimits">

@@ -24,8 +24,8 @@
 	<restful client_name="testClient" url="http://127.0.0.1:8081">
 		<interface name="getTimestamp">
             <request method="get" target="/api/v1/timestamp" signature="testSignature"/>
-            <response type="model">
-                <json_parser model="Timestamp">
+            <response model="Timestamp">
+                <json_parser>
 					<json_auto from="Timestamp" to="{ts}"/>
                 </json_parser>
             </response>

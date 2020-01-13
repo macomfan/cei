@@ -24,8 +24,8 @@
 	<restful client_name="bittrexClient" url="https://api.bittrex.com/api/v1.1">
 		<interface name="getMarkets">
             <request method="get" target="/public/getmarkets"/>
-            <response type="model">
-                <json_parser model="Markets">
+            <response model="Markets">
+                <json_parser>
 					<json_string from="success" to="{success}"/>
 					<json_string from="message" to="{message}"/>
                     <json_object_array from="result" to="{result}" model="MarketInfo">

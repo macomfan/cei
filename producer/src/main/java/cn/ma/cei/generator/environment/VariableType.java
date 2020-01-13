@@ -44,18 +44,18 @@ public class VariableType {
         return this.typeName.equals(typeName);
     }
 
-    public boolean isObject() {
-        return VariableFactory.isModel(this);
+    public boolean isCustomModel() {
+        return VariableFactory.isCustomModel(this);
     }
 
-    public boolean isObjectList() {
+    public boolean isCustomModelArray() {
         if (!typeName.equals("array")) {
             return false;
         }
         if (genericList.isEmpty()) {
             return false;
         }
-        return VariableFactory.isModel(genericList.get(0));
+        return VariableFactory.isCustomModel(genericList.get(0));
     }
 
     public String getDescriptor() {
@@ -64,7 +64,7 @@ public class VariableType {
         } else {
             String typeDescriptor = "";
             if (!isGeneric()) {
-                typeDescriptor = Reference.getTypeDescriptor(this);
+                typeDescriptor = VariableFactory.getModelTypeDescriptor(this);
             } else {
                 String subTypeName = "";
                 for (VariableType generic : genericList) {
@@ -72,7 +72,7 @@ public class VariableType {
                         subTypeName += generic.getDescriptor();
                     }
                 }
-                typeDescriptor = Reference.getTypeDescriptor(this)
+                typeDescriptor = VariableFactory.getModelTypeDescriptor(this)
                         + Environment.getCurrentDescriptionConverter().getGenericTypeDescriptor(subTypeName);
             }
             variableTypeDescriptor.get().put(typeName, typeDescriptor);
@@ -81,11 +81,11 @@ public class VariableType {
     }
 
     public String getReference() {
-        return Reference.getReference(this);
+        return VariableFactory.getModelReference(this);
     }
 
     public List<String> getReferences() {
-        String typeReference = Reference.getReference(this);
+        String typeReference = VariableFactory.getModelReference(this);
         List<String> res = new LinkedList<>();
         res.add(typeReference);
         if (isGeneric()) {

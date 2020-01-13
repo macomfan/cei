@@ -6,8 +6,8 @@
 package cn.ma.cei.generator.langs.python3;
 
 import cn.ma.cei.generator.builder.ModelBuilder;
-import cn.ma.cei.generator.environment.Reference;
 import cn.ma.cei.generator.environment.Variable;
+import cn.ma.cei.generator.environment.VariableFactory;
 import cn.ma.cei.generator.environment.VariableType;
 import cn.ma.cei.generator.langs.python3.tools.Python3Class;
 import cn.ma.cei.generator.langs.python3.tools.Python3File;
@@ -26,8 +26,8 @@ public class Python3ModelBuilder extends ModelBuilder {
     }
     
     @Override
-    public String getRefrerence(VariableType modelType) {
-        return Reference.NO_REF;
+    public String getRefrerence(String modelName) {
+        return VariableFactory.NO_REF;
     }
 
     @Override

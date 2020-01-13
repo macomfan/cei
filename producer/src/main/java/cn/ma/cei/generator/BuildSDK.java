@@ -67,8 +67,6 @@ public class BuildSDK {
             Environment.setCurrentLanguage(language);
             Environment.setCurrentDescriptionConverter(framework.getDescriptionConverter());
             
-            RestfulOptions.registryMember();
-            
             BuildExchange.build(sdk, framework.getExchangeBuilder());
             sdk.endBuilding();
         });

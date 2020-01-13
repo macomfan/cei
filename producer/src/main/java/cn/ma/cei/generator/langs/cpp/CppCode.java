@@ -6,7 +6,7 @@
 package cn.ma.cei.generator.langs.cpp;
 
 import cn.ma.cei.generator.Code;
-import cn.ma.cei.generator.environment.Reference;
+import cn.ma.cei.generator.environment.VariableFactory;
 
 /**
  *
@@ -24,7 +24,7 @@ public class CppCode extends Code {
     }
 
     public void appendInclude(String name) {
-        if (name != null && !name.equals("") && !name.equals(Reference.NO_REF)) {
+        if (name != null && !name.equals("") && !name.equals(VariableFactory.NO_REF)) {
             appendWordsln("#include", name);
         }
     }

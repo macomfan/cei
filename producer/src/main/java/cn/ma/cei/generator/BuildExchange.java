@@ -5,6 +5,7 @@ import cn.ma.cei.generator.builder.ExchangeBuilder;
 import cn.ma.cei.generator.builder.ModelBuilder;
 import cn.ma.cei.generator.builder.RestfulClientBuilder;
 import cn.ma.cei.generator.builder.SignatureBuilder;
+import cn.ma.cei.generator.buildin.RestfulOptions;
 import cn.ma.cei.model.xSDK;
 
 public class BuildExchange {
@@ -15,6 +16,7 @@ public class BuildExchange {
         }
 
         builder.startExchange(sdk.exchange);
+        RestfulOptions.registryMember();
 
         if (sdk.modelList != null) {
             sdk.modelList.forEach((model) -> {

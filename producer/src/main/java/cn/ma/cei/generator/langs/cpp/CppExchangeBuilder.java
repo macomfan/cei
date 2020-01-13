@@ -10,7 +10,6 @@ import cn.ma.cei.generator.buildin.RestfulRequest;
 import cn.ma.cei.generator.buildin.RestfulResponse;
 import cn.ma.cei.generator.environment.Constant;
 import cn.ma.cei.generator.environment.Environment;
-import cn.ma.cei.generator.environment.Reference;
 import cn.ma.cei.model.types.xBoolean;
 import cn.ma.cei.model.types.xInt;
 import cn.ma.cei.model.types.xString;

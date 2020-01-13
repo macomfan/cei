@@ -14,29 +14,28 @@ import cn.ma.cei.model.types.xString;
 public class BuildResponse {
 
     public static VariableType getReturnType(xResponse response) {
-        if (response.type.equals("raw")) {
+        if (response.model.equals("raw")) {
             return VariableFactory.variableType(RestfulResponse.typeName);
-        } else if (response.type.equals("string")) {
+        } else if (response.model.equals("string")) {
             return VariableFactory.variableType(xString.typeName);
-        } else if (response.type.equals("model")) {
-            if (response.jsonParser != null) {
-                return BuildJsonParser.getModelType(response.jsonParser);
-            }
-            throw new CEIException("[BuildResponse] Cannot decided the return type");
         } else {
-            throw new CEIException("[BuildResponse] Error response type");
+            // Check model
+            return VariableFactory.variableType(response.model);
         }
     }
 
-    public static Variable build(xResponse response, Variable responseVariable, RestfulInterfaceBuilder interfaceBuilder) {
+    public static Variable build(xResponse response, Variable responseVariable, VariableType returnType, RestfulInterfaceBuilder interfaceBuilder) {
         if (interfaceBuilder == null) {
             throw new CEIException("BuildResponse interfaceBuilder is null");
         }
         ResponseBuilder responseBuilder = interfaceBuilder.getResponseBuilder();
+        if (responseBuilder == null) {
+            throw new CEIException("ResponseBuilder is null");
+        }
         if (response.jsonParser != null) {
             response.jsonParser.startBuilding();
-            JsonParserBuilder jsonParserBuilder = interfaceBuilder.getResponseBuilder().getJsonParserBuilder();
-            Variable returnVariable = BuildJsonParser.build(response.jsonParser, responseVariable, jsonParserBuilder, interfaceBuilder);
+            JsonParserBuilder jsonParserBuilder = responseBuilder.getJsonParserBuilder();
+            Variable returnVariable = BuildJsonParser.build(response.jsonParser, responseVariable, returnType, jsonParserBuilder, interfaceBuilder);
             response.jsonParser.endBuilding();
             return returnVariable;
         }

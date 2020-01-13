@@ -29,8 +29,13 @@ public class main {
         LastTrade.register(router);
         PlaceOrder.register(router);
         Timestamp.register(router);
-
+        router.route(HttpMethod.GET, "/").handler(routingContext -> {
+            routingContext.response().end("Hello");
+        });
+        
         HttpServer server = vertx.createHttpServer().requestHandler(router).listen(8081);
         System.out.println("Server started");
+        
+        
     }
 }

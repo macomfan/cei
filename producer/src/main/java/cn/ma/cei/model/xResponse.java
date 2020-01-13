@@ -10,8 +10,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement(name = "response")
 public class xResponse extends xElement {
 
-    @XmlAttribute(name = "type")
-    public String type;
+    @XmlAttribute(name = "model")
+    public String model;
 
     @XmlElement(name = "json_parser")
     public xJsonParser jsonParser;

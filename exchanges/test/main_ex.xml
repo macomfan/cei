@@ -65,8 +65,8 @@
 						<header tag="accept-encoding" value="gzip"/>
 					</headers>
 				</request>
-				<response type="model">
-					<json_parser model="ExchangeInfo">
+				<response model="ExchangeInfo">
+					<json_parser>
 						<json_auto copy="ExchangeName"/>
 						<json_auto copy="Timestamp"/>
 						<json_auto copy="Symbols" model="Symbols">
@@ -84,8 +84,8 @@
 						<header tag="accept-encoding" value="gzip"/>
 					</headers>
 				</request>
-				<response type="model">
-					<json_parser model="ExchangeInfo">
+				<response model="ExchangeInfo">
+					<json_parser>
 						<json_auto copy="ExchangeName"/>
 						<json_auto copy="Timestamp"/>
 						<json_auto copy="Symbols" model="Symbols">
@@ -105,8 +105,8 @@
 					<header tag="accept-encoding" value="gzip"/>
 				</headers>
 			</request>
-            <response type="model">
-                <json_parser model="ExchangeInfo">
+            <response model="ExchangeInfo">
+                <json_parser>
                     <json_auto copy="ExchangeName"/>
 					<json_auto copy="Timestamp"/>
                     <json_auto copy="Symbols" model="Symbols">
@@ -131,8 +131,8 @@
                     <query name="symbol" value="{symbol}"/>
                 </query_strings>
             </request>
-            <response type="model">
-                <json_parser model="LastTrade">
+            <response model="LastTrade">
+                <json_parser>
                     <json_auto copy="Price"/>
 					<json_auto copy="Volume"/>
 					<json_auto copy="Timestamp"/>
@@ -154,8 +154,8 @@
                     </json_builder>
                 </post_body>
             </request>
-            <response type="model">
-                <json_parser model="Order">
+            <response model="Order">
+                <json_parser>
                     <json_auto copy="OrderId"/>
                 </json_parser>
             </response>
