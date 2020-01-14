@@ -54,17 +54,17 @@ public class CppClass {
         codeH.endln();
 
         importList.forEach((type) -> {
-            if (type.isGeneric()) {
-                for (VariableType generic : type.getGenericList()) {
-                    String typename = VariableFactory.getModelReference(generic);
-                    if (!typename.equals("")) {
-                        codeH.appendInclude(typename);
-                    }
-                }
-            } else {
-                String typename = VariableFactory.getModelReference(type);
-                codeH.appendInclude(typename);
-            }
+//            if (type.isGeneric()) {
+//                for (VariableType generic : type.getGenericList()) {
+//                    String typename = VariableFactory.getModelReference(generic);
+//                    if (!typename.equals("")) {
+//                        codeH.appendInclude(typename);
+//                    }
+//                }
+//            } else {
+//                String typename = VariableFactory.getModelReference(type);
+//                codeH.appendInclude(typename);
+//            }
         });
         codeH.endln();
     }

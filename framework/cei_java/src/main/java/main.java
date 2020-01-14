@@ -55,7 +55,7 @@ public class main {
         huobipro.Candlestick can = hbClient.getCandlestick("btcusdt", "1min", 5);
         can.data.forEach(item -> {
             System.out.println("------");
-            System.out.println(item.amount);
+            System.out.println(item);
             System.out.println(item.close);
             System.out.println(item.open);
             System.out.println(item.high);

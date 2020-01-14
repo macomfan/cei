@@ -39,8 +39,6 @@ public class BuildResponse {
             response.jsonParser.endBuilding();
             return returnVariable;
         }
-        //BuildJsonParser.build(response.jsonParser, );
-        // TODO
-        return responseVariable;
+        return null;
     }
 }

@@ -9,6 +9,7 @@ import cn.ma.cei.exception.CEIException;
 import cn.ma.cei.generator.naming.IDescriptionConverter;
 import cn.ma.cei.utils.Checker;
 import cn.ma.cei.utils.WordSplitter;
+import java.util.List;
 
 /**
  *
@@ -68,7 +69,7 @@ public class GoDescriptionConverter implements IDescriptionConverter {
     }
 
     @Override
-    public String getGenericTypeDescriptor(String name) {
-        return name;
+    public String getGenericTypeDescriptor(String baseName, List<String> subNames) {
+        return baseName;
     }
 }

@@ -9,6 +9,7 @@ import cn.ma.cei.exception.CEIException;
 import cn.ma.cei.generator.naming.IDescriptionConverter;
 import cn.ma.cei.utils.Checker;
 import cn.ma.cei.utils.WordSplitter;
+import java.util.List;
 
 /**
  *
@@ -69,11 +70,17 @@ public class JavaDescriptionConverter implements IDescriptionConverter {
     }
 
     @Override
-    public String getGenericTypeDescriptor(String name) {
-        if (name != null) {
-            return "<" + name + ">";
-        }
-        return "<>";
+    public String getGenericTypeDescriptor(String baseName, List<String> subNames) {
+        StringBuilder stringBuilder = new StringBuilder();
+        subNames.forEach((item) -> {
+            if (stringBuilder.length() != 0) {
+                stringBuilder.append(", ");
+            }
+            stringBuilder.append(item);
+        });
+        stringBuilder.insert(0, baseName + "<");
+        stringBuilder.append(">");
+        return stringBuilder.toString();
     }
 
 }

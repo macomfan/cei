@@ -1,5 +1,7 @@
 package cn.ma.cei.generator.naming;
 
+import java.util.List;
+
 public interface IDescriptionConverter {
     
     /***
@@ -22,7 +24,7 @@ public interface IDescriptionConverter {
     
     String toStringDescriptor(String name);
     
-    String getGenericTypeDescriptor(String name);
+    String getGenericTypeDescriptor(String baseName, List<String> subNames);
     
     //String getTypeDescriptor(String name);
 }

@@ -49,11 +49,7 @@ public class GoStruct {
     }
 
     public void addReference(VariableType type) {
-        if (type.isGeneric()) {
-            importList.addAll(type.getReferences());
-        } else {
-            importList.add(type.getReference());
-        }
+        importList.addAll(type.getReferences());
     }
 
     public Set<String> getImportList() {

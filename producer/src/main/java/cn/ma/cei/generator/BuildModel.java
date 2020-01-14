@@ -18,6 +18,7 @@ public class BuildModel {
         model.memberList.forEach((item) -> {
             item.startBuilding();
             Variable member = VariableFactory.registerMemberVariable(modelType, item.getType(), item.name);
+            System.out.println("TYPE: " + item.getType().getDescriptor());
             member.defaultValue = item.defaultValue;
             builder.registerMember(member);
             item.endBuilding();

@@ -9,7 +9,6 @@ import java.util.Objects;
 
 public class VariableType {
 
-    private final static EnvironmentData<NormalMap<String, String>> variableTypeDescriptor = new EnvironmentData<>(NormalMap::new);
     private final String typeName;
     private final List<VariableType> genericList = new LinkedList<>();
 
@@ -58,44 +57,14 @@ public class VariableType {
         return VariableFactory.isCustomModel(genericList.get(0));
     }
 
+    // TODO remove it,
+    // Calculate the descriptor in VariableFactory.
     public String getDescriptor() {
-        if (variableTypeDescriptor.get().containsKey(typeName)) {
-            return variableTypeDescriptor.get().get(typeName);
-        } else {
-            String typeDescriptor = "";
-            if (!isGeneric()) {
-                typeDescriptor = VariableFactory.getModelTypeDescriptor(this);
-            } else {
-                String subTypeName = "";
-                for (VariableType generic : genericList) {
-                    if (generic != null) {
-                        subTypeName += generic.getDescriptor();
-                    }
-                }
-                typeDescriptor = VariableFactory.getModelTypeDescriptor(this)
-                        + Environment.getCurrentDescriptionConverter().getGenericTypeDescriptor(subTypeName);
-            }
-            variableTypeDescriptor.get().put(typeName, typeDescriptor);
-            return typeDescriptor;
-        }
-    }
-
-    public String getReference() {
-        return VariableFactory.getModelReference(this);
+        return VariableFactory.getModelTypeDescriptor(this);
     }
 
     public List<String> getReferences() {
-        String typeReference = VariableFactory.getModelReference(this);
-        List<String> res = new LinkedList<>();
-        res.add(typeReference);
-        if (isGeneric()) {
-            genericList.forEach((item) -> {
-                if (item != null) {
-                    res.addAll(item.getReferences());
-                }
-            });
-        }
-        return res;
+        return VariableFactory.getModelReferences(this);
     }
 
     @Override

@@ -7,6 +7,8 @@ import cn.ma.cei.utils.NormalMap;
 import cn.ma.cei.utils.SecondLevelMap;
 
 import java.lang.reflect.Constructor;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -31,9 +33,9 @@ public class VariableFactory {
         private final SecondLevelMap<VariableType, String, VariableType> membersInModelInfo = new SecondLevelMap<>();
 
         /**
-         * ModelType - TypeDescriptior - Reference
+         * ModelType - TypeDescriptior - Reference List
          */
-        private final MapWithValue2<String, String, String> modelInfo = new MapWithValue2<>();
+        private final MapWithValue2<String, String, List<String>> modelInfo = new MapWithValue2<>();
 
         public boolean modelExist(String modelName) {
             return modelInfo.containsKey(modelName);
@@ -46,13 +48,19 @@ public class VariableFactory {
             return modelNameMap.get(modelName);
         }
 
-        public void registerModel(String modelName, String modelNameDescriptor, String reference, boolean isBuildIn) {
+        public void registerModel(String modelName, String modelNameDescriptor, List<String> references, boolean isBuildIn) {
             try {
-                modelInfo.tryPut(modelName, modelNameDescriptor, reference);
+                modelInfo.tryPut(modelName, modelNameDescriptor, references);
                 modelNameMap.tryPut(modelName, isBuildIn);
             } catch (Exception e) {
                 throw new CEIException("Registering dupicated model");
             }
+        }
+
+        public void registerModel(String modelName, String modelNameDescriptor, String reference, boolean isBuildIn) {
+            List<String> references = new LinkedList<>();
+            references.add(reference);
+            registerModel(modelName, modelNameDescriptor, references, isBuildIn);
         }
 
         public void registerMember(VariableType modelType, String memberName, VariableType memberType) {
@@ -73,7 +81,7 @@ public class VariableFactory {
             return membersInModelInfo.get(modelType, memberName);
         }
 
-        public String getModelReference(String modelName) {
+        public List<String> getModelReferences(String modelName) {
             return modelInfo.get2(modelName);
         }
 
@@ -119,10 +127,13 @@ public class VariableFactory {
      * @return The VariableType.
      */
     public static VariableType variableType(String modelName, VariableType... argsTypes) {
+        boolean isGenericType = false;
         String finalName = modelName;
         for (VariableType argsType : argsTypes) {
+            finalName += "#";
+            isGenericType = true;
             if (argsType != null) {
-                finalName += "#" + argsType.getName();
+                finalName += argsType.getName();
             }
         }
         if (variableTypeMap.get().containsKey(finalName)) {
@@ -133,10 +144,30 @@ public class VariableFactory {
             throw new CEIException("Cannot create the model, it has not been registered.");
         }
 
+        if (isGenericType) {
+            // Need registry a new model
+            List<String> references = new LinkedList<>();
+            String typeDescriptor = modelInfo.get().getModelTypeDescriptor(modelName);
+            List<String> subTypeNames = new LinkedList<>();
+            for (VariableType argsType : argsTypes) {
+                if (argsType != null) {
+                    if (!modelInfo.get().modelExist(argsType.getName())) {
+                        throw new CEIException("Cannot be generic type: " + argsType.getName());
+                    } else {
+                        references.addAll(argsType.getReferences());
+                        subTypeNames.add(argsType.getDescriptor());
+                    }
+                }
+            }
+            typeDescriptor = Environment.getCurrentDescriptionConverter().getGenericTypeDescriptor(typeDescriptor, subTypeNames);
+            modelInfo.get().registerModel(finalName, typeDescriptor, references, false);
+        }
+
         try {
             Constructor<?> cons = VariableType.class.getDeclaredConstructor(String.class, VariableType[].class);
             cons.setAccessible(true);
-            VariableType type = (VariableType) cons.newInstance(modelName, argsTypes);
+            // TODO use full name to create the type
+            VariableType type = (VariableType) cons.newInstance(finalName, argsTypes);
             variableTypeMap.get().tryPut(finalName, type);
             return type;
         } catch (Exception e) {
@@ -209,8 +240,8 @@ public class VariableFactory {
         modelInfo.get().registerModel(modelName, modelNameDescriptor, reference, false);
     }
 
-    public static String getModelReference(VariableType modeltype) {
-        return modelInfo.get().getModelReference(modeltype.getName());
+    public static List<String> getModelReferences(VariableType modeltype) {
+        return modelInfo.get().getModelReferences(modeltype.getName());
     }
 
     public static String getModelTypeDescriptor(VariableType modeltype) {
