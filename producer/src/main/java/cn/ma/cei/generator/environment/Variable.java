@@ -5,7 +5,7 @@ import cn.ma.cei.utils.SecondLevelMap;
 
 public class Variable {
 
-    private EnvironmentData<SecondLevelMap<String, Position, String>> variableDescriptor = new EnvironmentData<>();
+    private static EnvironmentData<SecondLevelMap<String, Position, String>> variableDescriptor = new EnvironmentData<>();
 
     public enum Position {
         INPUT,

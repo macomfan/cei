@@ -17,6 +17,6 @@ public class TheLinkedList {
     public final static String typeName = "linkedlist";
 
     public static VariableType getType() {
-        return VariableFactory.variableType(typeName, (VariableType) null);
+        return VariableFactory.variableType(typeName, (VariableType)null);
     }
 }

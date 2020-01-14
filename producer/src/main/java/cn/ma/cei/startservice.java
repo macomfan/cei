@@ -21,11 +21,15 @@ public class startservice {
 
     public static void main(String[] args) {
         Router router = Router.router(vertx);
-        router.route("/").handler(StaticHandler.create().setWebRoot("C:/dev/cei/webroot"));
+        router.route("/api").handler((routingContext) -> {
+            System.out.println("Get apis");
+            routingContext.response().end("api");
+        });
+        router.route("/*").handler(StaticHandler.create().setWebRoot("C:/dev/cei/webroot"));
 //        router.route(HttpMethod.GET, "/").handler(routingContext -> {
 //            routingContext.response().end("Hello");
 //        });
-        HttpServer server = vertx.createHttpServer().requestHandler(router).listen(8080);
+        HttpServer server = vertx.createHttpServer().requestHandler(router).listen(8090);
         System.out.println("Server started");
     }
 }

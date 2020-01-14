@@ -28,3 +28,4 @@ nb-configuration.xml
 /producer/.idea/
 /framework/cei_java/target/
 /simulator/server/target/
+/webroot/

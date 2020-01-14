@@ -147,6 +147,7 @@ public class VariableFactory {
         if (isGenericType) {
             // Need registry a new model
             List<String> references = new LinkedList<>();
+            references.addAll(modelInfo.get().getModelReferences(modelName));
             String typeDescriptor = modelInfo.get().getModelTypeDescriptor(modelName);
             List<String> subTypeNames = new LinkedList<>();
             for (VariableType argsType : argsTypes) {
