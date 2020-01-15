@@ -5,6 +5,7 @@
  */
 package cn.ma.cei;
 
+import cn.ma.cei.service.handler.GetExchangeSummary;
 import io.vertx.core.Vertx;
 import io.vertx.core.http.HttpMethod;
 import io.vertx.core.http.HttpServer;
@@ -15,12 +16,15 @@ import io.vertx.ext.web.handler.StaticHandler;
  *
  * @author u0151316
  */
-public class startservice {
+public class StartService {
 
     public static Vertx vertx = Vertx.vertx();
 
     public static void main(String[] args) {
         Router router = Router.router(vertx);
+
+        GetExchangeSummary.register(router);
+
         router.route("/api").handler((routingContext) -> {
             System.out.println("Get apis");
             routingContext.response().end("api");
@@ -29,7 +33,10 @@ public class startservice {
 //        router.route(HttpMethod.GET, "/").handler(routingContext -> {
 //            routingContext.response().end("Hello");
 //        });
-        HttpServer server = vertx.createHttpServer().requestHandler(router).listen(8090);
+        HttpServer server = vertx.createHttpServer().requestHandler(router).websocketHandler(websocket -> {
+            System.out.println("Connected");
+
+        }).listen(8090);
         System.out.println("Server started");
     }
 }

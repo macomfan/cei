@@ -1,5 +1,5 @@
 <template>
-<!--  <div id="app">
+  <!--  <div id="app">
     <el-row>
       <el-col :span="24">
         <div style="text-align: left;">Welcome to CEI</div>
@@ -26,34 +26,87 @@
   </div> -->
   <div id="app" style="width: 100%;">
     <table style="width: 100%;">
-      <tr><td style="background-color: aliceblue;"><div style="margin: 10px;">Welcome to CEI</div></td></tr>
-      <tr style="height: 1px; background-color: #2C3E50;"><td></td></tr>
-      <tr><td style="background-color:#EEEEEE"><MainMenuBar></MainMenuBar></td></tr>
-      <tr><td>
-      <table>
-        <tr>
-          <td style="width: 200px;"><NavBar></NavBar></td>
-          <td style="width: 1000px; vertical-align: top;"><MainView></MainView></td>
-        </tr>
-      </table>
-      </td></tr>
+      <tr>
+        <td style="background-color: aliceblue;">
+          <div style="margin: 20px; font-size: 20px; float: left;">Welcome to CEI</div>
+        </td>
+      </tr>
+      <tr style="height: 1px; background-color: #2C3E50;">
+        <td></td>
+      </tr>
+      <tr>
+        <td style="background-color:#EEEEEE">
+          <MenuBar :exchangeList="exchangeList"></MenuBar>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <table style="margin-top: 5px;">
+            <tr>
+              <td style="vertical-align: top;">
+                <NavBar :exchangeList="exchangeList"></NavBar>
+              </td>
+              <td style="width: 1px; background-color: #EEEEEE;"></td>
+              <td style="width: 1000px; vertical-align: top;">
+                <MainView></MainView>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
     </table>
-    
+
   </div>
-  
+
 </template>
 
 <script>
   import MainView from './components/MainView.vue'
-  import MainMenuBar from './components/MainMenuBar.vue'
+  import MenuBar from './components/MenuBar.vue'
   import NavBar from './components/NavBar.vue'
+  import Bus from './utils/eventbus.js'
+  import API from './utils/api.js'
+  import WS from './utils/ws.js'
 
   export default {
     name: 'app',
+    data() {
+      return {
+        exchangeList: []
+      }
+    },
     components: {
       MainView,
-      MainMenuBar,
+      MenuBar,
       NavBar
+    },
+    mounted() {
+      if (typeof(WebSocket) === "undefined") {
+        this.$notify.error({
+          title: 'Error',
+          message: 'Your browser does not support Websocket!',
+          duration: 0
+        });
+        return;
+      }
+      
+      WS.init()
+      WS.OnOpen = () => {
+        WS.request("aaa", ()=>{window.console.log("Request error")})
+      }
+
+      window.console.log("APP mounted")
+      Bus.subscribe(Bus.ON_API_ERROR, (data) => {
+        this.$notify.error({
+          title: 'Error',
+          message: 'API invoking error',
+          duration: 0
+        });
+        window.console.log(data)
+      })
+      API.getExchangSummary(data => {
+        this.exchangeList = data.exchanges
+      })
     }
   }
 </script>
