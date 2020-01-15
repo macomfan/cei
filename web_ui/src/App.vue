@@ -66,7 +66,8 @@
   import NavBar from './components/NavBar.vue'
   import Bus from './utils/eventbus.js'
   import API from './utils/api.js'
-  import WS from './utils/ws.js'
+  import Notification from './utils/notification.js'
+  import {Connection} from './utils/connection.js'
 
   export default {
     name: 'app',
@@ -89,19 +90,17 @@
         });
         return;
       }
-      
-      WS.init()
-      WS.OnOpen = () => {
-        WS.request("aaa", ()=>{window.console.log("Request error")})
+      this.conn = new Connection()
+      this.conn.onOpen = () => {
+        this.conn.request("aaa", () => {
+          window.console.log("Request error")
+        })
       }
+      this.conn.open()
 
       window.console.log("APP mounted")
       Bus.subscribe(Bus.ON_API_ERROR, (data) => {
-        this.$notify.error({
-          title: 'Error',
-          message: 'API invoking error',
-          duration: 0
-        });
+        Notification.showError(this, 'Error', 'API invoking error', 0)
         window.console.log(data)
       })
       API.getExchangSummary(data => {

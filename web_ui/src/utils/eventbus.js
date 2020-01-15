@@ -5,6 +5,8 @@ export default {
   ON_API_ERROR: "OnAPIError",
   ON_CURRNENT_EXCHANGE_CHANGE: "OnCurExChange",
   ON_EXCHANGE_DATA_CHANGE: "OnExDataChange",
+  ON_CONNECT_SWITCH_CHANGE: "OnConnectSwitch",
+  ON_LINE_STATUS_CHANGE: "OnLineStatusChange",
 
   publish: function(msg, data) {
     //window.console.log("[BUS] " + msg)
