@@ -1,3 +1,5 @@
+import Message from '../utils/message.js'
+
 export default {
   addModel(exchangeName, vm) {
     if (vm === null || vm === undefined) {
@@ -12,15 +14,9 @@ export default {
     }).then(({
       value
     }) => {
-      vm.$message({
-        type: 'info',
-        message: 'Adding Model: ' + value
-      });
+      Message.showInfo(vm, 'Adding Model: ' + value)
     }).catch(() => {
-      vm.$message({
-        type: 'info',
-        message: 'Add canceled'
-      });
+      Message.showInfo(vm, 'Adding canceled')
     });
   }
 }

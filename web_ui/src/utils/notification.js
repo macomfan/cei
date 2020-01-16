@@ -5,5 +5,12 @@ export default {
       message: message,
       duration: duration
     })
+  },
+  showSuccess(vm, title, message, duration) {
+    vm.$notify.success({
+      title: title,
+      message: message,
+      duration: duration
+    })
   }
 }

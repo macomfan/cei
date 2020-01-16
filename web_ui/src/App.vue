@@ -1,61 +1,19 @@
 <template>
-  <!--  <div id="app">
-    <el-row>
-      <el-col :span="24">
-        <div style="text-align: left;">Welcome to CEI</div>
-      </el-col>
-      <el-row>
-        <el-col :span="24" style="text-align: left;">
-          <MainMenuBar></MainMenuBar>
-        </el-col>
-      </el-row>
-      <el-row>
-        <el-col :span="2">
-          <NavBar></NavBar>
-        </el-col>
-        <el-col :span="20">
-          <HelloWorld msg="Welcome to Your Vue.js App" />
-        </el-col>
-      </el-row>
-    </el-row>
-    <table style="width: 100%;">
-      <tr>WWW</tr>
-      <tr style="background-color: #409EFF; height: 1px;"></tr>
-      <tr>222</tr>
-    </table>
-  </div> -->
-  <div id="app" style="width: 100%;">
-    <table style="width: 100%;">
-      <tr>
-        <td style="background-color: aliceblue;">
-          <div style="margin: 20px; font-size: 20px; float: left;">Welcome to CEI</div>
-        </td>
-      </tr>
-      <tr style="height: 1px; background-color: #2C3E50;">
-        <td></td>
-      </tr>
-      <tr>
-        <td style="background-color:#EEEEEE">
-          <MenuBar :exchangeList="exchangeList"></MenuBar>
-        </td>
-      </tr>
-      <tr>
-        <td>
-          <table style="margin-top: 5px;">
-            <tr>
-              <td style="vertical-align: top;">
-                <NavBar :exchangeList="exchangeList"></NavBar>
-              </td>
-              <td style="width: 1px; background-color: #EEEEEE;"></td>
-              <td style="width: 1000px; vertical-align: top;">
-                <MainView></MainView>
-              </td>
-            </tr>
-          </table>
-        </td>
-      </tr>
-    </table>
-
+  <div id="app" class="window">
+    <div class="header">
+      <span style="font-size: 20px;">Welcome to CEI</span>
+      <span style="align-self: flex-end; font-size: 10px;">ver: 0.0.1</span>
+    </div>
+    <div class="h-line"></div>
+    <div>
+      <MenuBar :exchangeList="exchangeList"></MenuBar>
+    </div>
+    <div class="h-line"></div>
+    <div class="main-view">
+      <NavBar style="width: 300px;"></NavBar>
+      <div class="v-line"></div>
+      <MainView :exchangeList="exchangeList"></MainView>
+    </div>
   </div>
 
 </template>
@@ -64,10 +22,10 @@
   import MainView from './components/MainView.vue'
   import MenuBar from './components/MenuBar.vue'
   import NavBar from './components/NavBar.vue'
-  import Bus from './utils/eventbus.js'
-  import API from './utils/api.js'
+  import Bus from './system/eventbus.js'
   import Notification from './utils/notification.js'
-  import {Connection} from './utils/connection.js'
+  import Connection from './system/connection.js'
+  import Logic from './system/logic.js'
 
   export default {
     name: 'app',
@@ -81,31 +39,39 @@
       MenuBar,
       NavBar
     },
-    mounted() {
-      if (typeof(WebSocket) === "undefined") {
-        this.$notify.error({
-          title: 'Error',
-          message: 'Your browser does not support Websocket!',
-          duration: 0
-        });
-        return;
-      }
-      this.conn = new Connection()
-      this.conn.onOpen = () => {
-        this.conn.request("aaa", () => {
-          window.console.log("Request error")
-        })
-      }
-      this.conn.open()
+    methods: {
+      initWebsocket() {
+        if (!Connection.isSupport()) {
+          Notification.showError(this, 'Error', 'Your browser does not support Websocket!', 0)
+          return
+        }
 
+        Connection.onOpen = () => {
+          window.console.log("Connected")
+          Notification.showSuccess(this, "Success", "Connect successfully", 3000)
+          Bus.publish(Bus.ON_LINE_STATUS_CHANGE, true)
+          Connection.request(Connection.REQ_INIT, {}, (data) => {
+            window.console.log("Request ok" + data.exchanges)
+            Logic.init(this)
+            this.exchangeList = data.exchanges
+          }, () => {
+            window.console.log("Request error")
+          })
+        }
+        Connection.onClose = () => {
+          window.console.log("Closed")
+          Notification.showError(this, 'Error', 'API connection failure', 3000)
+          Bus.publish(Bus.ON_LINE_STATUS_CHANGE, false)
+        }
+        Connection.open()
+      }
+    },
+    mounted() {
+      this.initWebsocket()
       window.console.log("APP mounted")
-      Bus.subscribe(Bus.ON_API_ERROR, (data) => {
-        Notification.showError(this, 'Error', 'API invoking error', 0)
-        window.console.log(data)
-      })
-      API.getExchangSummary(data => {
-        this.exchangeList = data.exchanges
-      })
+    },
+    beforeDestroy() {
+      Connection.close()
     }
   }
 </script>
@@ -116,5 +82,45 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     color: #2c3e50;
+  }
+
+  .window {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+
+  .header {
+    height: 40px;
+    background-color: aliceblue;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-bottom: 5px;
+    padding-top: 5px;
+  }
+
+  .h-line {
+    background-color: #dadece;
+    height: 1px;
+    width: 100%;
+  }
+
+  .v-line {
+    background-color: #EEEEEE;
+    width: 2px;
+    margin-left: 5px;
+    margin-right: 5px;
+  }
+
+  .main-view {
+    width: 100%;
+    flex-grow: 1;
+    display: flex;
+    height: 100%;
+    align-items: stretch;
+    padding-top: 2px;
   }
 </style>

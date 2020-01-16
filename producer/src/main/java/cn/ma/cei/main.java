@@ -12,16 +12,15 @@ import cn.ma.cei.generator.langs.java.JavaFramework;
 import cn.ma.cei.generator.langs.python3.Python3Framework;
 import cn.ma.cei.model.xSDK;
 import cn.ma.cei.xml.JAXBWrapper;
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 
 import javax.xml.bind.JAXBException;
 import java.lang.reflect.Field;
 import java.lang.reflect.Type;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.TreeSet;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -29,24 +28,26 @@ public class main {
 
     int aaa = 0;
 
-    static class base {
-
-        public static String aaa;
+    static class models {
+        public List<String> values = new LinkedList<>();
     }
 
-    static class D1<T> extends base {
-
+    static class testcls {
+        public String name = "abc";
+        public models m = new models();
     }
 
-    static class D2<T> extends base {
-
-    }
 
     public static void main(String[] args) throws NoSuchFieldException, JAXBException {
-        D1<Integer> di = new D1<>();
-        D2<String> ds = new D2<>();
-        di.aaa = "aaa";
-        System.err.println(ds.aaa);
+        models ll = new models();
+        ll.values.add("111");
+        ll.values.add("222");
+        testcls t = new testcls();
+        t.m = ll;
+        //JSONObject js = (JSONObject)JSON.toJSON(t);
+
+        testcls newt = JSON.parseObject("{}", testcls.class);
+
 
         StringBuilder sb = new StringBuilder();
         sb.append("111111\r\n");
@@ -119,10 +120,10 @@ public class main {
         //xSDK sdk = (xSDK) decoder.decode(document, xSDK.class);
         System.out.println("End");
 
-        Field f = main.class.getDeclaredField("aaa");
-        Type t = f.getGenericType();
-        System.out.println(f.getClass().getName());
-        int b = 0;
-        System.out.println(int.class.isInstance(b));
+//        Field f = main.class.getDeclaredField("aaa");
+//        Type t = f.getGenericType();
+//        System.out.println(f.getClass().getName());
+//        int b = 0;
+//        System.out.println(int.class.isInstance(b));
     }
 }

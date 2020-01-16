@@ -1,12 +1,16 @@
 export default {
+  isNull(value) {
+    return (value === null || value === undefined) ? true : false
+  },
+
   isNotNull(value, canBeIgnore) {
     var res = (value !== null || value !== undefined) ? true : false
-      if (!res && !canBeIgnore) {
-        // TODO
-      }
+    if (!res && !canBeIgnore) {
+      // TODO
+    }
     return res
   },
-  
+
   isVaildFunction(func, canBeIgnore) {
     if (this.isNotNull(func, canBeIgnore)) {
       var res = (func instanceof Function) ? true : false

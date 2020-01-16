@@ -5,7 +5,10 @@
  */
 package cn.ma.cei;
 
+import cn.ma.cei.service.WebsocketService;
 import cn.ma.cei.service.handler.GetExchangeSummary;
+import cn.ma.cei.service.processors.ExInfoProcessor;
+import cn.ma.cei.service.processors.InitProcessor;
 import io.vertx.core.Vertx;
 import io.vertx.core.http.HttpMethod;
 import io.vertx.core.http.HttpServer;
@@ -33,10 +36,34 @@ public class StartService {
 //        router.route(HttpMethod.GET, "/").handler(routingContext -> {
 //            routingContext.response().end("Hello");
 //        });
-        HttpServer server = vertx.createHttpServer().requestHandler(router).websocketHandler(websocket -> {
-            System.out.println("Connected");
 
-        }).listen(8090);
+        HttpServer httpServer = vertx.createHttpServer().requestHandler(router);
+        WebsocketService.registerProcessor(new InitProcessor());
+        WebsocketService.registerProcessor(new ExInfoProcessor());
+
+        WebsocketService websocketService = new WebsocketService();
+        websocketService.startService(httpServer);
+        httpServer.listen(8090);
+        
+//        HttpServer server = vertx.createHttpServer().requestHandler(router).websocketHandler(websocket -> {
+//            String clientId = websocket.binaryHandlerID();
+//            System.out.println("Connected: " + clientId);
+//
+//            websocket.frameHandler(handler -> {
+//                if (!handler.isText()) {
+//                    return;
+//                }
+//                String textData = handler.textData();
+//                String currID = websocket.binaryHandlerID();
+//                System.out.println("Rec: " + textData + "[" + currID + "]");
+//                
+//            });
+//            
+//            websocket.closeHandler(handler -> {
+//                System.out.println("Disconnect: " + clientId);
+//            });
+//
+//        }).listen(8090);
         System.out.println("Server started");
     }
 }

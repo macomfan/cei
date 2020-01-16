@@ -1,5 +1,5 @@
 import axios from 'axios'
-import Bus from './eventbus.js'
+import Bus from '../system/eventbus.js'
 
 
 const instance = axios.create({

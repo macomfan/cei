@@ -5,13 +5,11 @@
       <p>Exchange &nbsp;</p>
       <el-select style="padding-left: 5px;" ref="nameInput" v-model="exchangeIndex" filterable placeholder="Name" size="small"
         @change="onSelectExchange">
-        <el-option v-for="(item, index) in exchangeList" :key="index" :label="item.name" :value="index">
+        <el-option v-for="(item, index) in exchangeList" :key="index" :label="item" :value="index">
         </el-option>
       </el-select>
     </div>
     <div class="bar-item-right">
-      <el-switch v-model="connected" active-color="#13ce66" inactive-color="#7c0000" @change="onConnectedSwitchChange">
-      </el-switch>
     </div>
 
   </div>
@@ -20,7 +18,7 @@
 
 <script>
   //import api from '../utils/api.js'
-  import Bus from '../utils/eventbus.js'
+  import Bus from '../system/eventbus.js'
 
   export default {
     name: 'MainMenuBar',
@@ -32,7 +30,6 @@
     data() {
       return {
         exchangeIndex: '',
-        connected: false
       }
     },
     methods: {
@@ -40,17 +37,8 @@
         Bus.publish(Bus.ON_CURRNENT_EXCHANGE_CHANGE, this.exchangeIndex)
       },
 
-      onConnectedSwitchChange() {
-        window.console.log("test")
-        window.console.log(Bus.ON_CURRNENT_EXCHANGE_CHANGE)
-        window.console.log(Bus.ON_ABC)
-        //Bus.publish(Bus.ON_CONNECT_SWITCH_CHANGE, this.connected)
-      }
     },
     mounted() {
-      Bus.subscribe(Bus.ON_LINE_STATUS_CHANGE, (status) => {
-        this.connected = status
-      })
       window.console.log("MainMenuBar mounted")
     }
   }
@@ -62,6 +50,7 @@
     display: flex;
     flex: 1;
     justify-content: space-between;
+    background-color: #EEEEEE;
     align-items: center;
   }
 
