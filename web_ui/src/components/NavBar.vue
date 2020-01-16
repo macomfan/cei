@@ -7,7 +7,9 @@
       <el-tree :data="navList" node-key="id" :expand-on-click-node="false" empty-text="No Exchanged selected"
         @node-click="onNodeClick">
         <span class="custom-tree-node" slot-scope="{ node, data }">
+          <el-badge is-dot class="item">
           <span>{{ node.label }}</span>
+          </el-badge>
           <span>
             <el-link v-show="isShowPlus(data.name)" :underline="false" type="success" @click="onAdd(data)">Add</el-link>
             <el-link v-show="isShowSub(data.name)" :underline="false" type="danger">Del</el-link>

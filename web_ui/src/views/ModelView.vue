@@ -50,6 +50,32 @@
       </template>
     </el-table-column>
   </el-table>
+  
+  
+  <el-table
+    ref="filterTable"
+    :data="tableData"
+    style="width: 100%">
+    <el-table-column
+      prop="date"
+      label="日期"
+      width="500"
+      column-key="date"
+    >
+      <template slot-scope="scope">
+          <el-input placeholder="请输入内容" v-model="scope.row.name" v-if="scope.row.status" class="input-with-select">
+            <el-select v-model="select" slot="prepend" placeholder="请选择" >
+              <el-option label="String" value="1"></el-option>
+              <el-option label="Int" value="2"></el-option>
+              <el-option label="Long" value="3"></el-option>
+              <el-option label="StringArray" value="4"></el-option>
+            </el-select>
+            <el-button slot="append" icon="el-icon-check"></el-button>
+          </el-input>
+        <span v-else>{{scope.row.date}}</span>
+      </template>
+    </el-table-column>
+  </el-table>
   </div>
 
 </template>
@@ -58,6 +84,7 @@
   export default {
      data() {
        return {
+         select: '',
          tableData: [{
            date: '2016-05-02',
            name: '王小虎',
@@ -112,4 +139,10 @@
 </script>
 
 <style>
+    .el-select .el-input {
+      width: 130px;
+    }
+    .input-with-select .el-input-group__prepend {
+      background-color: #fff;
+    }
 </style>
