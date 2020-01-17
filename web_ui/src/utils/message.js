@@ -1,8 +1,26 @@
+
+var app = null
+
 export default {
-  showInfo(vm, message) {
-      vm.$message({
-        type: 'info',
-        message: message
-      });
+  init(vm) {
+    app = vm
+  },
+  
+  showInfo(message) {
+    app.$message({
+      type: 'info',
+      message: message
+    });
+  },
+
+  showError(message) {
+    app.$message.error(message);
+  },
+  
+  showSuccess(message) {
+    app.$message({
+      type: 'success',
+      message: message
+    });
   }
 }

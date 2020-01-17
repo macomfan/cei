@@ -9,6 +9,7 @@ import cn.ma.cei.service.WebsocketService;
 import cn.ma.cei.service.handler.GetExchangeSummary;
 import cn.ma.cei.service.processors.ExInfoProcessor;
 import cn.ma.cei.service.processors.InitProcessor;
+import cn.ma.cei.service.processors.ModelTestProcessor;
 import io.vertx.core.Vertx;
 import io.vertx.core.http.HttpMethod;
 import io.vertx.core.http.HttpServer;
@@ -40,6 +41,7 @@ public class StartService {
         HttpServer httpServer = vertx.createHttpServer().requestHandler(router);
         WebsocketService.registerProcessor(new InitProcessor());
         WebsocketService.registerProcessor(new ExInfoProcessor());
+        WebsocketService.registerProcessor(new ModelTestProcessor());
 
         WebsocketService websocketService = new WebsocketService();
         websocketService.startService(httpServer);

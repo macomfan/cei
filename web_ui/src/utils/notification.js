@@ -1,13 +1,19 @@
+var app = null
+
 export default {
-  showError(vm, title, message, duration) {
-    vm.$notify.error({
+  init(vm) {
+    app = vm
+  },
+  
+  showError(title, message, duration) {
+    app.$notify.error({
       title: title,
       message: message,
       duration: duration
     })
   },
-  showSuccess(vm, title, message, duration) {
-    vm.$notify.success({
+  showSuccess(title, message, duration) {
+    app.$notify.success({
       title: title,
       message: message,
       duration: duration

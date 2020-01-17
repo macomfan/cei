@@ -39,7 +39,7 @@ public class ProcessContext {
 
     public void error(int code) {
         JSONObject response = new JSONObject();
-        response.put("status", "ok");
+        response.put("status", "err");
         response.put("id", requestID);
         response.put("data", code);
         connection.send(response);

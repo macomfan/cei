@@ -1,4 +1,6 @@
 import Message from '../utils/message.js'
+import Connection from './connection.js'
+import Bus from './eventbus.js'
 
 export default {
   addModel(exchangeName, vm) {
@@ -14,9 +16,16 @@ export default {
     }).then(({
       value
     }) => {
-      Message.showInfo(vm, 'Adding Model: ' + value)
+      //Message.showInfo('Adding Model: ' + value)
+      Connection.request(Connection.REQ_MODEL_TEST, {
+        name: value
+      }, () => {
+        Bus.publish(Bus.UI_ADD_MODEL, value)
+      }, (code, msg) => {
+        Message.showError(msg)
+      })
     }).catch(() => {
-      Message.showInfo(vm, 'Adding canceled')
+      Message.showInfo('Adding canceled')
     });
   }
 }

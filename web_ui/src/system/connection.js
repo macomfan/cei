@@ -72,6 +72,10 @@ export default {
   onError: null,
   
   REQ_INIT: 'init',
+  REQ_EXCHANG_INFO: 'ExInfo',
+  REQ_MODEL_INFO: 'ModInfo',
+  REQ_MODEL_TEST: 'ModTest',
+  REQ_MODEL_ADD: 'ModAdd',
 
   isSupport: function() {
     return !(typeof(WebSocket) === "undefined")

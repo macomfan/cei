@@ -7,9 +7,7 @@
       <el-tree :data="navList" node-key="id" :expand-on-click-node="false" empty-text="No Exchanged selected"
         @node-click="onNodeClick">
         <span class="custom-tree-node" slot-scope="{ node, data }">
-          <el-badge is-dot class="item">
           <span>{{ node.label }}</span>
-          </el-badge>
           <span>
             <el-link v-show="isShowPlus(data.name)" :underline="false" type="success" @click="onAdd(data)">Add</el-link>
             <el-link v-show="isShowSub(data.name)" :underline="false" type="danger">Del</el-link>
@@ -22,9 +20,9 @@
 </template>
 
 <script>
-  import Bus from '../system/eventbus.js'
   import OP from '../system/operation.js'
   import Checker from '../utils/checker.js'
+  import DB from '../system/database.js'
 
   export default {
     name: 'NavBar',
@@ -33,7 +31,7 @@
         navList: [],
         filterString: "",
         isShow: false,
-        exchangeInfo: []
+        exchangeInfo: {}
       }
     },
     methods: {
@@ -56,8 +54,12 @@
         }
       },
       refreshNavList() {
+        if (Checker.isNull(this.exchangeInfo)) {
+          return
+        }
         this.navList = []
-        window.console.log("MMM " + this.exchangeInfo)
+        window.console.log("MMM ")
+        window.console.log(this.exchangeInfo)
         // Models
         if (Checker.isNotNull(this.exchangeInfo.models)) {
 
@@ -98,10 +100,9 @@
     },
     mounted() {
       window.console.log("NarBar mounted")
-      Bus.subscribe(Bus.ON_EXCHANGE_REFRESH, (data) => {
-        window.console.log("ON_EXCHANGE_REFRESH " + data)
+      DB.bindExchangeInfo((data) => {
         this.exchangeInfo = data
-
+        window.console.log("ON_EXCHANGE_INFO_REFRESH " + this.exchangeInfo)
         this.refreshNavList()
       })
     }

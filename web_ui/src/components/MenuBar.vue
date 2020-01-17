@@ -18,27 +18,29 @@
 
 <script>
   //import api from '../utils/api.js'
-  import Bus from '../system/eventbus.js'
+  import DB from '../system/database.js'
+  import Checker from '../utils/checker.js'
 
   export default {
     name: 'MainMenuBar',
-    props: {
-      exchangeList: {
-        type: Array
-      }
-    },
     data() {
       return {
         exchangeIndex: '',
+        exchangeList: [],
       }
     },
     methods: {
       onSelectExchange() {
-        Bus.publish(Bus.ON_CURRNENT_EXCHANGE_CHANGE, this.exchangeIndex)
+        if (Checker.isNotEmpty(this.exchangeList)) {
+          DB.updateCurrentExchange(this.exchangeList[this.exchangeIndex])
+        }
       },
 
     },
     mounted() {
+      DB.bindExchangeList((data) => {
+        this.exchangeList = data
+      })
       window.console.log("MainMenuBar mounted")
     }
   }

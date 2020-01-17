@@ -6,13 +6,13 @@
     </div>
     <div class="h-line"></div>
     <div>
-      <MenuBar :exchangeList="exchangeList"></MenuBar>
+      <MenuBar></MenuBar>
     </div>
     <div class="h-line"></div>
     <div class="main-view">
       <NavBar style="width: 300px;"></NavBar>
       <div class="v-line"></div>
-      <MainView :exchangeList="exchangeList"></MainView>
+      <MainView></MainView>
     </div>
   </div>
 
@@ -25,15 +25,12 @@
   import Bus from './system/eventbus.js'
   import Notification from './utils/notification.js'
   import Connection from './system/connection.js'
-  import Logic from './system/logic.js'
+  import DB from './system/database.js'
+  import Message from './utils/message.js'
 
   export default {
     name: 'app',
-    data() {
-      return {
-        exchangeList: []
-      }
-    },
+
     components: {
       MainView,
       MenuBar,
@@ -42,29 +39,27 @@
     methods: {
       initWebsocket() {
         if (!Connection.isSupport()) {
-          Notification.showError(this, 'Error', 'Your browser does not support Websocket!', 0)
+          Notification.showError('Error', 'Your browser does not support Websocket!', 0)
           return
         }
 
         Connection.onOpen = () => {
           window.console.log("Connected")
-          Notification.showSuccess(this, "Success", "Connect successfully", 3000)
+          Notification.showSuccess("Success", "Connect successfully", 3000)
           Bus.publish(Bus.ON_LINE_STATUS_CHANGE, true)
-          Connection.request(Connection.REQ_INIT, {}, (data) => {
-            window.console.log("Request ok" + data.exchanges)
-            Logic.init(this)
-            this.exchangeList = data.exchanges
-          }, () => {
-            window.console.log("Request error")
-          })
+          DB.init(this)
         }
         Connection.onClose = () => {
           window.console.log("Closed")
-          Notification.showError(this, 'Error', 'API connection failure', 3000)
+          Notification.showError('Error', 'API connection failure', 3000)
           Bus.publish(Bus.ON_LINE_STATUS_CHANGE, false)
         }
         Connection.open()
       }
+    },
+    created() {
+      Message.init(this)
+      Notification.init(this)
     },
     mounted() {
       this.initWebsocket()
