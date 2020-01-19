@@ -6,6 +6,7 @@ public class CEIException extends RuntimeException {
 
     public CEIException(String errMsg) {
         super(errMsg);
+        System.err.println(errMsg);
     }
     
     public CEIException(CEIErrorType type, Class cls, String errMsg) {

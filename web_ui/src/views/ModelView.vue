@@ -1,30 +1,36 @@
 <template>
   <div>
-    <el-button-group>
-      <el-popover content="New memeber" trigger="hover" placement="bottom">
-        <el-button icon="el-icon-edit" slot="reference" @click="onAdd(0)"></el-button>
-      </el-popover>
-      <el-popover :content="'Add before ' + currentName()" trigger="hover" placement="bottom">
-        <el-button icon="el-icon-share" :disabled="currentRow === null" slot="reference"></el-button>
-      </el-popover>
-      <el-popover :content="'Add after ' + currentName()" trigger="hover" placement="bottom">
-        <el-button icon="el-icon-delete" :disabled="currentRow === null" slot="reference"></el-button>
-      </el-popover>
-    </el-button-group>
+    <div class="buttons">
+      <el-button-group>
+        <el-popover content="New memeber" trigger="hover" placement="bottom">
+          <el-button icon="el-icon-edit" slot="reference" @click="onAdd(0)" size="small"></el-button>
+        </el-popover>
+        <el-popover :content="'Add before ' + currentName()" trigger="hover" placement="bottom">
+          <el-button icon="el-icon-share" :disabled="currentRow === null" slot="reference" size="small"></el-button>
+        </el-popover>
+        <el-popover :content="'Add after ' + currentName()" trigger="hover" placement="bottom">
+          <el-button icon="el-icon-delete" :disabled="currentRow === null" slot="reference" size="small"></el-button>
+        </el-popover>
+      </el-button-group>
+      <el-button icon="el-icon-delete" size="small" type="primary">Submit</el-button>
+    </div>
+
     <el-table :data="tableData" style="width: 100%" highlight-current-row @current-change="onCurrentChange">
-      <el-table-column label="Members" width="500">
+      <el-table-column label="Members" width="800">
         <template slot-scope="scope">
           <div v-if="scope.row.status">
-            <el-cascader placeholder="?" :options="options" :props="{ expandTrigger: 'hover' }" filterable @change="handleChangeType"></el-cascader>
+            <el-cascader placeholder="?" v-model="scope.row.type" :options="options" :props="{ expandTrigger: 'hover' }"
+              filterable @change="handleChangeType"></el-cascader>
             <el-input placeholder="?" v-model="scope.row.name" class="input-with-select">
-              <el-button slot="append" icon="el-icon-check"></el-button>
+              <el-button slot="append" icon="el-icon-check" @click="onConfirm(scope.row)"></el-button>
             </el-input>
           </div>
-
-          <span v-else>
-            <el-tag disable-transitions>{{scope.row.type}}</el-tag>
+          <div v-else class="table_show_item">
+            <span style="width: 100px; background-color: #000000;">
+              <el-tag disable-transitions>{{scope.row.type}}</el-tag>
+            </span>
             <span>{{scope.row.name}}</span>
-          </span>
+          </div>
 
         </template>
       </el-table-column>
@@ -38,7 +44,7 @@
   import StaticInfo from '../system/staticInfo.js'
   import DB from '../system/database.js'
   import OP from '../system/operation.js'
-  
+
   export default {
     data() {
       return {
@@ -65,10 +71,13 @@
       }
     },
     methods: {
+      onConfirm(row) {
+        row.status = 0
+      },
       handleChangeType(value) {
         window.console.log(value)
         if (value[0] === "model_new") {
-          OP.addModel("", this) 
+          OP.addModel("", this)
         }
       },
       currentName() {
@@ -87,20 +96,27 @@
           status: 1
         })
       }
-      
+
     },
     mounted() {
-      DB.bindModelList((data) => {
+      window.console.log("ModelView mounted")
+      DB.bindModelList(this, (data) => {
         this.options = StaticInfo.copyModelTypeOptions()
         this.options.forEach(item => {
           if (item.value === 'model') {
             var models = data
             models.forEach(model => {
-              item.children.push({value: model, label: model})
+              item.children.push({
+                value: model,
+                label: model
+              })
             })
           }
         })
       })
+    },
+    beforeDestroy() {
+      DB.unbindAll(this)
     }
   }
 </script>
@@ -109,7 +125,21 @@
   .el-cascader .el-input {
     width: 200px !important;
   }
+
   .input-with-select .el-input-group__prepend {
     background-color: #fff;
+  }
+  .table_show_item {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+  }
+  .buttons {
+    width: 500px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-left: 15px;
+    padding-right: 15px;
   }
 </style>

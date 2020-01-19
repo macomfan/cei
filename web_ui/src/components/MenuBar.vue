@@ -38,7 +38,7 @@
 
     },
     mounted() {
-      DB.bindExchangeList((data) => {
+      DB.bindExchangeList(this, (data) => {
         this.exchangeList = data
       })
       window.console.log("MainMenuBar mounted")

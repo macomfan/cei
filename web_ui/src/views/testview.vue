@@ -26,7 +26,7 @@
       }
     },
     mounted() {
-      DB.bindModelList((data) => {
+      DB.bindModelList(this, (data) => {
         this.options = StaticInfo.copyModelTypeOptions()
         this.options.forEach(item => {
           if (item.value === 'model') {

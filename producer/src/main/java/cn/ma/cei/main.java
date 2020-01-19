@@ -1,10 +1,7 @@
 package cn.ma.cei;
 
-import cn.ma.cei.exception.BuildTracer;
 import cn.ma.cei.finalizer.Finalizer;
-import cn.ma.cei.generator.BuildExchange;
 import cn.ma.cei.generator.BuildSDK;
-import cn.ma.cei.generator.CEIPath;
 import cn.ma.cei.generator.environment.Environment;
 import cn.ma.cei.generator.langs.cpp.CppFramework;
 import cn.ma.cei.generator.langs.golang.GoFramework;
@@ -12,14 +9,13 @@ import cn.ma.cei.generator.langs.java.JavaFramework;
 import cn.ma.cei.generator.langs.python3.Python3Framework;
 import cn.ma.cei.model.xSDK;
 import cn.ma.cei.xml.JAXBWrapper;
+import cn.ma.cei.xml.Convert;
+import cn.ma.cei.xml.JsonToXml;
+import cn.ma.cei.xml.XmlToJson;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 
 import javax.xml.bind.JAXBException;
-import java.lang.reflect.Field;
-import java.lang.reflect.Type;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -104,7 +100,13 @@ public class main {
 //        } catch (Exception e) {
 //            System.err.println(BuildTracer.getTraceString());
 //        }
-
+        XmlToJson xmlToJson = new XmlToJson();
+        Convert.doConvert(xmlToJson, finalSDKs.get(0));
+        System.out.println(xmlToJson.toJsonString());
+        JSONObject jsonObject = JSONObject.parseObject(xmlToJson.toJsonString());
+        JsonToXml jsonToXml = new JsonToXml(jsonObject);
+        xSDK newSdk = new xSDK();
+        Convert.doConvert(jsonToXml, newSdk);
 //        
 //        
 //        

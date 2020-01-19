@@ -100,7 +100,7 @@
     },
     mounted() {
       window.console.log("NarBar mounted")
-      DB.bindExchangeInfo((data) => {
+      DB.bindExchangeInfo(this, (data) => {
         this.exchangeInfo = data
         window.console.log("ON_EXCHANGE_INFO_REFRESH " + this.exchangeInfo)
         this.refreshNavList()

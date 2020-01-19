@@ -65,7 +65,7 @@ export default {
       window.console.log("Request error")
     })
     
-    Bus.subscribe(Bus.ON_CURRNENT_EXCHANGE_CHANGE, (data) => {
+    Bus.subscribe(Bus.ON_CURRNENT_EXCHANGE_CHANGE, this, (data) => {
       Connection.request(Connection.REQ_EXCHANG_INFO, {
         name: data
       }, (data) => {
@@ -81,9 +81,9 @@ export default {
     Bus.publish(Bus.ON_CURRNENT_EXCHANGE_CHANGE)
   },
   
-  bindCurrentExchange(func) {
+  bindCurrentExchange(inst, func) {
     func(currentExchange)
-    Bus.subscribe(Bus.ON_CURRNENT_EXCHANGE_CHANGE, () => {
+    Bus.subscribe(Bus.ON_CURRNENT_EXCHANGE_CHANGE, inst, () => {
       func(currentExchange)
     })
   },
@@ -92,6 +92,7 @@ export default {
    * @param ["exchangA", "exchangeB", "exchangeC"]
    */
   updateExchangeList(data) {
+    window.console.log(data)
     exchangeList = data
     Bus.publish(Bus.ON_EXCHANGE_LIST_REFRESH)
   },
@@ -104,12 +105,12 @@ export default {
   /**
    * @param func(["exchangA", "exchangeB", "exchangeC"])
    */
-  bindExchangeList(func) {
+  bindExchangeList(inst, func) {
     if (!Checker.isVaildFunction(func)) {
       return
     }
     func(exchangeList)
-    Bus.subscribe(Bus.ON_EXCHANGE_LIST_REFRESH, () => {
+    Bus.subscribe(Bus.ON_EXCHANGE_LIST_REFRESH, inst, () => {
       func(exchangeList)
     })
   },
@@ -124,13 +125,13 @@ export default {
    *                }
    *              })
    */
-  bindExchangeInfo(func) {
+  bindExchangeInfo(inst, func) {
     if (!Checker.isVaildFunction(func)) {
       return
     }
     window.console.log("bindExchangeInfo")
     func(exchangeInfo)
-    Bus.subscribe(Bus.ON_EXCHANGE_INFO_REFRESH, () => {
+    Bus.subscribe(Bus.ON_EXCHANGE_INFO_REFRESH, inst, () => {
       func(exchangeInfo)
     })
   },
@@ -138,24 +139,16 @@ export default {
   /**
    * @return ["nameA","nameB"]
    */
-  bindModelList(func) {
+  bindModelList(inst, func) {
     if (!Checker.isVaildFunction(func)) {
       return
     }
-
-    if (Checker.isNotNull(exchangeInfo)) {
-      window.console.log("bindModelList null")
-      window.console.log(exchangeInfo)
-    }
-    
-    
+        
     if (Checker.isNotNull(exchangeInfo) && Checker.isNotNull(exchangeInfo.models)) {
       func(exchangeInfo.models)
     }
     
-    Bus.subscribe(Bus.ON_EXCHANGE_INFO_REFRESH, () => {
-      window.console.log("ExInfo=")
-      window.console.log(exchangeInfo)
+    Bus.subscribe(Bus.ON_EXCHANGE_INFO_REFRESH, inst, () => {
       func(exchangeInfo.models)
     })
   },
@@ -163,4 +156,8 @@ export default {
   // bindModelData(func, modelName) {
     
   // }
+  
+  unbindAll(inst) {
+    Bus.unsubscribeAll(inst)
+  }
 }

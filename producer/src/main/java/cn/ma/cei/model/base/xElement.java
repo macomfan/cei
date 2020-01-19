@@ -8,9 +8,6 @@ import javax.xml.bind.annotation.XmlAttribute;
 
 @XmlElementBase
 public abstract class xElement {
-    @XmlAttribute(name = "id")
-    public String id;
-    
     public void startBuilding() {
         BuildTracer.startBuilding(this);
     }

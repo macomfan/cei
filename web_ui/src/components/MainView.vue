@@ -40,6 +40,7 @@
     },
     methods: {
       addTab(modelName) {
+        var $$aaa = 0
         let newTabName = ++this.tabIndex + '';
         this.editableTabs.push({
           title: modelName,
@@ -67,7 +68,7 @@
       }
     },
     mounted() {
-      Bus.subscribe(Bus.UI_ADD_MODEL, (modelName) => {
+      Bus.subscribe(Bus.UI_ADD_MODEL, this, (modelName) => {
         this.addTab(modelName)
       })
     }

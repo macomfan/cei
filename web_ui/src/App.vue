@@ -20,6 +20,7 @@
 
 <script>
   import MainView from './components/MainView.vue'
+  //import MainView from './views/ModelView.vue'
   import MenuBar from './components/MenuBar.vue'
   import NavBar from './components/NavBar.vue'
   import Bus from './system/eventbus.js'
