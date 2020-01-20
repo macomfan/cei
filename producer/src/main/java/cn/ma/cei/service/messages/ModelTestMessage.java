@@ -9,7 +9,7 @@ package cn.ma.cei.service.messages;
  *
  * @author u0151316
  */
-public class ModelTestMessage extends MessageBase<ModelTestMessage> {
+public class ModelTestMessage extends MessageWithParam<ModelTestMessage> {
 
     public static class Param {
 

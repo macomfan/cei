@@ -16,11 +16,12 @@ import java.lang.reflect.Type;
 /**
  * @author u0151316
  */
-public abstract class MessageBase<T> {
+public abstract class MessageWithParam<T> implements IMessage {
     public T param = null;
 
+    @Override
     public void fromJson(JSONObject json) {
-        Class tcls;
+        Class<T> tcls;
         try {
             ParameterizedType parameterizedType = (ParameterizedType) getClass().getGenericSuperclass();
             Type[] actualTypeArguments = parameterizedType.getActualTypeArguments();

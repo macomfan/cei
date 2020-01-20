@@ -5,9 +5,6 @@
  */
 package cn.ma.cei.service;
 
-import cn.ma.cei.service.WSConnection;
-import cn.ma.cei.service.WebsocketService;
-import cn.ma.cei.service.messages.MessageBase;
 import cn.ma.cei.service.response.IResponse;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;

@@ -1,6 +1,7 @@
 package cn.ma.cei.finalizer;
 
 import cn.ma.cei.model.types.*;
+import cn.ma.cei.model.*;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -22,6 +23,7 @@ public class TypeAlias {
         registerType(xDecimalArray.class, "DecimalArray");
         registerType(xObject.class, "Model");
         registerType(xObjectArray.class, "ModelArray");
+        registerType(xModel.class, "Model");
     }
 
     private static void registerType(Class<?> cls, String alias) {
@@ -29,7 +31,7 @@ public class TypeAlias {
     }
 
     public static String getClassNameByAlias(String alias) {
-        if (!typeMap.containsKey(alias)) {
+        if (!typeMap.containsValue(alias)) {
             return alias;
         }
         for (Map.Entry<String, String> entry : typeMap.entrySet()) {

@@ -25,7 +25,7 @@ public class JsonToXml implements IXmlJsonConverter {
 
     @Override
     public void objectType(Object xmlObject) {
-        if (!xmlObject.getClass().getName().equals(getType())) {
+        if (!xmlObject.getClass().getName().equals(TypeAlias.getClassNameByAlias(getType()))) {
             throw new CEIException("[JsonToXml] Object type cannot match");
         }
     }

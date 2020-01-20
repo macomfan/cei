@@ -5,11 +5,9 @@
  */
 package cn.ma.cei.service.messages;
 
-import com.alibaba.fastjson.JSONObject;
-
 /**
  * @author u0151316
  */
-public class InitMessage extends MessageBase {
+public class InitMessage extends MessageWithParam {
 
 }

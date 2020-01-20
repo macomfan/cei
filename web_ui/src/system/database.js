@@ -8,6 +8,12 @@ import Checker from '../utils/checker.js'
  */
 var exchangeList = null
 
+function updateExchangeList(data) {
+  window.console.log(data)
+  exchangeList = data
+  Bus.publish(Bus.ON_EXCHANGE_LIST_REFRESH)
+},
+
 /**
  * {
  * "name"   :"exchangNameA",
@@ -19,6 +25,11 @@ var exchangeList = null
  * }
  */
 var exchangeInfo = null
+
+function updateExchangeInfo(data) {
+  exchangeInfo = data
+  Bus.publish(Bus.ON_EXCHANGE_INFO_REFRESH)
+}
 
 // function CEIMember(name) {
 //   this.name = name
@@ -105,7 +116,7 @@ export default {
 
   queryModelDetail(modelName, func, error) {
     this.queryExchangeDetail((data) => {
-      if(Checker.isNull(data.a_modelList)) {
+      if (Checker.isNull(data.a_modelList)) {
         callError(error, 'Cannot get model list')
         return
       }
@@ -130,20 +141,6 @@ export default {
     Bus.subscribe(Bus.ON_CURRNENT_EXCHANGE_CHANGE, inst, () => {
       func(currentExchange)
     })
-  },
-
-  /**
-   * @param ["exchangA", "exchangeB", "exchangeC"]
-   */
-  updateExchangeList(data) {
-    window.console.log(data)
-    exchangeList = data
-    Bus.publish(Bus.ON_EXCHANGE_LIST_REFRESH)
-  },
-
-  updateExchangeInfo(data) {
-    exchangeInfo = data
-    Bus.publish(Bus.ON_EXCHANGE_INFO_REFRESH)
   },
 
   /**
@@ -200,6 +197,17 @@ export default {
   // bindModelData(func, modelName) {
 
   // }
+  
+  submitModelUpdate(modelUpdated, result) {
+    Connection.request(Connection.REQ_MODEL_UPDATE, {
+      exchangeName: currentExchange,
+      data: modelUpdated
+    }, () => {
+      
+    }, () => {
+      
+    })
+  }
 
   unbindAll(inst) {
     Bus.unsubscribeAll(inst)

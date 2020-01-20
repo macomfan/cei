@@ -11,8 +11,8 @@
             <el-cascader placeholder="?" v-model="scope.row.type" :options="options" :props="{ expandTrigger: 'hover' }"
               filterable @change="handleChangeType" size="small"></el-cascader>
             <el-input placeholder="?" v-model="scope.row.name" size="small" class="input-with-select">
-              <el-button slot="append" icon="el-icon-check" @click="onConfirm(scope.row)"></el-button>
             </el-input>
+            <el-button slot="append" icon="el-icon-check" size="small" @click="onConfirm(scope.row)"></el-button>
           </div>
           <!-- Display Item template -->
           <div v-else class="table_show_item">
@@ -36,24 +36,24 @@
         <template slot-scope="scope">
           <el-button-group ref="buttonGroup" v-show="scope.row === currentRow && scope.row.status !== 1">
             <el-tooltip content="Edit" trigger="hover" placement="bottom">
-              <el-button icon="el-icon-share" @click="onAdd(0)" size="small"></el-button>
+              <el-button icon="el-icon-setting" @click="onAdd(0)" size="small"></el-button>
             </el-tooltip>
             <el-tooltip content="Add after" trigger="hover" placement="bottom">
-              <el-button icon="el-icon-delete" @click="onAdd(0)" size="small"></el-button>
+              <el-button icon="el-icon-plus" @click="onAdd(0)" size="small"></el-button>
             </el-tooltip>
             <el-tooltip content="Add before" trigger="hover" placement="bottom">
-              <el-button icon="el-icon-share" @click="onAdd(0)" size="small"></el-button>
+              <el-button icon="el-icon-plus" @click="onAdd(0)" size="small"></el-button>
             </el-tooltip>
             <el-tooltip content="Delete" trigger="hover" placement="bottom">
-              <el-button icon="el-icon-share" @click="onAdd(0)" size="small"></el-button>
+              <el-button icon="el-icon-delete" @click="onAdd(0)" size="small"></el-button>
             </el-tooltip>
           </el-button-group>
         </template>
       </el-table-column>
     </el-table>
     <div class="table_footer">
-      <el-button icon="el-icon-edit" @click="onAdd(0)" size="small">New Member</el-button>
-      <el-button icon="el-icon-delete" size="small" type="primary">Submit</el-button>
+      <el-button icon="el-icon-plus" @click="onAdd(0)" size="small">New Member</el-button>
+      <el-button icon="el-icon-upload2" size="small" type="primary" @click="onSubmit">Submit</el-button>
     </div>
   </div>
 
@@ -129,7 +129,7 @@
         // To update the dropdown list
         this.options = StaticInfo.copyModelTypeOptions()
         this.options.forEach(item => {
-          if (item.value === 'model' || item.value === 'model_array') {
+          if (item.value === 'Model' || item.value === 'ModelArray') {
             var models = data
             models.forEach(model => {
               item.children.push({
@@ -141,8 +141,6 @@
         })
       },
       attachModel(model) {
-        window.console.log("attachModel:::")
-        window.console.log(model)
         var memberList = model.a_memberList
         memberList.forEach((member) => {
           var value = {

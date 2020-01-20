@@ -5,9 +5,6 @@
  */
 package cn.ma.cei.service;
 
-import cn.ma.cei.service.messages.InitMessage;
-import cn.ma.cei.service.messages.MessageBase;
-import cn.ma.cei.utils.Checker;
 import com.alibaba.fastjson.JSONObject;
 import io.vertx.core.http.ServerWebSocket;
 

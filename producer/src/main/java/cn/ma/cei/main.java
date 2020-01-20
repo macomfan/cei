@@ -8,6 +8,8 @@ import cn.ma.cei.generator.langs.golang.GoFramework;
 import cn.ma.cei.generator.langs.java.JavaFramework;
 import cn.ma.cei.generator.langs.python3.Python3Framework;
 import cn.ma.cei.model.xSDK;
+import cn.ma.cei.service.ProcessContext;
+import cn.ma.cei.service.processors.ModelUpdateProcessor;
 import cn.ma.cei.xml.JAXBWrapper;
 import cn.ma.cei.xml.Convert;
 import cn.ma.cei.xml.JsonToXml;

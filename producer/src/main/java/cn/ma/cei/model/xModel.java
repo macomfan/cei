@@ -14,6 +14,7 @@ import java.util.List;
 
 @XmlRootElement(name = "model")
 public class xModel extends xElement implements IDependenceNode {
+
     @XmlAttribute(name = "name")
     public String name;
 

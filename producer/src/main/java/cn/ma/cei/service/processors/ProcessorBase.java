@@ -6,14 +6,15 @@
 package cn.ma.cei.service.processors;
 
 import cn.ma.cei.service.ProcessContext;
-import cn.ma.cei.service.messages.MessageBase;
+import cn.ma.cei.service.messages.IMessage;
+import cn.ma.cei.service.messages.MessageWithParam;
 import com.alibaba.fastjson.JSONObject;
 
 /**
  * @param <T>
  * @author u0151316
  */
-public abstract class ProcessorBase<T extends MessageBase> {
+public abstract class ProcessorBase<T extends IMessage> implements IProcessor<T> {
     public final static String REQ = "req";
     public final static String SUB = "sub";
 
@@ -25,9 +26,7 @@ public abstract class ProcessorBase<T extends MessageBase> {
 
     public void invoke(ProcessContext context, JSONObject json) {
         T msg = this.newMessage();
-        msg.fromJson(json);
+        ((MessageWithParam<?>)msg).fromJson(json);
         this.process(context, msg);
     }
-
-    public abstract void process(ProcessContext context, T msg);
 }
