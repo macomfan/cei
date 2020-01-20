@@ -3,7 +3,9 @@ package cn.ma.cei.model;
 import cn.ma.cei.model.base.xElement;
 
 import javax.xml.bind.annotation.*;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @XmlRootElement(name = "restful")
 public class xRestful extends xElement {
@@ -22,4 +24,10 @@ public class xRestful extends xElement {
 
     @XmlElement(name = "interface")
     public List<xInterface> interfaceList;
+
+    public Set<String> getInterfaceSet() {
+        Set<String> res = new HashSet<>();
+        interfaceList.forEach(intf -> res.add(intf.name));
+        return res;
+    }
 }

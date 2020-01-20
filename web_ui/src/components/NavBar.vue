@@ -4,7 +4,7 @@
       <el-input v-model="filterString" placeholder="Filter" size="small"></el-input>
     </div>
     <div>
-      <el-tree :data="navList" node-key="id" :expand-on-click-node="false" empty-text="No Exchanged selected"
+      <el-tree :data="navList" node-key="id" default-expand-all :expand-on-click-node="false" empty-text="No Exchanged selected"
         @node-click="onNodeClick">
         <span class="custom-tree-node" slot-scope="{ node, data }">
           <span>{{ node.label }}</span>
@@ -20,6 +20,8 @@
 </template>
 
 <script>
+  var MODEL_TYPE = 'Models'
+  
   import OP from '../system/operation.js'
   import Checker from '../utils/checker.js'
   import DB from '../system/database.js'
@@ -35,8 +37,15 @@
       }
     },
     methods: {
-      onNodeClick() {
-
+      onNodeClick(data) {
+        if (data.type === MODEL_TYPE) {
+          window.console.log(data)
+          DB.queryModelDetail(data.name, (data) => {
+            OP.openModel(data._name)
+          }, (errmsg) => {
+            window.console.log("Error onNodeClick " + errmsg)
+          })
+        }
       },
       isShowPlus(name) {
         if (name.indexOf('ROOT_') === -1 && name.indexOf("MODELS_") !== -1) {
@@ -50,7 +59,7 @@
       },
       onAdd(data) {
         if (data.name.indexOf('MODELS_') !== -1) {
-          OP.addModel('', this)
+          OP.addModel('')
         }
       },
       refreshNavList() {
@@ -62,15 +71,15 @@
         window.console.log(this.exchangeInfo)
         // Models
         if (Checker.isNotNull(this.exchangeInfo.models)) {
-
           var modelsNode = new Object()
           modelsNode.name = 'MODELS_' + this.exchangeInfo.name
-          modelsNode.label = 'Models'
+          modelsNode.label = MODEL_TYPE
           modelsNode.children = []
           this.exchangeInfo.models.forEach((model) => {
             var modelItem = new Object()
             modelItem.name = model
             modelItem.label = model
+            modelItem.type = 'Models'
             modelsNode.children.push(modelItem)
           })
           this.navList.push(modelsNode)

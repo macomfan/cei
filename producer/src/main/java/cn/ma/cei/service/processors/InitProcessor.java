@@ -5,6 +5,7 @@
  */
 package cn.ma.cei.service.processors;
 
+import cn.ma.cei.finalizer.XMLDatabase;
 import cn.ma.cei.service.ProcessContext;
 import cn.ma.cei.service.messages.InitMessage;
 import cn.ma.cei.service.response.Exchanges;
@@ -80,9 +81,7 @@ public class InitProcessor extends ProcessorBase<InitMessage> {
 //
 //        data.put("exchanges", exchangeList);
         Exchanges ex = new Exchanges();
-        ex.exchanges.add("binance");
-        ex.exchanges.add("huobi");
-        ex.exchanges.add("cei");
+        ex.exchanges.addAll(XMLDatabase.getExchangeSet());
         context.response(ex);
     }
     

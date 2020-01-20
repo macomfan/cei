@@ -1,40 +1,60 @@
 <template>
   <div>
-    <div class="buttons">
-      <el-button-group>
-        <el-popover content="New memeber" trigger="hover" placement="bottom">
-          <el-button icon="el-icon-edit" slot="reference" @click="onAdd(0)" size="small"></el-button>
-        </el-popover>
-        <el-popover :content="'Add before ' + currentName()" trigger="hover" placement="bottom">
-          <el-button icon="el-icon-share" :disabled="currentRow === null" slot="reference" size="small"></el-button>
-        </el-popover>
-        <el-popover :content="'Add after ' + currentName()" trigger="hover" placement="bottom">
-          <el-button icon="el-icon-delete" :disabled="currentRow === null" slot="reference" size="small"></el-button>
-        </el-popover>
-      </el-button-group>
-      <el-button icon="el-icon-delete" size="small" type="primary">Submit</el-button>
-    </div>
-
-    <el-table :data="tableData" style="width: 100%" highlight-current-row @current-change="onCurrentChange">
-      <el-table-column label="Members" width="800">
+    <el-table :data="tableData" style="width: 800px" highlight-current-row @current-change="onCurrentChange">
+      <el-table-column label="Members" width="600">
+        <template slot="header">
+          <span style="font-size: 15px;">Members</span>
+        </template>
         <template slot-scope="scope">
-          <div v-if="scope.row.status">
+          <!-- New Item template -->
+          <div v-if="scope.row.status" class="table_new_item">
             <el-cascader placeholder="?" v-model="scope.row.type" :options="options" :props="{ expandTrigger: 'hover' }"
-              filterable @change="handleChangeType"></el-cascader>
-            <el-input placeholder="?" v-model="scope.row.name" class="input-with-select">
+              filterable @change="handleChangeType" size="small"></el-cascader>
+            <el-input placeholder="?" v-model="scope.row.name" size="small" class="input-with-select">
               <el-button slot="append" icon="el-icon-check" @click="onConfirm(scope.row)"></el-button>
             </el-input>
           </div>
+          <!-- Display Item template -->
           <div v-else class="table_show_item">
-            <span style="width: 100px; background-color: #000000;">
-              <el-tag disable-transitions>{{scope.row.type}}</el-tag>
-            </span>
-            <span>{{scope.row.name}}</span>
+            <div class="table_item_type">
+              <span v-for="(item, index) in scope.row.type" :key="index" style="padding-left: 5px;">
+                <el-tag disable-transitions v-show="index === 0">{{item}}</el-tag>
+                <el-tag disable-transitions v-show="index === 1"><a href="#" @click.prevent="gotoModel(item)">{{item}}</a></el-tag>
+              </span>
+            </div>
+            <div style="width: 20px;">&nbsp;</div>
+            <div>
+              <span>{{scope.row.name}}</span>
+            </div>
           </div>
-
+        </template>
+      </el-table-column>
+      <el-table-column label="Operation" width="200">
+        <template slot="header">
+          <span style="font-size: 15px;"></span>
+        </template>
+        <template slot-scope="scope">
+          <el-button-group ref="buttonGroup" v-show="scope.row === currentRow && scope.row.status !== 1">
+            <el-tooltip content="Edit" trigger="hover" placement="bottom">
+              <el-button icon="el-icon-share" @click="onAdd(0)" size="small"></el-button>
+            </el-tooltip>
+            <el-tooltip content="Add after" trigger="hover" placement="bottom">
+              <el-button icon="el-icon-delete" @click="onAdd(0)" size="small"></el-button>
+            </el-tooltip>
+            <el-tooltip content="Add before" trigger="hover" placement="bottom">
+              <el-button icon="el-icon-share" @click="onAdd(0)" size="small"></el-button>
+            </el-tooltip>
+            <el-tooltip content="Delete" trigger="hover" placement="bottom">
+              <el-button icon="el-icon-share" @click="onAdd(0)" size="small"></el-button>
+            </el-tooltip>
+          </el-button-group>
         </template>
       </el-table-column>
     </el-table>
+    <div class="table_footer">
+      <el-button icon="el-icon-edit" @click="onAdd(0)" size="small">New Member</el-button>
+      <el-button icon="el-icon-delete" size="small" type="primary">Submit</el-button>
+    </div>
   </div>
 
 </template>
@@ -51,33 +71,42 @@
         options: [],
         currentRow: null,
         currentMemeber: '',
-        tableData: [{
-          name: '王小虎',
-          type: '家',
-          status: 0
-        }, {
-          name: '王小虎',
-          type: '公司',
-          status: 0
-        }, {
-          name: '王小虎',
-          type: '家',
-          status: 0
-        }, {
-          name: '王小虎',
-          type: '公司',
-          status: 0
-        }]
+        tableData: []
+      }
+    },
+    props: ['tableValue', 'tableName'],
+    computed: {
+      isSelected: function() {
+        if (this.currentRow === null) {
+          window.console.log("this.currentRow === null")
+        } else {
+          window.console.log("this.currentRow !== null")
+        }
+        //this.$refs.buttonGroup.render()
+        return this.currentRow !== null
       }
     },
     methods: {
+      gotoModel(item) {
+        window.console.log("======")
+        window.console.log(item)
+        OP.openModel(item)
+      },
+      displayType(type) {
+        if (type.length === 1) return type[0]
+        else if (type.length === 2) return type[0] + ' \\ ' + type[1]
+        else return 'UNKNOWN'
+      },
       onConfirm(row) {
+        window.console.log("Send onUserChanged")
+        this.$emit('onUserChanged', this.tableName)
         row.status = 0
       },
+      
       handleChangeType(value) {
         window.console.log(value)
         if (value[0] === "model_new") {
-          OP.addModel("", this)
+          OP.addModel()
         }
       },
       currentName() {
@@ -95,15 +124,12 @@
           type: '',
           status: 1
         })
-      }
-
-    },
-    mounted() {
-      window.console.log("ModelView mounted")
-      DB.bindModelList(this, (data) => {
+      },
+      onModelListChange(data) {
+        // To update the dropdown list
         this.options = StaticInfo.copyModelTypeOptions()
         this.options.forEach(item => {
-          if (item.value === 'model') {
+          if (item.value === 'model' || item.value === 'model_array') {
             var models = data
             models.forEach(model => {
               item.children.push({
@@ -113,7 +139,29 @@
             })
           }
         })
-      })
+      },
+      attachModel(model) {
+        window.console.log("attachModel:::")
+        window.console.log(model)
+        var memberList = model.a_memberList
+        memberList.forEach((member) => {
+          var value = {
+            name: member._name,
+            type: [],
+            status: 0
+          }
+          value.type.push(member.type)
+          if (Checker.isNotNull(member._refer)) {
+            value.type.push(member._refer)
+          }
+          this.tableData.push(value);
+        })
+      }
+    },
+    mounted() {
+      window.console.log("ModelView mounted " + this.tableValue)
+      DB.bindModelList(this, this.onModelListChange)
+      DB.queryModelDetail(this.tableValue, this.attachModel)
     },
     beforeDestroy() {
       DB.unbindAll(this)
@@ -129,17 +177,58 @@
   .input-with-select .el-input-group__prepend {
     background-color: #fff;
   }
+
   .table_show_item {
     display: flex;
     justify-content: flex-start;
     align-items: center;
   }
-  .buttons {
-    width: 500px;
+
+  .table_item_type {
+    width: 250px;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+  }
+
+  .table_new_item {
+    width: 100%;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+  }
+
+  .table_footer {
+    width: 800px;
+    display: flex;
+    justify-content: flex-end;
+    padding-top: 5px;
+    align-items: center;
+  }
+
+  .table_header {
+    width: 100%;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding-left: 15px;
-    padding-right: 15px;
+  }
+  
+  a {
+      text-decoration: none;
+  }
+  a:link {
+      text-decoration: none;
+  }
+  a:visited {
+      text-decoration: none;
+  }
+  a:hover {
+      text-decoration: none;
+  }
+  a:active {
+      text-decoration: none;
+  }
+  a:focus {
+      text-decoration: none;
   }
 </style>

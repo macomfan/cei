@@ -44,11 +44,6 @@
 		<base64 output="{result}" input="{hmacsha256}"/>
 		<add_query_string key="Signature" value="{result}"/>
     </signature>
-	<restful_interface_definition>
-		<interface name="getTimestamp">
-			<resopnse type="">
-		</interface>
-	</restful_interface_definition>
 
     <restful client_name="MarketClient" url="http://127.0.0.1:8081">
 		<urls>

@@ -1,6 +1,7 @@
 package cn.ma.cei.xml;
 
 import cn.ma.cei.exception.CEIException;
+import cn.ma.cei.finalizer.TypeAlias;
 import com.alibaba.fastjson.JSONObject;
 
 import java.lang.reflect.Field;
@@ -10,10 +11,13 @@ import java.util.List;
 public class XmlToJson implements IXmlJsonConverter {
     private JSONObject jsonObject = new JSONObject();
 
+    public JSONObject getJsonObject() {
+        return jsonObject;
+    }
 
     @Override
     public void objectType(Object xmlObject) {
-        jsonObject.put("type", xmlObject.getClass().getSimpleName());
+        jsonObject.put("type", TypeAlias.getAliasByClassName(xmlObject.getClass()));
     }
 
     @Override

@@ -76,6 +76,7 @@ export default {
   REQ_MODEL_INFO: 'ModInfo',
   REQ_MODEL_TEST: 'ModTest',
   REQ_MODEL_ADD: 'ModAdd',
+  REQ_EXCHANGE_QUERY: 'ExQuery',
 
   isSupport: function() {
     return !(typeof(WebSocket) === "undefined")

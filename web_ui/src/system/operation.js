@@ -1,14 +1,16 @@
 import Message from '../utils/message.js'
 import Connection from './connection.js'
 import Bus from './eventbus.js'
+import DB from './database.js'
+
+var app = null
 
 export default {
-  addModel(exchangeName, vm) {
-    if (vm === null || vm === undefined) {
-      window.console.log("Error")
-    }
-    exchangeName = ''
-    vm.$prompt('Please input new Model name', 'Notice', {
+  init(vm) {
+    app = vm
+  },
+  addModel() {
+    app.$prompt('Please input new Model name', 'Notice', {
       confirmButtonText: 'OK',
       cancelButtonText: 'Cancel',
       inputPattern: /^\w+$/,
@@ -16,9 +18,9 @@ export default {
     }).then(({
       value
     }) => {
-      //Message.showInfo('Adding Model: ' + value)
       Connection.request(Connection.REQ_MODEL_TEST, {
-        name: value
+        exchangeName: DB.getCurrentExchange(),
+        modelName: value
       }, () => {
         Bus.publish(Bus.UI_ADD_MODEL, value)
       }, (code, msg) => {
@@ -27,5 +29,9 @@ export default {
     }).catch(() => {
       Message.showInfo('Adding canceled')
     });
+  },
+
+  openModel(data) {
+    Bus.publish(Bus.UI_OPEN_MODEL, data)
   }
 }

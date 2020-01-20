@@ -20,6 +20,7 @@ export default {
   ON_EXCHANGE_INFO_REFRESH: "OnExInfoRef",
   
   UI_ADD_MODEL: "UIAddModel",  // param: modelName
+  UI_OPEN_MODEL: "UIOpenModel",  // param: modelList
 
   publish: function(msg, data) {
     this.bus.$emit(msg, data);
@@ -31,7 +32,6 @@ export default {
     }
     subscription.push([inst, msg, func])
     this.bus.$on(msg, func);
-    this.bus.$o
   },
   unsubscribeAll: function(inst) {
     var tmp = []

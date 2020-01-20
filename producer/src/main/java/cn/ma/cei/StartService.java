@@ -5,16 +5,22 @@
  */
 package cn.ma.cei;
 
+import cn.ma.cei.finalizer.Finalizer;
+import cn.ma.cei.model.xSDK;
 import cn.ma.cei.service.WebsocketService;
 import cn.ma.cei.service.handler.GetExchangeSummary;
-import cn.ma.cei.service.processors.ExInfoProcessor;
+import cn.ma.cei.service.processors.ExchangeInfoProcessor;
+import cn.ma.cei.service.processors.ExchangeQueryProcessor;
 import cn.ma.cei.service.processors.InitProcessor;
 import cn.ma.cei.service.processors.ModelTestProcessor;
+import cn.ma.cei.xml.JAXBWrapper;
 import io.vertx.core.Vertx;
-import io.vertx.core.http.HttpMethod;
 import io.vertx.core.http.HttpServer;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.handler.StaticHandler;
+
+import javax.xml.bind.JAXBException;
+import java.util.List;
 
 /**
  *
@@ -24,7 +30,7 @@ public class StartService {
 
     public static Vertx vertx = Vertx.vertx();
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws JAXBException {
         Router router = Router.router(vertx);
 
         GetExchangeSummary.register(router);
@@ -38,10 +44,17 @@ public class StartService {
 //            routingContext.response().end("Hello");
 //        });
 
+        JAXBWrapper wrapper = new JAXBWrapper();
+        List<xSDK> sdks = wrapper.loadFromFolder("C:\\dev\\cei\\exchanges", xSDK.class);
+        Finalizer finalizer = new Finalizer();
+        finalizer.addSDK(sdks);
+        List<xSDK> finalSDKs = finalizer.finalizeSDK();
+
         HttpServer httpServer = vertx.createHttpServer().requestHandler(router);
         WebsocketService.registerProcessor(new InitProcessor());
-        WebsocketService.registerProcessor(new ExInfoProcessor());
+        WebsocketService.registerProcessor(new ExchangeInfoProcessor());
         WebsocketService.registerProcessor(new ModelTestProcessor());
+        WebsocketService.registerProcessor(new ExchangeQueryProcessor());
 
         WebsocketService websocketService = new WebsocketService();
         websocketService.startService(httpServer);

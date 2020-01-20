@@ -107,6 +107,10 @@ public class main {
         JsonToXml jsonToXml = new JsonToXml(jsonObject);
         xSDK newSdk = new xSDK();
         Convert.doConvert(jsonToXml, newSdk);
+
+        XmlToJson xmlToJson2 = new XmlToJson();
+        Convert.doConvert(xmlToJson2, newSdk);
+        System.out.println(xmlToJson2.toJsonString());
 //        
 //        
 //        

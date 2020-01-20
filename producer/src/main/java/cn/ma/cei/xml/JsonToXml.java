@@ -1,13 +1,15 @@
 package cn.ma.cei.xml;
 
 import cn.ma.cei.exception.CEIException;
+import cn.ma.cei.finalizer.TypeAlias;
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.ArrayList;
+import java.util.Collection;
 
 public class JsonToXml implements IXmlJsonConverter {
     private JSONObject jsonObject;
@@ -23,7 +25,7 @@ public class JsonToXml implements IXmlJsonConverter {
 
     @Override
     public void objectType(Object xmlObject) {
-        if (!xmlObject.getClass().getSimpleName().equals(getType())) {
+        if (!xmlObject.getClass().getName().equals(getType())) {
             throw new CEIException("[JsonToXml] Object type cannot match");
         }
     }
@@ -39,7 +41,13 @@ public class JsonToXml implements IXmlJsonConverter {
 
     @Override
     public void doObject(Object xmlObject, Field item) {
-        Object obj = null;
+        JSONObject newJsonObject = jsonObject.getJSONObject("o_" + item.getName());
+        if (newJsonObject == null) {
+            // No data in json, ignore
+            return;
+        }
+        JsonToXml jsonToXml = new JsonToXml(newJsonObject);
+        Object obj;
         try {
             obj = item.get(xmlObject);
             if (obj == null) {
@@ -48,24 +56,48 @@ public class JsonToXml implements IXmlJsonConverter {
         } catch (Exception e) {
             throw new CEIException("[JsonToXml] Cannot create object");
         }
-        JsonToXml jsonToXml = new JsonToXml(jsonObject.getJSONObject("o_" + item.getName()));
+
         Convert.doConvert(jsonToXml, obj);
+        try {
+            item.set(xmlObject, obj);
+        } catch (Exception e) {
+            throw new CEIException("[JsonToXml] Cannot set object");
+        }
     }
 
     @Override
     public void doList(Object xmlObject, Field item) {
         try {
-            Object obj = item.get(xmlObject);
-            //List<?> list = (List<?>);
-            ParameterizedType listGenericType = (ParameterizedType) item.getGenericType();
-            Type[] listActualTypeArguments = listGenericType.getActualTypeArguments();
-            System.out.println(listActualTypeArguments[listActualTypeArguments.length-1]);
-            for (int i = 0; i < listActualTypeArguments.length; i++) {
-                System.out.println(listActualTypeArguments[i]);
+            JSONArray jsonArray = jsonObject.getJSONArray("a_" + item.getName());
+            if (jsonArray == null) {
+                // No data in json. ignore.
+                return;
+            }
+            Collection list = (Collection)item.get(xmlObject);
+
+            if (list == null) {
+                Collection newList = new ArrayList();
+                item.set(xmlObject, newList);
+                list = newList;
             }
 
-            Class<? extends LinkedList> aa = String.class.asSubclass(LinkedList.class);
-            System.out.println(listActualTypeArguments[listActualTypeArguments.length-1]);
+            ParameterizedType listGenericType = (ParameterizedType) item.getGenericType();
+            Type[] listActualTypeArguments = listGenericType.getActualTypeArguments();
+            if (listActualTypeArguments.length == 0) {
+                // error
+            }
+            Collection finalList = list;
+            jsonArray.forEach((jsonObject) -> {
+                try {
+                    String typeName = ((JSONObject)jsonObject).getString("type");
+                    Object newItemObject = Class.forName(TypeAlias.getClassNameByAlias(typeName)).newInstance();
+                    JsonToXml jsonToXml = new JsonToXml((JSONObject)jsonObject);
+                    Convert.doConvert(jsonToXml, newItemObject);
+                    finalList.add(newItemObject);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            });
         } catch (Exception e) {
             e.printStackTrace();
         }

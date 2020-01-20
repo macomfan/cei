@@ -1,47 +1,47 @@
 var modelTypeOptions = [{
-  value: 'string',
+  value: 'String',
   label: 'String'
 }, {
-  value: 'boolean',
+  value: 'Boolean',
   label: 'Boolean'
 }, {
-  value: 'number',
+  value: 'Number',
   label: 'Number',
   children: [{
-    value: 'integer',
+    value: 'Integer',
     label: 'Integer'
   }, {
-    value: 'long',
+    value: 'Long',
     label: 'Long'
   }, {
-    value: 'decimal',
+    value: 'Decimal',
     label: 'Decimal'
   }]
 }, {
-  value: 'array',
+  value: 'Array',
   label: 'Array',
   children: [{
-    value: 'string',
+    value: 'StringArray',
     label: 'String'
   }, {
-    value: 'boolean',
+    value: 'BooleanArray',
     label: 'Boolean'
   }, {
-    value: 'integer',
+    value: 'IntegerArray',
     label: 'Integer'
   }, {
-    value: 'long',
+    value: 'LongArray',
     label: 'Long'
   }, {
-    value: 'decimal',
+    value: 'DecimalArray',
     label: 'Decimal'
   }]
 }, {
-  value: 'model',
+  value: 'Model',
   label: 'Model',
   children: []
 }, {
-  value: 'model_array',
+  value: 'ModelArray',
   label: 'ModelArray',
   children: []
 }, {

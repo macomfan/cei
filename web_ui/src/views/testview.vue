@@ -21,7 +21,7 @@
       handleChange(value) {
         window.console.log(value)
         if (value[0] === "model_new") {
-          OP.addModel("", this) 
+          OP.addModel("") 
         }
       }
     },

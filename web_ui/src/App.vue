@@ -27,7 +27,9 @@
   import Notification from './utils/notification.js'
   import Connection from './system/connection.js'
   import DB from './system/database.js'
+  import OP from './system/operation.js'
   import Message from './utils/message.js'
+  import Dialog from './utils/dialog.js'
 
   export default {
     name: 'app',
@@ -61,6 +63,8 @@
     created() {
       Message.init(this)
       Notification.init(this)
+      OP.init(this)
+      Dialog.init(this)
     },
     mounted() {
       this.initWebsocket()
