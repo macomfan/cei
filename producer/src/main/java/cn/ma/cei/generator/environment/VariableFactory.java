@@ -45,7 +45,7 @@ public class VariableFactory {
             if (!modelNameMap.containsKey(modelName)) {
                 throw new CEIException("Model not exist");
             }
-            return modelNameMap.get(modelName);
+            return !modelNameMap.get(modelName);
         }
 
         public void registerModel(String modelName, String modelNameDescriptor, List<String> references, boolean isBuildIn) {

@@ -1,9 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <sdk exchange="binance" document="https://binance-docs.github.io/apidocs/spot/cn/">
 
+	<model name="Timestamp">
+		<int name="serverTime"/>
+	</model>
+
     <model name="ExchangeInfo">
         <string name="timezone"/>
-		<long name="serverTime"/>
+		<int name="serverTime"/>
 		<object_array name="rateLimits" refer="RateLimits"/>
         <object_array name="symbols" refer="Symbol"/>
     </model>
@@ -27,11 +31,27 @@
 		<boolean name="ocoAllowed"/>
 	</model>
 
+	<model name="Depth">
+		<int name="lastUpdateId"/>
+		<object_array name="bids" refer="DepthEntity"/>
+		<object_array name="asks" refer="DepthEntity"/>
+	</model>
+
+	<model name="DepthEntity">
+		<decimal name="price"/>
+		<decimal name="volume"/>
+	</model>
+
     <restful client_name="MarketClient" url="https://api.binance.com">
+		<!--interface name="getTimestamp">
+			<request method="get" target="/api/v3/time"/>
+			<response model="Timestamp">
+				<json_parser>
+					<json_auto copy="serverTime"/>
+				</json_parser>
+			</response>
+		</interface-->
         <interface name="getExchangeInfo">
-            <headers>
-                <header tag="accept-encoding" value="gzip"/>
-            </headers>
             <request method="get" target="/api/v3/exchangeInfo"/>
             <response model="ExchangeInfo">
                 <json_parser>
@@ -57,6 +77,30 @@
                 </json_parser>
             </response>
         </interface>
-
+		<interface name="getDepth">
+			<inputs>
+				<string name="symbol"/>
+				<int name="limit"/>
+			</inputs>
+			<request method="get" target="/api/v3/depth">
+				<query_strings>
+					<query name="symbol" value="{symbol}"/>
+					<query name="limit" value="{limit}"/>
+				</query_strings>
+			</request>
+			<response model="Depth">
+				<json_parser>
+					<json_auto copy="lastUpdateId"/>
+					<json_array copy="bids" model="DepthEntity">
+						<json_auto from="0" to="{price}"/>
+						<json_auto from="1" to="{volume}"/>
+					</json_array>
+					<json_array copy="asks" model="DepthEntity">
+						<json_auto from="0" to="{price}"/>
+						<json_auto from="1" to="{volume}"/>
+					</json_array>
+				</json_parser>
+			</response>
+		</interface>
     </restful>
 </sdk> 

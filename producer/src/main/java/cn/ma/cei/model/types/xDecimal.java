@@ -5,6 +5,7 @@
  */
 package cn.ma.cei.model.types;
 
+import cn.ma.cei.finalizer.Alias;
 import cn.ma.cei.generator.environment.VariableFactory;
 import cn.ma.cei.generator.environment.VariableType;
 import cn.ma.cei.model.base.xType;
@@ -14,6 +15,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  *
  * @author u0151316
  */
+@Alias(name = "Decimal")
 @XmlRootElement(name = "decimal")
 public class xDecimal extends xType {
 

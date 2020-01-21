@@ -11,7 +11,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  *
  * @author u0151316
  */
-@XmlRootElement(name = "json_long")
-public class xJsonLong extends xJsonType {
+@XmlRootElement(name = "json_array")
+public class xJsonArray extends xJsonWithModel {
     
 }

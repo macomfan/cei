@@ -48,7 +48,7 @@ public class VariableType {
     }
 
     public boolean isCustomModelArray() {
-        if (!typeName.equals("array")) {
+        if (typeName.indexOf("array#") == -1) {
             return false;
         }
         if (genericList.isEmpty()) {

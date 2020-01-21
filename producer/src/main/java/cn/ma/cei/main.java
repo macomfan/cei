@@ -84,7 +84,7 @@ public class main {
 //        });
 //        code.appendln("}");
         JAXBWrapper wrapper = new JAXBWrapper();
-        List<xSDK> sdks = wrapper.loadFromFolder("C:\\dev\\cei\\exchanges\\huobipro", xSDK.class);
+        List<xSDK> sdks = wrapper.loadFromFolder("C:\\dev\\cei\\exchanges\\binance", xSDK.class);
         Finalizer finalizer = new Finalizer();
         finalizer.addSDK(sdks);
         List<xSDK> finalSDKs = finalizer.finalizeSDK();
@@ -102,6 +102,7 @@ public class main {
 //        } catch (Exception e) {
 //            System.err.println(BuildTracer.getTraceString());
 //        }
+        System.out.println("==============");
         XmlToJson xmlToJson = new XmlToJson();
         Convert.doConvert(xmlToJson, finalSDKs.get(0));
         System.out.println(xmlToJson.toJsonString());
@@ -113,6 +114,7 @@ public class main {
         XmlToJson xmlToJson2 = new XmlToJson();
         Convert.doConvert(xmlToJson2, newSdk);
         System.out.println(xmlToJson2.toJsonString());
+        System.out.println("==============");
 //        
 //        
 //        

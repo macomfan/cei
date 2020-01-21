@@ -26,7 +26,6 @@ import cn.ma.cei.generator.langs.python3.tools.Python3File;
 import cn.ma.cei.model.types.xBoolean;
 import cn.ma.cei.model.types.xDecimal;
 import cn.ma.cei.model.types.xInt;
-import cn.ma.cei.model.types.xLong;
 import cn.ma.cei.model.types.xString;
 
 /**
@@ -55,8 +54,7 @@ public class Python3ExchangeBuilder extends ExchangeBuilder {
 
         VariableFactory.setupBuildinVariableType(xString.typeName, "String", VariableFactory.NO_REF);
         VariableFactory.setupBuildinVariableType(xBoolean.typeName, "Boolean", VariableFactory.NO_REF);
-        VariableFactory.setupBuildinVariableType(xInt.typeName, "Integer", VariableFactory.NO_REF);
-        VariableFactory.setupBuildinVariableType(xLong.typeName, "Long", VariableFactory.NO_REF);
+        VariableFactory.setupBuildinVariableType(xInt.typeName, "Long", VariableFactory.NO_REF);
         VariableFactory.setupBuildinVariableType(xDecimal.typeName, "Decimal", VariableFactory.NO_REF);
         VariableFactory.setupBuildinVariableType(TheArray.typeName, "list", VariableFactory.NO_REF);
         VariableFactory.setupBuildinVariableType(RestfulRequest.typeName, "RestfulRequest", "from impl.restfulrequest import RestfulRequest");

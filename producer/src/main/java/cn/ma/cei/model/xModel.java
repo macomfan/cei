@@ -1,5 +1,6 @@
 package cn.ma.cei.model;
 
+import cn.ma.cei.finalizer.Alias;
 import cn.ma.cei.finalizer.IDependenceNode;
 import cn.ma.cei.model.base.xElement;
 import cn.ma.cei.model.base.xType;
@@ -12,6 +13,7 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.util.List;
 
+@Alias(name = "xModel")
 @XmlRootElement(name = "model")
 public class xModel extends xElement implements IDependenceNode {
 
@@ -23,7 +25,6 @@ public class xModel extends xElement implements IDependenceNode {
         xString.class,
         xBoolean.class,
         xInt.class,
-        xLong.class,
         xDecimal.class,
         xObject.class,
         xObjectArray.class,

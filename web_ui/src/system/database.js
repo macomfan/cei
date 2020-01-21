@@ -12,22 +12,25 @@ function updateExchangeList(data) {
   window.console.log(data)
   exchangeList = data
   Bus.publish(Bus.ON_EXCHANGE_LIST_REFRESH)
-},
+}
 
 /**
  * {
  * "name"   :"exchangNameA",
  * "models" :["nameA","nameB"],
- * "clients":{
- *           "name"     : "clientName",
- *           "interface": ["intfA", "intfB"]
- *           }
+ * "clients":[
+ *            {"name"     : "clientNameA",
+ *             "interface": ["intfA", "intfB"]},
+ *            {"name"     : "clientNameB",
+ *             "interface": ["intfA", "intfB"]},
+ *           ]
  * }
  */
 var exchangeInfo = null
 
 function updateExchangeInfo(data) {
   exchangeInfo = data
+  exchangeInfo.models = exchangeInfo.models.sort()
   Bus.publish(Bus.ON_EXCHANGE_INFO_REFRESH)
 }
 
@@ -77,7 +80,7 @@ export default {
   init() {
     Connection.request(Connection.REQ_INIT, {}, (data) => {
       window.console.log("Request ok" + data.exchanges)
-      this.updateExchangeList(data.exchanges)
+      updateExchangeList(data.exchanges)
     }, () => {
       window.console.log("Request error")
     })
@@ -86,7 +89,7 @@ export default {
       Connection.request(Connection.REQ_EXCHANG_INFO, {
         exchangeName: currentExchange
       }, (data) => {
-        this.updateExchangeInfo(data)
+        updateExchangeInfo(data)
       }, (error) => {
         Notification.showError('error', error, 3000)
       })
@@ -203,11 +206,11 @@ export default {
       exchangeName: currentExchange,
       data: modelUpdated
     }, () => {
-      
+      result()
     }, () => {
       
     })
-  }
+  },
 
   unbindAll(inst) {
     Bus.unsubscribeAll(inst)

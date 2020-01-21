@@ -2,50 +2,49 @@ package cn.ma.cei.finalizer;
 
 import cn.ma.cei.model.types.*;
 import cn.ma.cei.model.*;
+import cn.ma.cei.utils.DuplexMap;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class TypeAlias {
 
-    private static Map<String, String> typeMap = new HashMap<>();
+    private static DuplexMap<String, String> typeMap = new DuplexMap<>();
 
     static {
-        registerType(xString.class, "String");
-        registerType(xBoolean.class, "Boolean");
-        registerType(xInt.class, "Integer");
-        registerType(xLong.class, "Long");
-        registerType(xDecimal.class, "Decimal");
-        registerType(xStringArray.class, "StringArray");
-        registerType(xBooleanArray.class, "BooleanArray");
-        registerType(xIntArray.class, "IntArray");
-        registerType(xLongArray.class, "LongArray");
-        registerType(xDecimalArray.class, "DecimalArray");
-        registerType(xObject.class, "Model");
-        registerType(xObjectArray.class, "ModelArray");
-        registerType(xModel.class, "Model");
+        registerType(xString.class);
+        registerType(xBoolean.class);
+        registerType(xInt.class);
+        registerType(xDecimal.class);
+        registerType(xStringArray.class);
+        registerType(xBooleanArray.class);
+        registerType(xIntArray.class);
+        registerType(xDecimalArray.class);
+        registerType(xObject.class);
+        registerType(xObjectArray.class);
+        registerType(xModel.class);
     }
 
-    private static void registerType(Class<?> cls, String alias) {
-        typeMap.put(cls.getName(), alias);
+    private static void registerType(Class<?> cls) {
+        if (cls.isAnnotationPresent(Alias.class)) {
+            Alias alias = cls.getAnnotation(Alias.class);
+            typeMap.put(cls.getName(), alias.name());
+        }
     }
 
     public static String getClassNameByAlias(String alias) {
-        if (!typeMap.containsValue(alias)) {
+        String res = typeMap.getKey(alias);
+        if (res == null) {
             return alias;
         }
-        for (Map.Entry<String, String> entry : typeMap.entrySet()) {
-            if (entry.getValue().equals(alias)) {
-                return entry.getKey();
-            }
-        }
-        return alias;
+        return res;
     }
 
     public static String getAliasByClassName(Class<?> cls) {
-        if (typeMap.containsKey(cls.getName())) {
-            return typeMap.get(cls.getName());
+        String res = typeMap.getValue(cls.getName());
+        if (res == null) {
+            return cls.getName();
         }
-        return cls.getName();
+        return res;
     }
 }

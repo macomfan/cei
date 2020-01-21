@@ -4,21 +4,42 @@ import cn.ma.cei.exception.CEIException;
 import cn.ma.cei.generator.environment.Variable;
 import cn.ma.cei.generator.environment.VariableFactory;
 import cn.ma.cei.generator.environment.VariableType;
+import cn.ma.cei.model.types.xString;
 import cn.ma.cei.utils.UniquetList;
+
+import java.lang.reflect.Constructor;
 import java.util.List;
 
 public abstract class MethodBuilder {
+
+    private int tempVariableIndex = 0;
 
     public abstract void onAddReference(VariableType variableType);
 
     private final UniquetList<String, Variable> variableList = new UniquetList<>();
 
-    public void registerVariable(Variable variable) {
+    public Variable createLocalVariable(VariableType type, String name) {
+        Variable variable = null;
+        if (variableList.containsKey(name)) {
+            variable = VariableFactory.createLocalVariable(type, name + Integer.toString(tempVariableIndex++));
+        } else {
+            variable = VariableFactory.createLocalVariable(type, name);
+        }
+        registerVariable(variable);
+        return variable;
+    }
+
+    public Variable createInputVariable(VariableType type, String name) {
+        Variable variable = VariableFactory.createInputVariable(type, name);
+        registerVariable(variable);
+        return variable;
+    }
+
+    private void registerVariable(Variable variable) {
         if (variableList.containsKey(variable.getName())) {
             throw new CEIException("Variable re-defined: " + variable.getName());
         }
         variableList.put(variable.getName(), variable);
-        //onAddReference(variable.type);
     }
 
     public List<Variable> getVariableList() {

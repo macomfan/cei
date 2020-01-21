@@ -40,6 +40,16 @@ public class CppJsonParserBuilder extends JsonParserBuilder {
     }
 
     @Override
+    public void startArrayLoop(Variable eachItemJsonObject, Variable parentJsonObject, Variable itemName) {
+
+    }
+
+    @Override
+    public void endJsonArrayLoop(Variable to, Variable model) {
+
+    }
+
+    @Override
     public void defineModel(Variable model) {
         //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
@@ -52,11 +62,6 @@ public class CppJsonParserBuilder extends JsonParserBuilder {
     @Override
     public void getJsonStringArray(Variable to, Variable jsonObject, Variable itemName) {
         //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void getJsonLong(Variable to, Variable jsonObject, Variable itemName) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override

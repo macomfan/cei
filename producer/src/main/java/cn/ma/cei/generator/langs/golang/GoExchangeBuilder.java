@@ -22,11 +22,9 @@ import cn.ma.cei.generator.environment.Constant;
 import cn.ma.cei.generator.environment.Environment;
 import cn.ma.cei.generator.environment.VariableFactory;
 import cn.ma.cei.generator.langs.golang.tools.GoFile;
-import cn.ma.cei.generator.langs.golang.tools.GoStruct;
 import cn.ma.cei.model.types.xBoolean;
 import cn.ma.cei.model.types.xDecimal;
 import cn.ma.cei.model.types.xInt;
-import cn.ma.cei.model.types.xLong;
 import cn.ma.cei.model.types.xString;
 
 /**
@@ -53,8 +51,7 @@ public class GoExchangeBuilder extends ExchangeBuilder {
 
         VariableFactory.setupBuildinVariableType(xString.typeName, "string", VariableFactory.NO_REF);
         VariableFactory.setupBuildinVariableType(xBoolean.typeName, "bool", VariableFactory.NO_REF);
-        VariableFactory.setupBuildinVariableType(xInt.typeName, "int", VariableFactory.NO_REF);
-        VariableFactory.setupBuildinVariableType(xLong.typeName, "int64", VariableFactory.NO_REF);
+        VariableFactory.setupBuildinVariableType(xInt.typeName, "int64", VariableFactory.NO_REF);
         VariableFactory.setupBuildinVariableType(xDecimal.typeName, "float64", VariableFactory.NO_REF);
         VariableFactory.setupBuildinVariableType(TheArray.typeName, "[]", VariableFactory.NO_REF);
         VariableFactory.setupBuildinVariableType(TheStream.typeName, "[]byte", VariableFactory.NO_REF);

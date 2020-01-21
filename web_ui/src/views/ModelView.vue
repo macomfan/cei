@@ -36,7 +36,7 @@
         <template slot-scope="scope">
           <el-button-group ref="buttonGroup" v-show="scope.row === currentRow && scope.row.status !== 1">
             <el-tooltip content="Edit" trigger="hover" placement="bottom">
-              <el-button icon="el-icon-setting" @click="onAdd(0)" size="small"></el-button>
+              <el-button icon="el-icon-setting" @click="onEdit(scope.row)" size="small"></el-button>
             </el-tooltip>
             <el-tooltip content="Add after" trigger="hover" placement="bottom">
               <el-button icon="el-icon-plus" @click="onAdd(0)" size="small"></el-button>
@@ -45,7 +45,7 @@
               <el-button icon="el-icon-plus" @click="onAdd(0)" size="small"></el-button>
             </el-tooltip>
             <el-tooltip content="Delete" trigger="hover" placement="bottom">
-              <el-button icon="el-icon-delete" @click="onAdd(0)" size="small"></el-button>
+              <el-button icon="el-icon-delete" @click="onDelete(scope.row)" size="small"></el-button>
             </el-tooltip>
           </el-button-group>
         </template>
@@ -71,7 +71,8 @@
         options: [],
         currentRow: null,
         currentMemeber: '',
-        tableData: []
+        tableData: [],
+        changed: 0
       }
     },
     props: ['tableValue', 'tableName'],
@@ -87,6 +88,38 @@
       }
     },
     methods: {
+      // --- button event ---
+      onEdit(row) {
+        row.status = 1
+      },
+      onDelete(row) {
+        this.tableData = this.tableData.filter((p) => p.name !== row.name)
+      },
+      onConfirm(row) {
+        this.$emit('onUserChanged', this.tableName)
+        row.status = 0
+      },
+      onSubmit() {
+        var modelUpdated = {
+          type: 'xModel',
+          _name: this.tableValue,
+          a_memberList: []
+        }
+        this.tableData.forEach(item => {
+          var member = {
+            _name: item.name,
+            type: item.type[0]
+          }
+          if (item.type.length === 2) {
+            member._refer = item.type[1]
+          }
+          modelUpdated.a_memberList.push(member)
+        })
+        window.console.log(modelUpdated)
+        DB.submitModelUpdate(modelUpdated, () => {
+          window.console.log("OK ~~~~~~")
+        }) 
+      },
       gotoModel(item) {
         window.console.log("======")
         window.console.log(item)
@@ -97,12 +130,8 @@
         else if (type.length === 2) return type[0] + ' \\ ' + type[1]
         else return 'UNKNOWN'
       },
-      onConfirm(row) {
-        window.console.log("Send onUserChanged")
-        this.$emit('onUserChanged', this.tableName)
-        row.status = 0
-      },
-      
+
+
       handleChangeType(value) {
         window.console.log(value)
         if (value[0] === "model_new") {
@@ -154,7 +183,8 @@
           }
           this.tableData.push(value);
         })
-      }
+      },
+
     },
     mounted() {
       window.console.log("ModelView mounted " + this.tableValue)
@@ -210,23 +240,28 @@
     justify-content: space-between;
     align-items: center;
   }
-  
+
   a {
-      text-decoration: none;
+    text-decoration: none;
   }
+
   a:link {
-      text-decoration: none;
+    text-decoration: none;
   }
+
   a:visited {
-      text-decoration: none;
+    text-decoration: none;
   }
+
   a:hover {
-      text-decoration: none;
+    text-decoration: none;
   }
+
   a:active {
-      text-decoration: none;
+    text-decoration: none;
   }
+
   a:focus {
-      text-decoration: none;
+    text-decoration: none;
   }
 </style>

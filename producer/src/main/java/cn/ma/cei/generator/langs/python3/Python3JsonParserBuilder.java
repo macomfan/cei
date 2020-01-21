@@ -30,11 +30,6 @@ public class Python3JsonParserBuilder extends JsonParserBuilder {
 
     @Override
     public void getJsonInteger(Variable to, Variable jsonObject, Variable itemName) {
-        method.addAssign(method.useVariable(to), method.invoke(jsonObject.getDescriptor() + ".get_integer", itemName));
-    }
-
-    @Override
-    public void getJsonLong(Variable to, Variable jsonObject, Variable itemName) {
         method.addAssign(method.useVariable(to), method.invoke(jsonObject.getDescriptor() + ".get_long", itemName));
     }
 
@@ -72,6 +67,16 @@ public class Python3JsonParserBuilder extends JsonParserBuilder {
         method.addAssign(method.useVariable(to), method.newInstance(TheArray.getType()));
         method.endIf();
         method.addInvoke(to.getDescriptor() + ".append", model);
+        method.endFor();
+    }
+
+    @Override
+    public void startArrayLoop(Variable eachItemJsonObject, Variable parentJsonObject, Variable itemName) {
+        method.startFor(eachItemJsonObject, parentJsonObject.getDescriptor() + ".get_items(" + itemName.getDescriptor() + "):");
+    }
+
+    @Override
+    public void endJsonArrayLoop(Variable to, Variable model) {
         method.endFor();
     }
 

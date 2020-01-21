@@ -75,7 +75,7 @@ export default {
   REQ_EXCHANG_INFO: 'ExInfo',
   REQ_MODEL_INFO: 'ModInfo',
   REQ_MODEL_TEST: 'ModTest',
-  REQ_MODEL_ADD: 'ModAdd',
+  REQ_MODEL_UPDATE: 'ModUpt',
   REQ_EXCHANGE_QUERY: 'ExQuery',
 
   isSupport: function() {

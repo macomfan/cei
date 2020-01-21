@@ -19,19 +19,15 @@ import java.util.List;
 public class BuildRestfulInterface {
 
     public static void build(xInterface restIf, RestfulInterfaceBuilder builder) {
-        // Should be the member variable
-        Variable options = VariableFactory.createLocalVariable(RestfulOptions.getType(), "options");
-        builder.registerVariable(options);
 
-        Variable request = VariableFactory.createLocalVariable(RestfulRequest.getType(), "request");
-        Variable response = VariableFactory.createLocalVariable(RestfulResponse.getType(), "response");
+        Variable options = builder.createLocalVariable(RestfulOptions.getType(), "options");
+        Variable request = builder.createLocalVariable(RestfulRequest.getType(), "request");
+        Variable response = builder.createLocalVariable(RestfulResponse.getType(), "response");
 
-        builder.registerVariable(request);
-        builder.registerVariable(response);
         if (restIf.inputList != null) {
             restIf.inputList.forEach((input) -> {
                 input.startBuilding();
-                builder.registerVariable(VariableFactory.createInputVariable(input.getType(), input.name));
+                builder.createInputVariable(input.getType(), input.name);
                 input.endBuilding();
             });
         }

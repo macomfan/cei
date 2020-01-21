@@ -16,7 +16,6 @@ import cn.ma.cei.model.json.xJsonBoolean;
 import cn.ma.cei.model.json.xJsonBuilder;
 import cn.ma.cei.model.json.xJsonDecimal;
 import cn.ma.cei.model.json.xJsonInteger;
-import cn.ma.cei.model.json.xJsonLong;
 import cn.ma.cei.model.json.xJsonString;
 import cn.ma.cei.model.json.xJsonType;
 import cn.ma.cei.model.types.xInt;
@@ -62,8 +61,6 @@ public class BuildJsonBuilder {
             } else if (item instanceof xJsonString) {
                 jsonBuilderBuilder.addJsonString(from, jsonObject, to);
             } else if (item instanceof xJsonInteger) {
-                jsonBuilderBuilder.addJsonNumber(from, jsonObject, to);
-            } else if (item instanceof xJsonLong) {
                 jsonBuilderBuilder.addJsonNumber(from, jsonObject, to);
             } else if (item instanceof xJsonBoolean) {
                 jsonBuilderBuilder.addJsonBoolean(from, jsonObject, to);

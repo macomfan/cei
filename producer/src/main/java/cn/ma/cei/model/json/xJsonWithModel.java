@@ -17,7 +17,6 @@ public abstract class xJsonWithModel extends xJsonType {
         xJsonAuto.class,
         xJsonString.class,
         xJsonInteger.class,
-        xJsonLong.class,
         xJsonBoolean.class,
         xJsonDecimal.class,
         xJsonObjectArray.class,

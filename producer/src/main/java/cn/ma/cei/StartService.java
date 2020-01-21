@@ -9,10 +9,7 @@ import cn.ma.cei.finalizer.Finalizer;
 import cn.ma.cei.model.xSDK;
 import cn.ma.cei.service.WebsocketService;
 import cn.ma.cei.service.handler.GetExchangeSummary;
-import cn.ma.cei.service.processors.ExchangeInfoProcessor;
-import cn.ma.cei.service.processors.ExchangeQueryProcessor;
-import cn.ma.cei.service.processors.InitProcessor;
-import cn.ma.cei.service.processors.ModelTestProcessor;
+import cn.ma.cei.service.processors.*;
 import cn.ma.cei.xml.JAXBWrapper;
 import io.vertx.core.Vertx;
 import io.vertx.core.http.HttpServer;
@@ -55,6 +52,7 @@ public class StartService {
         WebsocketService.registerProcessor(new ExchangeInfoProcessor());
         WebsocketService.registerProcessor(new ModelTestProcessor());
         WebsocketService.registerProcessor(new ExchangeQueryProcessor());
+        WebsocketService.registerProcessor(new ModelUpdateProcessor());
 
         WebsocketService websocketService = new WebsocketService();
         websocketService.startService(httpServer);

@@ -35,16 +35,19 @@ public class WebsocketService {
     private static void processReq(WSConnection connection, JSONObject json) {
         String msgType = json.getString("msg");
         long requestID = json.getLong("id");
-        if (Checker.isEmpty(msgType)) {
-            System.err.println("[WS] Error unknown message type");
-        }
         msgType = msgType.toLowerCase();
         ProcessContext context = new ProcessContext();
         context.clientID = connection.clientID;
         context.connection = connection;
         context.requestID = requestID;
+        if (Checker.isEmpty(msgType)) {
+            System.err.println("[WS] Error unknown message type");
+            context.error("Error unknown message type");
+            return;
+        }
         if (!reqProcessorMap.containsKey(msgType)) {
             System.err.println("[WS] Cannot find the processor for " + msgType);
+            context.error("Error unknown message type");
             return;
         }
         reqProcessorMap.get(msgType).invoke(context, json.getJSONObject("param"));

@@ -14,9 +14,7 @@ public abstract class JsonParserBuilder {
     public abstract void getJsonString(Variable to, Variable jsonObject, Variable itemName);
 
     public abstract void getJsonInteger(Variable to, Variable jsonObject, Variable itemName);
-    
-    public abstract void getJsonLong(Variable to, Variable jsonObject, Variable itemName);
-    
+
     public abstract void getJsonBoolean(Variable to, Variable jsonObject, Variable itemName);
     
     public abstract void getJsonDecimal(Variable to, Variable jsonObject, Variable itemName);
@@ -35,6 +33,13 @@ public abstract class JsonParserBuilder {
      */
     public abstract void getJsonObject(Variable to, Variable parentModel, Variable jsonObject, Variable parentJsonObject, Variable itemName);
 
+    /**
+     * for eachItemJsonObject in parentJsonObject.getObjectArray(itemName)
+     *
+     * @param eachItemJsonObject
+     * @param parentJsonObject
+     * @param itemName
+     */
     public abstract void startJsonObjectArrayLoop(Variable eachItemJsonObject, Variable parentJsonObject, Variable itemName);
 
     /***
@@ -44,6 +49,21 @@ public abstract class JsonParserBuilder {
      * @param model
      */
     public abstract void endJsonObjectArrayLoop(Variable to, Variable model);
+
+    /**
+     * for eachItemJsonObject in parentJsonObject.getArray(itemName)
+     * @param eachItemJsonObject
+     * @param parentJsonObject
+     * @param itemName
+     */
+    public abstract void startArrayLoop(Variable eachItemJsonObject, Variable parentJsonObject, Variable itemName);
+
+    /**
+     * end for
+     * @param to
+     * @param model
+     */
+    public abstract void endJsonArrayLoop(Variable to, Variable model);
 
     public abstract void defineModel(Variable model);
 

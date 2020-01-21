@@ -21,7 +21,7 @@ public class JavaJsonParserBuilder extends JsonParserBuilder {
 
     @Override
     public void getJsonInteger(Variable to, Variable jsonObject, Variable itemName) {
-        method.addAssign(method.useVariable(to), method.invoke(jsonObject.getDescriptor() + ".getInteger", itemName));
+        method.addAssign(method.useVariable(to), method.invoke(jsonObject.getDescriptor() + ".getLong", itemName));
     }
 
     @Override
@@ -52,6 +52,16 @@ public class JavaJsonParserBuilder extends JsonParserBuilder {
     }
 
     @Override
+    public void startArrayLoop(Variable eachItemJsonObject, Variable parentJsonObject, Variable itemName) {
+        method.startFor(eachItemJsonObject, method.invoke(parentJsonObject.getDescriptor() + ".getArray", itemName));
+    }
+
+    @Override
+    public void endJsonArrayLoop(Variable to, Variable model) {
+        method.endFor();
+    }
+
+    @Override
     public void defineModel(Variable model) {
         method.addAssign(method.defineVariable(model), method.newInstance(model.getType()));
     }
@@ -60,11 +70,6 @@ public class JavaJsonParserBuilder extends JsonParserBuilder {
     public void defineRootJsonObject(Variable jsonObject, Variable responseVariable) {
         Variable value = VariableFactory.createConstantVariable(responseVariable.getDescriptor() + ".getJson()");
         method.addAssign(method.defineVariable(jsonObject), method.useVariable(value));
-    }
-
-    @Override
-    public void getJsonLong(Variable to, Variable jsonObject, Variable itemName) {
-        method.addAssign(method.useVariable(to), method.invoke(jsonObject.getDescriptor() + ".getLong", itemName));
     }
 
     @Override

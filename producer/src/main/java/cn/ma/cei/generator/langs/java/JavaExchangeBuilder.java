@@ -21,7 +21,6 @@ import cn.ma.cei.generator.langs.java.tools.JavaClass;
 import cn.ma.cei.model.types.xBoolean;
 import cn.ma.cei.model.types.xDecimal;
 import cn.ma.cei.model.types.xInt;
-import cn.ma.cei.model.types.xLong;
 import cn.ma.cei.model.types.xString;
 
 public class JavaExchangeBuilder extends ExchangeBuilder {
@@ -46,8 +45,7 @@ public class JavaExchangeBuilder extends ExchangeBuilder {
 
         VariableFactory.setupBuildinVariableType(xString.typeName, "String", VariableFactory.NO_REF);
         VariableFactory.setupBuildinVariableType(xBoolean.typeName, "Boolean", VariableFactory.NO_REF);
-        VariableFactory.setupBuildinVariableType(xInt.typeName, "Integer", VariableFactory.NO_REF);
-        VariableFactory.setupBuildinVariableType(xLong.typeName, "Long", VariableFactory.NO_REF);
+        VariableFactory.setupBuildinVariableType(xInt.typeName, "Long", VariableFactory.NO_REF);
         VariableFactory.setupBuildinVariableType(xDecimal.typeName, "BigDecimal", "java.math.BigDecimal");
         VariableFactory.setupBuildinVariableType(TheArray.typeName, "List", "java.util.List");
         VariableFactory.setupBuildinVariableType(TheLinkedList.typeName, "LinkedList", "java.util.LinkedList");

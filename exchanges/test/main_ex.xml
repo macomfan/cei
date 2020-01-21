@@ -3,7 +3,7 @@
 
     <model name="ExchangeInfo">
         <string name="ExchangeName"/>
-		<long name="Timestamp"/>
+		<int name="Timestamp"/>
         <object_array name="Symbols" refer="Symbols"/>
     </model>
 
@@ -17,7 +17,7 @@
     <model name="LastTrade">
         <decimal name="Price"/>
         <decimal name="Volume"/>
-		<long name="Timestamp"/>
+		<int name="Timestamp"/>
 		<string name="Symbol"/>
     </model>
 

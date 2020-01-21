@@ -23,7 +23,6 @@ public class xJsonBuilder extends xBuilder {
         xJsonAuto.class,
         xJsonString.class,
         xJsonInteger.class,
-        xJsonLong.class,
         xJsonBoolean.class,
         xJsonDecimal.class})
     public List<xJsonType> itemList;
