@@ -23,15 +23,20 @@ public abstract class JsonParserBuilder {
 
     /***
      * jsonObject = parentJsonObject.getObject( itemName )
-     * to = parentModel
-     * 
-     * @param to
-     * @param parentModel
+     *
      * @param jsonObject
      * @param parentJsonObject
      * @param itemName 
      */
-    public abstract void getJsonObject(Variable to, Variable parentModel, Variable jsonObject, Variable parentJsonObject, Variable itemName);
+    public abstract void startJsonObject(Variable jsonObject, Variable parentJsonObject, Variable itemName);
+
+    /***
+     * to = parentModel
+     *
+     * @param to
+     * @param model
+     */
+    public abstract void endJsonObject(Variable to, Variable model);
 
     /**
      * for eachItemJsonObject in parentJsonObject.getObjectArray(itemName)
@@ -40,7 +45,7 @@ public abstract class JsonParserBuilder {
      * @param parentJsonObject
      * @param itemName
      */
-    public abstract void startJsonObjectArrayLoop(Variable eachItemJsonObject, Variable parentJsonObject, Variable itemName);
+    public abstract void startJsonObjectArray(Variable eachItemJsonObject, Variable parentJsonObject, Variable itemName);
 
     /***
      * parentModel.to.add(model)
@@ -48,7 +53,7 @@ public abstract class JsonParserBuilder {
      * @param to
      * @param model
      */
-    public abstract void endJsonObjectArrayLoop(Variable to, Variable model);
+    public abstract void endJsonObjectArray(Variable to, Variable model);
 
     /**
      * for eachItemJsonObject in parentJsonObject.getArray(itemName)
@@ -56,14 +61,14 @@ public abstract class JsonParserBuilder {
      * @param parentJsonObject
      * @param itemName
      */
-    public abstract void startArrayLoop(Variable eachItemJsonObject, Variable parentJsonObject, Variable itemName);
+    public abstract void startArray(Variable eachItemJsonObject, Variable parentJsonObject, Variable itemName);
 
     /**
      * end for
      * @param to
      * @param model
      */
-    public abstract void endJsonArrayLoop(Variable to, Variable model);
+    public abstract void endJsonArray(Variable to, Variable model);
 
     public abstract void defineModel(Variable model);
 

@@ -50,31 +50,36 @@ public class GoJsonParserBuilder extends JsonParserBuilder {
     }
 
     @Override
-    public void getJsonObject(Variable to, Variable parentModel, Variable jsonObject, Variable parentJsonObject, Variable itemName) {
+    public void startJsonObject(Variable jsonObject, Variable parentJsonObject, Variable itemName) {
         method.addAssign(method.useVariable(new GoVar(jsonObject)), method.invoke(parentJsonObject.getDescriptor() + ".GetObject", new GoVar(itemName)));
+
+    }
+
+    @Override
+    public void endJsonObject(Variable to, Variable model) {
         if (to != null) {
-            method.addAssign(method.useVariable(new GoVar(to)), method.useVariable(new GoVar(parentModel)));
+            method.addAssign(method.useVariable(new GoVar(to)), method.useVariable(new GoVar(model)));
         }
     }
 
     @Override
-    public void startJsonObjectArrayLoop(Variable eachItemJsonObject, Variable parentJsonObject, Variable itemName) {
+    public void startJsonObjectArray(Variable eachItemJsonObject, Variable parentJsonObject, Variable itemName) {
         method.startFor(new GoVar(eachItemJsonObject), method.invoke(parentJsonObject.getDescriptor() + ".getObjectArray", new GoVar(itemName)));
     }
 
     @Override
-    public void endJsonObjectArrayLoop(Variable to, Variable model) {
+    public void endJsonObjectArray(Variable to, Variable model) {
         method.addAssign(method.useVariable(new GoVar(to)), method.invoke("append", new GoVar(to), new GoVar(model)));
         method.endFor();
     }
 
     @Override
-    public void startArrayLoop(Variable eachItemJsonObject, Variable parentJsonObject, Variable itemName) {
+    public void startArray(Variable eachItemJsonObject, Variable parentJsonObject, Variable itemName) {
         method.startFor(new GoVar(eachItemJsonObject), method.invoke(parentJsonObject.getDescriptor() + ".getObjectArray", new GoVar(itemName)));
     }
 
     @Override
-    public void endJsonArrayLoop(Variable to, Variable model) {
+    public void endJsonArray(Variable to, Variable model) {
         method.endFor();
     }
 

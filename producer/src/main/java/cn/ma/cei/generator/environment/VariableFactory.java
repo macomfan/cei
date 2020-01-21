@@ -1,5 +1,6 @@
 package cn.ma.cei.generator.environment;
 
+import cn.ma.cei.exception.BuildTracer;
 import cn.ma.cei.exception.CEIException;
 import cn.ma.cei.model.types.xString;
 import cn.ma.cei.utils.MapWithValue2;
@@ -141,6 +142,7 @@ public class VariableFactory {
         }
         // The type is not exist. Check if it can be created.
         if (!modelInfo.get().modelExist(modelName)) {
+            System.err.println(BuildTracer.getTraceString());
             throw new CEIException("Cannot create the model, it has not been registered.");
         }
 

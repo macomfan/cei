@@ -106,7 +106,7 @@
             <request method="get" target="/v1/common/symbols"/>
             <response model="Symbols">
                 <json_parser>
-					<json_checker check_path=".status" not_equal="ok" error_path=".err-code|.err-msg"/>
+					<!--json_checker check_path=".status" not_equal="ok" error_path=".err-code|.err-msg"/-->
                     <json_auto copy="status"/>
                     <json_auto copy="data" model="SymbolsData">
                         <json_auto from="base-currency" to="{baseCurrency}"/>
