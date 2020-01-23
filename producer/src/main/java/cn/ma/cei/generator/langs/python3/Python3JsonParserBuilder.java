@@ -62,7 +62,7 @@ public class Python3JsonParserBuilder extends JsonParserBuilder {
 
     @Override
     public void startJsonObjectArray(Variable eachItemJsonObject, Variable parentJsonObject, Variable itemName) {
-        method.startFor(eachItemJsonObject, parentJsonObject.getDescriptor() + ".get_items(" + itemName.getDescriptor() + "):");
+        method.startFor(eachItemJsonObject, parentJsonObject.getDescriptor() + ".get_object_array(" + itemName.getDescriptor() + "):");
     }
 
     @Override
@@ -71,16 +71,6 @@ public class Python3JsonParserBuilder extends JsonParserBuilder {
         method.addAssign(method.useVariable(to), method.newInstance(TheArray.getType()));
         method.endIf();
         method.addInvoke(to.getDescriptor() + ".append", model);
-        method.endFor();
-    }
-
-    @Override
-    public void startArray(Variable eachItemJsonObject, Variable parentJsonObject, Variable itemName) {
-        method.startFor(eachItemJsonObject, parentJsonObject.getDescriptor() + ".get_items(" + itemName.getDescriptor() + "):");
-    }
-
-    @Override
-    public void endJsonArray(Variable to, Variable model) {
         method.endFor();
     }
 

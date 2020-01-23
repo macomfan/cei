@@ -95,8 +95,6 @@ public class BuildJsonParser {
             processJsonObject(to, context);
         } else if (context.jsonItem instanceof xJsonObjectArray) {
             processJsonObjectArray(to, context);
-        } else if (context.jsonItem instanceof xJsonArray) {
-            processJsonArray(to, context);
         } else {
             if (context.parentModel == null || context.parentJsonObject == null) {
                 throw new CEIException("[BuildJsonParser] error for normal json item");
@@ -157,15 +155,6 @@ public class BuildJsonParser {
     private static void processJsonStringArray(Variable to, JsonItemContext context) {
         Variable from = VariableFactory.createHardcodeStringVariable(context.jsonItem.from);
         context.jsonParserBuilder.getJsonStringArray(to, context.parentJsonObject, from);
-    }
-
-    private static void processJsonArray(Variable to, JsonItemContext context) {
-        xJsonWithModel jsonWithModel = (xJsonWithModel) context.jsonItem;
-        Variable eachItemJsonObject = context.method.createLocalVariable(JsonWrapper.getType(), "item");
-        Variable from = VariableFactory.createHardcodeStringVariable(jsonWithModel.from);
-        context.jsonParserBuilder.startArray(eachItemJsonObject, context.parentJsonObject, from);
-        Variable newModel = defineModel(context);
-        context.jsonParserBuilder.endJsonArray(to, newModel);
     }
 
     private static void processJsonObjectArray(Variable to, JsonItemContext context) {

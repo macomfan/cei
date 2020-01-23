@@ -31,7 +31,7 @@ public class GoJsonParserBuilder extends JsonParserBuilder {
 
     @Override
     public void getJsonInteger(Variable to, Variable jsonObject, Variable itemName) {
-        method.addAssign(method.useVariable(new GoVar(to)), method.invoke(jsonObject.getDescriptor() + ".GetLong", new GoVar(itemName)));
+        method.addAssign(method.useVariable(new GoVar(to)), method.invoke(jsonObject.getDescriptor() + ".GetInt64", new GoVar(itemName)));
     }
 
     @Override
@@ -70,16 +70,6 @@ public class GoJsonParserBuilder extends JsonParserBuilder {
     @Override
     public void endJsonObjectArray(Variable to, Variable model) {
         method.addAssign(method.useVariable(new GoVar(to)), method.invoke("append", new GoVar(to), new GoVar(model)));
-        method.endFor();
-    }
-
-    @Override
-    public void startArray(Variable eachItemJsonObject, Variable parentJsonObject, Variable itemName) {
-        method.startFor(new GoVar(eachItemJsonObject), method.invoke(parentJsonObject.getDescriptor() + ".getObjectArray", new GoVar(itemName)));
-    }
-
-    @Override
-    public void endJsonArray(Variable to, Variable model) {
         method.endFor();
     }
 

@@ -8,10 +8,7 @@ public abstract class RestfulInterfaceBuilder extends MethodBuilder {
     
     public abstract JsonBuilderBuilder getJsonBuilderBuilder();
 
-//    public abstract void startInterface(String restIfName);
-//
-//    public abstract void defineMethod(VariableType returnType, String methodDescriptor, VariableList params, MethodImplementation impl);
-    public abstract void setRequestTarget(Variable request, Variable target);
+    public abstract void setRequestTarget(Variable request, Variable... targets);
 
     public abstract void addHeader(Variable request, Variable tag, Variable value);
 
@@ -31,5 +28,4 @@ public abstract class RestfulInterfaceBuilder extends MethodBuilder {
 
     public abstract void returnResult(Variable returnVariable);
 
-//    public abstract void endInterface();
 }

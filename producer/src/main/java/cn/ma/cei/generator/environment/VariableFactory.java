@@ -252,7 +252,7 @@ public class VariableFactory {
     }
 
     public static String isReference(String value) {
-        String pattern = "\\{.*\\}";
+        String pattern = "\\{.*}";
         Pattern r = Pattern.compile(pattern);
         Matcher m = r.matcher(value);
         if (m.find()) {

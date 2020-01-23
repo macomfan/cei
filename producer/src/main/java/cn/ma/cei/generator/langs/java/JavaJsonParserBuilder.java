@@ -56,16 +56,6 @@ public class JavaJsonParserBuilder extends JsonParserBuilder {
     }
 
     @Override
-    public void startArray(Variable eachItemJsonObject, Variable parentJsonObject, Variable itemName) {
-        method.startFor(eachItemJsonObject, method.invoke(parentJsonObject.getDescriptor() + ".getArray", itemName));
-    }
-
-    @Override
-    public void endJsonArray(Variable to, Variable model) {
-        method.endFor();
-    }
-
-    @Override
     public void defineModel(Variable model) {
         method.addAssign(method.defineVariable(model), method.newInstance(model.getType()));
     }

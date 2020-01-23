@@ -11,25 +11,22 @@ import cn.ma.cei.generator.builder.RestfulInterfaceBuilder;
 import cn.ma.cei.generator.environment.Variable;
 import cn.ma.cei.generator.environment.VariableFactory;
 import cn.ma.cei.generator.environment.VariableType;
-import cn.ma.cei.generator.langs.golang.tools.GoInterfaceVar;
-import cn.ma.cei.generator.langs.golang.tools.GoMethod;
-import cn.ma.cei.generator.langs.golang.tools.GoPtrType;
-import cn.ma.cei.generator.langs.golang.tools.GoStruct;
-import cn.ma.cei.generator.langs.golang.tools.GoVar;
+import cn.ma.cei.generator.langs.golang.tools.*;
 import cn.ma.cei.model.types.xString;
 import cn.ma.cei.utils.WordSplitter;
+
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
 /**
- *
  * @author U0151316
  */
 public class GoRestfulInterfaceBuilder extends RestfulInterfaceBuilder {
-    
+
     private final GoStruct clientStruct;
     private GoMethod method;
-    
+
     public GoRestfulInterfaceBuilder(GoStruct clientStruct) {
         this.clientStruct = clientStruct;
     }
@@ -45,8 +42,14 @@ public class GoRestfulInterfaceBuilder extends RestfulInterfaceBuilder {
     }
 
     @Override
-    public void setRequestTarget(Variable request, Variable target) {
-        method.addInvoke(request.getDescriptor() + ".SetTarget", new GoVar(target));
+    public void setRequestTarget(Variable request, Variable... targets) {
+        List<GoVar> paramList = new ArrayList<>();
+        for (Variable variable : targets) {
+            paramList.add(new GoVar(variable));
+        }
+        GoVar[] params = new GoVar[paramList.size()];
+        paramList.toArray(params);
+        method.addInvoke(request.getDescriptor() + ".SetTarget", params);
     }
 
     @Override
@@ -110,7 +113,7 @@ public class GoRestfulInterfaceBuilder extends RestfulInterfaceBuilder {
     public void startMethod(VariableType returnType, String methodDescriptor, List<Variable> params) {
         method = new GoMethod(clientStruct);
         List<GoVar> tmp = new LinkedList<>();
-        params.forEach(item ->{
+        params.forEach(item -> {
             tmp.add(new GoInterfaceVar(item));
         });
         method.startMethod(new GoPtrType(returnType), methodDescriptor, tmp);
@@ -121,5 +124,5 @@ public class GoRestfulInterfaceBuilder extends RestfulInterfaceBuilder {
         method.endMethod();
         clientStruct.addMethod(method);
     }
-    
+
 }

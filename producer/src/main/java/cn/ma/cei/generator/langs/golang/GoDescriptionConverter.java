@@ -9,6 +9,7 @@ import cn.ma.cei.exception.CEIException;
 import cn.ma.cei.generator.naming.IDescriptionConverter;
 import cn.ma.cei.utils.Checker;
 import cn.ma.cei.utils.WordSplitter;
+
 import java.util.List;
 
 /**
@@ -70,6 +71,12 @@ public class GoDescriptionConverter implements IDescriptionConverter {
 
     @Override
     public String getGenericTypeDescriptor(String baseName, List<String> subNames) {
+        if (subNames.size() > 1) {
+            throw new CEIException("Type error in Go");
+        }
+        if (subNames.size() == 1) {
+            return baseName + subNames.get(0);
+        }
         return baseName;
     }
 }

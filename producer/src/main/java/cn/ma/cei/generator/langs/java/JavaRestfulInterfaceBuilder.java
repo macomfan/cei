@@ -28,8 +28,8 @@ public class JavaRestfulInterfaceBuilder extends RestfulInterfaceBuilder {
     }
 
     @Override
-    public void setRequestTarget(Variable request, Variable target) {
-        method.addInvoke(request.getDescriptor() + ".setTarget", target);
+    public void setRequestTarget(Variable request, Variable... targets ) {
+        method.addInvoke(request.getDescriptor() + ".setTarget", targets);
     }
 
     @Override

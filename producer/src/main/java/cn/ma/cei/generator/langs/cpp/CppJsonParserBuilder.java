@@ -60,16 +60,6 @@ public class CppJsonParserBuilder extends JsonParserBuilder {
     }
 
     @Override
-    public void startArray(Variable eachItemJsonObject, Variable parentJsonObject, Variable itemName) {
-
-    }
-
-    @Override
-    public void endJsonArray(Variable to, Variable model) {
-
-    }
-
-    @Override
     public void getJsonBoolean(Variable to, Variable jsonObject, Variable itemName) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }

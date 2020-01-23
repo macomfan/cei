@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <sdk exchange="huobipro" document="https://huobiapi.github.io/docs/spot/v1/en/">
 
-	<model name="Timestamp">
-		<string name="status"/>
-		<int name="data"/>
-	</model>
+    <model name="Timestamp">
+        <string name="status"/>
+        <int name="data"/>
+    </model>
 
     <model name="Symbols">
         <string name="status"/>
@@ -30,83 +30,140 @@
         <string name="status"/>
         <string_array name="data"/>
     </model>
-	
-	<model name="Candlestick">
-		<string name="status"/>
-		<object_array name="data" refer="CandlestickData"/>
-	</model>
-	
-	<model name="CandlestickData">
-		<int name="id"/>
-		<decimal name="amount"/>
-		<int name="count"/>
-		<decimal name="open"/>
-		<decimal name="close"/>
-		<decimal name="low"/>
-		<decimal name="high"/>
-		<decimal name="vol"/>
-	</model>
+
+    <model name="Candlestick">
+        <string name="status"/>
+        <object_array name="data" refer="CandlestickData"/>
+    </model>
+
+    <model name="CandlestickData">
+        <int name="id"/>
+        <decimal name="amount"/>
+        <int name="count"/>
+        <decimal name="open"/>
+        <decimal name="close"/>
+        <decimal name="low"/>
+        <decimal name="high"/>
+        <decimal name="vol"/>
+    </model>
 
     <model name="LastTrade">
         <string name="status"/>
-        <object name="tick" refer="LastTradeTick"/>
-    </model>
-	
-	<model name="OrderID">
-		<string name="status"/>
-		<int name="data"/>
-	</model>
-
-    <model name="LastTradeTick">
-        <string name="ts"/>
+        <string name="ch"/>
+        <int name="ts"/>
+        <int name="tsInTick"/>
+        <int name="idInTick"/>
         <object_array name="data" refer="LastTradeData"/>
     </model>
 
-    <model name="LastTradeData">
-        <string name="direction"/>
-    </model>
-
-    <model name="LastTradeEx">
+    <model name="OrderID">
         <string name="status"/>
-        <object name="data" refer="LastTradeData"/>
+        <int name="data"/>
     </model>
 
-	<signature name="restful">
+    <model name="LastTradeData">
+        <int name="id"/>
+        <int name="tradeID"/>
+        <decimal name="price"/>
+        <decimal name="amount"/>
+        <string name="direction"/>
+        <int name="ts"/>
+    </model>
+
+    <model name="Account">
+        <string name="status"/>
+        <object_array name="data" refer="AccountData"/>
+    </model>
+
+    <model name="AccountData">
+        <int name="id"/>
+        <string name="state"/>
+        <string name="type"/>
+        <string name="subtype"/>
+    </model>
+
+    <model name="Depth">
+        <string name="status"/>
+        <string name="ch"/>
+        <int name="ts"/>
+        <object_array name="bids" refer="DepthEntity"/>
+        <object_array name="asks" refer="DepthEntity"/>
+    </model>
+
+    <model name="DepthEntity">
+        <decimal name="price"/>
+        <decimal name="amount"/>
+    </model>
+
+    <model name="BestQuote">
+        <string name="status"/>
+        <string name="ch"/>
+        <int name="ts"/>
+        <decimal name="bestBidPrice"/>
+        <decimal name="bestBidAmount"/>
+        <decimal name="bestAskPrice"/>
+        <decimal name="bestAskAmount"/>
+    </model>
+
+    <signature name="restful">
         <get_now output="{timestamp}" format=""/>
         <add_query_string key="AccessKeyId" value="{apiKey}"/>
         <add_query_string key="SignatureMethod" value="HmacSHA256"/>
         <add_query_string key="SignatureVersion" value="2"/>
         <add_query_string key="Timestamp" value="{timestamp}"/>
-		<combine_query_string output="{queryString}" sort="asc" separator="&amp;"/>
+        <combine_query_string output="{queryString}" sort="asc" separator="&amp;"/>
         <get_request_info output="{method}" info="method" convert="uppercase"/>
-		<get_request_info output="{host}" info="host"/>
-		<get_request_info output="{target}" info="target"/>
+        <get_request_info output="{host}" info="host"/>
+        <get_request_info output="{target}" info="target"/>
         <add_string_array output="{buffer}" input="{method}"/>
         <add_string_array output="{buffer}" input="{host}"/>
         <add_string_array output="{buffer}" input="{target}"/>
-		<add_string_array output="{buffer}" input="{queryString}"/>
+        <add_string_array output="{buffer}" input="{queryString}"/>
         <combine_string_array output="{newbuffer}" input="{buffer}" separator="\n"/>
-		<hmacsha256 output="{hmacsha256}" input="{newbuffer}" key="{secretKey}"/>
-		<base64 output="{result}" input="{hmacsha256}"/>
-		<add_query_string key="Signature" value="{result}"/>
+        <hmacsha256 output="{hmacsha256}" input="{newbuffer}" key="{secretKey}"/>
+        <base64 output="{result}" input="{hmacsha256}"/>
+        <add_query_string key="Signature" value="{result}"/>
     </signature>
 
+    <restful client_name="binanceClient" url="https://api.binance.com">
+        <interface name="getBestQuote">
+            <inputs>
+                <string name="symbol"/>
+            </inputs>
+            <request method="get" target="/api/v3/depth">
+                <query_strings>
+                    <query name="symbol" value="{symbol}"/>
+                    <query name="limit" value="5"/>
+                </query_strings>
+            </request>
+            <response model="BestQuote">
+                <json_parser>
+                    <json_auto from="lastUpdateId" to="{ts}"/>
+                    <json_auto from="\bids\[0]\[0]" to="{bestBidPrice}"/>
+                    <json_auto from="\bids\[0]\[1]" to="{bestBidAmount}"/>
+                    <json_auto from="\asks\[1]\[0]" to="{bestAskPrice}"/>
+                    <json_auto from="\asks\[1]\[1]" to="{bestAskAmount}"/>
+                </json_parser>
+            </response>
+        </interface>
+    </restful>
+
     <restful client_name="MarketClient" url="https://api.huobi.so">
-		<interface name="getTimestamp">
-			<request method="get" target="/v1/common/timestamp"/>
-			<response model="Timestamp">
-				<json_parser>
-					<json_auto copy="status"/>
-					<json_auto copy="data"/>
-				</json_parser>
-			</response>
-		</interface>
-	
+        <interface name="getTimestamp">
+            <request method="get" target="/v1/common/timestamp"/>
+            <response model="Timestamp">
+                <json_parser>
+                    <json_auto copy="status"/>
+                    <json_auto copy="data"/>
+                </json_parser>
+            </response>
+        </interface>
+
         <interface name="getSymbol">
             <request method="get" target="/v1/common/symbols"/>
             <response model="Symbols">
                 <json_parser>
-					<!--json_checker check_path=".status" not_equal="ok" error_path=".err-code|.err-msg"/-->
+                    <!--json_checker check_path=".status" not_equal="ok" error_path=".err-code|.err-msg"/-->
                     <json_auto copy="status"/>
                     <json_auto copy="data" model="SymbolsData">
                         <json_auto from="base-currency" to="{baseCurrency}"/>
@@ -135,51 +192,10 @@
                 </json_parser>
             </response>
         </interface>
-		
-		<interface name="getCandlestick">
-			<inputs>
-				<string name="symbol"/>
-				<string name="period"/>
-				<int name="size"/>
-			</inputs>
-			<request method="get" target="/market/history/kline">
-                <query_strings>
-                    <query name="symbol" value="{symbol}"/>
-                    <query name="period" value="{period}"/>
-                    <query name="size" value="{size}"/>
-                </query_strings>
-			</request>
-		    <response model="Candlestick">
-				<json_parser>
-					<json_auto copy="status"/>
-					<json_auto copy="data" model="CandlestickData">
-						<json_auto copy="id"/>
-						<json_auto copy="amount"/>
-						<json_auto copy="count"/>
-						<json_auto copy="open"/>
-						<json_auto copy="close"/>
-						<json_auto copy="low"/>
-						<json_auto copy="high"/>
-						<json_auto copy="vol"/>
-					</json_auto>
-				</json_parser>
-			</response>
-		</interface>
-
-        <!--interface name="getCurrencyInfo">
-            <inputs>
-                <string name="currency" mandatory="false"/>
-                <boolean name="authorizedUser" mandatory="false"/>
-            </inputs>
-            <request method="get" target="/v2/reference/currencies">
-                <query_strings/>
-            </request>
-            <response type="raw"/>
-        </interface>
 
         <interface name="getCandlestick">
             <inputs>
-                <string name="symbol" mandatory="true"/>
+                <string name="symbol"/>
                 <string name="period"/>
                 <int name="size"/>
             </inputs>
@@ -190,62 +206,111 @@
                     <query name="size" value="{size}"/>
                 </query_strings>
             </request>
-            <response type="model">
-                <json_parser model="Symbols">
-                    <json_string from="status" to="{status}"/>
-                    <json_object_array from="data" to="{data}" model="LastTradeTick">
-                        <json_string from="base-currency" to="{base_currency}"/>
-                    </json_object_array>
+            <response model="Candlestick">
+                <json_parser>
+                    <json_auto copy="status"/>
+                    <json_auto copy="data" model="CandlestickData">
+                        <json_auto copy="id"/>
+                        <json_auto copy="amount"/>
+                        <json_auto copy="count"/>
+                        <json_auto copy="open"/>
+                        <json_auto copy="close"/>
+                        <json_auto copy="low"/>
+                        <json_auto copy="high"/>
+                        <json_auto copy="vol"/>
+                    </json_auto>
                 </json_parser>
             </response>
-        </interface-->
+        </interface>
 
         <interface name="getLastTrade">
             <inputs>
                 <string name="symbol" mandatory="true"/>
             </inputs>
             <request method="get" target="/market/trade">
-				<headers>
-					<header tag="accept-encoding" value="gzip"/>
-				</headers>
                 <query_strings>
                     <query name="symbol" value="{symbol}"/>
                 </query_strings>
             </request>
             <response model="LastTrade">
                 <json_parser>
-                    <json_string from="status" to="{status}"/>
-                    <json_object from="tick" to="{tick}" model="LastTradeTick">
-                        <json_string from="ts" to="{ts}"/>
-                        <json_object_array from="data" to="{data}" model="LastTradeData">
-                            <json_string from="direction" to="{direction}"/>
-                        </json_object_array>
+                    <json_auto copy="status"/>
+                    <json_auto copy="ts"/>
+                    <json_auto copy="ch"/>
+                    <json_object from="tick">
+                        <json_auto from="ts" to="{tsInTick}"/>
+                        <json_auto from="id" to="{idInTick}"/>
+                        <json_auto copy="data" model="LastTradeData">
+                            <json_auto copy="amount"/>
+                            <json_auto copy="price"/>
+                            <json_auto copy="ts"/>
+                            <json_auto copy="id"/>
+                            <json_auto copy="direction"/>
+                            <json_auto from="trade-id" to="{tradeID}"/>
+                        </json_auto>
                     </json_object>
                 </json_parser>
             </response>
         </interface>
 
-        <!--interface name="getLastTradeEx">
+        <interface name="getMarketDepth">
             <inputs>
-                <string name="symbol" mandatory="true"/>
+                <string name="symbol"/>
+                <int name="depth"/>
+                <string name="type"/>
             </inputs>
-            <request method="get" target="/market/trade">
+            <request method="get" target="/market/depth">
                 <query_strings>
                     <query name="symbol" value="{symbol}"/>
+                    <query name="depth" value="{depth}"/>
+                    <query name="type" value="{type}"/>
                 </query_strings>
             </request>
-            <response type="model">
-                <json_parser model="LastTradeEx">
-                    <json_string from="status" to="{status}"/>
+            <response model="Depth">
+                <json_parser>
+                    <json_auto copy="status"/>
+                    <json_auto copy="ts"/>
+                    <json_auto copy="ch"/>
                     <json_object from="tick">
-                        <json_object_array from="data" to="{data}" model="LastTradeData">
-                            <json_string from="direction" to="{direction}"/>
-                        </json_object_array>
+                        <json_auto copy="bids" model="DepthEntity">
+                            <json_auto from="\[0]" to="{price}"/>
+                            <json_auto from="\[1]" to="{amount}"/>
+                        </json_auto>
+                        <json_auto copy="asks" model="DepthEntity">
+                            <json_auto from="\[0]" to="{price}"/>
+                            <json_auto from="\[1]" to="{amount}"/>
+                        </json_auto>
                     </json_object>
                 </json_parser>
             </response>
-        </interface-->
+        </interface>
 
+        <interface name="getBestQuote">
+            <inputs>
+                <string name="symbol"/>
+            </inputs>
+            <request method="get" target="/market/depth">
+                <query_strings>
+                    <query name="symbol" value="{symbol}"/>
+                    <query name="depth" value="5"/>
+                    <query name="type" value="step0"/>
+                </query_strings>
+            </request>
+            <response model="BestQuote">
+                <json_parser>
+                    <json_auto copy="status"/>
+                    <json_auto copy="ts"/>
+                    <json_auto copy="ch"/>
+                    <json_auto from="\tick\bids\[0]\[0]" to="{bestBidPrice}"/>
+                    <json_auto from="\tick\bids\[0]\[1]" to="{bestBidAmount}"/>
+                    <json_auto from="\tick\asks\[1]\[0]" to="{bestAskPrice}"/>
+                    <json_auto from="\tick\asks\[1]\[1]" to="{bestAskAmount}"/>
+                </json_parser>
+            </response>
+        </interface>
+    </restful>
+
+    <restful client_name="TradingClient" url="https://api.huobi.so">
         <interface name="placeOrder">
             <inputs>
                 <string name="accountId" mandatory="true"/>
@@ -258,19 +323,50 @@
                 <post_body>
                     <json_builder>
                         <json_auto from="{accountId}" to="account-id"/>
-						<json_auto copy="symbol"/>
-						<json_auto copy="type"/>
-						<json_auto copy="amount"/>
-						<json_auto copy="price"/>
+                        <json_auto copy="symbol"/>
+                        <json_auto copy="type"/>
+                        <json_auto copy="amount"/>
+                        <json_auto copy="price"/>
                     </json_builder>
                 </post_body>
             </request>
             <response model="OrderID">
-				<json_parser>
-					<json_auto copy="status"/>
-					<json_auto copy="data"/>
-				</json_parser>
-			</response>
+                <json_parser>
+                    <json_auto copy="status"/>
+                    <json_auto copy="data"/>
+                </json_parser>
+            </response>
         </interface>
+
+        <interface name="cancelOrder">
+            <inputs>
+                <int name="orderId"/>
+            </inputs>
+            <request method="post" target="/v1/order/orders/{orderId}/submitcancel" signature="restful"/>
+            <response model="OrderID">
+                <json_parser>
+                    <json_auto copy="status"/>
+                    <json_auto copy="data"/>
+                </json_parser>
+            </response>
+        </interface>
+    </restful>
+
+    <restful client_name="AccountClient" url="https://api.huobi.so">
+        <interface name="getAccounts">
+            <request method="get" target="/v1/account/accounts" signature="restful"/>
+            <response model="Account">
+                <json_parser>
+                    <json_auto copy="status"/>
+                    <json_auto copy="data" model="AccountData">
+                        <json_auto copy="id"/>
+                        <json_auto copy="state"/>
+                        <json_auto copy="type"/>
+                        <json_auto copy="subtype"/>
+                    </json_auto>
+                </json_parser>
+            </response>
+        </interface>
+
     </restful>
 </sdk>

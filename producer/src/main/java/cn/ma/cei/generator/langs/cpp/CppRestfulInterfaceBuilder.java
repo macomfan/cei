@@ -71,7 +71,7 @@ public class CppRestfulInterfaceBuilder extends RestfulInterfaceBuilder {
     }
 
     @Override
-    public void setRequestTarget(Variable request, Variable target) {
+    public void setRequestTarget(Variable request, Variable... targets) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

@@ -16,6 +16,7 @@ public class RestfulResponse {
         String res = null;
         try {
             res = response.body().string();
+            System.out.println(res);
         } catch (Exception e) {
             throw new CEIException("Cannot get string");
         }

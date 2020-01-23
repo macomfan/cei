@@ -55,21 +55,6 @@ public abstract class JsonParserBuilder {
      */
     public abstract void endJsonObjectArray(Variable to, Variable model);
 
-    /**
-     * for eachItemJsonObject in parentJsonObject.getArray(itemName)
-     * @param eachItemJsonObject
-     * @param parentJsonObject
-     * @param itemName
-     */
-    public abstract void startArray(Variable eachItemJsonObject, Variable parentJsonObject, Variable itemName);
-
-    /**
-     * end for
-     * @param to
-     * @param model
-     */
-    public abstract void endJsonArray(Variable to, Variable model);
-
     public abstract void defineModel(Variable model);
 
     public abstract void defineRootJsonObject(Variable jsonObject, Variable responseVariable);

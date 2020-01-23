@@ -91,14 +91,14 @@
 			<response model="Depth">
 				<json_parser>
 					<json_auto copy="lastUpdateId"/>
-					<json_array copy="bids" model="DepthEntity">
-						<json_auto from="0" to="{price}"/>
-						<json_auto from="1" to="{volume}"/>
-					</json_array>
-					<json_array copy="asks" model="DepthEntity">
-						<json_auto from="0" to="{price}"/>
-						<json_auto from="1" to="{volume}"/>
-					</json_array>
+					<json_auto copy="bids" model="DepthEntity">
+						<json_auto from="\\[0]" to="{price}"/>
+						<json_auto from="\\[1]" to="{volume}"/>
+					</json_auto>
+					<json_auto copy="asks" model="DepthEntity">
+						<json_auto from="\\[0]" to="{price}"/>
+						<json_auto from="\\[1]" to="{volume}"/>
+					</json_auto>
 				</json_parser>
 			</response>
 		</interface>

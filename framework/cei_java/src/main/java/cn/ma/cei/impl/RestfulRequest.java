@@ -42,7 +42,7 @@ public class RestfulRequest {
         this.method = method;
     }
 
-    public void setTarget(String target) {
+    public void setTarget(String target, Object... params) {
         this.target = target;
     }
 
@@ -57,7 +57,7 @@ public class RestfulRequest {
         queryString_.add(new Pair<>(name, value));
     }
 
-    public void addQueryString(String name, Integer value) {
+    public void addQueryString(String name, Long value) {
         if (value == null) {
             return;
         }

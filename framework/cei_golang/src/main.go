@@ -1,35 +1,51 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
-	"impl/restful"
+	"impl/jsonwrapper"
+	//"impl/restful"
 	//"strconv"
-	//"exchanges"
 )
 
-func TTT(a, b interface{}) []string {
-	fmt.Println(a)
-	fmt.Println(b)
-	var strlist []string
-	strlist = append(strlist, "AAA")
-	return strlist
+func JsonToMapDemo() {
+	jsonStr := `
+	{
+			"name": "jqw",
+			"age": 18,
+			"data": [
+				{"aaa": "aaa"}
+			]
+	}
+	`
+	var mapResult map[string]interface{}
+	err := json.Unmarshal([]byte(jsonStr), &mapResult)
+	if err != nil {
+		fmt.Println("JsonToMapDemo err: ", err)
+	}
+	//fmt.Println(mapResult)
 }
 
 func main() {
-	for index, value := range TTT(3.141, "aaa") {
-		fmt.Printf("index: %d value: %s\n", index, value)
-	}
-	strlist := TTT(3.141, "aaa")
-	for index := 0; index < len(strlist); index += 1 {
-		fmt.Printf("value: %s\n", strlist[index])
-	}
 
-	options := new(restful.RestfulOptions)
-	request := restful.NewRestfulRequest(options)
-	request.AddQueryString("1", "A")
-	request.AddQueryString("2", "B")
-	request.AddQueryString("3", 12345.67890)
-	fmt.Println(request.BuildQueryString())
+	JsonToMapDemo()
+	jsonStr := `
+	{
+			"name": "jqw",
+			"age": 18,
+			"data": {"aaa": "aaa"},
+			"object_array": [{"d":1}, {"d":2}],
+			"array":["1","2"]
+			
+	}`
+	json := jsonwrapper.ParseFromString(jsonStr)
+	fmt.Println(json.GetInt64("age"))
+	data := json.GetObject("data")
+	fmt.Println(data.GetString("aaa"))
+	obj := json.GetObjectArray("object_array")
+	fmt.Println(obj[0].GetInt64("d"))
+	strarr := json.GetStringArray("array")
+	fmt.Println(strarr[1])
 	// testClient := cei.NewTestClient(nil)
 	// timestamp := testClient.GetTimestamp()
 	// fmt.Println(timestamp.Ts)

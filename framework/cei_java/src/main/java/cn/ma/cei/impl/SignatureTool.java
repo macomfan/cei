@@ -19,7 +19,6 @@ import java.util.Map;
 import javafx.util.Pair;
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
-import javax.tools.OptionChecker;
 
 public class SignatureTool {
 
@@ -98,8 +97,8 @@ public class SignatureTool {
     private static final ZoneId ZONE_GMT = ZoneId.of("Z");
 
     public static String getNow(String format) {
-        return "2019-12-31T02%3A23%3A25";
-        //return Instant.ofEpochSecond(Instant.now().getEpochSecond()).atZone(ZONE_GMT).format(DT_FORMAT);
+        //return "2019-12-31T02%3A23%3A25";
+        return Instant.ofEpochSecond(Instant.now().getEpochSecond()).atZone(ZONE_GMT).format(DT_FORMAT);
     }
 
     public static String combineQueryString(RestfulRequest request, Constant sort, String separator) {

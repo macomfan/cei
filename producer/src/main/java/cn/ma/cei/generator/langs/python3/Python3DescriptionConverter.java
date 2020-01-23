@@ -72,5 +72,4 @@ public class Python3DescriptionConverter implements IDescriptionConverter {
     public String getGenericTypeDescriptor(String baseName, List<String> subNames) {
         return baseName;
     }
-
 }

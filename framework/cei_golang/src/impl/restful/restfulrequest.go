@@ -29,7 +29,7 @@ func (inst *RestfulRequest) SetTarget(target string) {
 }
 
 func (inst *RestfulRequest) GetTarget() string {
-	return this.target
+	return inst.target
 }
 
 func (inst *RestfulRequest) SetMethod(method Method) {

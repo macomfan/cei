@@ -1,11 +1,10 @@
 package cn.ma.cei.impl;
 
 import cn.ma.cei.exception.CEIException;
-import javafx.util.Pair;
 import okhttp3.*;
 
 public class RestfulConnection {
-    private static final OkHttpClient client_ = new OkHttpClient();
+    private static final OkHttpClient client = new OkHttpClient();
 
     public RestfulConnection() {
 
@@ -18,15 +17,17 @@ public class RestfulConnection {
             builder.headers(buildHeaders(restfulRequest));
             builder.url(url);
             switch (restfulRequest.getMethod()) {
-                case GET: {
+                case GET:
                     builder.get();
                     break;
-                }
                 case POST:
                     builder.post(RequestBody.create(null, restfulRequest.getPostBody()));
                     break;
+                case DELETE:
+                    builder.delete(RequestBody.create(null, restfulRequest.getPostBody()));
+                    break;
             }
-            Response response = client_.newCall(builder.build()).execute();
+            Response response = client.newCall(builder.build()).execute();
             //System.out.println(response.body().string());
             return new RestfulResponse(response);
         } catch (Exception e) {
@@ -36,9 +37,9 @@ public class RestfulConnection {
 
     private static Headers buildHeaders(RestfulRequest restfulRequest) {
         Headers.Builder builder = new Headers.Builder();
-        for (Pair<String, String> item: restfulRequest.getHeaders()) {
+        restfulRequest.getHeaders().forEach((item) -> {
             builder.add(item.getKey(), item.getValue());
-        }
+        });
         return builder.build();
     }
 }

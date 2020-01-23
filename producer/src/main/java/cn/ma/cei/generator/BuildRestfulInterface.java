@@ -12,6 +12,7 @@ import cn.ma.cei.model.xInterface;
 import cn.ma.cei.model.xPostBody;
 import cn.ma.cei.model.xQuery;
 import cn.ma.cei.utils.Checker;
+import cn.ma.cei.utils.RegexHelper;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -54,7 +55,25 @@ public class BuildRestfulInterface {
 
             builder.defineRequest(request);
             builder.setUrl(request);
-            builder.setRequestTarget(request, VariableFactory.createHardcodeStringVariable(restIf.request.target));
+
+            List<String> linkedParam = RegexHelper.findReference(restIf.request.target);
+            if (linkedParam.isEmpty()) {
+                builder.setRequestTarget(request, VariableFactory.createHardcodeStringVariable(restIf.request.target));
+            } else {
+                List<Variable> variables = new LinkedList<>();
+                variables.add(VariableFactory.createHardcodeStringVariable(restIf.request.target));
+                linkedParam.forEach(item -> {
+                    Variable param = builder.queryVariable(item);
+                    if (param == null) {
+                        throw new CEIException("Cannot find variable in target");
+                    }
+                    variables.add(param);
+                });
+                Variable[] params = new Variable[variables.size()];
+                variables.toArray(params);
+                builder.setRequestTarget(request, params);
+            }
+
 
             Variable requestMethod = VariableFactory.createConstantVariable(Constant.requestMethod().tryGet(restIf.request.method));
 

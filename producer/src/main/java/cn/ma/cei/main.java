@@ -10,6 +10,7 @@ import cn.ma.cei.generator.langs.python3.Python3Framework;
 import cn.ma.cei.model.xSDK;
 import cn.ma.cei.service.ProcessContext;
 import cn.ma.cei.service.processors.ModelUpdateProcessor;
+import cn.ma.cei.utils.RegexHelper;
 import cn.ma.cei.xml.JAXBWrapper;
 import cn.ma.cei.xml.Convert;
 import cn.ma.cei.xml.JsonToXml;
@@ -37,12 +38,8 @@ public class main {
 
 
     public static void main(String[] args) throws NoSuchFieldException, JAXBException {
-        models ll = new models();
-        ll.values.add("111");
-        ll.values.add("222");
-        testcls t = new testcls();
-        t.m = ll;
-        //JSONObject js = (JSONObject)JSON.toJSON(t);
+
+        List res = RegexHelper.findReference("https://api.huobi.pro/v1/order/orders/{order-id}/submitcancel/{aaa}");
 
         testcls newt = JSON.parseObject("{}", testcls.class);
 
@@ -66,12 +63,12 @@ public class main {
             from = index + "\r\n".length();
         }
 
-        String pattern = "\\{.*\\}";
-        Pattern r = Pattern.compile(pattern);
-        Matcher m = r.matcher("{aaa}");
-        if (m.find()) {
-            System.out.println("find");
-        }
+//        String pattern = "\\{.*\\}";
+//        Pattern r = Pattern.compile(pattern);
+//        Matcher m = r.matcher("{aaa}");
+//        if (m.find()) {
+//            System.out.println("find");
+//        }
 
 //        Code code = new Code();
 //        code.appendln("import cn.macomfan.ccei.sdk.impl.RestfulConnection;");
@@ -97,8 +94,8 @@ public class main {
 //        BuildSDK.build(finalSDKs, Environment.Language.python3, "C:\\dev\\cei\\output");
 //        try {
             BuildSDK.build(finalSDKs, Environment.Language.java, "C:\\dev\\cei\\output");
-//            BuildSDK.build(finalSDKs, Environment.Language.golang, "C:\\dev\\cei\\output");
-//            BuildSDK.build(finalSDKs, Environment.Language.python3, "C:\\dev\\cei\\output");
+            BuildSDK.build(finalSDKs, Environment.Language.golang, "C:\\dev\\cei\\output");
+            BuildSDK.build(finalSDKs, Environment.Language.python3, "C:\\dev\\cei\\output");
 //        } catch (Exception e) {
 //            System.err.println(BuildTracer.getTraceString());
 //        }

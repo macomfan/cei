@@ -3,58 +3,19 @@ from impl.restfulconnection import RestfulConnection
 from impl.signaturetool import SignatureTool
 from exchanges.cei import *
 
-import requests
-import asyncio
-
-def place_order(account_id, price):
-    print(account_id + price)
-
-
-async def call(name):
-    print("call ", name)
-    await asyncio.sleep(2)
-    print("complate ", name)
-
-
-async def my_task(name):
-    print("start ", name)
-    await asyncio.sleep(2)
-    return name + " done"
-
-
-async def main():
-    # await my_task("t1")
-    # await my_task("t2")
-    # await my_task("t3")
-    await asyncio.gather(
-        asyncio.create_task(my_task("t1")),
-        asyncio.create_task(my_task("t2")),
-        asyncio.create_task(my_task("t3"))
-    )
+from exchanges.huobipro import *
 
 if __name__ == '__main__':
 
-    sites = ["Baidu", "Google", "Runoob", "Taobao"]
-    for site in sites:
-        a = 20
-        if site == "Runoob":
-            print("菜鸟教程!")
-            break
-        print("循环数据 " + site)
-    else:
-        print("没有循环数据!")
-    print("完成循环!")
-    print(a)
-    for site in sites:
-        a = 10
-        if site == "Runoob":
-            print("菜鸟教程!")
-            break
-        print("循环数据 " + site)
-    else:
-        print("没有循环数据!")
-    print("完成循环!")
-    print(a)
+    option = RestfulOptions()
+    marketClient = MarketClient()
+    data = marketClient.get_candlestick("btcusdt", "1min", 5)
+    print(data)
+
+    data = marketClient.get_last_trade("btcusdt")
+    print(data)
+
+
 
     # asyncio.run(main())
     # place_order(None, None)
