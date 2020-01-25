@@ -6,6 +6,7 @@ import (
 	"impl/jsonwrapper"
 	//"impl/restful"
 	//"strconv"
+	"exchanges/testws"
 )
 
 func JsonToMapDemo() {
@@ -27,6 +28,10 @@ func JsonToMapDemo() {
 }
 
 func main() {
+
+	testws := testws.NewTestWS()
+	testws.Start()
+	testws.Send()
 
 	JsonToMapDemo()
 	jsonStr := `

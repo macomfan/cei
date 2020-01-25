@@ -1,15 +1,22 @@
 class WebSocketEvent:
 
     def __init__(self):
-        self.__callback_list = list()
+        self.__user_callback = None
+        self.__checker = None
         pass
 
-    def add_callback(self, when, callback):
-        self.__callback_list.append([when, callback])
+    def register_user(self, when, callback):
+        self.__checker = when
+        self.__user_callback = callback
         pass
 
-    def invoke(self):
-        for item in self.__callback_list:
-            if item[0] is not None:
-                if item[0].check():
-                    item[1]()
+    def register_system(self, when, callback):
+        self.__checker = when
+        self.__user_callback = callback
+        pass
+
+    def check(self, msg):
+        return self.__checker(msg)
+
+    def invoke(self, msg):
+        return self.__user_callback(msg)

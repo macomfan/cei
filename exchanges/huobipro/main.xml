@@ -128,7 +128,7 @@
     <restful client_name="binanceClient" url="https://api.binance.com">
         <interface name="getBestQuote">
             <inputs>
-                <string name="symbol"/>
+                <string_array name="symbol"/>
             </inputs>
             <request method="get" target="/api/v3/depth">
                 <query_strings>

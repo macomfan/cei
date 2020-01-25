@@ -62,7 +62,8 @@ public class Python3DescriptionConverter implements IDescriptionConverter {
     @Override
     public String toStringDescriptor(String name) {
         if (name != null) {
-            return "\"" + name + "\"";
+            String newName = name.replace("\\", "\\\\");
+            return "\"" + newName + "\"";
         } else {
             throw new CEIException("Name is null in NameConverter");
         }

@@ -12,6 +12,9 @@ import okhttp3.WebSocket;
 import okhttp3.WebSocketListener;
 import okio.ByteString;
 
+import java.util.LinkedList;
+import java.util.List;
+
 /**
  *
  * @author u0151316
@@ -21,17 +24,19 @@ public class WebSocketConnection extends WebSocketListener {
     private static final OkHttpClient client = new OkHttpClient();
     private WebSocket webSocket = null;
 
+    private List<WebSocketEvent> events = new LinkedList<>();
+
     @FunctionalInterface
     public interface Function<T> {
 
         public void onEvent(T t);
     }
 
-    public void registerEvent(Function<String> f) {
+    public void registerEvent(WebSocketEvent event) {
 
     }
 
-    public void connect(WebSocketRequest request) {
+    public void connect(WebSocketOption request) {
         Request okhttpRequest = new Request.Builder().url(request.url).build();
         webSocket = client.newWebSocket(okhttpRequest, this);
     }
@@ -51,13 +56,18 @@ public class WebSocketConnection extends WebSocketListener {
     @Override
     public void onMessage(WebSocket webSocket, String text) {
         super.onMessage(webSocket, text);
-        System.err.println("onMessage string: " + text);
+        WebSocketMessage msg = new WebSocketMessage();
+        events.forEach(item->{
+            if (item.check(msg)) {
+                item.invoke(msg);
+            }
+        });
     }
     
-    public void send(String msg) {
+    public void send(JsonWrapper msg) {
         if (webSocket != null) {
             System.out.println(msg);
-            webSocket.send(msg);
+            webSocket.send(msg.toJsonString());
         }
     }
 

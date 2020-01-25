@@ -4,16 +4,26 @@ from impl.signaturetool import SignatureTool
 from exchanges.cei import *
 
 from exchanges.huobipro import *
+from exchanges.TestWS import *
 
 if __name__ == '__main__':
 
-    option = RestfulOptions()
-    marketClient = MarketClient()
-    data = marketClient.get_candlestick("btcusdt", "1min", 5)
-    print(data)
+    ws = TestWSClient()
 
-    data = marketClient.get_last_trade("btcusdt")
-    print(data)
+    def suf(msg):
+        print("callback " + msg)
+
+    ws.sub("aaa", suf)
+    ws.start()
+    ws.send("mmmmmm")
+
+    # option = RestfulOptions()
+    # marketClient = MarketClient()
+    # data = marketClient.get_candlestick("btcusdt", "1min", 5)
+    # print(data)
+    #
+    # data = marketClient.get_last_trade("btcusdt")
+    # print(data)
 
 
 

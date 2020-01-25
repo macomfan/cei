@@ -5,6 +5,7 @@ class WebSocketConnection:
     # disposable event
 
     def __init__(self):
+        self.__event_list = list()
         pass
 
     def connect(self):
@@ -17,12 +18,13 @@ class WebSocketConnection:
         pass
 
     def register_persistent_event(self, event):
-        pass
+        self.__event_list.append(event)
 
     def register_disposable_event(self, event):
-        pass
+        self.__event_list.append(event)
 
-    def on_message(self):
-        # for all event
-        # if (event.test_hit())  event.invoke() and remove single event
+    def on_message(self, msg):
+        for event in self.__event_list:
+            if event.check(msg):
+                event.invoke(msg)
         pass

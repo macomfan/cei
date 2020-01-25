@@ -9,6 +9,6 @@ package cn.ma.cei.impl;
  *
  * @author u0151316
  */
-public class WebSocketRequest {
+public class WebSocketOption {
     public String url;
 }
