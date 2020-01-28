@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<sdk exchange="huobipro" document="https://huobiapi.github.io/docs/spot/v1/en/">
+    <model name="CandlestickData">
+        <int name="id"/>
+        <decimal name="amount"/>
+        <decimal name="vol"/>
+    </model>
+
+    <model name="WSCandlestick">
+        <int name="ts"/>
+        <string name="ch"/>
+        <object name="tick" refer="CandlestickData"/>
+    </model>
+
+    <websocket name="WSClient" url="wss:\\aaaaa{stream}">
+        <inputs>
+            <string name="stream"/>
+        </inputs>
+        <on_connect>
+
+        </on_connect>
+        <event>
+
+        </event>
+        <subscript>
+            <input>
+
+            </input>
+            <tirgger>
+                <json_parser>
+                    <json_checker>
+                        <json_equal key="ch" value="kline"/>
+                    </json_checker>
+                </json_parser>
+            </tirgger>
+        </subscript>
+        <request>
+
+        </request>
+    </websocket>
+</sdk>

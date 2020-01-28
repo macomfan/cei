@@ -30,7 +30,7 @@ public class JavaModelBuilder extends ModelBuilder {
     }
 
     @Override
-    public String getRefrerence(String modelName) {
+    public String getReference(String modelName) {
         return JavaCode.CURRENT_PACKAGE;
     }
 }

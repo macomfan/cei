@@ -19,18 +19,24 @@ public abstract class MethodBuilder {
     private final UniquetList<String, Variable> variableList = new UniquetList<>();
 
     public Variable createLocalVariable(VariableType type, String name) {
-        Variable variable = null;
         if (variableList.containsKey(name)) {
-            variable = VariableFactory.createLocalVariable(type, name + Integer.toString(tempVariableIndex++));
-        } else {
-            variable = VariableFactory.createLocalVariable(type, name);
+            throw new CEIException("Duplicate variable " + name);
         }
+        Variable variable = VariableCreator.createLocalVariable(type, name);
         registerVariable(variable);
         return variable;
     }
 
+    public Variable createTempVariable(VariableType type, String name) {
+        String newName = name;
+        if (variableList.containsKey(newName)) {
+            newName += Integer.toString(tempVariableIndex);
+        }
+        return createLocalVariable(type, newName);
+    }
+
     public Variable createInputVariable(VariableType type, String name) {
-        Variable variable = VariableFactory.createInputVariable(type, name);
+        Variable variable = VariableCreator.createInputVariable(type, name);
         registerVariable(variable);
         return variable;
     }
@@ -58,7 +64,7 @@ public abstract class MethodBuilder {
         if (variableList.containsKey(variableName)) {
             throw new CEIException("[MethodBuilder] Variable re-defined: " + variableName);
         }
-        Variable variable = VariableFactory.createInputVariable(type, variableName);
+        Variable variable = VariableCreator.createInputVariable(type, variableName);
         registerVariable(variable);
         return variable;
     }
@@ -79,7 +85,7 @@ public abstract class MethodBuilder {
         if (variableList.containsKey(variableName)) {
             throw new CEIException("[MethodBuilder] Variable re-defined: " + variableName);
         }
-        Variable variable = VariableFactory.createLocalVariable(type, variableName);
+        Variable variable = VariableCreator.createLocalVariable(type, variableName);
         registerVariable(variable);
         return variable;
     }

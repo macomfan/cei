@@ -1,17 +1,21 @@
-package websocket
+package ceiimpl
+
+import (
+	_ "github.com/gorilla/websocket"
+)
 
 
 type WebsocketConnection struct {
-	event []*WebsocketEvent
+	event []*WebSocketEvent
 }
 
 
-func NewWebSocketConnection() *WebsocketConnection {
+func NewWebsocketConnection() *WebsocketConnection {
 	inst := new(WebsocketConnection)
 	return inst
 }
 
-func (inst *WebsocketConnection) RegisterEvent(event *WebsocketEvent) {
+func (inst *WebsocketConnection) RegisterEvent(event *WebSocketEvent) {
 	inst.event = append(inst.event, event)
 }
 

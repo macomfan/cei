@@ -163,7 +163,9 @@
             <request method="get" target="/v1/common/symbols"/>
             <response model="Symbols">
                 <json_parser>
-                    <!--json_checker check_path=".status" not_equal="ok" error_path=".err-code|.err-msg"/-->
+					<json_checker>
+						<json_not_equal key="stauts" value="ok"/>
+					</json_checker>
                     <json_auto copy="status"/>
                     <json_auto copy="data" model="SymbolsData">
                         <json_auto from="base-currency" to="{baseCurrency}"/>
@@ -257,13 +259,13 @@
             <inputs>
                 <string name="symbol"/>
                 <int name="depth"/>
-                <string name="type"/>
+                <string name="mergeType"/>
             </inputs>
             <request method="get" target="/market/depth">
                 <query_strings>
                     <query name="symbol" value="{symbol}"/>
                     <query name="depth" value="{depth}"/>
-                    <query name="type" value="{type}"/>
+                    <query name="type" value="{mergeType}"/>
                 </query_strings>
             </request>
             <response model="Depth">
@@ -315,7 +317,7 @@
             <inputs>
                 <string name="accountId" mandatory="true"/>
                 <string name="symbol" mandatory="true"/>
-                <string name="type" mandatory="true"/>
+                <string name="orderType" mandatory="true"/>
                 <string name="amount" mandatory="true"/>
                 <string name="price"/>
             </inputs>
@@ -324,7 +326,7 @@
                     <json_builder>
                         <json_auto from="{accountId}" to="account-id"/>
                         <json_auto copy="symbol"/>
-                        <json_auto copy="type"/>
+                        <json_auto from="{orderType}" to="type"/>
                         <json_auto copy="amount"/>
                         <json_auto copy="price"/>
                     </json_builder>

@@ -1,4 +1,4 @@
-package restful
+package ceiimpl
 
 type RestfulOptions struct {
 	URL               string
@@ -8,16 +8,16 @@ type RestfulOptions struct {
 }
 
 func (inst *RestfulOptions) SetFrom(option *RestfulOptions) {
-	if option.URL != nil {
+	if option.URL != inst.URL {
 		inst.URL = option.URL
 	}
-	if option.ConnectionTimeout != nil {
+	if option.ConnectionTimeout != inst.ConnectionTimeout {
 		inst.ConnectionTimeout = option.ConnectionTimeout
 	}
-	if option.ApiKey != nil {
+	if option.ApiKey != inst.ApiKey {
 		inst.ApiKey = option.ApiKey
 	}
-	if option.SecretKey != nil {
+	if option.SecretKey != inst.SecretKey {
 		inst.SecretKey = option.SecretKey
 	}
 }

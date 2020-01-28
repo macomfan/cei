@@ -1,4 +1,4 @@
-package jsonwrapper
+package ceiimpl
 
 import (
 	"encoding/json"
@@ -10,7 +10,7 @@ type JsonWrapper struct {
 
 func ParseFromString(data string) *JsonWrapper {
 	instance := new(JsonWrapper)
-	json.Unmarshal([]byte(data), &instance.data)
+	_ = json.Unmarshal([]byte(data), &instance.data)
 	return instance
 }
 
@@ -50,7 +50,7 @@ func (inst *JsonWrapper) GetObject(key string) *JsonWrapper {
 
 func (inst *JsonWrapper) GetObjectArray(key string) []*JsonWrapper {
 	value := inst.checkMandatoryField(key)
-	res := []*JsonWrapper{}
+	var res []*JsonWrapper
 	for _, value := range value.([]interface{}) {
 		res = append(res, NewJsonWrapper(value.(map[string]interface{})))
 	 }
@@ -59,9 +59,14 @@ func (inst *JsonWrapper) GetObjectArray(key string) []*JsonWrapper {
 
 func (inst *JsonWrapper) GetStringArray(key string) []string {
 	value := inst.checkMandatoryField(key)
-	res := []string{}
+	var res []string
 	for _, value := range value.([]interface{}) {
 		res = append(res, value.(string))
 	 }
 	return res
+}
+
+func (inst *JsonWrapper) ToBytes() []byte {
+	bytes, _ := json.Marshal(&inst.data)
+	return bytes
 }

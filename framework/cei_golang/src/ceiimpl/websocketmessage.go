@@ -1,4 +1,4 @@
-package websocket
+package ceiimpl
 
 type WebsocketMessage struct {
 }

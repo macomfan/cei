@@ -30,10 +30,4 @@ public class JavaFramework extends Framework{
     public IDescriptionConverter getDescriptionConverter() {
         return new JavaDescriptionConverter();
     }
-
-    @Override
-    public Set<String> getKeywords() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-    
 }

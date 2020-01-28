@@ -37,8 +37,8 @@ public class GoExchangeBuilder extends ExchangeBuilder {
     
     @Override
     public void startExchange(String exchangeName) {
-        Constant.requestMethod().tryPut(RestfulRequest.RequestMethod.GET, "restful.GET");
-        Constant.requestMethod().tryPut(RestfulRequest.RequestMethod.POST, "restful.POST");
+        Constant.requestMethod().tryPut(RestfulRequest.RequestMethod.GET, "ceiimpl.GET");
+        Constant.requestMethod().tryPut(RestfulRequest.RequestMethod.POST, "ceiimpl.POST");
 
         Constant.signatureMethod().tryPut(SignatureTool.Constant.ASC, "signature.ASC");
         Constant.signatureMethod().tryPut(SignatureTool.Constant.DSC, "signature.DSC");
@@ -55,12 +55,12 @@ public class GoExchangeBuilder extends ExchangeBuilder {
         VariableFactory.setupBuildinVariableType(xDecimal.typeName, "float64", VariableFactory.NO_REF);
         VariableFactory.setupBuildinVariableType(TheArray.typeName, "[]", VariableFactory.NO_REF);
         VariableFactory.setupBuildinVariableType(TheStream.typeName, "[]byte", VariableFactory.NO_REF);
-        VariableFactory.setupBuildinVariableType(RestfulRequest.typeName, "restful.RestfulRequest", "impl/restful");
-        VariableFactory.setupBuildinVariableType(RestfulResponse.typeName, "RestfulResponse", "impl/restful");
-        VariableFactory.setupBuildinVariableType(RestfulConnection.typeName, "restful", "impl/restful");
-        VariableFactory.setupBuildinVariableType(RestfulOptions.typeName, "restful.RestfulOptions", "impl/restful");
-        VariableFactory.setupBuildinVariableType(JsonWrapper.typeName, "JsonWrapper", "impl/json");
-        VariableFactory.setupBuildinVariableType(SignatureTool.typeName, "signature", "impl/signature");
+        VariableFactory.setupBuildinVariableType(RestfulRequest.typeName, "ceiimpl.RestfulRequest", "ceiimpl");
+        VariableFactory.setupBuildinVariableType(RestfulResponse.typeName, "RestfulResponse", "ceiimpl");
+        VariableFactory.setupBuildinVariableType(RestfulConnection.typeName, "ceiimpl", "ceiimpl");
+        VariableFactory.setupBuildinVariableType(RestfulOptions.typeName, "ceiimpl.RestfulOptions", "ceiimpl");
+        VariableFactory.setupBuildinVariableType(JsonWrapper.typeName, "ceiimpl.JsonWrapper", "ceiimpl");
+        VariableFactory.setupBuildinVariableType(SignatureTool.typeName, "signature", "ceiimpl");
 
         CEIPath workingFolder = Environment.getWorkingFolder();
         CEIPath exchangeFolder = CEIPath.appendPath(workingFolder, "src", "exchanges");

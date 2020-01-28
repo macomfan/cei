@@ -31,7 +31,7 @@ public class CppModelBuilder extends ModelBuilder {
     }
 
     @Override
-    public String getRefrerence(String modelName) {
+    public String getReference(String modelName) {
         // TODO
         return modelName;
     }

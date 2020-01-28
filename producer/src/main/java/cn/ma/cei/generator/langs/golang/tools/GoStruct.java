@@ -5,10 +5,13 @@
  */
 package cn.ma.cei.generator.langs.golang.tools;
 
+import cn.ma.cei.exception.CEIException;
 import cn.ma.cei.generator.environment.Variable;
 import cn.ma.cei.generator.environment.VariableType;
 import cn.ma.cei.generator.langs.golang.GoCode;
 import cn.ma.cei.utils.UniquetList;
+import cn.ma.cei.utils.WordSplitter;
+
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -23,7 +26,8 @@ public class GoStruct {
     private GoCode code = new GoCode();
     private String structName;
 
-    private UniquetList<String, GoVar> memberList = new UniquetList<>();
+    private UniquetList<String, GoVar> publicMemberList = new UniquetList<>();
+    private UniquetList<String, GoVar> privateMemberList = new UniquetList<>();
     private Set<String> importList = new HashSet<>();
     private List<GoMethod> methodList = new LinkedList<>();
 
@@ -35,10 +39,19 @@ public class GoStruct {
         return code;
     }
 
-    public void addMember(GoVar memberVariable) {
-        memberList.put(memberVariable.getName(), memberVariable);
+    public void addPublicMember(GoVar memberVariable) {
+        if (privateMemberList.containsKey(memberVariable.getName())) {
+            throw new CEIException("Duplicate member in GoStruct");
+        }
+        publicMemberList.put(memberVariable.getName(), memberVariable);
     }
 
+    public void addPrivateMember(GoVar memberVariable) {
+        if (publicMemberList.containsKey(memberVariable.getName())) {
+            throw new CEIException("Duplicate member in GoStruct");
+        }
+        privateMemberList.put(memberVariable.getName(), memberVariable);
+    }
 
     public void addMethod(GoMethod method) {
         methodList.add(method);
@@ -62,9 +75,7 @@ public class GoStruct {
 
     private void defineStruct() {
         code.appendWordsln("type", structName, "struct", "{");
-        code.newBlock(() -> {
-            defineMembers();
-        });
+        code.newBlock(this::defineMembers);
         code.appendln("}");
         writeMethod();
     }
@@ -72,14 +83,22 @@ public class GoStruct {
     private void defineMembers() {
         int maxMemberLen = 0;
 
-        for (GoVar member : memberList.values()) {
+        for (GoVar member : publicMemberList.values()) {
+            if (member.getNameDescriptor().length() > maxMemberLen) {
+                maxMemberLen = member.getNameDescriptor().length();
+            }
+        }
+        for (GoVar member : privateMemberList.values()) {
             if (member.getNameDescriptor().length() > maxMemberLen) {
                 maxMemberLen = member.getNameDescriptor().length();
             }
         }
         maxMemberLen++;
-        for (GoVar member : memberList.values()) {
+        for (GoVar member : publicMemberList.values()) {
             code.addMemberln(member.getNameDescriptor(), member.getTypeDescriptor(), maxMemberLen);
+        }
+        for (GoVar member : privateMemberList.values()) {
+            code.addMemberln(WordSplitter.getLowerCamelCase(member.getNameDescriptor()), member.getTypeDescriptor(), maxMemberLen);
         }
     }
 

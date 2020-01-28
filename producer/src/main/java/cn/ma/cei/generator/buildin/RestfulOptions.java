@@ -26,7 +26,6 @@ public class RestfulOptions {
     }
 
     public static void registryMember() {
-        Variable options = VariableFactory.createLocalVariable(RestfulOptions.getType(), "options");
         VariableFactory.registerMemberVariable(RestfulOptions.getType(), VariableFactory.variableType(xString.typeName), "apiKey");
         VariableFactory.registerMemberVariable(RestfulOptions.getType(), VariableFactory.variableType(xString.typeName), "secretKey");
         VariableFactory.registerMemberVariable(RestfulOptions.getType(), VariableFactory.variableType(xString.typeName), "url");

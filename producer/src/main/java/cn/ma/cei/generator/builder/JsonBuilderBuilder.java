@@ -20,4 +20,16 @@ public abstract class JsonBuilderBuilder {
     public abstract void addJsonNumber(Variable from, Variable jsonObject, Variable itemName);
     
     public abstract void addJsonBoolean(Variable from, Variable jsonObject, Variable itemName);
+
+//    public abstract void addJsonObject(Variable from, Variable jsonObject, Variable itemName);
+//
+//    public abstract void addJsonObjectArray(Variable from, Variable jsonObject, Variable itemName);
+//
+//    public abstract void addJsonStringArray(Variable from, Variable jsonObject, Variable itemName);
+//
+//    public abstract void addJsonIntegerArray(Variable from, Variable jsonObject, Variable itemName);
+//
+//    public abstract void addJsonDecimalArray(Variable from, Variable jsonObject, Variable itemName);
+//
+//    public abstract void addJsonBooleanArray(Variable from, Variable jsonObject, Variable itemName);
 }

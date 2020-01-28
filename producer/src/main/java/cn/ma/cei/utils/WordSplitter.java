@@ -131,10 +131,6 @@ public class WordSplitter {
         }
     }
 
-//    private static String getString(String name, Method method, String separator) {
-//
-//    }
-
     private static boolean isUppercaseChar(char ch) {
         return 'A' <= ch && ch <= 'Z';
     }
@@ -162,12 +158,9 @@ public class WordSplitter {
                         indexStart = i + 1;
                     }
                 }
-
             }
             return res;
         }
-
     }
-
 
 }

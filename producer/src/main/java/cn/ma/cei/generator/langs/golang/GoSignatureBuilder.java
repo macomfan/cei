@@ -8,10 +8,7 @@ package cn.ma.cei.generator.langs.golang;
 import cn.ma.cei.generator.builder.SignatureBuilder;
 import cn.ma.cei.generator.environment.Variable;
 import cn.ma.cei.generator.environment.VariableType;
-import cn.ma.cei.generator.langs.golang.tools.GoFile;
-import cn.ma.cei.generator.langs.golang.tools.GoMethod;
-import cn.ma.cei.generator.langs.golang.tools.GoStruct;
-import cn.ma.cei.generator.langs.golang.tools.GoVar;
+import cn.ma.cei.generator.langs.golang.tools.*;
 import cn.ma.cei.utils.WordSplitter;
 import java.util.LinkedList;
 import java.util.List;
@@ -97,7 +94,7 @@ public class GoSignatureBuilder extends SignatureBuilder {
         method = new GoMethod(null);
         List<GoVar> tmp = new LinkedList<>();
         params.forEach(item -> {
-            tmp.add(new GoVar(item));
+            tmp.add(new GoPtrVar(item));
         });
         method.startMethod(null, WordSplitter.getLowerCamelCase(methodDescriptor), tmp);
     }

@@ -1,10 +1,13 @@
 package main
 
 import (
+	"ceiimpl"
+	"ceiimpl/utils"
 	"encoding/json"
 	"fmt"
-	"impl/jsonwrapper"
-	//"impl/restful"
+	"sort"
+
+	//"ceiimpl/restful"
 	//"strconv"
 	"exchanges/testws"
 )
@@ -27,11 +30,29 @@ func JsonToMapDemo() {
 	//fmt.Println(mapResult)
 }
 
-func main() {
+type IntSlice [][]string
 
-	testws := testws.NewTestWS()
-	testws.Start()
-	testws.Send()
+func (s IntSlice) Len() int { return len(s) }
+func (s IntSlice) Swap(i, j int){ s[i], s[j] = s[j], s[i] }
+func (s IntSlice) Less(i, j int) bool { return s[i][0] < s[j][0] }
+
+
+
+func main() {
+	var queryString [][]string
+	queryString = append(queryString, []string{"symbol", "symbol"})
+	queryString = append(queryString, []string{"prod", "prod"})
+	sort.Sort(sort.Reverse(IntSlice(queryString)))
+
+	//pattern := "\\{.*?}"
+	//	//r := regexp.MustCompile(pattern)
+	//	//fmt.Println(r.FindAllString("aaaaaaxxxzz",-1)) //Hello World!
+	fmt.Println(utils.FillString("aaa{bbb}ccc{ddd}eee", 123, 456))
+
+
+	testWS := testws.NewTestWS()
+	testWS.Start()
+	testWS.Send()
 
 	JsonToMapDemo()
 	jsonStr := `
@@ -43,7 +64,7 @@ func main() {
 			"array":["1","2"]
 			
 	}`
-	json := jsonwrapper.ParseFromString(jsonStr)
+	json := ceiimpl.ParseFromString(jsonStr)
 	fmt.Println(json.GetInt64("age"))
 	data := json.GetObject("data")
 	fmt.Println(data.GetString("aaa"))

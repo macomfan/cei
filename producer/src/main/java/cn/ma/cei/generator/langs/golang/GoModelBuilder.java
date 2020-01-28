@@ -28,7 +28,7 @@ public class GoModelBuilder extends ModelBuilder {
     }
     
     @Override
-    public String getRefrerence(String modelName) {
+    public String getReference(String modelName) {
         return VariableFactory.NO_REF;
     }
 
@@ -39,7 +39,7 @@ public class GoModelBuilder extends ModelBuilder {
 
     @Override
     public void registerMember(Variable variable) {
-        modelStruct.addMember(new GoVar(variable));
+        modelStruct.addPublicMember(new GoVar(variable));
     }
 
     @Override

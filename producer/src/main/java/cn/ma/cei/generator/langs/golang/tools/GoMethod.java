@@ -102,7 +102,7 @@ public class GoMethod {
         if (parent == null) {
             return "";
         }
-        return "(this " + "*" + parent.getStructName() + ")";
+        return "(inst " + "*" + parent.getStructName() + ")";
     }
 
     private String invokeParamString(List<GoVar> params) {

@@ -20,7 +20,7 @@ class RestfulRequest:
             return ""
         tmp = dict()
         for item in self.__queryString:
-            tmp[item[0]]= item[1]
+            tmp[item[0]] = item[1]
         encoded_param = urllib.parse.urlencode(tmp)
         return "?" + encoded_param
 

@@ -1,10 +1,9 @@
-package restful
+package ceiimpl
 
 import (
-	"io/ioutil"
-	"impl/json"
-	"net/http"
 	"fmt"
+	"io/ioutil"
+	"net/http"
 )
 
 type RestfulResponse struct {
@@ -18,14 +17,14 @@ func newRestfulResponse(response *http.Response) *RestfulResponse {
 }
 
 
-func (this *RestfulResponse) GetJson() *json.JsonWrapper {
+func (inst *RestfulResponse) GetJson() *JsonWrapper {
 	var body []byte
-	defer this.response.Body.Close()
-	body, err := ioutil.ReadAll(this.response.Body)
+	defer inst.response.Body.Close()
+	body, err := ioutil.ReadAll(inst.response.Body)
 	if err != nil {
 		fmt.Println(err)
 		return nil
 	}
-	json := json.NewJsonWrapper(body)
+	json := ParseFromString(string(body))
 	return json
 }

@@ -8,6 +8,7 @@ import cn.ma.cei.generator.environment.Variable;
 import cn.ma.cei.generator.environment.VariableFactory;
 import cn.ma.cei.generator.environment.VariableType;
 import cn.ma.cei.model.json.*;
+import cn.ma.cei.model.json.checker.xJsonChecker;
 import cn.ma.cei.model.types.*;
 
 public class BuildJsonParser {
@@ -23,19 +24,23 @@ public class BuildJsonParser {
         Variable rootJsonObject = defineRootJsonObject(method);
         jsonParserBuilder.defineRootJsonObject(rootJsonObject, responseVariable);
 
-        Variable model = method.createLocalVariable(outputModelType, outputModelType.getDescriptor() + "_var");
+        Variable model = method.createLocalVariable(outputModelType, outputModelType.getDescriptor() + "Var");
         jsonParserBuilder.defineModel(model);
 
         jsonParser.itemList.forEach((item) -> {
-            item.startBuilding();
-            JsonItemContext newContext = new JsonItemContext();
-            newContext.jsonItem = item;
-            newContext.parentModel = model;
-            newContext.parentJsonObject = rootJsonObject;
-            newContext.jsonParserBuilder = jsonParserBuilder;
-            newContext.method = method;
-            processJsonItem(newContext);
-            item.endBuilding();
+            if (item instanceof xJsonChecker) {
+                // TODO
+            } else {
+                item.startBuilding();
+                JsonItemContext newContext = new JsonItemContext();
+                newContext.jsonItem = item;
+                newContext.parentModel = model;
+                newContext.parentJsonObject = rootJsonObject;
+                newContext.jsonParserBuilder = jsonParserBuilder;
+                newContext.method = method;
+                processJsonItem(newContext);
+                item.endBuilding();
+            }
         });
         return model;
     }
@@ -114,12 +119,12 @@ public class BuildJsonParser {
     }
 
     private static Variable defineRootJsonObject(MethodBuilder method) {
-        return method.createLocalVariable(JsonWrapper.getType(), "root_obj");
+        return method.createLocalVariable(JsonWrapper.getType(), "rootObj");
     }
 
     private static Variable defineJsonObject(JsonItemContext context) {
         xJsonWithModel jsonWithModel = (xJsonWithModel) context.jsonItem;
-        return context.method.createLocalVariable(JsonWrapper.getType(), jsonWithModel.from + "_obj");
+        return context.method.createLocalVariable(JsonWrapper.getType(), jsonWithModel.from + "Obj");
     }
 
     private static Variable defineModel(JsonItemContext context) {
@@ -127,7 +132,7 @@ public class BuildJsonParser {
         if (jsonWithModel.model == null || "".equals(jsonWithModel.model)) {
             throw new CEIException("[BuildJsonParser] Model is not defined");
         }
-        Variable model = context.method.createLocalVariable(VariableFactory.variableType(jsonWithModel.model), jsonWithModel.model + "_var");
+        Variable model = context.method.createTempVariable(VariableFactory.variableType(jsonWithModel.model), jsonWithModel.model + "Var");
         context.jsonParserBuilder.defineModel(model);
         return model;
     }
@@ -161,7 +166,7 @@ public class BuildJsonParser {
         xJsonWithModel jsonWithModel = (xJsonWithModel) context.jsonItem;
         Variable newJsonObject = context.parentJsonObject;
 
-        Variable eachItemJsonObject = context.method.createLocalVariable(JsonWrapper.getType(), "item");
+        Variable eachItemJsonObject = context.method.createTempVariable(JsonWrapper.getType(), "item");
         Variable from = VariableFactory.createHardcodeStringVariable(jsonWithModel.from);
         context.jsonParserBuilder.startJsonObjectArray(eachItemJsonObject, newJsonObject, from);
 

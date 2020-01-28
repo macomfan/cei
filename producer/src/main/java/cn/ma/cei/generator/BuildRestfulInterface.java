@@ -21,7 +21,6 @@ public class BuildRestfulInterface {
 
     public static void build(xInterface restIf, RestfulInterfaceBuilder builder) {
 
-        Variable options = builder.createLocalVariable(RestfulOptions.getType(), "options");
         Variable request = builder.createLocalVariable(RestfulRequest.getType(), "request");
         Variable response = builder.createLocalVariable(RestfulResponse.getType(), "response");
 

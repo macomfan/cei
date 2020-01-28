@@ -29,10 +29,4 @@ public abstract class Framework {
     public abstract ExchangeBuilder getExchangeBuilder();
     
     public abstract IDescriptionConverter getDescriptionConverter();
-    
-    /***
-     * List all keywords here, to check if the variable name is conflicting with the keyword.
-     * @return Set of keywords.
-     */
-    public abstract Set<String> getKeywords();
 }

@@ -17,7 +17,7 @@ import java.util.List;
 
 public class JAXBWrapper {
 
-    private void checkCurrentClass(Class cls, List<Class> classes) {
+    private void checkCurrentClass(Class<?> cls, List<Class<?>> classes) {
         if (cls.getName().equals("java.lang.Object")) {
             return;
         }
@@ -27,13 +27,16 @@ public class JAXBWrapper {
         if (cls.isAnnotationPresent(XmlRootElement.class)) {
             if (!classes.contains(cls)) {
                 classes.add(cls);
+            } else {
+                return;
             }
         }
 
         for (Field field : cls.getDeclaredFields()) {
             if (field.isAnnotationPresent(XmlAnyElementTypes.class)) {
-                for (Class c : field.getAnnotation(XmlAnyElementTypes.class).value()) {
+                for (Class<?> c : field.getAnnotation(XmlAnyElementTypes.class).value()) {
                     if (!classes.contains(c)) {
+                        checkCurrentClass(c, classes);
                         classes.add(c);
                     }
                 }
@@ -42,7 +45,7 @@ public class JAXBWrapper {
                 ParameterizedType type = (ParameterizedType) field.getGenericType();
                 Type[] types = type.getActualTypeArguments();
                 for (Type t : types) {
-                    checkCurrentClass((Class) t, classes);
+                    checkCurrentClass((Class<?>) t, classes);
                 }
             } else {
                 checkCurrentClass(field.getType(), classes);
@@ -51,17 +54,20 @@ public class JAXBWrapper {
         checkCurrentClass(cls.getSuperclass(), classes);
     }
 
-    public <T extends Object> T loadFromXML(File file, Class<T> rootClass) throws JAXBException {
-        List<Class> classes = new LinkedList<>();
+    public <T> T loadFromXML(File file, Class<T> rootClass) throws JAXBException {
+        List<Class<?>> classes = new LinkedList<>();
         checkCurrentClass(rootClass, classes);
-        Class[] tmp = classes.toArray(new Class[classes.size()]);
+        classes.forEach(item -> {
+            System.err.println(item.getName());
+        });
+        Class<?>[] tmp = classes.toArray(new Class[classes.size()]);
         JAXBContext context = JAXBContext.newInstance(tmp, null);
         Unmarshaller unmarshaller = context.createUnmarshaller();
         return (T) unmarshaller.unmarshal(file);
 
     }
 
-    public <T extends Object> List<T> loadFromFolder(String path, Class<T> rootClass) throws JAXBException {
+    public <T> List<T> loadFromFolder(String path, Class<T> rootClass) throws JAXBException {
         List<T> result = new LinkedList<>();
         File folder = new File(path);
         if (!folder.exists()) {

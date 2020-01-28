@@ -30,10 +30,5 @@ public class CppFramework extends Framework{
     public IDescriptionConverter getDescriptionConverter() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-
-    @Override
-    public Set<String> getKeywords() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
     
 }

@@ -1,12 +1,13 @@
-package restful
+package ceiimpl
 
 import (
-	"net/http"
+	"bytes"
 	"fmt"
+	"net/http"
 )
 
-// Query the resful
-func Query(request *RestfulRequest) *RestfulResponse {
+// Query the restful
+func RestfulQuery(request *RestfulRequest) *RestfulResponse {
 	var resp *http.Response
 	var err error
 	if request.GetMethod() == GET {
@@ -16,7 +17,11 @@ func Query(request *RestfulRequest) *RestfulResponse {
 			return nil
 		}
 	} else if request.GetMethod() == POST {
-		fmt.Println("POST")
+		resp, err = http.Post(request.GetURL() + request.GetTarget() + request.BuildQueryString(), "", bytes.NewReader(request.GetRequestBody()))
+		if err != nil {
+			fmt.Println(err)
+			return nil
+		}
 	}
 	response := newRestfulResponse(resp)
 	return response

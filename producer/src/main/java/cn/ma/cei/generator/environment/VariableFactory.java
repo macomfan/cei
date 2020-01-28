@@ -119,7 +119,7 @@ public class VariableFactory {
 
     /**
      * *
-     * Get or create a VaribaleType. This is the only interface to get or create
+     * Get or create a VariableType. This is the only interface to get or create
      * the VariableType.
      *
      * @param modelName The name of type you want to get or create.
@@ -178,14 +178,6 @@ public class VariableFactory {
         }
     }
 
-    public static Variable createLocalVariable(VariableType type, String name) {
-        return createVariable(type, name, Variable.Position.LOCAL, null);
-    }
-
-    public static Variable createInputVariable(VariableType type, String name) {
-        return createVariable(type, name, Variable.Position.INPUT, null);
-    }
-
     public static Variable createHardcodeStringVariable(String name) {
         return createVariable(xString.inst.getType(), name, Variable.Position.STRING, null);
     }
@@ -194,9 +186,6 @@ public class VariableFactory {
         return createVariable(xString.inst.getType(), name, Variable.Position.CONSTANT, null);
     }
 
-//    public static Variable createThisVariable(VariableType type, String name) {
-//        return createVariable(type, name, Variable.Position.THIS, null);
-//    }
     /**
      * *
      * Register the member in a model, the member must be registered before
@@ -207,9 +196,9 @@ public class VariableFactory {
      * @param memberName The variable name.
      * @return The new created member variable.
      */
-    public static Variable registerMemberVariable(VariableType modelType, VariableType memberType, String memberName) {
+    public static void registerMemberVariable(VariableType modelType, VariableType memberType, String memberName) {
         modelInfo.get().registerMember(modelType, memberName, memberType);
-        return createVariable(memberType, memberName, Variable.Position.MEMBER, null);
+        //return createVariable(memberType, memberName, Variable.Position.MEMBER, null);
     }
 
     public static Variable queryMemberVariable(Variable parentVariable, String name) {

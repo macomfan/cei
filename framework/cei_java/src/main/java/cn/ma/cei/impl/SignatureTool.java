@@ -44,12 +44,10 @@ public class SignatureTool {
     public static String combineStringArray(List<String> list, String separator) {
         StringBuilder sb = new StringBuilder();
         list.forEach(item -> {
-            if (sb.length() == 0) {
-                sb.append(item);
-            } else {
+            if (sb.length() != 0) {
                 sb.append(separator);
-                sb.append(item);
             }
+            sb.append(item);
         });
         return sb.toString();
     }
@@ -102,17 +100,16 @@ public class SignatureTool {
     }
 
     public static String combineQueryString(RestfulRequest request, Constant sort, String separator) {
-        List<Pair<String, String>> queryString = new LinkedList<>();
-        queryString.addAll(request.getQueryString());
+        List<Pair<String, String>> queryString = new LinkedList<>(request.getQueryString());
         if (sort != null) {
             switch (sort) {
                 case ASC:
-                    Collections.sort(queryString, (o1, o2) -> {
+                    queryString.sort((o1, o2) -> {
                         return o1.getKey().compareTo(o2.getKey());
                     });
                     break;
                 case DSC:
-                    Collections.sort(queryString, (o1, o2) -> {
+                    queryString.sort((o1, o2) -> {
                         return -o1.getKey().compareTo(o2.getKey());
                     });
                     break;

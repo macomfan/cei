@@ -1,6 +1,7 @@
 package cn.ma.cei.generator.naming;
 
 import java.util.List;
+import java.util.Set;
 
 public interface IDescriptionConverter {
     
@@ -25,4 +26,10 @@ public interface IDescriptionConverter {
     String toStringDescriptor(String name);
     
     String getGenericTypeDescriptor(String baseName, List<String> subNames);
+
+    /***
+     * List all keywords here, to check if the variable name is conflicting with the keyword.
+     * @return Set of keywords.
+     */
+    Set<String> getKeywords();
 }

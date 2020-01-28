@@ -26,7 +26,7 @@ public class Python3ModelBuilder extends ModelBuilder {
     }
     
     @Override
-    public String getRefrerence(String modelName) {
+    public String getReference(String modelName) {
         return VariableFactory.NO_REF;
     }
 

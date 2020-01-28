@@ -4,8 +4,6 @@ import cn.ma.cei.model.types.*;
 import cn.ma.cei.model.*;
 import cn.ma.cei.utils.DuplexMap;
 
-import java.util.HashMap;
-import java.util.Map;
 
 public class TypeAlias {
 

@@ -59,17 +59,12 @@ public class GoRestfulInterfaceBuilder extends RestfulInterfaceBuilder {
 
     @Override
     public void defineRequest(Variable request) {
-        Variable options = VariableFactory.createConstantVariable("this.options");
-        method.addAssignAndDeclare(method.useVariable(new GoVar(request)), "restful.NewRestfulRequest(&this.options)");
+        method.addAssignAndDeclare(method.useVariable(new GoVar(request)), "ceiimpl.NewRestfulRequest(inst.options)");
     }
 
     @Override
     public void addToQueryString(Variable request, Variable queryStringName, Variable variable) {
-        if (variable.getType() == xString.inst.getType()) {
-            method.addInvoke(request.getDescriptor() + ".AddQueryString", new GoVar(queryStringName), new GoVar(variable));
-        } else {
-            method.addInvoke(request.getDescriptor() + ".AddQueryStringTODO", new GoVar(queryStringName), new GoVar(variable));
-        }
+        method.addInvoke(request.getDescriptor() + ".AddQueryString", new GoVar(queryStringName), new GoVar(variable));
     }
 
     @Override
@@ -79,18 +74,18 @@ public class GoRestfulInterfaceBuilder extends RestfulInterfaceBuilder {
 
     @Override
     public void invokeQuery(Variable response, Variable request) {
-        method.addAssignAndDeclare(method.useVariable(new GoVar(response)), method.invoke("restful.Query", new GoVar(request)));
+        method.addAssignAndDeclare(method.useVariable(new GoVar(response)), method.invoke("ceiimpl.RestfulQuery", new GoVar(request)));
     }
 
     @Override
     public void invokeSignature(Variable request, String methodName) {
-        Variable option = VariableFactory.createConstantVariable("this.options");
+        Variable option = VariableFactory.createConstantVariable("inst.options");
         method.addInvoke(WordSplitter.getLowerCamelCase(methodName), new GoVar(request), new GoVar(option));
     }
 
     @Override
     public void setUrl(Variable request) {
-        Variable url = VariableFactory.createConstantVariable("this.options.URL");
+        Variable url = VariableFactory.createConstantVariable("inst.options.URL");
         method.addInvoke(request.getDescriptor() + ".SetURL", new GoVar(url));
     }
 

@@ -23,7 +23,7 @@ public class JavaRestfulClientBuilder extends RestfulClientBuilder {
     @Override
     public void startClient(String clientDescriptor, RestfulOptions options) {
         clientClass = new JavaClass(clientDescriptor);
-        clientClass.addMemberVariable(JavaClass.AccessType.PRIVATE, VariableFactory.createLocalVariable(RestfulOptions.getType(), "options"));
+        clientClass.addMemberVariable(JavaClass.AccessType.PRIVATE, this.createMemberVariable(RestfulOptions.getType(), "options"));
 
         defauleConstructor = new JavaMethod(clientClass);
         defauleConstructor.getCode().appendWordsln("public", clientDescriptor + "() {");

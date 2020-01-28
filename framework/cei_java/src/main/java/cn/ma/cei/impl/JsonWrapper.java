@@ -21,12 +21,6 @@ import java.util.List;
  */
 public class JsonWrapper {
 
-    enum JsonPathNodeType {
-        VALUE,
-        OBJECT,
-        ARRAY
-    }
-
     static class JsonPathNode {
 
         public String path = "";
@@ -59,7 +53,7 @@ public class JsonWrapper {
                     }
                     if (items[i].indexOf('[') != -1) {
                         String index = items[i].replaceFirst("\\[", "");
-                        index = index.replaceFirst("\\]", "");
+                        index = index.replaceFirst("]", "");
                         newJsonPathNode.arrayIndex = Integer.parseInt(index);
 
                     } else {
@@ -84,20 +78,16 @@ public class JsonWrapper {
             while (curr != null) {
                 if (curr.arrayIndex != -1) {
                     //Get as array currJson should be array
+                    assert currObject instanceof JSONArray;
                     JSONArray jsonArray = (JSONArray) currObject;
-                    if (jsonArray == null) {
-                        return null;
-                    }
                     if (jsonArray.size() <= curr.arrayIndex) {
                         return null;
                     }
                     currObject = jsonArray.get(curr.arrayIndex);
                 } else {
                     // Get as object currJson should be object
+                    assert currObject instanceof JSONObject;
                     JSONObject jsonObject = (JSONObject) currObject;
-                    if (jsonObject == null) {
-                        return null;
-                    }
                     if (!jsonObject.containsKey(curr.path)) {
                         return null;
                     }

@@ -8,6 +8,7 @@ package cn.ma.cei.generator.langs.golang;
 import cn.ma.cei.generator.builder.JsonParserBuilder;
 import cn.ma.cei.generator.environment.Variable;
 import cn.ma.cei.generator.environment.VariableFactory;
+import cn.ma.cei.generator.langs.golang.tools.GoGetValueVar;
 import cn.ma.cei.generator.langs.golang.tools.GoMethod;
 import cn.ma.cei.generator.langs.golang.tools.GoType;
 import cn.ma.cei.generator.langs.golang.tools.GoVar;
@@ -51,8 +52,7 @@ public class GoJsonParserBuilder extends JsonParserBuilder {
 
     @Override
     public void startJsonObject(Variable jsonObject, Variable parentJsonObject, Variable itemName) {
-        method.addAssign(method.useVariable(new GoVar(jsonObject)), method.invoke(parentJsonObject.getDescriptor() + ".GetObject", new GoVar(itemName)));
-
+        method.addAssignAndDeclare(method.useVariable(new GoVar(jsonObject)), method.invoke(parentJsonObject.getDescriptor() + ".GetObject", new GoVar(itemName)));
     }
 
     @Override
@@ -64,12 +64,12 @@ public class GoJsonParserBuilder extends JsonParserBuilder {
 
     @Override
     public void startJsonObjectArray(Variable eachItemJsonObject, Variable parentJsonObject, Variable itemName) {
-        method.startFor(new GoVar(eachItemJsonObject), method.invoke(parentJsonObject.getDescriptor() + ".getObjectArray", new GoVar(itemName)));
+        method.startFor(new GoVar(eachItemJsonObject), method.invoke(parentJsonObject.getDescriptor() + ".GetObjectArray", new GoVar(itemName)));
     }
 
     @Override
     public void endJsonObjectArray(Variable to, Variable model) {
-        method.addAssign(method.useVariable(new GoVar(to)), method.invoke("append", new GoVar(to), new GoVar(model)));
+        method.addAssign(method.useVariable(new GoVar(to)), method.invoke("append", new GoVar(to), new GoGetValueVar(model)));
         method.endFor();
     }
 
