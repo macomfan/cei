@@ -7,12 +7,24 @@ import java.util.List;
 
 public class ReflectionHelper {
     public static List<Field> getAllFields(Object obj) {
-        Class<?> c = obj.getClass();
+        Class<?> cls = obj.getClass();
         List<Field> fieldList = new LinkedList<>();
-        while (c != null) {
-            fieldList.addAll(Arrays.asList(c.getDeclaredFields()));
-            c = c.getSuperclass();
+        while (cls != null) {
+            fieldList.addAll(Arrays.asList(cls.getDeclaredFields()));
+            cls = cls.getSuperclass();
         }
         return fieldList;
+    }
+
+    public static Field getFieldByName(Object obj, String name) {
+        Class<?> cls = obj.getClass();
+        while (cls != null) {
+            try {
+                return cls.getDeclaredField(name);
+            } catch (NoSuchFieldError | NoSuchFieldException ignored) {
+            }
+            cls = cls.getSuperclass();
+        }
+        return null;
     }
 }

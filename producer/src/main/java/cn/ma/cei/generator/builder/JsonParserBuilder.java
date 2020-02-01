@@ -59,5 +59,5 @@ public abstract class JsonParserBuilder {
 
     public abstract void defineRootJsonObject(Variable jsonObject, Variable responseVariable);
 
-
+    public abstract JsonCheckerBuilder createJsonCheckerBuilder();
 }

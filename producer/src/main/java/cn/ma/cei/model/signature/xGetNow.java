@@ -6,6 +6,7 @@
 package cn.ma.cei.model.signature;
 
 import cn.ma.cei.model.base.xSignatureItem;
+
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -20,4 +21,10 @@ public class xGetNow extends xSignatureItem {
     
     @XmlAttribute(name = "format")
     public String format;
+
+    @Override
+    public void customCheck() {
+        super.customCheck();
+        checkMemberNotNull(output, "output");
+    }
 }

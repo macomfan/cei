@@ -6,6 +6,7 @@
 package cn.ma.cei.model.signature;
 
 import cn.ma.cei.model.base.xSignatureItem;
+
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -24,6 +25,10 @@ public class xCombineQueryString extends xSignatureItem {
     
     @XmlAttribute(name = "separator")
     public String separator;
-    
-    
+
+    @Override
+    public void customCheck() {
+        super.customCheck();
+        checkMemberNotNull(output, "output");
+    }
 }

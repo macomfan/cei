@@ -73,6 +73,7 @@ public class Finalizer {
         // Check error
         System.out.println("-- Start end");
         sdkMap.values().forEach((sdk) -> {
+            sdk.doCheck();
             XMLDatabase.attachSDK(sdk);
         });
         return new LinkedList<>(sdkMap.values());

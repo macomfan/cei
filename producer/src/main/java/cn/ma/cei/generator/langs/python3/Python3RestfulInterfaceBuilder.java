@@ -8,6 +8,7 @@ package cn.ma.cei.generator.langs.python3;
 import cn.ma.cei.generator.builder.JsonBuilderBuilder;
 import cn.ma.cei.generator.builder.ResponseBuilder;
 import cn.ma.cei.generator.builder.RestfulInterfaceBuilder;
+import cn.ma.cei.generator.builder.StringBuilderBuilder;
 import cn.ma.cei.generator.environment.Variable;
 import cn.ma.cei.generator.environment.VariableFactory;
 import cn.ma.cei.generator.environment.VariableType;
@@ -69,6 +70,16 @@ public class Python3RestfulInterfaceBuilder extends RestfulInterfaceBuilder {
     @Override
     public void onAddReference(VariableType variableType) {
         clientClass.addReference(variableType);
+    }
+
+    @Override
+    public JsonBuilderBuilder createJsonBuilderBuilder() {
+        return null;
+    }
+
+    @Override
+    public StringBuilderBuilder createStringBuilderBuilder() {
+        return null;
     }
 
     @Override

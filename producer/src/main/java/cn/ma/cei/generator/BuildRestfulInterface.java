@@ -3,7 +3,6 @@ package cn.ma.cei.generator;
 import cn.ma.cei.exception.CEIException;
 import cn.ma.cei.generator.builder.RestfulInterfaceBuilder;
 import cn.ma.cei.generator.buildin.RestfulConnection;
-import cn.ma.cei.generator.buildin.RestfulOptions;
 import cn.ma.cei.generator.buildin.RestfulRequest;
 import cn.ma.cei.generator.buildin.RestfulResponse;
 import cn.ma.cei.generator.environment.*;
@@ -12,7 +11,6 @@ import cn.ma.cei.model.xInterface;
 import cn.ma.cei.model.xPostBody;
 import cn.ma.cei.model.xQuery;
 import cn.ma.cei.utils.Checker;
-import cn.ma.cei.utils.RegexHelper;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -54,28 +52,9 @@ public class BuildRestfulInterface {
 
             builder.defineRequest(request);
             builder.setUrl(request);
-
-            List<String> linkedParam = RegexHelper.findReference(restIf.request.target);
-            if (linkedParam.isEmpty()) {
-                builder.setRequestTarget(request, VariableFactory.createHardcodeStringVariable(restIf.request.target));
-            } else {
-                List<Variable> variables = new LinkedList<>();
-                variables.add(VariableFactory.createHardcodeStringVariable(restIf.request.target));
-                linkedParam.forEach(item -> {
-                    Variable param = builder.queryVariable(item);
-                    if (param == null) {
-                        throw new CEIException("Cannot find variable in target");
-                    }
-                    variables.add(param);
-                });
-                Variable[] params = new Variable[variables.size()];
-                variables.toArray(params);
-                builder.setRequestTarget(request, params);
-            }
-
+            builder.setRequestTarget(request, BuildVarious.createValueFromAttribute("target", restIf.request, builder));
 
             Variable requestMethod = VariableFactory.createConstantVariable(Constant.requestMethod().tryGet(restIf.request.method));
-
             builder.setRequestMethod(request, requestMethod);
             makeHeaders(restIf.request.headers, builder);
             makeQueryString(restIf.request.queryStrings, builder);
@@ -119,16 +98,16 @@ public class BuildRestfulInterface {
         Variable request = builder.queryVariable("request");
         queryStrings.forEach((queryString) -> {
             queryString.startBuilding();
-            Variable var;
-            String value = VariableFactory.isReference(queryString.value);
-            if (value == null) {
-                var = VariableFactory.createHardcodeStringVariable(queryString.value);
-            } else {
-                var = builder.queryVariable(value);
-                if (var == null) {
-                    throw new CEIException("Cannot lookup variable: " + var);
-                }
-            }
+            Variable var = BuildVarious.createValueFromAttribute("value", queryString, builder);
+//            String value = VariableFactory.isReference(queryString.value);
+//            if (value == null) {
+//                var = VariableFactory.createHardcodeStringVariable(queryString.value);
+//            } else {
+//                var = builder.queryVariable(value);
+//                if (var == null) {
+//                    throw new CEIException("Cannot lookup variable: " + var);
+//                }
+//            }
             Variable queryStringName = VariableFactory.createHardcodeStringVariable(queryString.name);
             builder.addToQueryString(request, queryStringName, var);
             queryString.endBuilding();
@@ -136,9 +115,10 @@ public class BuildRestfulInterface {
     }
 
     private static void makePostBody(xPostBody postBody, Variable request, RestfulInterfaceBuilder builder) {
-        if (postBody != null && postBody.jsonBuilder != null) {
+        if (postBody != null) {
             postBody.startBuilding();
-            Variable result = BuildJsonBuilder.build(postBody.jsonBuilder, builder.getJsonBuilderBuilder(), builder);
+            //Variable result = BuildJsonBuilder.build(postBody.jsonBuilder, builder.getJsonBuilderBuilder(), builder);
+            Variable result = BuildVarious.createValueFromAttribute("value", postBody, builder);
             if (result != null) {
                 builder.setPostBody(request, result);
             }

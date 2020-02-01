@@ -1,8 +1,10 @@
 package cn.ma.cei.generator;
 
 import cn.ma.cei.exception.CEIException;
+import cn.ma.cei.generator.builder.JsonCheckerBuilder;
 import cn.ma.cei.generator.builder.JsonParserBuilder;
 import cn.ma.cei.generator.builder.MethodBuilder;
+import cn.ma.cei.generator.buildin.JsonChecker;
 import cn.ma.cei.generator.buildin.JsonWrapper;
 import cn.ma.cei.generator.environment.Variable;
 import cn.ma.cei.generator.environment.VariableFactory;
@@ -17,7 +19,8 @@ public class BuildJsonParser {
                                  Variable responseVariable,
                                  VariableType outputModelType,
                                  JsonParserBuilder jsonParserBuilder,
-                                 MethodBuilder method) {
+                                 MethodBuilder method,
+                                 JsonCheckerBuilder.UsedFor usedFor) {
         if (jsonParser == null) {
             throw new CEIException("[BuildJsonParser] The root is not json parser");
         }
@@ -28,21 +31,30 @@ public class BuildJsonParser {
         jsonParserBuilder.defineModel(model);
 
         jsonParser.itemList.forEach((item) -> {
+            JsonItemContext newContext = new JsonItemContext();
+            newContext.jsonItem = item;
+            newContext.parentModel = model;
+            newContext.parentJsonObject = rootJsonObject;
+            newContext.jsonParserBuilder = jsonParserBuilder;
+            newContext.method = method;
+            item.startBuilding();
             if (item instanceof xJsonChecker) {
-                // TODO
+                buildJsonChecker((xJsonChecker)item, newContext, usedFor);
             } else {
-                item.startBuilding();
-                JsonItemContext newContext = new JsonItemContext();
-                newContext.jsonItem = item;
-                newContext.parentModel = model;
-                newContext.parentJsonObject = rootJsonObject;
-                newContext.jsonParserBuilder = jsonParserBuilder;
-                newContext.method = method;
                 processJsonItem(newContext);
-                item.endBuilding();
             }
+            item.endBuilding();
         });
         return model;
+    }
+
+    private static void buildJsonChecker(xJsonChecker jsonChecker, JsonItemContext context, JsonCheckerBuilder.UsedFor usedFor) {
+        JsonCheckerBuilder jsonCheckerBuilder = context.jsonParserBuilder.createJsonCheckerBuilder();
+        if (jsonCheckerBuilder == null) {
+            throw new CEIException("[BuildJsonParser] JsonChecker build is null");
+        }
+        jsonCheckerBuilder.setUsedFor(usedFor);
+        BuildJsonChecker.build(jsonChecker, context.parentJsonObject, jsonCheckerBuilder, context.method);
     }
 
     private static Variable getToVariable(Variable parentModel, xJsonType jsonItem) {

@@ -30,4 +30,10 @@ public class xRestful extends xElement {
         interfaceList.forEach(intf -> res.add(intf.name));
         return res;
     }
+
+    @Override
+    public void customCheck() {
+        super.customCheck();
+        interfaceList.forEach(xElement::doCheck);
+    }
 }

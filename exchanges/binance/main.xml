@@ -41,16 +41,20 @@
 		<decimal name="price"/>
 		<decimal name="volume"/>
 	</model>
+	
+	<model name="LastTrade">
+
+	</model>
 
     <restful client_name="MarketClient" url="https://api.binance.com">
-		<!--interface name="getTimestamp">
+		<interface name="getTimestamp">
 			<request method="get" target="/api/v3/time"/>
 			<response model="Timestamp">
 				<json_parser>
 					<json_auto copy="serverTime"/>
 				</json_parser>
 			</response>
-		</interface-->
+		</interface>
         <interface name="getExchangeInfo">
             <request method="get" target="/api/v3/exchangeInfo"/>
             <response model="ExchangeInfo">

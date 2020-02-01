@@ -2,8 +2,7 @@
 <sdk exchange="huobipro" document="https://huobiapi.github.io/docs/spot/v1/en/">
 
     <model name="Timestamp">
-        <string name="status"/>
-        <int name="data"/>
+        <int name="timestamp"/>
     </model>
 
     <model name="Symbols">
@@ -132,7 +131,7 @@
             </inputs>
             <request method="get" target="/api/v3/depth">
                 <query_strings>
-                    <query name="symbol" value="{symbol}"/>
+                    <query name="symbol" value="aaa{symbol}"/>
                     <query name="limit" value="5"/>
                 </query_strings>
             </request>
@@ -153,8 +152,10 @@
             <request method="get" target="/v1/common/timestamp"/>
             <response model="Timestamp">
                 <json_parser>
-                    <json_auto copy="status"/>
-                    <json_auto copy="data"/>
+                    <json_checker>
+                        <json_not_equal key="stauts" value="ok"/>
+                    </json_checker>
+                    <json_auto from="data" to="{timestamp}"/>
                 </json_parser>
             </response>
         </interface>
@@ -323,13 +324,15 @@
             </inputs>
             <request method="post" target="/v1/order/orders/place" signature="restful">
                 <post_body>
-                    <json_builder>
-                        <json_auto from="{accountId}" to="account-id"/>
-                        <json_auto copy="symbol"/>
-                        <json_auto from="{orderType}" to="type"/>
-                        <json_auto copy="amount"/>
-                        <json_auto copy="price"/>
-                    </json_builder>
+					<attribute name="value">
+						<json_builder>
+							<json_auto from="{accountId}" to="account-id"/>
+							<json_auto copy="symbol"/>
+							<json_auto from="{orderType}" to="type"/>
+							<json_auto copy="amount"/>
+							<json_auto copy="price"/>
+						</json_builder>
+					</attribute>
                 </post_body>
             </request>
             <response model="OrderID">

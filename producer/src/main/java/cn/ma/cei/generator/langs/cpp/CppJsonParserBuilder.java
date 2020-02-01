@@ -5,6 +5,7 @@
  */
 package cn.ma.cei.generator.langs.cpp;
 
+import cn.ma.cei.generator.builder.JsonCheckerBuilder;
 import cn.ma.cei.generator.builder.JsonParserBuilder;
 import cn.ma.cei.generator.environment.Variable;
 
@@ -32,6 +33,11 @@ public class CppJsonParserBuilder extends JsonParserBuilder {
     @Override
     public void defineRootJsonObject(Variable jsonObject, Variable responseVariable) {
         //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public JsonCheckerBuilder createJsonCheckerBuilder() {
+        return null;
     }
 
     @Override

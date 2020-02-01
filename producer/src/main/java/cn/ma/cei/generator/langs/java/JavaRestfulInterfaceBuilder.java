@@ -1,6 +1,7 @@
 package cn.ma.cei.generator.langs.java;
 
 import cn.ma.cei.generator.builder.JsonBuilderBuilder;
+import cn.ma.cei.generator.builder.StringBuilderBuilder;
 import cn.ma.cei.generator.environment.Variable;
 import cn.ma.cei.generator.environment.VariableFactory;
 import cn.ma.cei.generator.environment.VariableType;
@@ -12,7 +13,6 @@ import java.util.List;
 
 public class JavaRestfulInterfaceBuilder extends RestfulInterfaceBuilder {
 
-    //private JavaMethod method;
     private JavaClass clientClass;
 
     private JavaMethod method;
@@ -61,6 +61,16 @@ public class JavaRestfulInterfaceBuilder extends RestfulInterfaceBuilder {
     @Override
     public void onAddReference(VariableType variableType) {
         clientClass.addReference(variableType);
+    }
+
+    @Override
+    public JsonBuilderBuilder createJsonBuilderBuilder() {
+        return new JavaJsonBuilderBuilder(method);
+    }
+
+    @Override
+    public StringBuilderBuilder createStringBuilderBuilder() {
+        return new JavaStringBuilderBuilder(method);
     }
 
     @Override

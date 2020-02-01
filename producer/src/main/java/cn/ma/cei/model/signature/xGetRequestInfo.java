@@ -6,6 +6,7 @@
 package cn.ma.cei.model.signature;
 
 import cn.ma.cei.model.base.xSignatureItem;
+
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -24,4 +25,10 @@ public class xGetRequestInfo extends xSignatureItem {
     @XmlAttribute(name = "convert")
     public String convert;
 
+    @Override
+    public void customCheck() {
+        super.customCheck();
+        checkMemberNotNull(info, "info");
+        checkMemberNotNull(output, "output");
+    }
 }

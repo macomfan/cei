@@ -1,5 +1,6 @@
 package cn.ma.cei.generator;
 
+import cn.ma.cei.generator.builder.JsonCheckerBuilder;
 import cn.ma.cei.generator.environment.Variable;
 import cn.ma.cei.generator.environment.VariableType;
 import cn.ma.cei.exception.CEIException;
@@ -35,7 +36,8 @@ public class BuildResponse {
         if (response.jsonParser != null) {
             response.jsonParser.startBuilding();
             JsonParserBuilder jsonParserBuilder = responseBuilder.getJsonParserBuilder();
-            Variable returnVariable = BuildJsonParser.build(response.jsonParser, responseVariable, returnType, jsonParserBuilder, interfaceBuilder);
+            Variable returnVariable = BuildJsonParser.build(
+                    response.jsonParser, responseVariable, returnType, jsonParserBuilder, interfaceBuilder, JsonCheckerBuilder.UsedFor.REPORT_ERROR);
             response.jsonParser.endBuilding();
             return returnVariable;
         }

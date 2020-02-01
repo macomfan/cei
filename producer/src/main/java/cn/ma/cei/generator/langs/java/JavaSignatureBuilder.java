@@ -5,7 +5,9 @@
  */
 package cn.ma.cei.generator.langs.java;
 
+import cn.ma.cei.generator.builder.JsonBuilderBuilder;
 import cn.ma.cei.generator.builder.SignatureBuilder;
+import cn.ma.cei.generator.builder.StringBuilderBuilder;
 import cn.ma.cei.generator.buildin.SignatureTool;
 import cn.ma.cei.generator.environment.Variable;
 import cn.ma.cei.generator.environment.VariableType;
@@ -51,6 +53,16 @@ public class JavaSignatureBuilder extends SignatureBuilder {
     @Override
     public void onAddReference(VariableType variableType) {
         parent.addReference(variableType);
+    }
+
+    @Override
+    public JsonBuilderBuilder createJsonBuilderBuilder() {
+        return null;
+    }
+
+    @Override
+    public StringBuilderBuilder createStringBuilderBuilder() {
+        return null;
     }
 
     @Override

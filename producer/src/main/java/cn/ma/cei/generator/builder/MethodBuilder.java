@@ -16,6 +16,10 @@ public abstract class MethodBuilder {
 
     public abstract void onAddReference(VariableType variableType);
 
+    public abstract JsonBuilderBuilder createJsonBuilderBuilder();
+
+    public abstract StringBuilderBuilder createStringBuilderBuilder();
+
     private final UniquetList<String, Variable> variableList = new UniquetList<>();
 
     public Variable createLocalVariable(VariableType type, String name) {
@@ -30,7 +34,7 @@ public abstract class MethodBuilder {
     public Variable createTempVariable(VariableType type, String name) {
         String newName = name;
         if (variableList.containsKey(newName)) {
-            newName += Integer.toString(tempVariableIndex);
+            newName += Integer.toString(tempVariableIndex++);
         }
         return createLocalVariable(type, newName);
     }

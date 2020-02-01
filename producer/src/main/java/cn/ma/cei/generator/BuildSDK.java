@@ -66,7 +66,7 @@ public class BuildSDK {
             Environment.setCurrentExchange(sdk.exchange);
             Environment.setCurrentLanguage(language);
             Environment.setCurrentDescriptionConverter(framework.getDescriptionConverter());
-            
+
             BuildExchange.build(sdk, framework.getExchangeBuilder());
             sdk.endBuilding();
         });

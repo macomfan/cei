@@ -11,17 +11,28 @@ import cn.ma.cei.model.json.checker.xJsonNotEqual;
 import cn.ma.cei.model.json.xJsonParser;
 
 public class BuildJsonChecker {
+    static class JsonCheckContext {
+        Variable jsonCheckerObject;
+        JsonCheckerBuilder jsonCheckerBuilder;
+        Variable key;
+        Variable value;
+    }
+
     public static void build(xJsonChecker jsonChecker, Variable jsonParser, JsonCheckerBuilder builder, MethodBuilder method) {
         Variable jsonCheckerVar = method.createLocalVariable(JsonChecker.getType(), "jsonChecker");
         builder.defineJsonChecker(jsonCheckerVar, jsonParser);
         jsonChecker.items.forEach(item -> {
+            JsonCheckContext context = new JsonCheckContext();
+            context.jsonCheckerObject = jsonCheckerVar;
+            context.jsonCheckerBuilder = builder;
+
             if (item instanceof xJsonEqual) {
                 ProcessEqual((xJsonEqual) item, builder);
             } else if (item instanceof xJsonNotEqual) {
                 ProcessNotEqual((xJsonNotEqual) item);
             }
         });
-        builder.completeJsonChecker(jsonParser);
+        builder.completeJsonChecker(jsonCheckerVar);
     }
 
     private static void ProcessEqual(xJsonEqual jsonEqual, JsonCheckerBuilder builder) {

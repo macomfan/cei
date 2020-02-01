@@ -5,6 +5,7 @@
  */
 package cn.ma.cei.generator.langs.python3;
 
+import cn.ma.cei.generator.builder.JsonCheckerBuilder;
 import cn.ma.cei.generator.builder.JsonParserBuilder;
 import cn.ma.cei.generator.buildin.TheArray;
 import cn.ma.cei.generator.environment.Variable;
@@ -83,6 +84,11 @@ public class Python3JsonParserBuilder extends JsonParserBuilder {
     public void defineRootJsonObject(Variable jsonObject, Variable responseVariable) {
         Variable value = VariableFactory.createConstantVariable(responseVariable.getDescriptor() + ".get_json()");
         method.addAssign(method.defineVariable(jsonObject), method.useVariable(value));
+    }
+
+    @Override
+    public JsonCheckerBuilder createJsonCheckerBuilder() {
+        return new Python3JsonCheckerBuilder();
     }
 
 }

@@ -6,6 +6,7 @@
 package cn.ma.cei.model.signature;
 
 import cn.ma.cei.model.base.xSignatureItem;
+
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -21,4 +22,11 @@ public class xBase64 extends xSignatureItem {
 
     @XmlAttribute(name = "input")
     public String input;
+
+    @Override
+    public void customCheck() {
+        super.customCheck();
+        checkMemberNotNull(input, "input");
+        checkMemberNotNull(output, "output");
+    }
 }

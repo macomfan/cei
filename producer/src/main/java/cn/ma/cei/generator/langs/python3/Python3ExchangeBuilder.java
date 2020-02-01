@@ -10,16 +10,10 @@ import cn.ma.cei.generator.builder.ExchangeBuilder;
 import cn.ma.cei.generator.builder.ModelBuilder;
 import cn.ma.cei.generator.builder.RestfulClientBuilder;
 import cn.ma.cei.generator.builder.SignatureBuilder;
-import cn.ma.cei.generator.buildin.JsonWrapper;
-import cn.ma.cei.generator.buildin.RestfulConnection;
-import cn.ma.cei.generator.buildin.RestfulOptions;
-import cn.ma.cei.generator.buildin.RestfulRequest;
-import cn.ma.cei.generator.buildin.RestfulResponse;
-import cn.ma.cei.generator.buildin.SignatureTool;
-import cn.ma.cei.generator.buildin.TheArray;
-import cn.ma.cei.generator.buildin.TheStream;
+import cn.ma.cei.generator.buildin.*;
 import cn.ma.cei.generator.environment.Constant;
 import cn.ma.cei.generator.environment.Environment;
+import cn.ma.cei.generator.environment.Variable;
 import cn.ma.cei.generator.environment.VariableFactory;
 import cn.ma.cei.generator.langs.python3.tools.Python3Class;
 import cn.ma.cei.generator.langs.python3.tools.Python3File;
@@ -64,6 +58,7 @@ public class Python3ExchangeBuilder extends ExchangeBuilder {
         VariableFactory.setupBuildinVariableType(JsonWrapper.typeName, "JsonWrapper", "from impl.jsonwrapper import JsonWrapper");
         VariableFactory.setupBuildinVariableType(SignatureTool.typeName, "SignatureTool", "from impl.signaturetool import SignatureTool");
         VariableFactory.setupBuildinVariableType(TheStream.typeName, "byte[]", VariableFactory.NO_REF);
+        VariableFactory.setupBuildinVariableType(JsonChecker.typeName, "JsonChecker", "from impl.jsonchecker import JsonChecker");
 
         CEIPath workingFolder = Environment.getWorkingFolder();
         CEIPath exchangeFolder = CEIPath.appendPath(workingFolder, "exchanges");

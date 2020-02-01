@@ -25,4 +25,8 @@ public class JsonChecker {
     public boolean complete() {
         return result;
     }
+
+    public void reportError() {
+
+    }
 }

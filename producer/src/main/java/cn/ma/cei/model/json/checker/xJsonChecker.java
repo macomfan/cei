@@ -1,7 +1,7 @@
 package cn.ma.cei.model.json.checker;
 
 import cn.ma.cei.model.json.xJsonType;
-import cn.ma.cei.xml.XmlAnyElementTypes;
+import cn.ma.cei.xml.CEIXmlAnyElementTypes;
 
 import javax.xml.bind.annotation.XmlAnyElement;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -11,7 +11,7 @@ import java.util.List;
 public class xJsonChecker extends xJsonType {
 
     @XmlAnyElement(lax = true)
-    @XmlAnyElementTypes({
+    @CEIXmlAnyElementTypes({
             xJsonEqual.class,
             xJsonNotEqual.class})
     public List<xJsonCheckerItem> items;

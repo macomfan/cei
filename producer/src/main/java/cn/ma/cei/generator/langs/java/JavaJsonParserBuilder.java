@@ -1,5 +1,6 @@
 package cn.ma.cei.generator.langs.java;
 
+import cn.ma.cei.generator.builder.JsonCheckerBuilder;
 import cn.ma.cei.generator.environment.Variable;
 import cn.ma.cei.generator.builder.JsonParserBuilder;
 import cn.ma.cei.generator.environment.VariableFactory;
@@ -74,5 +75,10 @@ public class JavaJsonParserBuilder extends JsonParserBuilder {
     @Override
     public void getJsonDecimal(Variable to, Variable jsonObject, Variable itemName) {
         method.addAssign(method.useVariable(to), method.invoke(jsonObject.getDescriptor() + ".getDecimal", itemName));
+    }
+
+    @Override
+    public JsonCheckerBuilder createJsonCheckerBuilder() {
+        return new JavaJsonCheckerBuilder(method);
     }
 }

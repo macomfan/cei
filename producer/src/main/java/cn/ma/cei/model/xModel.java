@@ -6,7 +6,7 @@ import cn.ma.cei.model.base.xElement;
 import cn.ma.cei.model.base.xType;
 import cn.ma.cei.model.types.*;
 import cn.ma.cei.model.types.xObject;
-import cn.ma.cei.xml.XmlAnyElementTypes;
+import cn.ma.cei.xml.CEIXmlAnyElementTypes;
 
 import javax.xml.bind.annotation.XmlAnyElement;
 import javax.xml.bind.annotation.XmlAttribute;
@@ -21,7 +21,7 @@ public class xModel extends xElement implements IDependenceNode {
     public String name;
 
     @XmlAnyElement(lax = true)
-    @XmlAnyElementTypes({
+    @CEIXmlAnyElementTypes({
         xString.class,
         xBoolean.class,
         xInt.class,
@@ -34,6 +34,13 @@ public class xModel extends xElement implements IDependenceNode {
     @Override
     public String getIdentifier() {
         return name;
+    }
+
+    @Override
+    public void customCheck() {
+        super.customCheck();
+        checkMemberNotNull(name, "name");
+        checkMember(memberList);
     }
 
 }

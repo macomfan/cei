@@ -1,5 +1,4 @@
 
-import cn.ma.cei.exchanges.TestWebsocket;
 import cn.ma.cei.exchanges.cei;
 import cn.ma.cei.exchanges.huobipro;
 import cn.ma.cei.impl.JsonWrapper;
@@ -35,10 +34,20 @@ public class main {
     }
 
     public static void main(String[] args) throws InterruptedException {
-        TestWebsocket tws = new TestWebsocket();
-        tws.start("aaa");
-        Thread.sleep(1000);
-        tws.subscriptCandlestick(null, null, null);
+        String jsonData = "[{\n" +
+                "\t\"price\": \"0.1\",\n" +
+                "\t\"qty\": \"0.1\"\n" +
+                "}, {\n" +
+                "\t\"price\": \"0.2\",\n" +
+                "\t\"qty\": \"0.2\"\n" +
+                "}]";
+        JsonWrapper jsonParse = JsonWrapper.parseFromString(jsonData);
+
+
+//        TestWebsocket tws = new TestWebsocket();
+//        tws.start("aaa");
+//        Thread.sleep(1000);
+//        tws.subscriptCandlestick(null, null, null);
         
 //        String data = "{\n"
 //      + "  \"status\": \"ok\",\n"

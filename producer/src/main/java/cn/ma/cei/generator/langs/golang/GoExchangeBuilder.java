@@ -10,14 +10,7 @@ import cn.ma.cei.generator.builder.ExchangeBuilder;
 import cn.ma.cei.generator.builder.ModelBuilder;
 import cn.ma.cei.generator.builder.RestfulClientBuilder;
 import cn.ma.cei.generator.builder.SignatureBuilder;
-import cn.ma.cei.generator.buildin.JsonWrapper;
-import cn.ma.cei.generator.buildin.RestfulConnection;
-import cn.ma.cei.generator.buildin.RestfulOptions;
-import cn.ma.cei.generator.buildin.RestfulRequest;
-import cn.ma.cei.generator.buildin.RestfulResponse;
-import cn.ma.cei.generator.buildin.SignatureTool;
-import cn.ma.cei.generator.buildin.TheArray;
-import cn.ma.cei.generator.buildin.TheStream;
+import cn.ma.cei.generator.buildin.*;
 import cn.ma.cei.generator.environment.Constant;
 import cn.ma.cei.generator.environment.Environment;
 import cn.ma.cei.generator.environment.VariableFactory;
@@ -61,6 +54,7 @@ public class GoExchangeBuilder extends ExchangeBuilder {
         VariableFactory.setupBuildinVariableType(RestfulOptions.typeName, "ceiimpl.RestfulOptions", "ceiimpl");
         VariableFactory.setupBuildinVariableType(JsonWrapper.typeName, "ceiimpl.JsonWrapper", "ceiimpl");
         VariableFactory.setupBuildinVariableType(SignatureTool.typeName, "signature", "ceiimpl");
+        VariableFactory.setupBuildinVariableType(JsonChecker.typeName, "ceiimpl.JsonChecker", "ceiimpl");
 
         CEIPath workingFolder = Environment.getWorkingFolder();
         CEIPath exchangeFolder = CEIPath.appendPath(workingFolder, "src", "exchanges");

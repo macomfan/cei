@@ -15,4 +15,10 @@ public class xResponse extends xElement {
 
     @XmlElement(name = "json_parser")
     public xJsonParser jsonParser;
+
+    @Override
+    public void customCheck() {
+        super.customCheck();
+        checkMemberNotNull(model, "model");
+    }
 }

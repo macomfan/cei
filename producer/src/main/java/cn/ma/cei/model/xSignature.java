@@ -16,14 +16,15 @@ import cn.ma.cei.model.signature.xCombineStringArray;
 import cn.ma.cei.model.signature.xGetRequestInfo;
 import cn.ma.cei.model.signature.xGetNow;
 import cn.ma.cei.model.signature.xHmacsha256;
-import cn.ma.cei.xml.XmlAnyElementTypes;
+
+import cn.ma.cei.xml.CEIXmlAnyElementTypes;
+
 import java.util.List;
 import javax.xml.bind.annotation.XmlAnyElement;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
- *
  * @author U0151316
  */
 @XmlRootElement(name = "signature")
@@ -33,15 +34,22 @@ public class xSignature extends xElement {
     public String name;
 
     @XmlAnyElement(lax = true)
-    @XmlAnyElementTypes({
-        xGetNow.class,
-        xAddQueryString.class,
-        xCombineQueryString.class,
-        xGetRequestInfo.class,
-        xAddStringArray.class,
-        xAppendToString.class,
-        xCombineStringArray.class,
-        xBase64.class,
-        xHmacsha256.class})
+    @CEIXmlAnyElementTypes({
+            xGetNow.class,
+            xAddQueryString.class,
+            xCombineQueryString.class,
+            xGetRequestInfo.class,
+            xAddStringArray.class,
+            xAppendToString.class,
+            xCombineStringArray.class,
+            xBase64.class,
+            xHmacsha256.class})
     public List<xSignatureItem> items;
+
+    @Override
+    public void customCheck() {
+        super.customCheck();
+        checkMemberNotNull(name, "name");
+        checkMember(items);
+    }
 }

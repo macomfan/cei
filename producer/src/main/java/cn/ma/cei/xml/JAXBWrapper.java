@@ -7,11 +7,9 @@ import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.io.File;
-import java.io.FilenameFilter;
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
-import java.nio.file.Path;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -21,7 +19,7 @@ public class JAXBWrapper {
         if (cls.getName().equals("java.lang.Object")) {
             return;
         }
-        if (!cls.isAnnotationPresent(XmlRootElement.class) && !cls.isAnnotationPresent(XmlElementBase.class)) {
+        if (!cls.isAnnotationPresent(XmlRootElement.class)) {
             return;
         }
         if (cls.isAnnotationPresent(XmlRootElement.class)) {
@@ -33,8 +31,8 @@ public class JAXBWrapper {
         }
 
         for (Field field : cls.getDeclaredFields()) {
-            if (field.isAnnotationPresent(XmlAnyElementTypes.class)) {
-                for (Class<?> c : field.getAnnotation(XmlAnyElementTypes.class).value()) {
+            if (field.isAnnotationPresent(CEIXmlAnyElementTypes.class)) {
+                for (Class<?> c : field.getAnnotation(CEIXmlAnyElementTypes.class).value()) {
                     if (!classes.contains(c)) {
                         checkCurrentClass(c, classes);
                         classes.add(c);

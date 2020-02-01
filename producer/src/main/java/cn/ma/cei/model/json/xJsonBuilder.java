@@ -6,7 +6,7 @@
 package cn.ma.cei.model.json;
 
 import cn.ma.cei.model.base.xBuilder;
-import cn.ma.cei.xml.XmlAnyElementTypes;
+import cn.ma.cei.xml.CEIXmlAnyElementTypes;
 import java.util.List;
 import javax.xml.bind.annotation.XmlAnyElement;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -19,7 +19,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class xJsonBuilder extends xBuilder {
 
     @XmlAnyElement(lax = true)
-    @XmlAnyElementTypes({
+    @CEIXmlAnyElementTypes({
         xJsonAuto.class,
         xJsonString.class,
         xJsonInteger.class,

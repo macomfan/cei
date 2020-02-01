@@ -94,8 +94,8 @@ public class main {
 //        BuildSDK.build(finalSDKs, Environment.Language.python3, "C:\\dev\\cei\\output");
 //        try {
             BuildSDK.build(finalSDKs, Environment.Language.java, "C:\\dev\\cei\\output");
-            BuildSDK.build(finalSDKs, Environment.Language.golang, "C:\\dev\\cei\\output");
-            BuildSDK.build(finalSDKs, Environment.Language.python3, "C:\\dev\\cei\\output");
+//            BuildSDK.build(finalSDKs, Environment.Language.golang, "C:\\dev\\cei\\output");
+//            BuildSDK.build(finalSDKs, Environment.Language.python3, "C:\\dev\\cei\\output");
 //        } catch (Exception e) {
 //            System.err.println(BuildTracer.getTraceString());
 //        }

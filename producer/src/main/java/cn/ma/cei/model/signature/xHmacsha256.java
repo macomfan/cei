@@ -6,6 +6,7 @@
 package cn.ma.cei.model.signature;
 
 import cn.ma.cei.model.base.xSignatureItem;
+
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -24,4 +25,12 @@ public class xHmacsha256 extends xSignatureItem {
 
     @XmlAttribute(name = "key")
     public String key;
+
+    @Override
+    public void customCheck() {
+        super.customCheck();
+        checkMemberNotNull(input, "input");
+        checkMemberNotNull(output, "output");
+        checkMemberNotNull(key, "key");
+    }
 }

@@ -1,6 +1,7 @@
 package cn.ma.cei.generator.langs.cpp;
 
 import cn.ma.cei.generator.builder.JsonBuilderBuilder;
+import cn.ma.cei.generator.builder.StringBuilderBuilder;
 import cn.ma.cei.generator.environment.Variable;
 import cn.ma.cei.generator.environment.VariableType;
 import cn.ma.cei.generator.builder.ResponseBuilder;
@@ -47,6 +48,16 @@ public class CppRestfulInterfaceBuilder extends RestfulInterfaceBuilder {
     @Override
     public void onAddReference(VariableType variableType) {
         
+    }
+
+    @Override
+    public JsonBuilderBuilder createJsonBuilderBuilder() {
+        return null;
+    }
+
+    @Override
+    public StringBuilderBuilder createStringBuilderBuilder() {
+        return null;
     }
 
 

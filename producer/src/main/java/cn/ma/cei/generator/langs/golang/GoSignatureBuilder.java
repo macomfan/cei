@@ -5,7 +5,9 @@
  */
 package cn.ma.cei.generator.langs.golang;
 
+import cn.ma.cei.generator.builder.JsonBuilderBuilder;
 import cn.ma.cei.generator.builder.SignatureBuilder;
+import cn.ma.cei.generator.builder.StringBuilderBuilder;
 import cn.ma.cei.generator.environment.Variable;
 import cn.ma.cei.generator.environment.VariableType;
 import cn.ma.cei.generator.langs.golang.tools.*;
@@ -87,6 +89,16 @@ public class GoSignatureBuilder extends SignatureBuilder {
     @Override
     public void onAddReference(VariableType variableType) {
         //signatureStruct.addReference(variableType);
+    }
+
+    @Override
+    public JsonBuilderBuilder createJsonBuilderBuilder() {
+        return null;
+    }
+
+    @Override
+    public StringBuilderBuilder createStringBuilderBuilder() {
+        return null;
     }
 
     @Override

@@ -41,6 +41,10 @@ public class JavaMethod {
         code.appendJavaLine("return", variable.getDescriptor());
     }
 
+    public void addReturn(String statement) {
+        code.appendJavaLine("return", statement);
+    }
+
     public void startFor(Variable item, String statement) {
         code.appendWordsln(statement + ".forEach(" + item.getDescriptor() + " -> {");
         code.startBlock();

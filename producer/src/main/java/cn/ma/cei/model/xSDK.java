@@ -26,7 +26,6 @@ public class xSDK extends xElement {
     @XmlElement(name = "restful")
     public List<xRestful> restfulList;
 
-
     private <T> List<T> mergeList (List<T> dst, List<T> src) {
         if (dst == null) {
             dst = new LinkedList<>();
@@ -43,8 +42,13 @@ public class xSDK extends xElement {
         signatureList =mergeList(signatureList, sdk.signatureList);
     }
 
-    @Override
-    public void check() {
 
+    @Override
+    public void customCheck() {
+        super.customCheck();
+        checkMemberNotNull(exchange, "exchange");
+        checkMember(modelList);
+        checkMember(signatureList);
+        checkMember(restfulList);
     }
 }

@@ -104,10 +104,11 @@ public class JsonWrapper {
 
     public static JsonWrapper parseFromString(String text) {
         try {
-            JSONObject jsonObject = (JSONObject) JSON.parse(text);
-            // TODO maybe JSONArray
-            if (jsonObject != null) {
-                return new JsonWrapper(jsonObject);
+            Object tmp = JSON.parse(text);
+            if (tmp instanceof JSONObject) {
+                return new JsonWrapper((JSONObject)tmp);
+            } else if (tmp instanceof JSONArray) {
+                return new JsonWrapper((JSONArray)tmp);
             } else {
                 throw new CEIException("[Json] Unknown error when parse: " + text);
             }
