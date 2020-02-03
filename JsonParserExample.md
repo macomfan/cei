@@ -1,4 +1,26 @@
-####Example 1 - Get value from Json Object
+#### <json_value>
+```xml
+<json_value key="xxx" value="xxx" />
+```
+* Attributes  
+ key:  
+ value  
+ copy  
+  
+  
+#### <json_object>
+```xml
+<json_object key="xxx" value="xxx" model="xxxModel"/>
+```
+* Attributes  
+> key:  
+> value  
+> copy  
+
+
+### Examples
+
+#### Example 1 - Get value from Json Object
 
 ```json
 {
@@ -28,7 +50,7 @@
 </json_parser>
 ```
 
-####Example 2 - Get object from Json Object
+#### Example 2 - Get object from Json Object
 
 ```json
 {
@@ -36,6 +58,10 @@
   "data": {
       "price": 123.456,
       "volume": 1.0
+  },
+  "detail": {
+    "base": "btc",
+    "quote": "usdt"
   }
 }
 ```
@@ -44,11 +70,17 @@
     <model name="LastTradeWithData">
         <string name="symbol"/>
         <object name="data" refer="LastTradeData"/>
+        <object name="detail" refer="Detail"/>
     </model>
     
     <model name="LastTradeData">
         <decimal name="price"/>
         <decimal name="volume"/>
+    </model>
+
+    <model name="Detail">
+        <string name="base"/>
+        <string name="quote"/>
     </model>
 </sdk>
 ```
@@ -58,6 +90,10 @@
     <json_object key="data" value="{data}" model="LastTradeData">
         <json_value key="price" value="{price}"/>
         <json_value key="volume" value="{volume}"/>
+    </json_object>
+    <json_object key="detail" value="{detail}" model="Detail">
+        <json_value key="base" value="{base}"/>
+        <json_value key="quote" value="{quote}"/>
     </json_object>
 </json_parser>
 ```
@@ -119,19 +155,17 @@
 ```
 ```xml
 <json_parser model="OrderBook">
-    <json_array key="bids" value="{bids}">
-        <json_object model="OrderEntity">
-            <json_value key="price" value="{price}"/>
-            <json_value key="volume" value="{volume}"/>
-        </json_object>
-    </json_array>
-    <json_object_array key="asks" value="asks" model="OrderEntity">
+    <json_object_array key="bids" value="{bids}" model="OrderEntity">
+        <json_value key="price" value="{price}"/>
+        <json_value key="volume" value="{volume}"/>
+    </json_object_array>
+    <json_object_array key="asks" value="{asks}" model="OrderEntity">
         <json_value key="price" value="{price}"/>
         <json_value key="volume" value="{volume}"/>
     </json_object_array>
 </json_parser>
 ```
-####Example 5 - Get object array in Json Root
+#### Example 5 - Get object array in Json Root
 ```json
 [{
 		"symbol": "btcusdt",
@@ -167,19 +201,8 @@
     </json_object_array>
 </json_parser>
 ```
-Or
-```xml
-<json_array model="HistoricalTrade">
-    <json_array value="data">
-        <json_object model="TradeEntity">
-            <json_value key="symbol" value="{symbol}"/>
-            <json_value key="price" value="{price}"/>
-            <json_value key="volume" value="{volume}"/>
-        </json_object>
-    </json_array>
-</json_parser>
-```
-####Example 6 - Get data array in Json array
+
+#### Example 6 - Get data array in Json array
 ```json
 {
 	"bids": [
@@ -205,21 +228,21 @@ Or
 ```
 ```xml
 <json_parser model="OrderDepth">
-    <json_array key="bids" value="{bids}" model="DepthEntity">
-        <json_value value="data"/>
-    </json_array>
-    <json_array key="asks" value="{asks}" model="DepthEntity">
-        <json_value value="data"/>
-    </json_array>
+    <json_object_array key="bids" value="{bids}" model="DepthEntity">
+        <json_value key="\" value="data"/>
+    </json_object_array>
+    <json_object_array key="asks" value="{asks}" model="DepthEntity">
+        <json_value key="\" value="data"/>
+    </json_object_array>
 </json_parser>
 ```
-####Example 7 - Use copy attribute
+#### Example 7 - Use copy attribute
 
 
-####Example 8 - Use Json Path for normal value
+#### Example 8 - Use Json Path for normal value
 
 
-####Example 9 - Use Json Path for value in array
+#### Example 9 - Use Json Path for value in array
 
 
 

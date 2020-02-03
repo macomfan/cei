@@ -46,17 +46,32 @@ public class CppJsonParserBuilder extends JsonParserBuilder {
     }
 
     @Override
-    public void startJsonObject(Variable jsonObject, Variable parentJsonObject, Variable itemName) {
+    public void getJsonDecimalArray(Variable to, Variable jsonObject, Variable itemName) {
 
     }
 
     @Override
-    public void endJsonObject(Variable to, Variable model) {
+    public void getJsonBooleanArray(Variable to, Variable jsonObject, Variable itemName) {
 
     }
 
     @Override
-    public void startJsonObjectArray(Variable eachItemJsonObject, Variable parentJsonObject, Variable itemName) {
+    public void getJsonIntArray(Variable to, Variable jsonObject, Variable itemName) {
+
+    }
+
+    @Override
+    public void defineJsonObject(Variable jsonObject, Variable parentJsonObject, Variable itemName) {
+
+    }
+
+    @Override
+    public void assignModel(Variable to, Variable model) {
+
+    }
+
+    @Override
+    public void startJsonObjectArray(Variable eachItemJsonObject, Variable jsonObject) {
 
     }
 

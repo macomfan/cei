@@ -55,7 +55,6 @@ public class JsonWrapper {
                         String index = items[i].replaceFirst("\\[", "");
                         index = index.replaceFirst("]", "");
                         newJsonPathNode.arrayIndex = Integer.parseInt(index);
-
                     } else {
                         newJsonPathNode.path = items[i];
                     }
@@ -208,38 +207,38 @@ public class JsonWrapper {
         }
     }
 
-    public JsonWrapper getArray(String itemName) {
-        Object obj = checkMandatoryField(itemName);
-        try {
-            return new JsonWrapper((JSONArray) obj);
-        } catch (Exception e) {
-            throw new CEIException("[Json] Get array: " + itemName + " error");
-        }
-    }
-
     public JsonWrapper getObject(String itemName) {
         Object obj = checkMandatoryField(itemName);
         try {
-            return new JsonWrapper((JSONObject)obj);
+            if (obj instanceof JSONObject) {
+                return new JsonWrapper((JSONObject)obj);
+            } else if (obj instanceof JSONArray) {
+                return new JsonWrapper((JSONArray)obj);
+            } else {
+                throw new CEIException("[Json] Get object: " + itemName + " error, it is neither object or array");
+            }
         } catch (Exception e) {
             throw new CEIException("[Json] Get object: " + itemName + " error");
         }
     }
 
-    public List<JsonWrapper> getObjectArray(String itemName) {
-        Object obj = checkMandatoryField(itemName);
-        if (!(obj instanceof JSONArray)) {
-            throw new CEIException("[Json] Get array: " + itemName + " error");
-        }
-        List<JsonWrapper> res = new LinkedList<>();
-        JSONArray array = (JSONArray) obj;
-        array.forEach((object) -> {
-            if (!(object instanceof JSONObject)) {
-                throw new CEIException("[Json] Parse array error in forEach");
+    @FunctionalInterface
+    public interface ForEachHandler {
+        void process(JsonWrapper item);
+    }
+
+
+    public void forEach(ForEachHandler handler) {
+        shouldBeArray();
+        jsonArray.forEach(item -> {
+            if (item instanceof JSONObject) {
+                handler.process(new JsonWrapper((JSONObject)item));
+            } else if (item instanceof JSONArray) {
+                handler.process(new JsonWrapper((JSONArray)item));
+            } else {
+                throw new CEIException("[Json] the item is neither object or array");
             }
-            res.add(new JsonWrapper((JSONObject) object));
         });
-        return res;
     }
 
     public List<String> getStringArray(String itemName) {
@@ -254,6 +253,22 @@ public class JsonWrapper {
                 throw new CEIException("[Json] Parse array error in forEachAsString");
             }
             res.add((String) object);
+        });
+        return res;
+    }
+
+    public List<BigDecimal> getDecimalArray(String itemName) {
+        Object obj = checkMandatoryField(itemName);
+        if (!(obj instanceof JSONArray)) {
+            throw new CEIException("[Json] Get array: " + itemName + " error");
+        }
+        List<BigDecimal> res = new LinkedList<>();
+        JSONArray array = (JSONArray)obj;
+        array.forEach((object) -> {
+            if (!(object instanceof BigDecimal)) {
+                throw new CEIException("[Json] Parse array error in forEachAsBigDecimal");
+            }
+            res.add((BigDecimal) object);
         });
         return res;
     }

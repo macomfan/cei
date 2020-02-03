@@ -22,13 +22,15 @@ public class xModel extends xElement implements IDependenceNode {
 
     @XmlAnyElement(lax = true)
     @CEIXmlAnyElementTypes({
-        xString.class,
-        xBoolean.class,
-        xInt.class,
-        xDecimal.class,
-        xObject.class,
-        xObjectArray.class,
-        xStringArray.class})
+            xString.class,
+            xBoolean.class,
+            xInt.class,
+            xDecimal.class,
+            xObject.class,
+            xObjectArray.class,
+            xStringArray.class,
+            xDecimalArray.class,
+            xBooleanArray.class})
     public List<xType> memberList;
 
     @Override
@@ -40,7 +42,7 @@ public class xModel extends xElement implements IDependenceNode {
     public void customCheck() {
         super.customCheck();
         checkMemberNotNull(name, "name");
-        checkMember(memberList);
+        checkMemberNotNull(memberList, "member");
     }
 
 }

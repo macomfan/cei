@@ -31,20 +31,35 @@ public class JavaJsonParserBuilder extends JsonParserBuilder {
     }
 
     @Override
-    public void startJsonObject(Variable jsonObject, Variable parentJsonObject, Variable itemName) {
+    public void getJsonDecimalArray(Variable to, Variable jsonObject, Variable itemName) {
+        method.addAssign(method.useVariable(to), method.invoke(jsonObject.getDescriptor() + ".getDecimalArray", itemName));
+    }
+
+    @Override
+    public void getJsonBooleanArray(Variable to, Variable jsonObject, Variable itemName) {
+        method.addAssign(method.useVariable(to), method.invoke(jsonObject.getDescriptor() + ".getBooleanArray", itemName));
+    }
+
+    @Override
+    public void getJsonIntArray(Variable to, Variable jsonObject, Variable itemName) {
+        method.addAssign(method.useVariable(to), method.invoke(jsonObject.getDescriptor() + ".getIntArray", itemName));
+    }
+
+    @Override
+    public void defineJsonObject(Variable jsonObject, Variable parentJsonObject, Variable itemName) {
         method.addAssign(method.defineVariable(jsonObject), method.invoke(parentJsonObject.getDescriptor() + ".getObject", itemName));
     }
 
     @Override
-    public void endJsonObject(Variable to, Variable model) {
+    public void assignModel(Variable to, Variable model) {
         if (to != null) {
             method.addAssign(method.useVariable(to), method.useVariable(model));
         }
     }
 
     @Override
-    public void startJsonObjectArray(Variable eachItemJsonObject, Variable parentJsonObject, Variable itemName) {
-        method.startFor(eachItemJsonObject, method.invoke(parentJsonObject.getDescriptor() + ".getObjectArray", itemName));
+    public void startJsonObjectArray(Variable eachItemJsonObject, Variable jsonObject) {
+        method.startFor(eachItemJsonObject, jsonObject.getDescriptor());
     }
 
     @Override

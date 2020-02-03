@@ -124,29 +124,6 @@
         <add_query_string key="Signature" value="{result}"/>
     </signature>
 
-    <restful client_name="binanceClient" url="https://api.binance.com">
-        <interface name="getBestQuote">
-            <inputs>
-                <string_array name="symbol"/>
-            </inputs>
-            <request method="get" target="/api/v3/depth">
-                <query_strings>
-                    <query name="symbol" value="aaa{symbol}"/>
-                    <query name="limit" value="5"/>
-                </query_strings>
-            </request>
-            <response model="BestQuote">
-                <json_parser>
-                    <json_auto from="lastUpdateId" to="{ts}"/>
-                    <json_auto from="\bids\[0]\[0]" to="{bestBidPrice}"/>
-                    <json_auto from="\bids\[0]\[1]" to="{bestBidAmount}"/>
-                    <json_auto from="\asks\[1]\[0]" to="{bestAskPrice}"/>
-                    <json_auto from="\asks\[1]\[1]" to="{bestAskAmount}"/>
-                </json_parser>
-            </response>
-        </interface>
-    </restful>
-
     <restful client_name="MarketClient" url="https://api.huobi.so">
         <interface name="getTimestamp">
             <request method="get" target="/v1/common/timestamp"/>
@@ -155,7 +132,7 @@
                     <json_checker>
                         <json_not_equal key="stauts" value="ok"/>
                     </json_checker>
-                    <json_auto from="data" to="{timestamp}"/>
+                    <json_value key="data" value="{timestamp}"/>
                 </json_parser>
             </response>
         </interface>
@@ -167,21 +144,21 @@
 					<json_checker>
 						<json_not_equal key="stauts" value="ok"/>
 					</json_checker>
-                    <json_auto copy="status"/>
-                    <json_auto copy="data" model="SymbolsData">
-                        <json_auto from="base-currency" to="{baseCurrency}"/>
-                        <json_auto from="quote-currency" to="{quoteCurrency}"/>
-                        <json_auto from="price-precision" to="{pricePrecision}"/>
-                        <json_auto from="amount-precision" to="{amountPrecision}"/>
-                        <json_auto from="symbol-partition" to="{symbolPartition}"/>
-                        <json_auto copy="symbol"/>
-                        <json_auto copy="state"/>
-                        <json_auto from="value-precision" to="{valuePrecision}"/>
-                        <json_auto from="min-order-amt" to="{minOrderAmt}"/>
-                        <json_auto from="max-order-amt" to="{maxOrderAmt}"/>
-                        <json_auto from="min-order-value" to="{minOrderValue}"/>
-                        <!--json_auto from="leverage-ratio" to="{leverageRatio}" optional="true"/-->
-                    </json_auto>
+                    <json_value copy="status"/>
+                    <json_object_array copy="data" model="SymbolsData">
+                        <json_value key="base-currency" value="{baseCurrency}"/>
+                        <json_value key="quote-currency" value="{quoteCurrency}"/>
+                        <json_value key="price-precision" value="{pricePrecision}"/>
+                        <json_value key="amount-precision" value="{amountPrecision}"/>
+                        <json_value key="symbol-partition" value="{symbolPartition}"/>
+                        <json_value copy="symbol"/>
+                        <json_value copy="state"/>
+                        <json_value key="value-precision" value="{valuePrecision}"/>
+                        <json_value key="min-order-amt" value="{minOrderAmt}"/>
+                        <json_value key="max-order-amt" value="{maxOrderAmt}"/>
+                        <json_value key="min-order-value" value="{minOrderValue}"/>
+                        <json_value key="leverage-ratio" value="{leverageRatio}"/>
+                    </json_object_array>
                 </json_parser>
             </response>
         </interface>
@@ -190,8 +167,8 @@
             <request method="get" target="/v1/common/currencys"/>
             <response model="Currencies">
                 <json_parser>
-                    <json_string from="status" to="{status}"/>
-                    <json_string_array from="data" to="{data}"/>
+                    <json_value key="status" value="{status}"/>
+                    <json_value key="data" value="{data}"/>
                 </json_parser>
             </response>
         </interface>
@@ -211,17 +188,17 @@
             </request>
             <response model="Candlestick">
                 <json_parser>
-                    <json_auto copy="status"/>
-                    <json_auto copy="data" model="CandlestickData">
-                        <json_auto copy="id"/>
-                        <json_auto copy="amount"/>
-                        <json_auto copy="count"/>
-                        <json_auto copy="open"/>
-                        <json_auto copy="close"/>
-                        <json_auto copy="low"/>
-                        <json_auto copy="high"/>
-                        <json_auto copy="vol"/>
-                    </json_auto>
+                    <json_value copy="status"/>
+                    <json_object_array copy="data" model="CandlestickData">
+                        <json_value copy="id"/>
+                        <json_value copy="amount"/>
+                        <json_value copy="count"/>
+                        <json_value copy="open"/>
+                        <json_value copy="close"/>
+                        <json_value copy="low"/>
+                        <json_value copy="high"/>
+                        <json_value copy="vol"/>
+                    </json_object_array>
                 </json_parser>
             </response>
         </interface>
@@ -237,20 +214,20 @@
             </request>
             <response model="LastTrade">
                 <json_parser>
-                    <json_auto copy="status"/>
-                    <json_auto copy="ts"/>
-                    <json_auto copy="ch"/>
-                    <json_object from="tick">
-                        <json_auto from="ts" to="{tsInTick}"/>
-                        <json_auto from="id" to="{idInTick}"/>
-                        <json_auto copy="data" model="LastTradeData">
-                            <json_auto copy="amount"/>
-                            <json_auto copy="price"/>
-                            <json_auto copy="ts"/>
-                            <json_auto copy="id"/>
-                            <json_auto copy="direction"/>
-                            <json_auto from="trade-id" to="{tradeID}"/>
-                        </json_auto>
+                    <json_value copy="status"/>
+                    <json_value copy="ts"/>
+                    <json_value copy="ch"/>
+                    <json_object key="tick">
+                        <json_value key="ts" value="{tsInTick}"/>
+                        <json_value key="id" value="{idInTick}"/>
+                        <json_object_array copy="data" model="LastTradeData">
+                            <json_value copy="amount"/>
+                            <json_value copy="price"/>
+                            <json_value copy="ts"/>
+                            <json_value copy="id"/>
+                            <json_value copy="direction"/>
+                            <json_value key="trade-id" value="{tradeID}"/>
+                        </json_object_array>
                     </json_object>
                 </json_parser>
             </response>
@@ -271,18 +248,18 @@
             </request>
             <response model="Depth">
                 <json_parser>
-                    <json_auto copy="status"/>
-                    <json_auto copy="ts"/>
-                    <json_auto copy="ch"/>
-                    <json_object from="tick">
-                        <json_auto copy="bids" model="DepthEntity">
-                            <json_auto from="\[0]" to="{price}"/>
-                            <json_auto from="\[1]" to="{amount}"/>
-                        </json_auto>
-                        <json_auto copy="asks" model="DepthEntity">
-                            <json_auto from="\[0]" to="{price}"/>
-                            <json_auto from="\[1]" to="{amount}"/>
-                        </json_auto>
+                    <json_value copy="status"/>
+                    <json_value copy="ts"/>
+                    <json_value copy="ch"/>
+                    <json_object key="tick">
+                        <json_object_array copy="bids" model="DepthEntity">
+                            <json_value key="\[0]" value="{price}"/>
+                            <json_value key="\[1]" value="{amount}"/>
+                        </json_object_array>
+                        <json_object_array copy="asks" model="DepthEntity">
+                            <json_value key="\[0]" value="{price}"/>
+                            <json_value key="\[1]" value="{amount}"/>
+                        </json_object_array>
                     </json_object>
                 </json_parser>
             </response>
@@ -301,13 +278,13 @@
             </request>
             <response model="BestQuote">
                 <json_parser>
-                    <json_auto copy="status"/>
-                    <json_auto copy="ts"/>
-                    <json_auto copy="ch"/>
-                    <json_auto from="\tick\bids\[0]\[0]" to="{bestBidPrice}"/>
-                    <json_auto from="\tick\bids\[0]\[1]" to="{bestBidAmount}"/>
-                    <json_auto from="\tick\asks\[1]\[0]" to="{bestAskPrice}"/>
-                    <json_auto from="\tick\asks\[1]\[1]" to="{bestAskAmount}"/>
+                    <json_value copy="status"/>
+                    <json_value copy="ts"/>
+                    <json_value copy="ch"/>
+                    <json_value key="\tick\bids\[0]\[0]" value="{bestBidPrice}"/>
+                    <json_value key="\tick\bids\[0]\[1]" value="{bestBidAmount}"/>
+                    <json_value key="\tick\asks\[1]\[0]" value="{bestAskPrice}"/>
+                    <json_value key="\tick\asks\[1]\[1]" value="{bestAskAmount}"/>
                 </json_parser>
             </response>
         </interface>
@@ -326,19 +303,19 @@
                 <post_body>
 					<attribute name="value">
 						<json_builder>
-							<json_auto from="{accountId}" to="account-id"/>
-							<json_auto copy="symbol"/>
-							<json_auto from="{orderType}" to="type"/>
-							<json_auto copy="amount"/>
-							<json_auto copy="price"/>
+							<json_value key="{accountId}" value="account-id"/>
+							<json_value copy="symbol"/>
+							<json_value key="{orderType}" value="type"/>
+							<json_value copy="amount"/>
+							<json_value copy="price"/>
 						</json_builder>
 					</attribute>
                 </post_body>
             </request>
             <response model="OrderID">
                 <json_parser>
-                    <json_auto copy="status"/>
-                    <json_auto copy="data"/>
+                    <json_value copy="status"/>
+                    <json_value copy="data"/>
                 </json_parser>
             </response>
         </interface>
@@ -350,8 +327,8 @@
             <request method="post" target="/v1/order/orders/{orderId}/submitcancel" signature="restful"/>
             <response model="OrderID">
                 <json_parser>
-                    <json_auto copy="status"/>
-                    <json_auto copy="data"/>
+                    <json_value copy="status"/>
+                    <json_value copy="data"/>
                 </json_parser>
             </response>
         </interface>
@@ -362,13 +339,13 @@
             <request method="get" target="/v1/account/accounts" signature="restful"/>
             <response model="Account">
                 <json_parser>
-                    <json_auto copy="status"/>
-                    <json_auto copy="data" model="AccountData">
-                        <json_auto copy="id"/>
-                        <json_auto copy="state"/>
-                        <json_auto copy="type"/>
-                        <json_auto copy="subtype"/>
-                    </json_auto>
+                    <json_value copy="status"/>
+                    <json_object key="data" model="AccountData">
+                        <json_value copy="id"/>
+                        <json_value copy="state"/>
+                        <json_value copy="type"/>
+                        <json_value copy="subtype"/>
+                    </json_object>
                 </json_parser>
             </response>
         </interface>

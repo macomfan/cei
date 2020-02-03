@@ -1,41 +1,38 @@
 package cei.simulator.server.models;
 
-import com.alibaba.fastjson.JSON;
 import io.vertx.core.http.HttpMethod;
 import io.vertx.ext.web.Router;
 
-import java.util.LinkedList;
-import java.util.List;
-
 public class ExchangeInfo {
-    public String ExchangeName = "TestExchange";
-    public long Timestamp = 123;
-    public List<Symbol> Symbols = new LinkedList<>();
+    private final static String data = "{\n" +
+            "\t\"ExName\": \"TestExchange\",\n" +
+            "\t\"Timestamp\": 1580652183,\n" +
+            "\t\"Symbols\": [{\n" +
+            "\t\t\t\"Name\": \"btcusdt\",\n" +
+            "\t\t\t\"OCOAllowed\": true,\n" +
+            "\t\t\t\"Precision\": 1,\n" +
+            "\t\t\t\"Status\": \"O\"\n" +
+            "\t\t},\n" +
+            "\t\t{\n" +
+            "\t\t\t\"Name\": \"ethusdt\",\n" +
+            "\t\t\t\"OCOAllowed\": false,\n" +
+            "\t\t\t\"Precision\": 2,\n" +
+            "\t\t\t\"Status\": \"P\"\n" +
+            "\t\t},\n" +
+            "\t\t{\n" +
+            "\t\t\t\"Name\": \"eosusdt\",\n" +
+            "\t\t\t\"OCOAllowed\": true,\n" +
+            "\t\t\t\"Precision\": 3,\n" +
+            "\t\t\t\"Status\": \"Q\"\n" +
+            "\t\t}\n" +
+            "\t]\n" +
+            "}";
+
 
     public static void register(Router router) {
-        ExchangeInfo data = new ExchangeInfo();
-        Symbol btc = new Symbol();
-        btc.Name = "btcusdt";
-        btc.OCOAllowed = true;
-        btc.Precision = 1;
-        btc.Status = "O";
-        Symbol eth = new Symbol();
-        eth.Name = "ethusdt";
-        eth.OCOAllowed = false;
-        eth.Precision = 2;
-        eth.Status = "C";
-        Symbol eos = new Symbol();
-        eos.Name = "eosusdt";
-        eos.OCOAllowed = false;
-        eos.Precision = 3;
-        eos.Status = "A";
-        data.Symbols.add(btc);
-        data.Symbols.add(eth);
-        data.Symbols.add(eos);
-
         router.route(HttpMethod.GET, "/api/v1/exchangeInfo").handler(routingContext -> {
-            String str = JSON.toJSONString(data);
-            routingContext.response().end(str);
+            System.out.println("/api/v1/exchangeInfo");
+            routingContext.response().end(data);
         });
 
     }

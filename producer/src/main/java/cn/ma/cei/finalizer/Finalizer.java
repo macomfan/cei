@@ -54,6 +54,7 @@ public class Finalizer {
 //        }
         // Model dependence decision.
         sdkMap.values().forEach(sdk -> {
+            sdk.doCheck();
             Dependence<xModel> dependence = new Dependence<>();
             for (xModel model : sdk.modelList) {
                 boolean referToOther = false;

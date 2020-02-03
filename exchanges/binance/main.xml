@@ -42,16 +42,14 @@
 		<decimal name="volume"/>
 	</model>
 	
-	<model name="LastTrade">
 
-	</model>
 
     <restful client_name="MarketClient" url="https://api.binance.com">
 		<interface name="getTimestamp">
 			<request method="get" target="/api/v3/time"/>
 			<response model="Timestamp">
 				<json_parser>
-					<json_auto copy="serverTime"/>
+					<json_value copy="serverTime"/>
 				</json_parser>
 			</response>
 		</interface>
@@ -59,25 +57,25 @@
             <request method="get" target="/api/v3/exchangeInfo"/>
             <response model="ExchangeInfo">
                 <json_parser>
-                    <json_auto copy="timezone"/>
-					<json_auto copy="serverTime"/>
-					<json_auto copy="rateLimits" model="RateLimits">
-						<json_auto copy="rateLimitType"/>
-						<json_auto copy="interval"/>
-						<json_auto copy="intervalNum"/>
-						<json_auto copy="limit"/>
-					</json_auto>
-					<json_auto copy="symbols" model="Symbol">
-						<json_auto copy="symbol"/>
-						<json_auto copy="status"/>
-						<json_auto copy="baseAsset"/>
-						<json_auto copy="baseAssetPrecision"/>
-						<json_auto copy="quoteAsset"/>
-						<json_auto copy="quotePrecision"/>
-						<json_auto copy="orderTypes"/>
-						<json_auto copy="icebergAllowed"/>
-						<json_auto copy="ocoAllowed"/>
-					</json_auto>
+                    <json_value copy="timezone"/>
+					<json_value copy="serverTime"/>
+					<json_object_array copy="rateLimits" model="RateLimits">
+						<json_value copy="rateLimitType"/>
+						<json_value copy="interval"/>
+						<json_value copy="intervalNum"/>
+						<json_value copy="limit"/>
+					</json_object_array>
+					<json_object_array copy="symbols" model="Symbol">
+						<json_value copy="symbol"/>
+						<json_value copy="status"/>
+						<json_value copy="baseAsset"/>
+						<json_value copy="baseAssetPrecision"/>
+						<json_value copy="quoteAsset"/>
+						<json_value copy="quotePrecision"/>
+						<json_value copy="orderTypes"/>
+						<json_value copy="icebergAllowed"/>
+						<json_value copy="ocoAllowed"/>
+					</json_object_array>
                 </json_parser>
             </response>
         </interface>
@@ -94,15 +92,15 @@
 			</request>
 			<response model="Depth">
 				<json_parser>
-					<json_auto copy="lastUpdateId"/>
-					<json_auto copy="bids" model="DepthEntity">
-						<json_auto from="\\[0]" to="{price}"/>
-						<json_auto from="\\[1]" to="{volume}"/>
-					</json_auto>
-					<json_auto copy="asks" model="DepthEntity">
-						<json_auto from="\\[0]" to="{price}"/>
-						<json_auto from="\\[1]" to="{volume}"/>
-					</json_auto>
+					<json_value copy="lastUpdateId"/>
+					<json_object_array copy="bids" model="DepthEntity">
+						<json_value key="\\[0]" value="{price}"/>
+						<json_value key="\\[1]" value="{volume}"/>
+					</json_object_array>
+					<json_object_array copy="asks" model="DepthEntity">
+						<json_value key="\\[0]" value="{price}"/>
+						<json_value key="\\[1]" value="{volume}"/>
+					</json_object_array>
 				</json_parser>
 			</response>
 		</interface>

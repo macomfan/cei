@@ -24,6 +24,15 @@
     <model name="Order">
         <int name="OrderId"/>
     </model>
+	
+	<model name="HistoricalTrade">
+        <object_array name="data" refer="TradeEntity"/>
+    </model>
+
+    <model name="TradeEntity">
+        <decimal name="price"/>
+        <decimal name="volume"/>
+    </model>
 
     <signature name="restful">
         <get_now output="{timestamp}" format=""/>
@@ -46,70 +55,18 @@
     </signature>
 
     <restful client_name="MarketClient" url="http://127.0.0.1:8081">
-		<urls>
-			<url key="default" value="http://127.0.0.1:8081"/>
-			<url key="private" value="http://127.0.0.1:8081/sign"/>
-		</urls>
-		<compound name="getSymbols">
-		    <inputs>
-                <string name="symbol" mandatory="true"/>
-            </inputs>
-			<entity>
-				<request method="get" target="/api/v1/exchangeInfo">
-					<headers>
-						<header tag="accept-encoding" value="gzip"/>
-					</headers>
-				</request>
-				<response model="ExchangeInfo">
-					<json_parser>
-						<json_auto copy="ExchangeName"/>
-						<json_auto copy="Timestamp"/>
-						<json_auto copy="Symbols" model="Symbols">
-							<json_auto copy="Name"/>
-							<json_auto copy="Status"/>
-							<json_auto copy="OCOAllowed"/>
-							<json_auto copy="Precision"/>
-						</json_auto>
-					</json_parser>
-				</response>
-			</entity>
-			<entity>
-				<request method="get" target="/api/v1/exchangeInfo">
-					<headers>
-						<header tag="accept-encoding" value="gzip"/>
-					</headers>
-				</request>
-				<response model="ExchangeInfo">
-					<json_parser>
-						<json_auto copy="ExchangeName"/>
-						<json_auto copy="Timestamp"/>
-						<json_auto copy="Symbols" model="Symbols">
-							<json_auto copy="Name"/>
-							<json_auto copy="Status"/>
-							<json_auto copy="OCOAllowed"/>
-							<json_auto copy="Precision"/>
-						</json_auto>
-					</json_parser>
-				</response>
-			</entity>
-		</compound>
-	
         <interface name="getExchangeInfo">
-            <request method="get" target="/api/v1/exchangeInfo">
-				<headers>
-					<header tag="accept-encoding" value="gzip"/>
-				</headers>
-			</request>
+            <request method="get" target="/api/v1/exchangeInfo"/>
             <response model="ExchangeInfo">
                 <json_parser>
-                    <json_auto copy="ExchangeName"/>
-					<json_auto copy="Timestamp"/>
-                    <json_auto copy="Symbols" model="Symbols">
-                        <json_auto copy="Name"/>
-						<json_auto copy="Status"/>
-						<json_auto copy="OCOAllowed"/>
-						<json_auto copy="Precision"/>
-                    </json_auto>
+                    <json_value copy="ExchangeName"/>
+					<json_value copy="Timestamp"/>
+                    <json_object_array copy="Symbols" model="Symbols">
+                        <json_value copy="Name"/>
+						<json_value copy="Status"/>
+						<json_value copy="OCOAllowed"/>
+						<json_value copy="Precision"/>
+                    </json_object_array>
                 </json_parser>
             </response>
         </interface>
@@ -119,19 +76,16 @@
                 <string name="symbol" mandatory="true"/>
             </inputs>
             <request method="get" target="/api/v1/lastTrade">
-				<headers>
-					<header tag="accept-encoding" value="gzip"/>
-				</headers>
                 <query_strings>
                     <query name="symbol" value="{symbol}"/>
                 </query_strings>
             </request>
             <response model="LastTrade">
                 <json_parser>
-                    <json_auto copy="Price"/>
-					<json_auto copy="Volume"/>
-					<json_auto copy="Timestamp"/>
-					<json_auto copy="Symbol"/>
+                    <json_value copy="Price"/>
+					<json_value copy="Volume"/>
+					<json_value copy="Timestamp"/>
+					<json_value copy="Symbol"/>
                 </json_parser>
             </response>
         </interface>
@@ -141,17 +95,19 @@
                 <string name="account_id" mandatory="true"/>
 				<decimal name="price" mandatory="true"/>
             </inputs>
-            <request method="post" target="/api/v1/placeOrder" url="private" signature="restful">
+            <request method="post" target="/api/v1/placeOrder">
                 <post_body>
-                    <json_builder>
-                        <json_string to="account-id" from="{account_id}"/>
-						<json_decimal copy="price"/>
-                    </json_builder>
+					<attribute name="value">
+						<json_builder>
+							<json_string value="account-id" key="{account_id}"/>
+							<json_decimal copy="price"/>
+						</json_builder>
+					</attribute>
                 </post_body>
             </request>
             <response model="Order">
                 <json_parser>
-                    <json_auto copy="OrderId"/>
+                    <json_value key="\[0]" value="{OrderId}"/>
                 </json_parser>
             </response>
         </interface>

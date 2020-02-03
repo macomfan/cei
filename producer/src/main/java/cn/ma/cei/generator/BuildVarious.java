@@ -86,15 +86,15 @@ public class BuildVarious {
         jsonBuilder.itemList.forEach(item -> {
             item.startBuilding();
             if (item.copy == null) {
-                if (item.from == null || item.to == null) {
+                if (item.key == null || item.value == null) {
                     throw new CEIException("[BuildJsonBuilder] from, to and copy cannot be null");
                 }
             } else {
-                if (item.from != null && item.to != null) {
+                if (item.key != null && item.value != null) {
                     throw new CEIException("[BuildJsonBuilder] from, to cannot exist with copy");
                 } else {
-                    item.from = "{" + item.copy + "}";
-                    item.to = item.copy;
+                    item.key = "{" + item.copy + "}";
+                    item.value = item.copy;
                     item.copy = null;
                 }
             }
@@ -102,7 +102,7 @@ public class BuildVarious {
             if (from == null) {
                 throw new CEIException("[BuildJsonBuilder] cannot process from");
             }
-            Variable to = VariableFactory.createHardcodeStringVariable(item.to);
+            Variable to = VariableFactory.createHardcodeStringVariable(item.value);
 
             if (item instanceof xJsonAuto) {
                 if (from.getType() == xString.inst.getType()) {
@@ -130,8 +130,8 @@ public class BuildVarious {
     }
 
     private static Variable getFromVariable(xJsonType jsonItem, MethodBuilder method) {
-        if (jsonItem.from != null && !jsonItem.from.equals("")) {
-            return method.queryVariableAsParam(jsonItem.from);
+        if (jsonItem.key != null && !jsonItem.key.equals("")) {
+            return method.queryVariableAsParam(jsonItem.key);
         }
         return null;
     }

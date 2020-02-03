@@ -6,7 +6,7 @@ public class CEIException extends RuntimeException {
 
     public CEIException(String errMsg) {
         super(errMsg);
-        System.err.println(errMsg);
+        System.err.println(BuildTracer.getTraceString());
     }
     
     public CEIException(CEIErrorType type, Class cls, String errMsg) {

@@ -50,20 +50,35 @@ public class Python3JsonParserBuilder extends JsonParserBuilder {
     }
 
     @Override
-    public void startJsonObject(Variable jsonObject, Variable parentJsonObject, Variable itemName) {
+    public void getJsonDecimalArray(Variable to, Variable jsonObject, Variable itemName) {
+
+    }
+
+    @Override
+    public void getJsonBooleanArray(Variable to, Variable jsonObject, Variable itemName) {
+
+    }
+
+    @Override
+    public void getJsonIntArray(Variable to, Variable jsonObject, Variable itemName) {
+
+    }
+
+    @Override
+    public void defineJsonObject(Variable jsonObject, Variable parentJsonObject, Variable itemName) {
         method.addAssign(method.defineVariable(jsonObject), method.invoke(parentJsonObject.getDescriptor() + ".get_object", itemName));
     }
 
     @Override
-    public void endJsonObject(Variable to, Variable model) {
+    public void assignModel(Variable to, Variable model) {
         if (to != null) {
             method.addAssign(method.useVariable(to), method.useVariable(model));
         }
     }
 
     @Override
-    public void startJsonObjectArray(Variable eachItemJsonObject, Variable parentJsonObject, Variable itemName) {
-        method.startFor(eachItemJsonObject, parentJsonObject.getDescriptor() + ".get_object_array(" + itemName.getDescriptor() + "):");
+    public void startJsonObjectArray(Variable eachItemJsonObject, Variable jsonObject) {
+        method.startFor(eachItemJsonObject, jsonObject.getDescriptor() + ":");
     }
 
     @Override
