@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<sdk exchange="huobipro">
+    <model name="Currencies">
+        <string name="status"/>
+        <string_array name="data"/>
+    </model>
+</sdk>

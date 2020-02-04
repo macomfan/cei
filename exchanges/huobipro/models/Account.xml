@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<sdk exchange="huobipro">
+    <model name="Account">
+        <string name="status"/>
+        <object_array name="data" refer="AccountData"/>
+    </model>
+
+    <model name="AccountData">
+        <int name="id"/>
+        <string name="state"/>
+        <string name="type"/>
+        <string name="subtype"/>
+    </model>
+</sdk>

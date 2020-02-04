@@ -142,7 +142,6 @@ public class VariableFactory {
         }
         // The type is not exist. Check if it can be created.
         if (!modelInfo.get().modelExist(modelName)) {
-            System.err.println(BuildTracer.getTraceString());
             throw new CEIException("Cannot create the model, it has not been registered.");
         }
 

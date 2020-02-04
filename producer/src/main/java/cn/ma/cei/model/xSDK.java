@@ -1,6 +1,7 @@
 package cn.ma.cei.model;
 
 import cn.ma.cei.model.base.xElement;
+import cn.ma.cei.xml.CEIXmlStandalone;
 
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
@@ -9,6 +10,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 @XmlRootElement(name = "sdk")
+@CEIXmlStandalone
 public class xSDK extends xElement {
 
     @XmlAttribute(name = "exchange")

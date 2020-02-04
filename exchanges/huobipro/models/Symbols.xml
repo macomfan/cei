@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<sdk exchange="huobipro">
+    <model name="Symbols">
+        <string name="status"/>
+        <object_array name="data" refer="SymbolsData"/>
+    </model>
+
+    <model name="SymbolsData">
+        <string name="baseCurrency"/>
+        <string name="quoteCurrency"/>
+        <int name="pricePrecision"/>
+        <int name="amountPrecision"/>
+        <string name="symbolPartition"/>
+        <string name="symbol"/>
+        <string name="state"/>
+        <int name="valuePrecision"/>
+        <decimal name="minOrderAmt"/>
+        <decimal name="maxOrderAmt"/>
+        <decimal name="minOrderValue"/>
+        <int name="leverageRatio"/>
+    </model>
+</sdk>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<sdk exchange="huobipro">
+    <model name="LastTrade">
+        <string name="status"/>
+        <string name="ch"/>
+        <int name="ts"/>
+        <int name="tsInTick"/>
+        <int name="idInTick"/>
+        <object_array name="data" refer="Trade"/>
+    </model>
+</sdk>

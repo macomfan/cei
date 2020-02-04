@@ -41,8 +41,8 @@ public class StartService {
 //            routingContext.response().end("Hello");
 //        });
 
-        JAXBWrapper wrapper = new JAXBWrapper();
-        List<xSDK> sdks = wrapper.loadFromFolder("C:\\dev\\cei\\exchanges", xSDK.class);
+        JAXBWrapper wrapper = new JAXBWrapper(xSDK.class);
+        List<xSDK> sdks = wrapper.loadFromFolder("C:\\dev\\cei\\exchanges");
         Finalizer finalizer = new Finalizer();
         finalizer.addSDK(sdks);
         List<xSDK> finalSDKs = finalizer.finalizeSDK();

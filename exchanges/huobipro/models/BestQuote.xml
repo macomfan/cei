@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<sdk exchange="huobipro">
+    <model name="BestQuote">
+        <string name="status"/>
+        <string name="ch"/>
+        <int name="ts"/>
+        <decimal name="bestBidPrice"/>
+        <decimal name="bestBidAmount"/>
+        <decimal name="bestAskPrice"/>
+        <decimal name="bestAskAmount"/>
+    </model>
+</sdk>

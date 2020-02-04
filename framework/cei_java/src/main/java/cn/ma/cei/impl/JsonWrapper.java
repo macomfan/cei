@@ -30,7 +30,7 @@ public class JsonWrapper {
 
     public static class JsonPath {
 
-        private JsonWrapper currentJsonWrapper = null;
+        private JsonWrapper currentJsonWrapper;
         private JsonPathNode rootPathNode = null;
 
         public JsonPath(JsonWrapper currentJsonWrapper, String path) {
@@ -226,7 +226,6 @@ public class JsonWrapper {
     public interface ForEachHandler {
         void process(JsonWrapper item);
     }
-
 
     public void forEach(ForEachHandler handler) {
         shouldBeArray();

@@ -39,10 +39,22 @@
 
 	<model name="DepthEntity">
 		<decimal name="price"/>
-		<decimal name="volume"/>
+		<decimal name="qty"/>
 	</model>
-	
 
+	<model name="TradeList">
+		<object_array name="data" refer="Trade"/>
+	</model>
+
+	<model name="Trade">
+		<int name="id"/>
+		<decimal name="price"/>
+		<decimal name="qty"/>
+		<decimal name="quoteQty"/>
+		<int name="time"/>
+		<boolean name="isBuyerMaker"/>
+		<boolean name="isBestMatch"/>
+	</model>
 
     <restful client_name="MarketClient" url="https://api.binance.com">
 		<interface name="getTimestamp">
@@ -79,6 +91,7 @@
                 </json_parser>
             </response>
         </interface>
+
 		<interface name="getDepth">
 			<inputs>
 				<string name="symbol"/>
@@ -94,12 +107,38 @@
 				<json_parser>
 					<json_value copy="lastUpdateId"/>
 					<json_object_array copy="bids" model="DepthEntity">
-						<json_value key="\\[0]" value="{price}"/>
-						<json_value key="\\[1]" value="{volume}"/>
+						<json_value key="\[0]" value="{price}"/>
+						<json_value key="\[1]" value="{qty}"/>
 					</json_object_array>
 					<json_object_array copy="asks" model="DepthEntity">
-						<json_value key="\\[0]" value="{price}"/>
-						<json_value key="\\[1]" value="{volume}"/>
+						<json_value key="\[0]" value="{price}"/>
+						<json_value key="\[1]" value="{qty}"/>
+					</json_object_array>
+				</json_parser>
+			</response>
+		</interface>
+
+		<interface name="getTrade">
+			<inputs>
+				<string name="symbol"/>
+				<int name="limit"/>
+			</inputs>
+			<request method="get" target="/api/v3/trades">
+				<query_strings>
+					<query name="symbol" value="{symbol}"/>
+					<query name="limit" value="{limit}"/>
+				</query_strings>
+			</request>
+			<response model="TradeList">
+				<json_parser>
+					<json_object_array value="{data}" model="Trade">
+						<json_value copy="id"/>
+						<json_value copy="price"/>
+						<json_value copy="qty"/>
+						<json_value copy="quoteQty"/>
+						<json_value copy="time"/>
+						<json_value copy="isBuyerMaker"/>
+						<json_value copy="isBestMatch"/>
 					</json_object_array>
 				</json_parser>
 			</response>

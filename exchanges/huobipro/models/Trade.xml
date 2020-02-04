@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<sdk exchange="huobipro">
+    <model name="Trade">
+        <int name="id"/>
+        <int name="tradeID"/>
+        <decimal name="price"/>
+        <decimal name="amount"/>
+        <string name="direction"/>
+        <int name="ts"/>
+    </model>
+</sdk>

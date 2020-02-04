@@ -12,7 +12,6 @@ import java.util.List;
 
 //import cn.ma.cei.sdk.exchanges.binance.models.ExchangeInfo;
 //import cn.ma.cei.sdk.exchanges.bittrex.models.Markets;
-//import cn.ma.cei.sdk.exchanges.bittrex.services.BittrexClient;
 //import cn.ma.cei.sdk.exchanges.huobipro.models.LastTrade;
 public class main {
 
