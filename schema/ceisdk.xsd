@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           targetNamespace="https://aaa"
+           xmlns="https://aaa"
+           elementFormDefault="qualified">
+    <xs:element name="sdk" type="xSDK"/>
+
+    <xs:complexType name="xSDK">
+        <xs:choice maxOccurs="unbounded">
+            <xs:element name="definition" type="xSDKDefinition"/>
+            <xs:element name="signature" type="xSignature" maxOccurs="unbounded"/>
+            <xs:element name="model" type="xModel" maxOccurs="unbounded"/>
+            <xs:element name="restful" type="xRestful" maxOccurs="unbounded"/>
+        </xs:choice>
+        <xs:attribute name="name" use="required" type="nameType"/>
+    </xs:complexType>
+
+    <xs:complexType name="xSDKDefinition">
+        <xs:attribute name="document"/>
+    </xs:complexType>
+
+    <!--    <xs:complexType name="xRestfulDefinition">-->
+    <!--        <xs:sequence>-->
+    <!--            <xs:element name="name" minOccurs="1" maxOccurs="1"/>-->
+    <!--            <xs:element name="url" minOccurs="1" maxOccurs="1"/>-->
+    <!--        </xs:sequence>-->
+    <!--    </xs:complexType>-->
+
+
+    <xs:complexType name="xModel">
+        <xs:choice>
+            <xs:element name="string" type="xType"/>
+            <xs:element name="int" type="xType"/>
+            <xs:element name="decimal" type="xType"/>
+            <xs:element name="boolean" type="xType"/>
+            <xs:element name="object" type="xObject"/>
+            <xs:element name="object_array" type="xObjectArray"/>
+            <xs:element name="string_array" type="xType"/>
+            <xs:element name="int_array" type="xType"/>
+            <xs:element name="decimal_array" type="xType"/>
+            <xs:element name="boolean_array" type="xType"/>
+        </xs:choice>
+        <xs:attribute name="name" use="required" type="nameType"/>
+    </xs:complexType>
+
+    <xs:complexType name="xRestful">
+        <xs:choice>
+            <xs:element name="definition"/>
+            <xs:element name="interface" type="xInterface" maxOccurs="unbounded"/>
+        </xs:choice>
+        <xs:attribute name="name" use="required" type="nameType"/>
+    </xs:complexType>
+
+    <xs:complexType name="xType">
+        <xs:attribute name="name" use="required" type="nameType"/>
+    </xs:complexType>
+    <xs:complexType name="xObject">
+        <xs:attribute name="name" use="required" type="nameType"/>
+        <xs:attribute name="model" use="required" type="nameType"/>
+    </xs:complexType>
+    <xs:complexType name="xObjectArray">
+        <xs:attribute name="name" use="required" type="nameType"/>
+        <xs:attribute name="model" use="required" type="nameType"/>
+    </xs:complexType>
+
+    <xs:simpleType name="nameType">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="[A-Za-z][A-Za-z0-9]+"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:complexType name="xSignature">
+    </xs:complexType>
+
+
+    <xs:complexType name="xInterface">
+        <xs:sequence>
+            <xs:element name="inputs" minOccurs="0" type="xInputs"/>
+            <xs:element name="request" type="xRequest"/>
+            <xs:element name="response" type="xResponse"/>
+        </xs:sequence>
+        <xs:attribute name="name" use="required" type="nameType"/>
+    </xs:complexType>
+    <xs:complexType name="xRequest">
+        <xs:sequence>
+            <xs:element name="query_strings" type="xQueryStrings" minOccurs="0"/>
+            <xs:element name="post_body" minOccurs="0" type="xPostBody"/>
+        </xs:sequence>
+        <xs:attribute name="method" use="required" type="httpMethodType"/>
+        <xs:attribute name="target" use="required" type="xs:string"/>
+    </xs:complexType>
+    <xs:simpleType name="httpMethodType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="get"/>
+            <xs:enumeration value="post"/>
+            <xs:enumeration value="delete"/>
+            <xs:enumeration value="put"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:complexType name="xResponse">
+        <xs:choice minOccurs="0">
+            <xs:element name="json_parser" type="xJsonParser"/>
+        </xs:choice>
+        <xs:attribute name="model" use="required" type="nameType"/>
+    </xs:complexType>
+    <xs:complexType name="xJsonParser">
+        <xs:choice>
+            <xs:element name="json_checker"/>
+            <xs:element name="json_value"/>
+            <xs:element name="json_object_array"/>
+            <xs:element name="json_object"/>
+        </xs:choice>
+        <xs:attribute name="model" type="nameType"/>
+    </xs:complexType>
+    <xs:complexType name="xInputs">
+        <xs:choice>
+            <xs:element name="string" type="xType"/>
+            <xs:element name="int" type="xType"/>
+            <xs:element name="decimal" type="xType"/>
+            <xs:element name="boolean" type="xType"/>
+        </xs:choice>
+    </xs:complexType>
+    <xs:complexType name="xQueryStrings">
+        <xs:choice>
+            <xs:element name="query" type="xQuery"/>
+        </xs:choice>
+    </xs:complexType>
+    <xs:complexType name="xQuery">
+        <xs:attribute name="name" use="required" type="nameType"/>
+        <xs:attribute name="value" use="required" type="xs:string"/>
+    </xs:complexType>
+    <xs:complexType name="xPostBody">
+        <xs:choice maxOccurs="unbounded">
+            <xs:element name="attribute" type="xVarious"/>
+        </xs:choice>
+        <xs:attribute name="value" type="xs:string"/>
+    </xs:complexType>
+    <xs:complexType name="xVarious">
+        <xs:attribute name="name" use="required" type="nameType"/>
+    </xs:complexType>
+</xs:schema>

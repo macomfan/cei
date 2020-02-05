@@ -1,7 +1,6 @@
 package cn.ma.cei.model;
 
-import cn.ma.cei.model.base.xElement;
-import cn.ma.cei.xml.CEIXmlStandalone;
+import cn.ma.cei.model.base.xStandalone;
 
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
@@ -10,8 +9,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 @XmlRootElement(name = "sdk")
-@CEIXmlStandalone
-public class xSDK extends xElement {
+public class xSDK extends xStandalone<xSDK> {
 
     @XmlAttribute(name = "exchange")
     public String exchange;
@@ -28,7 +26,7 @@ public class xSDK extends xElement {
     @XmlElement(name = "restful")
     public List<xRestful> restfulList;
 
-    private <T> List<T> mergeList (List<T> dst, List<T> src) {
+    private <T> List<T> mergeList(List<T> dst, List<T> src) {
         if (dst == null) {
             dst = new LinkedList<>();
         }
@@ -41,7 +39,7 @@ public class xSDK extends xElement {
     public void merge(xSDK sdk) {
         restfulList = mergeList(restfulList, sdk.restfulList);
         modelList = mergeList(modelList, sdk.modelList);
-        signatureList =mergeList(signatureList, sdk.signatureList);
+        signatureList = mergeList(signatureList, sdk.signatureList);
     }
 
 

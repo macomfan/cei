@@ -1,5 +1,8 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<sdk exchange="huobipro" document="https://huobiapi.github.io/docs/spot/v1/en/">
+<?xml version="1.0" encoding="UTF-8"?>
+<sdk xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+     xsi:schemaLocation="https://github.com/macomfan/cei"
+     xmlns="https://github.com/macomfan/cei"
+     exchange="huobipro" document="https://huobiapi.github.io/docs/spot/v1/en/">
 
     <signature name="restful">
         <get_now output="{timestamp}" format=""/>
