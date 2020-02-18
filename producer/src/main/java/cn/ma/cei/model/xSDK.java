@@ -11,11 +11,11 @@ import java.util.List;
 @XmlRootElement(name = "sdk")
 public class xSDK extends xStandalone<xSDK> {
 
-    @XmlAttribute(name = "exchange")
-    public String exchange;
+    @XmlAttribute(name = "name")
+    public String name;
 
-    @XmlAttribute(name = "document")
-    public String document;
+    @XmlElement(name = "definition")
+    public xSDKDefinition definition;
 
     @XmlElement(name = "model")
     public List<xModel> modelList;
@@ -46,7 +46,7 @@ public class xSDK extends xStandalone<xSDK> {
     @Override
     public void customCheck() {
         super.customCheck();
-        checkMemberNotNull(exchange, "exchange");
+        checkMemberNotNull(name, "exchange");
         checkMember(modelList);
         checkMember(signatureList);
         checkMember(restfulList);

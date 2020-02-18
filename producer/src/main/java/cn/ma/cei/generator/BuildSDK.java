@@ -10,6 +10,8 @@ import cn.ma.cei.exception.CEIException;
 import cn.ma.cei.generator.buildin.RestfulOptions;
 import cn.ma.cei.generator.environment.Environment;
 import cn.ma.cei.model.xSDK;
+import cn.ma.cei.utils.MapWithValue2;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -28,16 +30,17 @@ public class BuildSDK {
         public boolean addTimestamp = true;
     }
 
-    public static Map<Environment.Language, Framework> frameworks = new HashMap<>();
+    public static MapWithValue2<String , Language, Framework> frameworks = new MapWithValue2<>();
 
-    public static void registerFramework(Environment.Language language, Framework framework) {
-        if (frameworks.containsKey(language)) {
+    public static void registerFramework(Framework framework) {
+        Language language = framework.getLanguage();
+        if (frameworks.containsKey(language.getName())) {
             throw new CEIException("[BuildSDK] Framework duplicated");
         }
-        frameworks.put(language, framework);
+        frameworks.put(language.getName(), language, framework);
     }
 
-    public static void build(List<xSDK> sdks, Environment.Language language, String outputFolder) {
+    public static void build(List<xSDK> sdks, String language, String outputFolder) {
         if (!frameworks.containsKey(language)) {
             throw new CEIException("[BuildSDK] The framework does not exist");
         }
@@ -57,14 +60,14 @@ public class BuildSDK {
         CEIPath buildFolder = new CEIPath(CEIPath.Type.FOLDER, "C:\\dev\\cei\\framework");
         buildFolder.mkdirs();
 
-        Framework framework = frameworks.get(language);
+        Framework framework = frameworks.get2(language);
 
-        Environment.setWorkingFolder(CEIPath.appendPath(buildFolder, framework.getFrameworkName()));
+        Environment.setWorkingFolder(CEIPath.appendPath(buildFolder, frameworks.get1(language).getWorkingName()));
 
         sdks.forEach((sdk) -> {
             sdk.startBuilding();
-            Environment.setCurrentExchange(sdk.exchange);
-            Environment.setCurrentLanguage(language);
+            Environment.setCurrentExchange(sdk.name);
+            Environment.setCurrentLanguage(frameworks.get1(language));
             Environment.setCurrentDescriptionConverter(framework.getDescriptionConverter());
 
             BuildExchange.build(sdk, framework.getExchangeBuilder());

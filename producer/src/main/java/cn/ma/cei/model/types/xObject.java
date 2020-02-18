@@ -13,10 +13,10 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class xObject extends xReferable {
     @Override
     public VariableType getType() {
-        if (refer == null || refer.equals("")) {
+        if (model == null || model.equals("")) {
             throw new CEIException("refer is null");
         }
-        return VariableFactory.variableType(refer);
+        return VariableFactory.variableType(model);
     }
 
 }

@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <sdk xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-     xsi:schemaLocation="https://github.com/macomfan/cei"
+     xsi:schemaLocation="https://github.com/macomfan/cei https://github.com/macomfan/cei/ceisdk.xsd"
      xmlns="https://github.com/macomfan/cei"
-     exchange="huobipro" document="https://huobiapi.github.io/docs/spot/v1/en/">
+     name="huobipro">
+
+    <definition document="https://huobiapi.github.io/docs/spot/v1/en/"/>
 
     <signature name="restful">
         <get_now output="{timestamp}" format=""/>
@@ -24,7 +26,8 @@
         <add_query_string key="Signature" value="{result}"/>
     </signature>
 
-    <restful client_name="MarketClient" url="https://api.huobi.so">
+    <restful name="MarketClient">
+        <definition url="https://api.huobi.so"/>
         <interface name="getTimestamp">
             <request method="get" target="/v1/common/timestamp"/>
             <response model="Timestamp">
@@ -81,9 +84,9 @@
             </inputs>
             <request method="get" target="/market/history/kline">
                 <query_strings>
-                    <query name="symbol" value="{symbol}"/>
-                    <query name="period" value="{period}"/>
-                    <query name="size" value="{size}"/>
+                    <query key="symbol" value="{symbol}"/>
+                    <query key="period" value="{period}"/>
+                    <query key="size" value="{size}"/>
                 </query_strings>
             </request>
             <response model="Candlestick">
@@ -105,11 +108,11 @@
 
         <interface name="getLastTrade">
             <inputs>
-                <string name="symbol" mandatory="true"/>
+                <string name="symbol"/>
             </inputs>
             <request method="get" target="/market/trade">
                 <query_strings>
-                    <query name="symbol" value="{symbol}"/>
+                    <query key="symbol" value="{symbol}"/>
                 </query_strings>
             </request>
             <response model="LastTrade">
@@ -141,9 +144,9 @@
             </inputs>
             <request method="get" target="/market/depth">
                 <query_strings>
-                    <query name="symbol" value="{symbol}"/>
-                    <query name="depth" value="{depth}"/>
-                    <query name="type" value="{mergeType}"/>
+                    <query key="symbol" value="{symbol}"/>
+                    <query key="depth" value="{depth}"/>
+                    <query key="type" value="{mergeType}"/>
                 </query_strings>
             </request>
             <response model="Depth">
@@ -171,9 +174,9 @@
             </inputs>
             <request method="get" target="/market/depth">
                 <query_strings>
-                    <query name="symbol" value="{symbol}"/>
-                    <query name="depth" value="5"/>
-                    <query name="type" value="step0"/>
+                    <query key="symbol" value="{symbol}"/>
+                    <query key="depth" value="5"/>
+                    <query key="type" value="step0"/>
                 </query_strings>
             </request>
             <response model="BestQuote">
@@ -190,18 +193,19 @@
         </interface>
     </restful>
 
-    <restful client_name="TradingClient" url="https://api.huobi.so">
+    <restful name="TradingClient">
+        <definition url="https://api.huobi.so"/>
         <interface name="placeOrder">
             <inputs>
-                <string name="accountId" mandatory="true"/>
-                <string name="symbol" mandatory="true"/>
-                <string name="orderType" mandatory="true"/>
-                <string name="amount" mandatory="true"/>
+                <string name="accountId"/>
+                <string name="symbol"/>
+                <string name="orderType"/>
+                <string name="amount"/>
                 <string name="price"/>
             </inputs>
             <request method="post" target="/v1/order/orders/place" signature="restful">
                 <post_body>
-					<attribute name="value">
+					<attribute for="value">
 						<json_builder>
 							<json_value key="{accountId}" value="account-id"/>
 							<json_value copy="symbol"/>
@@ -234,7 +238,8 @@
         </interface>
     </restful>
 
-    <restful client_name="AccountClient" url="https://api.huobi.so">
+    <restful name="AccountClient">
+        <definition url="https://api.huobi.so"/>
         <interface name="getAccounts">
             <request method="get" target="/v1/account/accounts" signature="restful"/>
             <response model="Account">
@@ -249,6 +254,5 @@
                 </json_parser>
             </response>
         </interface>
-
     </restful>
 </sdk>

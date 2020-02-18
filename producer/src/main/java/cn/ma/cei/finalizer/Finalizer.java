@@ -26,7 +26,7 @@ public class Finalizer {
         //  - Restful
         //  - Signature
         if (sdk.modelList != null) {
-            sdk.modelList.forEach(model -> XMLDatabase.registerModel(sdk.exchange, model.name, model));
+            sdk.modelList.forEach(model -> XMLDatabase.registerModel(sdk.name, model.name, model));
         }
         orgSDKList.add(sdk);
     }
@@ -38,11 +38,11 @@ public class Finalizer {
     public List<xSDK> finalizeSDK() {
         System.out.println("-- Start finalize");
         orgSDKList.forEach(sdk-> {
-            if (sdkMap.containsKey(sdk.exchange)) {
-                xSDK orgSdk = sdkMap.get(sdk.exchange);
+            if (sdkMap.containsKey(sdk.name)) {
+                xSDK orgSdk = sdkMap.get(sdk.name);
                 orgSdk.merge(sdk);
             } else {
-                sdkMap.put(sdk.exchange, sdk);
+                sdkMap.put(sdk.name, sdk);
             }
         });
         // Merge SDK
@@ -61,7 +61,7 @@ public class Finalizer {
                 for (xType item : model.memberList) {
                     if (item instanceof xReferable) {
                         referToOther = true;
-                        xModel refer = XMLDatabase.lookupModel(sdk.exchange, ((xReferable) item).refer);
+                        xModel refer = XMLDatabase.lookupModel(sdk.name, ((xReferable) item).model);
                         dependence.addNode(model, refer);
                     }
                 }

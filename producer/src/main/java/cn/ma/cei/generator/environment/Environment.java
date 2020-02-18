@@ -7,6 +7,7 @@ package cn.ma.cei.generator.environment;
 
 import cn.ma.cei.exception.CEIException;
 import cn.ma.cei.generator.CEIPath;
+import cn.ma.cei.generator.Language;
 import cn.ma.cei.generator.naming.IDescriptionConverter;
 
 /**
@@ -14,14 +15,6 @@ import cn.ma.cei.generator.naming.IDescriptionConverter;
  * @author u0151316
  */
 public class Environment {
-
-    public enum Language {
-        java,
-        cpp,
-        python3,
-        golang,
-        NA,
-    }
 
     private static CEIPath workingFolder = null;
     private static CEIPath exchangeFolder = null;

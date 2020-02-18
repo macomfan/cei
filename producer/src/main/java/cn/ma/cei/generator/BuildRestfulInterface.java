@@ -108,7 +108,7 @@ public class BuildRestfulInterface {
 //                    throw new CEIException("Cannot lookup variable: " + var);
 //                }
 //            }
-            Variable queryStringName = VariableFactory.createHardcodeStringVariable(queryString.name);
+            Variable queryStringName = VariableFactory.createHardcodeStringVariable(queryString.key);
             builder.addToQueryString(request, queryStringName, var);
             queryString.endBuilding();
         });

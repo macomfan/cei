@@ -5,6 +5,7 @@
  */
 package cn.ma.cei.generator.langs.golang;
 
+import cn.ma.cei.generator.Language;
 import cn.ma.cei.generator.builder.ExchangeBuilder;
 import cn.ma.cei.generator.builder.Framework;
 import cn.ma.cei.generator.naming.IDescriptionConverter;
@@ -18,8 +19,8 @@ import java.util.Set;
 public class GoFramework extends Framework {
 
     @Override
-    public String getFrameworkName() {
-        return "cei_golang";
+    public Language getLanguage() {
+        return new Language("golang", "cei_golang");
     }
 
     @Override

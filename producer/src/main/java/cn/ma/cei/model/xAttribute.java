@@ -6,11 +6,11 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
-@XmlRootElement(name = "value")
+@XmlRootElement(name = "attribute")
 public class xAttribute {
 
-    @XmlAttribute(name = "name")
-    public String name;
+    @XmlAttribute(name = "for")
+    public String forAttribute;
 
     @XmlElement(name = "json_builder")
     public xJsonBuilder jsonBuilder;

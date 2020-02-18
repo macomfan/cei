@@ -5,6 +5,7 @@
  */
 package cn.ma.cei.generator.langs.java;
 
+import cn.ma.cei.generator.Language;
 import cn.ma.cei.generator.builder.Framework;
 import cn.ma.cei.generator.builder.ExchangeBuilder;
 import cn.ma.cei.generator.naming.IDescriptionConverter;
@@ -17,8 +18,8 @@ import java.util.Set;
 public class JavaFramework extends Framework{
 
     @Override
-    public String getFrameworkName() {
-        return "cei_java";
+    public Language getLanguage() {
+        return new Language("java", "cei_java");
     }
 
     @Override

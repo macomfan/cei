@@ -23,7 +23,7 @@ public class CppExchangeBuilder extends ExchangeBuilder {
         this.exchangeName = exchangeName;
         
         Environment.setCurrentExchange(exchangeName);
-        Environment.setCurrentLanguage(Environment.Language.cpp);
+        //Environment.setCurrentLanguage(Environment.Language.cpp);
 
 //        Constant.requestMethod().tryPut(RestfulInterfaceBuilder.RequestMethod.GET, "RestfulRequest.Method.GET");
 //        Constant.requestMethod().tryPut(RestfulInterfaceBuilder.RequestMethod.POST, "RestfulRequest.Method.POST");

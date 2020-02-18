@@ -80,20 +80,19 @@ public class main {
 //            code.endln();
 //        });
 //        code.appendln("}");
-        JAXBWrapper wrapper = new JAXBWrapper(xSDK.class);
-        List<xSDK> sdks = wrapper.loadFromFolder("C:\\dev\\cei\\exchanges");
+        List<xSDK> sdks = (new JAXBWrapper<>(xSDK.class)).loadFromFolder("C:\\dev\\cei\\exchanges\\test");
         Finalizer finalizer = new Finalizer();
         finalizer.addSDK(sdks);
         List<xSDK> finalSDKs = finalizer.finalizeSDK();
 
-        BuildSDK.registerFramework(Environment.Language.java, new JavaFramework());
-        BuildSDK.registerFramework(Environment.Language.cpp, new CppFramework());
-        BuildSDK.registerFramework(Environment.Language.python3, new Python3Framework());
-        BuildSDK.registerFramework(Environment.Language.golang, new GoFramework());
+        BuildSDK.registerFramework(new JavaFramework());
+        BuildSDK.registerFramework(new CppFramework());
+        BuildSDK.registerFramework(new Python3Framework());
+        BuildSDK.registerFramework(new GoFramework());
 //        BuildSDK.build(finalSDKs, Environment.Language.java, "C:\\dev\\cei\\output");
 //        BuildSDK.build(finalSDKs, Environment.Language.python3, "C:\\dev\\cei\\output");
 //        try {
-            BuildSDK.build(finalSDKs, Environment.Language.java, "C:\\dev\\cei\\output");
+            BuildSDK.build(finalSDKs, "java", "C:\\dev\\cei\\output");
 //            BuildSDK.build(finalSDKs, Environment.Language.golang, "C:\\dev\\cei\\output");
 //            BuildSDK.build(finalSDKs, Environment.Language.python3, "C:\\dev\\cei\\output");
 //        } catch (Exception e) {

@@ -14,9 +14,9 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class xObjectArray extends xReferable {
     @Override
     public VariableType getType() {
-        if (refer == null || refer.equals("")) {
+        if (model == null || model.equals("")) {
             throw new CEIException("refer is null");
         }
-        return VariableFactory.variableType("array", VariableFactory.variableType(refer));
+        return VariableFactory.variableType("array", VariableFactory.variableType(model));
     }
 }

@@ -8,8 +8,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement(name = "query")
 public class xQuery extends xVarious {
 
-    @XmlAttribute(name = "name")
-    public String name;
+    @XmlAttribute(name = "key")
+    public String key;
 
     @XmlAttribute(name = "value")
     public String value;

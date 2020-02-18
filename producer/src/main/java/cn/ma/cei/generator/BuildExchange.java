@@ -15,7 +15,7 @@ public class BuildExchange {
             throw new CEIException("[BuildExchange] ExchangeBuilder is null");
         }
 
-        builder.startExchange(sdk.exchange);
+        builder.startExchange(sdk.name);
         RestfulOptions.registryMember();
 
         if (sdk.modelList != null) {

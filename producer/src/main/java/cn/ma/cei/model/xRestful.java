@@ -10,17 +10,17 @@ import java.util.Set;
 @XmlRootElement(name = "restful")
 public class xRestful extends xElement {
 
-    @XmlAttribute(name = "client_name")
-    public String clientName;
-
-    @XmlAttribute(name = "url")
-    public String url;
+    @XmlAttribute(name = "name")
+    public String name;
 
     @XmlAttribute(name = "successful_code")
     public String successfulCode;
 
     @XmlAttribute(name = "timeout")
     public Integer timeout;
+
+    @XmlElement(name = "definition")
+    public xRestfulDefinition definition;
 
     @XmlElement(name = "interface")
     public List<xInterface> interfaceList;

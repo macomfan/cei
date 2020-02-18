@@ -16,7 +16,7 @@ public class XMLDatabase {
     private static NormalMap<String, xSDK> sdkMap = new NormalMap<>();
 
     public static void attachSDK(xSDK sdk) {
-        sdkMap.tryPut(sdk.exchange, sdk);
+        sdkMap.tryPut(sdk.name, sdk);
     }
 
     public static xSDK getSDK(String exchangeName) {
@@ -32,7 +32,7 @@ public class XMLDatabase {
         }
         xSDK sdk = sdkMap.get(exchangeName);
         for (xRestful item : sdk.restfulList) {
-            if (item.clientName.equals(clientName)) {
+            if (item.name.equals(clientName)) {
                 return item;
             }
         }
@@ -47,7 +47,7 @@ public class XMLDatabase {
         xSDK sdk = getSDK(exchangeName);
         if (sdk == null) return null;
         Set<String> res = new HashSet<>();
-        sdk.restfulList.forEach((client) -> res.add(client.clientName));
+        sdk.restfulList.forEach((client) -> res.add(client.name));
         return res;
     }
 

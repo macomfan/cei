@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<sdk exchange="binance" document="https://binance-docs.github.io/apidocs/spot/cn/">
+<sdk xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	 xsi:schemaLocation="https://github.com/macomfan/cei https://github.com/macomfan/cei/ceisdk.xsd"
+	 xmlns="https://github.com/macomfan/cei"
+	 name="binance">
+
+	<definition document="https://binance-docs.github.io/apidocs/spot/cn/"/>
 
 	<model name="Timestamp">
 		<int name="serverTime"/>
@@ -8,8 +13,8 @@
     <model name="ExchangeInfo">
         <string name="timezone"/>
 		<int name="serverTime"/>
-		<object_array name="rateLimits" refer="RateLimits"/>
-        <object_array name="symbols" refer="Symbol"/>
+		<object_array name="rateLimits" model="RateLimits"/>
+        <object_array name="symbols" model="Symbol"/>
     </model>
 	
 	<model name="RateLimits">
@@ -33,8 +38,8 @@
 
 	<model name="Depth">
 		<int name="lastUpdateId"/>
-		<object_array name="bids" refer="DepthEntity"/>
-		<object_array name="asks" refer="DepthEntity"/>
+		<object_array name="bids" model="DepthEntity"/>
+		<object_array name="asks" model="DepthEntity"/>
 	</model>
 
 	<model name="DepthEntity">
@@ -43,7 +48,7 @@
 	</model>
 
 	<model name="TradeList">
-		<object_array name="data" refer="Trade"/>
+		<object_array name="data" model="Trade"/>
 	</model>
 
 	<model name="Trade">
@@ -56,7 +61,8 @@
 		<boolean name="isBestMatch"/>
 	</model>
 
-    <restful client_name="MarketClient" url="https://api.binance.com">
+    <restful name="MarketClient">
+		<definition url="https://api.binance.com"/>
 		<interface name="getTimestamp">
 			<request method="get" target="/api/v3/time"/>
 			<response model="Timestamp">
@@ -99,8 +105,8 @@
 			</inputs>
 			<request method="get" target="/api/v3/depth">
 				<query_strings>
-					<query name="symbol" value="{symbol}"/>
-					<query name="limit" value="{limit}"/>
+					<query key="symbol" value="{symbol}"/>
+					<query key="limit" value="{limit}"/>
 				</query_strings>
 			</request>
 			<response model="Depth">
@@ -125,8 +131,8 @@
 			</inputs>
 			<request method="get" target="/api/v3/trades">
 				<query_strings>
-					<query name="symbol" value="{symbol}"/>
-					<query name="limit" value="{limit}"/>
+					<query key="symbol" value="{symbol}"/>
+					<query key="limit" value="{limit}"/>
 				</query_strings>
 			</request>
 			<response model="TradeList">

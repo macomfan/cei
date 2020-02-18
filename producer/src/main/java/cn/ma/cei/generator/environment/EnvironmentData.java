@@ -5,6 +5,7 @@
  */
 package cn.ma.cei.generator.environment;
 
+import cn.ma.cei.generator.Language;
 import cn.ma.cei.utils.NormalMap;
 import cn.ma.cei.utils.SecondLevelMap;
 
@@ -14,7 +15,7 @@ import cn.ma.cei.utils.SecondLevelMap;
  */
 class EnvironmentData<T> {
     
-    private SecondLevelMap<String, Environment.Language, T> data = new SecondLevelMap<>();
+    private SecondLevelMap<String, Language, T> data = new SecondLevelMap<>();
     private Creation<T> creation = null;
 
     public EnvironmentData(Creation<T> creation) {

@@ -16,7 +16,7 @@ public class xVarious extends xElement {
         if (attributes == null) return null;
         xAttribute res = null;
         for (xAttribute value : attributes) {
-            if (value.name != null && value.name.equals(name)) {
+            if (value.forAttribute != null && value.forAttribute.equals(name)) {
                 res = value;
             }
         }

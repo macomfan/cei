@@ -5,6 +5,7 @@
  */
 package cn.ma.cei.generator.builder;
 
+import cn.ma.cei.generator.Language;
 import cn.ma.cei.generator.naming.IDescriptionConverter;
 import java.util.Set;
 
@@ -14,12 +15,12 @@ import java.util.Set;
  */
 public abstract class Framework {
     /***
-     * Return the folder of the framework. e.g.
+     * Return the language of the framework. e.g.
      * For java: cei_java, for python3: cei_python3, for cpp: cei_python3
      * 
      * @return The folder of specify language in cei/framework.
      */
-    public abstract String getFrameworkName();
+    public abstract Language getLanguage();
     
     /***
      * To create the new ExchangeBuilder

@@ -18,12 +18,12 @@ public class BuildRestfulInterfaceClient {
         if (client.timeout != null) {
             options.connectionTimeout = client.timeout;
         }
-        if (client.url != null) {
-            options.url = client.url;
+        if (client.definition != null) {
+            options.url = client.definition.url;
         }
-        VariableFactory.registerModel(client.clientName, VariableFactory.NO_REF);
-        builder.setClassType(VariableFactory.variableType(client.clientName));
-        builder.startClient(Environment.getCurrentDescriptionConverter().getClientDescriptor(client.clientName), options);
+        VariableFactory.registerModel(client.name, VariableFactory.NO_REF);
+        builder.setClassType(VariableFactory.variableType(client.name));
+        builder.startClient(Environment.getCurrentDescriptionConverter().getClientDescriptor(client.name), options);
 
         if (client.interfaceList != null) {
             client.interfaceList.forEach((restIf) -> {

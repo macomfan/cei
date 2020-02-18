@@ -1,8 +1,8 @@
 package cn.ma.cei.model;
 
 
+import cn.ma.cei.model.base.xElement;
 import cn.ma.cei.model.base.xType;
-import cn.ma.cei.model.base.xVarious;
 import cn.ma.cei.model.types.xBoolean;
 import cn.ma.cei.model.types.xInt;
 import cn.ma.cei.model.types.xString;
@@ -12,7 +12,7 @@ import javax.xml.bind.annotation.*;
 import java.util.List;
 
 @XmlRootElement(name = "interface")
-public class xInterface extends xVarious {
+public class xInterface extends xElement {
 
     @XmlAttribute(name = "name")
     public String name;
