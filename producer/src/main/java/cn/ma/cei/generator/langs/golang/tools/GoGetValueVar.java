@@ -1,6 +1,6 @@
 package cn.ma.cei.generator.langs.golang.tools;
 
-import cn.ma.cei.generator.environment.Variable;
+import cn.ma.cei.generator.Variable;
 
 public class GoGetValueVar extends GoVar {
 

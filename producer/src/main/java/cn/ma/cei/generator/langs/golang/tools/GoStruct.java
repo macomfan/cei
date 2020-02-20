@@ -6,8 +6,7 @@
 package cn.ma.cei.generator.langs.golang.tools;
 
 import cn.ma.cei.exception.CEIException;
-import cn.ma.cei.generator.environment.Variable;
-import cn.ma.cei.generator.environment.VariableType;
+import cn.ma.cei.generator.VariableType;
 import cn.ma.cei.generator.langs.golang.GoCode;
 import cn.ma.cei.utils.UniquetList;
 import cn.ma.cei.utils.WordSplitter;

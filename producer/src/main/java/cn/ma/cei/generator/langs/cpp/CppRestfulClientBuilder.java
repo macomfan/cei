@@ -4,6 +4,7 @@ import cn.ma.cei.generator.buildin.RestfulOptions;
 import cn.ma.cei.generator.builder.RestfulClientBuilder;
 import cn.ma.cei.generator.builder.RestfulInterfaceBuilder;
 import cn.ma.cei.generator.langs.cpp.tools.CppClass;
+import cn.ma.cei.generator.sMethod;
 
 public class CppRestfulClientBuilder extends RestfulClientBuilder {
     private CppClass cppClass;
@@ -14,12 +15,12 @@ public class CppRestfulClientBuilder extends RestfulClientBuilder {
     }
     
     @Override
-    public void startClient(String clientName, RestfulOptions options) {
-        cppClass = new CppClass(exchangeName, clientName);
+    public void startClient(String clientDescriptor, RestfulOptions options) {
+        cppClass = new CppClass(exchangeName, clientDescriptor);
     }
 
     @Override
-    public RestfulInterfaceBuilder getRestfulInterfaceBuilder() {
+    public RestfulInterfaceBuilder getRestfulInterfaceBuilder(sMethod method) {
         return new CppRestfulInterfaceBuilder(cppClass);
     }
 

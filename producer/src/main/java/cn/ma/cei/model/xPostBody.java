@@ -14,7 +14,4 @@ public class xPostBody extends xVarious {
 
     @XmlAttribute(name = "value")
     public String value;
-
-    @XmlElement(name = "json_builder")
-    public xJsonBuilder jsonBuilder;
 }

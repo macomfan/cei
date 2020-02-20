@@ -1,8 +1,7 @@
 package cn.ma.cei.generator.langs.cpp.tools;
 
-import cn.ma.cei.generator.environment.Variable;
-import cn.ma.cei.generator.environment.VariableFactory;
-import cn.ma.cei.generator.environment.VariableType;
+import cn.ma.cei.generator.Variable;
+import cn.ma.cei.generator.VariableType;
 import cn.ma.cei.generator.langs.cpp.CodeForCpp;
 import cn.ma.cei.generator.langs.cpp.CodeForHpp;
 import cn.ma.cei.utils.UniquetList;

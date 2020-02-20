@@ -1,6 +1,6 @@
 package cn.ma.cei.model.base;
 
-import cn.ma.cei.generator.environment.VariableType;
+import cn.ma.cei.generator.VariableType;
 
 import javax.xml.bind.annotation.XmlAttribute;
 

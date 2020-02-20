@@ -1,7 +1,7 @@
 package cn.ma.cei.generator.langs.cpp;
 
-import cn.ma.cei.generator.environment.Variable;
-import cn.ma.cei.generator.environment.VariableType;
+import cn.ma.cei.generator.Variable;
+import cn.ma.cei.generator.VariableType;
 import cn.ma.cei.generator.builder.ModelBuilder;
 import cn.ma.cei.generator.langs.cpp.tools.CppClass;
 
@@ -21,7 +21,7 @@ public class CppModelBuilder extends ModelBuilder {
     }
 
     @Override
-    public void registerMember(Variable variable) {
+    public void addMember(Variable variable) {
         cppClass.addMemberVariable(CppClass.AccessType.PUBLIC, variable);
     }
 

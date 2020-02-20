@@ -5,15 +5,14 @@
  */
 package cn.ma.cei.generator.langs.golang;
 
+import cn.ma.cei.generator.BuilderContext;
 import cn.ma.cei.generator.builder.JsonBuilderBuilder;
 import cn.ma.cei.generator.builder.ResponseBuilder;
 import cn.ma.cei.generator.builder.RestfulInterfaceBuilder;
 import cn.ma.cei.generator.builder.StringBuilderBuilder;
-import cn.ma.cei.generator.environment.Variable;
-import cn.ma.cei.generator.environment.VariableFactory;
-import cn.ma.cei.generator.environment.VariableType;
+import cn.ma.cei.generator.Variable;
+import cn.ma.cei.generator.VariableType;
 import cn.ma.cei.generator.langs.golang.tools.*;
-import cn.ma.cei.model.types.xString;
 import cn.ma.cei.utils.WordSplitter;
 
 import java.util.ArrayList;
@@ -80,15 +79,15 @@ public class GoRestfulInterfaceBuilder extends RestfulInterfaceBuilder {
 
     @Override
     public void invokeSignature(Variable request, String methodName) {
-        Variable option = VariableFactory.createConstantVariable("inst.options");
+        Variable option = BuilderContext.createStatement("inst.options");
         method.addInvoke(WordSplitter.getLowerCamelCase(methodName), new GoVar(request), new GoVar(option));
     }
 
-    @Override
-    public void setUrl(Variable request) {
-        Variable url = VariableFactory.createConstantVariable("inst.options.URL");
-        method.addInvoke(request.getDescriptor() + ".SetURL", new GoVar(url));
-    }
+//    @Override
+//    public void setUrl(Variable request) {
+//        Variable url = VariableFactory.createConstantVariable("inst.options.URL");
+//        method.addInvoke(request.getDescriptor() + ".SetURL", new GoVar(url));
+//    }
 
     @Override
     public void setRequestMethod(Variable request, Variable requestMethod) {

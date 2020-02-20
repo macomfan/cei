@@ -6,7 +6,7 @@
 package cn.ma.cei.generator.langs.golang.tools;
 
 import cn.ma.cei.generator.CEIPath;
-import cn.ma.cei.generator.environment.VariableFactory;
+import cn.ma.cei.generator.BuilderContext;
 import cn.ma.cei.generator.langs.golang.GoCode;
 import cn.ma.cei.utils.UniquetList;
 import java.util.ArrayList;
@@ -73,7 +73,7 @@ public class GoFile {
         code.appendln("import (");
         code.newBlock(() -> {
             list.forEach((item) -> {
-                if (!item.equals(VariableFactory.NO_REF) && !item.equals(packageName)) {
+                if (!item.equals(BuilderContext.NO_REF) && !item.equals(packageName)) {
                     code.appendln("\"" + item + "\"");
                 }
             });

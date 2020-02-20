@@ -5,7 +5,6 @@
  */
 package cn.ma.cei.generator.langs.golang.tools;
 
-import cn.ma.cei.generator.environment.VariableType;
 import cn.ma.cei.generator.langs.golang.GoCode;
 import java.util.Arrays;
 import java.util.HashSet;

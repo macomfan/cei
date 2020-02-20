@@ -1,8 +1,8 @@
 package cn.ma.cei.generator.langs.java;
 
+import cn.ma.cei.generator.BuilderContext;
 import cn.ma.cei.generator.builder.StringBuilderBuilder;
-import cn.ma.cei.generator.environment.Variable;
-import cn.ma.cei.generator.environment.VariableFactory;
+import cn.ma.cei.generator.Variable;
 import cn.ma.cei.generator.langs.java.tools.JavaMethod;
 
 public class JavaStringBuilderBuilder extends StringBuilderBuilder {
@@ -14,6 +14,6 @@ public class JavaStringBuilderBuilder extends StringBuilderBuilder {
 
     @Override
     public Variable stringReplacement(Variable... items) {
-        return VariableFactory.createConstantVariable(method.invoke("StringUtils.replace", items));
+        return BuilderContext.createStatement(method.invoke("StringUtils.replace", items));
     }
 }

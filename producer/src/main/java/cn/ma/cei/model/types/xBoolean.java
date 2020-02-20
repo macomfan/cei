@@ -1,8 +1,8 @@
 package cn.ma.cei.model.types;
 
 import cn.ma.cei.finalizer.Alias;
-import cn.ma.cei.generator.environment.VariableType;
-import cn.ma.cei.generator.environment.VariableFactory;
+import cn.ma.cei.generator.BuilderContext;
+import cn.ma.cei.generator.VariableType;
 import cn.ma.cei.model.base.xType;
 
 import javax.xml.bind.annotation.XmlRootElement;
@@ -17,6 +17,6 @@ public class xBoolean extends xType {
     
     @Override
     public VariableType getType() {
-        return VariableFactory.variableType(typeName);
+        return BuilderContext.variableType(typeName);
     }
 }

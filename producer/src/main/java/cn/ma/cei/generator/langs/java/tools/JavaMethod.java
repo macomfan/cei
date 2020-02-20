@@ -5,8 +5,8 @@
  */
 package cn.ma.cei.generator.langs.java.tools;
 
-import cn.ma.cei.generator.environment.Variable;
-import cn.ma.cei.generator.environment.VariableType;
+import cn.ma.cei.generator.Variable;
+import cn.ma.cei.generator.VariableType;
 import cn.ma.cei.generator.langs.java.JavaCode;
 import java.util.Arrays;
 import java.util.List;

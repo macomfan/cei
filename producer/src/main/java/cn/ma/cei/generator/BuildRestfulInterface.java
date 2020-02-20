@@ -5,12 +5,12 @@ import cn.ma.cei.generator.builder.RestfulInterfaceBuilder;
 import cn.ma.cei.generator.buildin.RestfulConnection;
 import cn.ma.cei.generator.buildin.RestfulRequest;
 import cn.ma.cei.generator.buildin.RestfulResponse;
-import cn.ma.cei.generator.environment.*;
 import cn.ma.cei.model.xHeader;
 import cn.ma.cei.model.xInterface;
 import cn.ma.cei.model.xPostBody;
 import cn.ma.cei.model.xQuery;
 import cn.ma.cei.utils.Checker;
+import cn.ma.cei.utils.RegexHelper;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -19,13 +19,15 @@ public class BuildRestfulInterface {
 
     public static void build(xInterface restIf, RestfulInterfaceBuilder builder) {
 
-        Variable request = builder.createLocalVariable(RestfulRequest.getType(), "request");
-        Variable response = builder.createLocalVariable(RestfulResponse.getType(), "response");
+        Variable request = GlobalContext.getCurrentMethod().createLocalVariable(RestfulRequest.getType(), "request");
+        Variable response = GlobalContext.getCurrentMethod().createLocalVariable(RestfulResponse.getType(), "response");
 
+        List<Variable> inputVariableList = new LinkedList<>();
         if (restIf.inputList != null) {
             restIf.inputList.forEach((input) -> {
                 input.startBuilding();
-                builder.createInputVariable(input.getType(), input.name);
+                Variable inputVariable = GlobalContext.getCurrentMethod().createInputVariable(input.getType(), input.name);
+                inputVariableList.add(inputVariable);
                 input.endBuilding();
             });
         }
@@ -34,27 +36,17 @@ public class BuildRestfulInterface {
         if (restIf.response != null) {
             restIf.response.startBuilding();
             returnType = BuildResponse.getReturnType(restIf.response);
+            GlobalContext.getCurrentMethod().setReturnType(returnType);
             restIf.response.endBuilding();
         }
 
-        List<Variable> inputVariableList = new LinkedList<>();
-        builder.getVariableList().forEach((variable) -> {
-            if (variable.position == Variable.Position.INPUT) {
-                inputVariableList.add(variable);
-            }
-        });
 
-        builder.startMethod(returnType, Environment.getCurrentDescriptionConverter().getMethodDescriptor(restIf.name), inputVariableList);
+        builder.startMethod(returnType, GlobalContext.getCurrentDescriptionConverter().getMethodDescriptor(restIf.name), inputVariableList);
         {
-            if (Checker.isEmpty(restIf.request.method)) {
-                throw new CEIException("[BuildRestfulInterface] Method is null");
-            }
-
             builder.defineRequest(request);
-            builder.setUrl(request);
             builder.setRequestTarget(request, BuildVarious.createValueFromAttribute("target", restIf.request, builder));
 
-            Variable requestMethod = VariableFactory.createConstantVariable(Constant.requestMethod().tryGet(restIf.request.method));
+            Variable requestMethod = GlobalContext.createStatement(Constant.requestMethod().tryGet(restIf.request.method));
             builder.setRequestMethod(request, requestMethod);
             makeHeaders(restIf.request.headers, builder);
             makeQueryString(restIf.request.queryStrings, builder);
@@ -72,20 +64,20 @@ public class BuildRestfulInterface {
         if (headers == null) {
             return;
         }
-        Variable request = builder.queryVariable("request");
+        Variable request = GlobalContext.getCurrentMethod().getVariable("request");
         headers.forEach((header) -> {
             header.startBuilding();
             Variable var;
-            String value = VariableFactory.isReference(header.value);
+            String value = RegexHelper.isReference(header.value);
             if (value == null) {
-                var = VariableFactory.createHardcodeStringVariable(header.value);
+                var = GlobalContext.createStringConstant(header.value);
             } else {
-                var = builder.queryVariable(value);
+                var = GlobalContext.getCurrentMethod().getVariable(value);
                 if (var == null) {
                     throw new CEIException("Cannot lookup variable: " + var);
                 }
             }
-            Variable tag = VariableFactory.createHardcodeStringVariable(header.tag);
+            Variable tag = GlobalContext.createStringConstant(header.tag);
             builder.addHeader(request, tag, var);
             header.endBuilding();
         });
@@ -95,7 +87,7 @@ public class BuildRestfulInterface {
         if (queryStrings == null) {
             return;
         }
-        Variable request = builder.queryVariable("request");
+        Variable request = GlobalContext.getCurrentMethod().getVariable("request");
         queryStrings.forEach((queryString) -> {
             queryString.startBuilding();
             Variable var = BuildVarious.createValueFromAttribute("value", queryString, builder);
@@ -108,7 +100,7 @@ public class BuildRestfulInterface {
 //                    throw new CEIException("Cannot lookup variable: " + var);
 //                }
 //            }
-            Variable queryStringName = VariableFactory.createHardcodeStringVariable(queryString.key);
+            Variable queryStringName = GlobalContext.createStringConstant(queryString.key);
             builder.addToQueryString(request, queryStringName, var);
             queryString.endBuilding();
         });
@@ -117,7 +109,6 @@ public class BuildRestfulInterface {
     private static void makePostBody(xPostBody postBody, Variable request, RestfulInterfaceBuilder builder) {
         if (postBody != null) {
             postBody.startBuilding();
-            //Variable result = BuildJsonBuilder.build(postBody.jsonBuilder, builder.getJsonBuilderBuilder(), builder);
             Variable result = BuildVarious.createValueFromAttribute("value", postBody, builder);
             if (result != null) {
                 builder.setPostBody(request, result);
@@ -128,7 +119,7 @@ public class BuildRestfulInterface {
 
     private static void makeSignature(String signatureName, Variable request, RestfulInterfaceBuilder builder) {
         if (signatureName != null && !signatureName.equals("")) {
-            builder.invokeSignature(request, Environment.getCurrentDescriptionConverter().getMethodDescriptor(signatureName));
+            builder.invokeSignature(request, GlobalContext.getCurrentDescriptionConverter().getMethodDescriptor(signatureName));
         }
     }
 }

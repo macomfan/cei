@@ -5,10 +5,10 @@
  */
 package cn.ma.cei.generator.langs.golang;
 
+import cn.ma.cei.generator.BuilderContext;
 import cn.ma.cei.generator.builder.JsonCheckerBuilder;
 import cn.ma.cei.generator.builder.JsonParserBuilder;
-import cn.ma.cei.generator.environment.Variable;
-import cn.ma.cei.generator.environment.VariableFactory;
+import cn.ma.cei.generator.Variable;
 import cn.ma.cei.generator.langs.golang.tools.GoGetValueVar;
 import cn.ma.cei.generator.langs.golang.tools.GoMethod;
 import cn.ma.cei.generator.langs.golang.tools.GoType;
@@ -96,7 +96,7 @@ public class GoJsonParserBuilder extends JsonParserBuilder {
 
     @Override
     public void defineRootJsonObject(Variable jsonObject, Variable responseVariable) {
-        Variable value = VariableFactory.createConstantVariable(responseVariable.getDescriptor() + ".GetJson()");
+        Variable value = BuilderContext.createStatement(responseVariable.getDescriptor() + ".GetJson()");
         method.addAssignAndDeclare(method.useVariable(new GoVar(jsonObject)), method.useVariable(new GoVar(value)));
     }
 

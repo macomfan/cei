@@ -7,7 +7,7 @@ package cn.ma.cei.generator.langs.cpp;
 
 import cn.ma.cei.generator.builder.JsonCheckerBuilder;
 import cn.ma.cei.generator.builder.JsonParserBuilder;
-import cn.ma.cei.generator.environment.Variable;
+import cn.ma.cei.generator.Variable;
 
 /**
  *

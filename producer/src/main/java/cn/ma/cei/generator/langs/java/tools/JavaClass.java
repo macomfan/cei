@@ -1,10 +1,10 @@
 package cn.ma.cei.generator.langs.java.tools;
 
 import cn.ma.cei.exception.CEIException;
+import cn.ma.cei.generator.BuilderContext;
 import cn.ma.cei.generator.CEIPath;
-import cn.ma.cei.generator.environment.Variable;
-import cn.ma.cei.generator.environment.VariableFactory;
-import cn.ma.cei.generator.environment.VariableType;
+import cn.ma.cei.generator.Variable;
+import cn.ma.cei.generator.VariableType;
 import cn.ma.cei.generator.langs.java.JavaCode;
 import cn.ma.cei.utils.UniquetList;
 import java.util.ArrayList;
@@ -133,7 +133,7 @@ public class JavaClass {
         List<String> list = new ArrayList<>(newImportList);
         Collections.sort(list);
         list.forEach((item) -> {
-            if (!item.equals(VariableFactory.NO_REF) && !item.equals(packageName)) {
+            if (!item.equals(BuilderContext.NO_REF) && !item.equals(packageName)) {
                 code.appendImport(item);
             }
         });

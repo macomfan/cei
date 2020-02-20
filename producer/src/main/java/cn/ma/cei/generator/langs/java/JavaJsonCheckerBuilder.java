@@ -1,7 +1,7 @@
 package cn.ma.cei.generator.langs.java;
 
 import cn.ma.cei.generator.builder.JsonCheckerBuilder;
-import cn.ma.cei.generator.environment.Variable;
+import cn.ma.cei.generator.Variable;
 import cn.ma.cei.generator.langs.java.tools.JavaMethod;
 
 public class JavaJsonCheckerBuilder extends JsonCheckerBuilder {

@@ -36,8 +36,7 @@ public class UniquetList<IndexType, ValueType> {
     }
 
     public List<ValueType> values() {
-        List<ValueType> res = new LinkedList<>();
-        res.addAll(indexedList);
+        List<ValueType> res = new LinkedList<>(indexedList);
         return res;
     }
 

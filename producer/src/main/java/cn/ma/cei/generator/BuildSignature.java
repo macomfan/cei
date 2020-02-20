@@ -11,10 +11,6 @@ import cn.ma.cei.generator.buildin.RestfulOptions;
 import cn.ma.cei.generator.buildin.RestfulRequest;
 import cn.ma.cei.generator.buildin.SignatureTool;
 import cn.ma.cei.generator.buildin.TheStream;
-import cn.ma.cei.generator.environment.Constant;
-import cn.ma.cei.generator.environment.Environment;
-import cn.ma.cei.generator.environment.Variable;
-import cn.ma.cei.generator.environment.VariableFactory;
 import cn.ma.cei.model.signature.xAddQueryString;
 import cn.ma.cei.model.signature.xAddStringArray;
 import cn.ma.cei.model.signature.xAppendToString;
@@ -28,6 +24,7 @@ import cn.ma.cei.model.types.xString;
 import cn.ma.cei.model.types.xStringArray;
 import cn.ma.cei.model.xSignature;
 import cn.ma.cei.utils.Checker;
+import cn.ma.cei.utils.RegexHelper;
 
 /**
  *
@@ -36,13 +33,18 @@ import cn.ma.cei.utils.Checker;
 public class BuildSignature {
 
     public static void build(xSignature signature, SignatureBuilder builder) {
+        if (builder == null) {
+            throw new CEIException("[BuildSignature] SignatureBuilder is null");
+        }
         if (Checker.isEmpty(signature.name)) {
             throw new CEIException("[BuildSignature] name is null");
         }
-        Variable request = builder.newInputVariable(RestfulRequest.getType(), "{request}");
-        Variable options = builder.newInputVariable(RestfulOptions.getType(), "{options}");
+        Variable request = GlobalContext.getCurrentMethod().createInputVariable(RestfulRequest.getType(), "request");
+        Variable options = GlobalContext.getCurrentMethod().createInputVariable(RestfulOptions.getType(), "options");
 
-        builder.startMethod(null, Environment.getCurrentDescriptionConverter().getMethodDescriptor(signature.name), builder.getVariableList());
+        builder.startMethod(null,
+                GlobalContext.getCurrentMethod().getDescriptor(),
+                GlobalContext.getCurrentMethod().getInputVariableList());
         signature.items.forEach(item -> {
             item.startBuilding();
             if (item instanceof xGetNow) {
@@ -69,15 +71,15 @@ public class BuildSignature {
         builder.endMethod();
     }
 
-    private static Variable queryVariable(String name, SignatureBuilder builder) {
-        Variable variable = builder.queryVariableAsParam(name);
+    private static Variable queryVariable(String name) {
+        Variable variable = GlobalContext.getCurrentMethod().getVariableAsParam(name);
         if (variable == null) {
-            Variable options = builder.queryVariable("options");
+            Variable options = GlobalContext.getCurrentMethod().getVariable("options");
             if (options == null) {
                 throw new CEIException("[BuildSignature] Cannot query option");
             }
-            String variableName = VariableFactory.isReference(name);
-            variable = options.queryMember(variableName);
+            String variableName = RegexHelper.isReference(name);
+            variable = options.getMember(variableName);
             if (variable == null) {
                 throw new CEIException("[BuildSignature] cannot query variable: " + name);
             }
@@ -89,8 +91,8 @@ public class BuildSignature {
         if (Checker.isEmpty(getNow.output)) {
             throw new CEIException("[BuildSignature] output must be defined for get_now");
         }
-        Variable output = builder.newLocalVariable(xString.inst.getType(), getNow.output);
-        Variable format = queryVariable(getNow.format, builder);
+        Variable output = GlobalContext.getCurrentMethod().createLocalVariable(xString.inst.getType(), RegexHelper.isReference(getNow.output));
+        Variable format = queryVariable(getNow.format);
         builder.getNow(output, format);
     }
 
@@ -98,8 +100,8 @@ public class BuildSignature {
         if (Checker.isEmpty(appendQueryString.key) || Checker.isEmpty(appendQueryString.value)) {
             throw new CEIException("[BuildSignature] key and value must be defined for append_query_string");
         }
-        Variable variable = queryVariable(appendQueryString.value, builder);
-        Variable key = queryVariable(appendQueryString.key, builder);
+        Variable variable = queryVariable(appendQueryString.value);
+        Variable key = queryVariable(appendQueryString.key);
         builder.addQueryString(requestVariable, key, variable);
     }
 
@@ -107,15 +109,15 @@ public class BuildSignature {
         if (Checker.isEmpty(combineQueryString.output)) {
             throw new CEIException("[BuildSignature] output must be defined for CombineQueryString");
         }
-        Variable output = builder.newLocalVariable(xString.inst.getType(), combineQueryString.output);
+        Variable output = GlobalContext.getCurrentMethod().createLocalVariable(xString.inst.getType(), RegexHelper.isReference(combineQueryString.output));
 
         Variable sort;
         if (!Checker.isEmpty(combineQueryString.sort)) {
-            sort = VariableFactory.createConstantVariable(Constant.signatureMethod().tryGet(combineQueryString.sort));
+            sort = GlobalContext.createStatement(Constant.signatureMethod().tryGet(combineQueryString.sort));
         } else {
-            sort = VariableFactory.createConstantVariable(Constant.signatureMethod().tryGet(SignatureTool.Constant.NONE));
+            sort = GlobalContext.createStatement(Constant.signatureMethod().tryGet(SignatureTool.Constant.NONE));
         }
-        Variable separator = queryVariable(combineQueryString.separator, builder);
+        Variable separator = queryVariable(combineQueryString.separator);
         builder.combineQueryString(requestVariable, output, sort, separator);
     }
 
@@ -126,19 +128,19 @@ public class BuildSignature {
         if (Checker.isEmpty(getRequestInfo.info)) {
             throw new CEIException("[BuildSignature] info must be defined for GetRequestInfo");
         }
-        Variable output = builder.newLocalVariable(xString.inst.getType(), getRequestInfo.output);
+        Variable output = GlobalContext.getCurrentMethod().createLocalVariable(xString.inst.getType(), RegexHelper.isReference(getRequestInfo.output));
 
         Variable info;
         if (!Checker.isEmpty(getRequestInfo.info)) {
-            info = VariableFactory.createConstantVariable(Constant.signatureMethod().tryGet(getRequestInfo.info));
+            info = GlobalContext.createStatement(Constant.signatureMethod().tryGet(getRequestInfo.info));
         } else {
-            info = VariableFactory.createConstantVariable(Constant.signatureMethod().tryGet(SignatureTool.Constant.NONE));
+            info = GlobalContext.createStatement(Constant.signatureMethod().tryGet(SignatureTool.Constant.NONE));
         }
         Variable convert;
         if (!Checker.isEmpty(getRequestInfo.convert)) {
-            convert = VariableFactory.createConstantVariable(Constant.signatureMethod().tryGet(getRequestInfo.convert));
+            convert = GlobalContext.createStatement(Constant.signatureMethod().tryGet(getRequestInfo.convert));
         } else {
-            convert = VariableFactory.createConstantVariable(Constant.signatureMethod().tryGet(SignatureTool.Constant.NONE));
+            convert = GlobalContext.createStatement(Constant.signatureMethod().tryGet(SignatureTool.Constant.NONE));
         }
         builder.getRequestInfo(requestVariable, output, info, convert);
     }
@@ -150,17 +152,17 @@ public class BuildSignature {
         if (Checker.isEmpty(appendStringArray.input)) {
             throw new CEIException("[BuildSignature] input must be defined for AppendStringArray");
         }
-        String outputName = VariableFactory.isReference(appendStringArray.output);
+        String outputName = RegexHelper.isReference(appendStringArray.output);
         if (outputName == null) {
             throw new CEIException("[BuildSignature] outpup must be {} in AppendStringArray");
         }
-        Variable output = builder.queryVariable(outputName);
+        Variable output = GlobalContext.getCurrentMethod().getVariable(outputName);
         if (output == null) {
-            output = builder.newLocalVariable(xStringArray.inst.getType(), appendStringArray.output);
+            output = GlobalContext.getCurrentMethod().createLocalVariable(xStringArray.inst.getType(), RegexHelper.isReference(appendStringArray.output));
             builder.newStringArray(output);
         }
 
-        Variable input = queryVariable(appendStringArray.input, builder);
+        Variable input = queryVariable(appendStringArray.input);
         builder.addStringArray(output, input);
     }
 
@@ -171,9 +173,9 @@ public class BuildSignature {
         if (Checker.isEmpty(combineQueryString.input)) {
             throw new CEIException("[BuildSignature] input must be defined for CombineStringArray");
         }
-        Variable input = queryVariable(combineQueryString.input, builder);
-        Variable output = builder.newLocalVariable(xString.inst.getType(), combineQueryString.output);
-        Variable separator = queryVariable(combineQueryString.separator, builder);
+        Variable input = queryVariable(combineQueryString.input);
+        Variable output = GlobalContext.getCurrentMethod().createLocalVariable(xString.inst.getType(), RegexHelper.isReference(combineQueryString.output));
+        Variable separator = queryVariable(combineQueryString.separator);
         builder.combineStringArray(output, input, separator);
 
     }
@@ -186,14 +188,14 @@ public class BuildSignature {
             throw new CEIException("[BuildSignature] input must be defined for AppendToString");
         }
 
-        String outputName = VariableFactory.isReference(appendToString.output);
+        String outputName = RegexHelper.isReference(appendToString.output);
         if (outputName == null) {
             throw new CEIException("[BuildSignature] outpup must be {} in AppendStringArray");
         }
-        Variable input = queryVariable(appendToString.input, builder);
-        Variable output = builder.queryVariable(outputName);
+        Variable input = queryVariable(appendToString.input);
+        Variable output = GlobalContext.getCurrentMethod().getVariable(outputName);
         if (output == null) {
-            output = builder.newLocalVariable(xString.inst.getType(), appendToString.output);
+            output =  GlobalContext.getCurrentMethod().createLocalVariable(xString.inst.getType(), RegexHelper.isReference(appendToString.output));
             builder.appendToString(true, output, input);
         } else {
             builder.appendToString(false, output, input);
@@ -207,8 +209,8 @@ public class BuildSignature {
         if (Checker.isEmpty(base64.input)) {
             throw new CEIException("[BuildSignature] input must be defined for base64");
         }
-        Variable input = queryVariable(base64.input, builder);
-        Variable output = builder.newLocalVariable(xString.inst.getType(), base64.output);
+        Variable input = queryVariable(base64.input);
+        Variable output = GlobalContext.getCurrentMethod().createLocalVariable(xString.inst.getType(), RegexHelper.isReference(base64.output));
         builder.base64(output, input);
     }
 
@@ -222,9 +224,9 @@ public class BuildSignature {
         if (Checker.isEmpty(hmacsha256.key)) {
             throw new CEIException("[BuildSignature] key must be defined for hmacsha256");
         }
-        Variable input = queryVariable(hmacsha256.input, builder);
-        Variable key = queryVariable(hmacsha256.key, builder);
-        Variable output = builder.newLocalVariable(TheStream.getType(), hmacsha256.output);
+        Variable input = queryVariable(hmacsha256.input);
+        Variable key = queryVariable(hmacsha256.key);
+        Variable output =  GlobalContext.getCurrentMethod().createLocalVariable(TheStream.getType(), RegexHelper.isReference(hmacsha256.output));
         builder.hmacsha265(output, input, key);
     }
 }

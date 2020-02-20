@@ -5,18 +5,12 @@
  */
 package cn.ma.cei.generator;
 
-import cn.ma.cei.generator.builder.Framework;
+import cn.ma.cei.generator.builder.IFramework;
 import cn.ma.cei.exception.CEIException;
-import cn.ma.cei.generator.buildin.RestfulOptions;
-import cn.ma.cei.generator.environment.Environment;
 import cn.ma.cei.model.xSDK;
 import cn.ma.cei.utils.MapWithValue2;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  *
@@ -30,9 +24,9 @@ public class BuildSDK {
         public boolean addTimestamp = true;
     }
 
-    public static MapWithValue2<String , Language, Framework> frameworks = new MapWithValue2<>();
+    public final static MapWithValue2<String , Language, IFramework> frameworks = new MapWithValue2<>();
 
-    public static void registerFramework(Framework framework) {
+    public static void registerFramework(IFramework framework) {
         Language language = framework.getLanguage();
         if (frameworks.containsKey(language.getName())) {
             throw new CEIException("[BuildSDK] Framework duplicated");
@@ -60,16 +54,14 @@ public class BuildSDK {
         CEIPath buildFolder = new CEIPath(CEIPath.Type.FOLDER, "C:\\dev\\cei\\framework");
         buildFolder.mkdirs();
 
-        Framework framework = frameworks.get2(language);
-
-        Environment.setWorkingFolder(CEIPath.appendPath(buildFolder, frameworks.get1(language).getWorkingName()));
+        IFramework framework = frameworks.get2(language);
+        GlobalContext.setWorkingFolder(CEIPath.appendPath(buildFolder, frameworks.get1(language).getWorkingName()));
 
         sdks.forEach((sdk) -> {
             sdk.startBuilding();
-            Environment.setCurrentExchange(sdk.name);
-            Environment.setCurrentLanguage(frameworks.get1(language));
-            Environment.setCurrentDescriptionConverter(framework.getDescriptionConverter());
-
+            GlobalContext.setCurrentExchange(sdk.name);
+            GlobalContext.setCurrentLanguage(frameworks.get1(language));
+            GlobalContext.setCurrentFramework(framework);
             BuildExchange.build(sdk, framework.getExchangeBuilder());
             sdk.endBuilding();
         });

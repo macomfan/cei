@@ -6,7 +6,7 @@
 package cn.ma.cei.generator.langs.python3;
 
 import cn.ma.cei.generator.builder.JsonBuilderBuilder;
-import cn.ma.cei.generator.environment.Variable;
+import cn.ma.cei.generator.Variable;
 import cn.ma.cei.generator.langs.python3.tools.Python3Method;
 
 /**

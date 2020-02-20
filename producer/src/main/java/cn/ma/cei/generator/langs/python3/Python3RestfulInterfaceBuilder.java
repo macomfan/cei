@@ -5,13 +5,13 @@
  */
 package cn.ma.cei.generator.langs.python3;
 
+import cn.ma.cei.generator.BuilderContext;
 import cn.ma.cei.generator.builder.JsonBuilderBuilder;
 import cn.ma.cei.generator.builder.ResponseBuilder;
 import cn.ma.cei.generator.builder.RestfulInterfaceBuilder;
 import cn.ma.cei.generator.builder.StringBuilderBuilder;
-import cn.ma.cei.generator.environment.Variable;
-import cn.ma.cei.generator.environment.VariableFactory;
-import cn.ma.cei.generator.environment.VariableType;
+import cn.ma.cei.generator.Variable;
+import cn.ma.cei.generator.VariableType;
 import cn.ma.cei.generator.langs.python3.tools.Python3Class;
 import cn.ma.cei.generator.langs.python3.tools.Python3Method;
 import java.util.List;
@@ -42,7 +42,7 @@ public class Python3RestfulInterfaceBuilder extends RestfulInterfaceBuilder {
 
     @Override
     public void defineRequest(Variable request) {
-        Variable options = VariableFactory.createConstantVariable("self.__options");
+        Variable options = BuilderContext.createStatement("self.__options");
         method.addAssign(method.defineVariable(request), method.newInstance(request.getType(), options));
     }
 
@@ -51,11 +51,11 @@ public class Python3RestfulInterfaceBuilder extends RestfulInterfaceBuilder {
         method.addAssign(method.defineVariable(response), method.invoke("RestfulConnection.query", request));
     }
 
-    @Override
-    public void setUrl(Variable request) {
-        Variable url = VariableFactory.createConstantVariable("self.__options.url");
-        method.addInvoke(request.getDescriptor() + ".set_url", url);
-    }
+//    @Override
+//    public void setUrl(Variable request) {
+//        Variable url = VariableFactory.createConstantVariable("self.__options.url");
+//        method.addInvoke(request.getDescriptor() + ".set_url", url);
+//    }
 
     @Override
     public void setRequestMethod(Variable request, Variable requestMethod) {
@@ -115,7 +115,7 @@ public class Python3RestfulInterfaceBuilder extends RestfulInterfaceBuilder {
 
     @Override
     public void invokeSignature(Variable request, String methodName) {
-        Variable option = VariableFactory.createConstantVariable("self.__options");
+        Variable option = BuilderContext.createStatement("self.__options");
         method.addInvoke("Signature." + methodName, request, option);
     }
 

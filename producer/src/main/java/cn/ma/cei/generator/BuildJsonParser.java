@@ -5,9 +5,6 @@ import cn.ma.cei.generator.builder.JsonCheckerBuilder;
 import cn.ma.cei.generator.builder.JsonParserBuilder;
 import cn.ma.cei.generator.builder.MethodBuilder;
 import cn.ma.cei.generator.buildin.JsonWrapper;
-import cn.ma.cei.generator.environment.Variable;
-import cn.ma.cei.generator.environment.VariableFactory;
-import cn.ma.cei.generator.environment.VariableType;
 import cn.ma.cei.model.json.*;
 import cn.ma.cei.model.json.checker.xJsonChecker;
 import cn.ma.cei.model.types.*;
@@ -21,7 +18,6 @@ public class BuildJsonParser {
         Variable parentModel = null;
         Variable parentJsonObject = null;
         JsonParserBuilder jsonParserBuilder = null;
-        MethodBuilder method = null;
     }
 
 
@@ -34,7 +30,7 @@ public class BuildJsonParser {
         if (jsonParser == null) {
             throw new CEIException("[BuildJsonParser] The root is not json parser");
         }
-        Variable rootJsonObject = defineRootJsonObject(method);
+        Variable rootJsonObject = defineRootJsonObject();
         jsonParserBuilder.defineRootJsonObject(rootJsonObject, responseVariable);
 
         if ((jsonParser.itemList == null || jsonParser.itemList.isEmpty()) && jsonParser.jsonChecker == null) {
@@ -43,14 +39,14 @@ public class BuildJsonParser {
 
         if (jsonParser.jsonChecker != null) {
             jsonParser.jsonChecker.startBuilding();
-            buildJsonChecker(jsonParser.jsonChecker, jsonParserBuilder, rootJsonObject, method, usedFor);
+            buildJsonChecker(jsonParser.jsonChecker, jsonParserBuilder, rootJsonObject, usedFor);
             jsonParser.jsonChecker.endBuilding();
         }
 
         if (jsonParser.itemList.isEmpty() || outputModelType == null) {
             return null;
         }
-        Variable model = method.createTempVariable(outputModelType, outputModelType.getDescriptor() + "Var");
+        Variable model = GlobalContext.getCurrentMethod().createTempVariable(outputModelType, outputModelType.getDescriptor() + "Var");
         jsonParserBuilder.defineModel(model);
 
         jsonParser.itemList.forEach(item -> {
@@ -59,33 +55,31 @@ public class BuildJsonParser {
             newContext.parentModel = model;
             newContext.parentJsonObject = rootJsonObject;
             newContext.jsonParserBuilder = jsonParserBuilder;
-            newContext.method = method;
             processJsonItem(newContext);
         });
         return model;
     }
 
-    private static Variable defineRootJsonObject(MethodBuilder method) {
-        return method.createTempVariable(JsonWrapper.getType(), "rootObj");
+    private static Variable defineRootJsonObject() {
+        return GlobalContext.getCurrentMethod().createTempVariable(JsonWrapper.getType(), "rootObj");
     }
 
     private static void buildJsonChecker(
             xJsonChecker jsonChecker,
             JsonParserBuilder jsonParserBuilder,
             Variable rootJsonObject,
-            MethodBuilder method,
             JsonCheckerBuilder.UsedFor usedFor) {
         JsonCheckerBuilder jsonCheckerBuilder = jsonParserBuilder.createJsonCheckerBuilder();
         if (jsonCheckerBuilder == null) {
             throw new CEIException("[BuildJsonParser] JsonChecker build is null");
         }
         jsonCheckerBuilder.setUsedFor(usedFor);
-        BuildJsonChecker.build(jsonChecker, rootJsonObject, jsonCheckerBuilder, method);
+        BuildJsonChecker.build(jsonChecker, rootJsonObject, jsonCheckerBuilder);
     }
 
     private static void processJsonItem(JsonItemContext context) {
         context.jsonItem.startBuilding();
-        if (context.jsonItem == null || context.method == null || context.jsonParserBuilder == null) {
+        if (context.jsonItem == null || context.jsonParserBuilder == null) {
             throw new CEIException("[BuildJsonParser] null");
         }
         if (context.jsonItem.copy == null && context.jsonItem.key == null && context.jsonItem.value == null) {
@@ -172,7 +166,6 @@ public class BuildJsonParser {
             newContext.parentModel = newModel;
             newContext.parentJsonObject = newJsonObject;
             newContext.jsonParserBuilder = context.jsonParserBuilder;
-            newContext.method = context.method;
             processJsonItem(newContext);
         }
         if (value != null) {
@@ -187,7 +180,7 @@ public class BuildJsonParser {
             Variable key = getKeyVariable(jsonWithModel.key);
             context.jsonParserBuilder.defineJsonObject(newJsonObject, context.parentJsonObject, key);
         }
-        Variable eachItemJsonObject = context.method.createTempVariable(JsonWrapper.getType(), "item");
+        Variable eachItemJsonObject = GlobalContext.getCurrentMethod().createTempVariable(JsonWrapper.getType(), "item");
         context.jsonParserBuilder.startJsonObjectArray(eachItemJsonObject, newJsonObject);
         Variable newModel = defineModel(context);
 
@@ -197,7 +190,6 @@ public class BuildJsonParser {
             newContext.parentModel = newModel;
             newContext.parentJsonObject = eachItemJsonObject;
             newContext.jsonParserBuilder = context.jsonParserBuilder;
-            newContext.method = context.method;
             processJsonItem(newContext);
         });
 
@@ -210,7 +202,7 @@ public class BuildJsonParser {
             // If key is null, use the parent json object
             return context.parentJsonObject;
         }
-        return context.method.createLocalVariable(JsonWrapper.getType(), jsonWithModel.key + "Obj");
+        return GlobalContext.getCurrentMethod().createLocalVariable(JsonWrapper.getType(), jsonWithModel.key + "Obj");
     }
 
     private static Variable defineModel(JsonItemContext context) {
@@ -219,7 +211,7 @@ public class BuildJsonParser {
             // If model is null, use the parent model
             return context.parentModel;
         }
-        Variable model = context.method.createTempVariable(VariableFactory.variableType(jsonWithModel.model), jsonWithModel.model + "Var");
+        Variable model = GlobalContext.getCurrentMethod().createTempVariable(GlobalContext.variableType(jsonWithModel.model), jsonWithModel.model + "Var");
         context.jsonParserBuilder.defineModel(model);
         return model;
     }
@@ -230,7 +222,7 @@ public class BuildJsonParser {
             if (variableName == null) {
                 throw new CEIException("[BuildJsonParser] To must be Variable");
             }
-            return parentModel.queryMember(variableName);
+            return parentModel.getMember(variableName);
         } else {
             return null;
         }
@@ -240,7 +232,7 @@ public class BuildJsonParser {
         if (Checker.isEmpty(key)) {
             throw new CEIException("[BuildJsonParser] Key cannot be null");
         }
-        return VariableFactory.createHardcodeStringVariable(key);
+        return GlobalContext.createStringConstant(key);
     }
 
     private static void processJsonString(Variable value, JsonItemContext context) {

@@ -1,6 +1,6 @@
 package cn.ma.cei.generator.builder;
 
-import cn.ma.cei.generator.environment.Variable;
+import cn.ma.cei.generator.Variable;
 
 public abstract class RestfulInterfaceBuilder extends MethodBuilder {
 
@@ -22,7 +22,7 @@ public abstract class RestfulInterfaceBuilder extends MethodBuilder {
     
     public abstract void invokeSignature(Variable request, String methodName);
 
-    public abstract void setUrl(Variable request);
+//    public abstract void setUrl(Variable request);
 
     public abstract void setRequestMethod(Variable request, Variable requestMethod);
 

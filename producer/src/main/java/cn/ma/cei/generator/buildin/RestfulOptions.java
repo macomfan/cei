@@ -5,9 +5,8 @@
  */
 package cn.ma.cei.generator.buildin;
 
-import cn.ma.cei.generator.environment.Variable;
-import cn.ma.cei.generator.environment.VariableFactory;
-import cn.ma.cei.generator.environment.VariableType;
+import cn.ma.cei.generator.BuilderContext;
+import cn.ma.cei.generator.VariableType;
 import cn.ma.cei.model.types.xString;
 
 /**
@@ -22,12 +21,12 @@ public class RestfulOptions {
     public final static String typeName = "RestfulOptions";
 
     public static VariableType getType() {
-        return VariableFactory.variableType(typeName);
+        return BuilderContext.variableType(typeName);
     }
 
     public static void registryMember() {
-        VariableFactory.registerMemberVariable(RestfulOptions.getType(), VariableFactory.variableType(xString.typeName), "apiKey");
-        VariableFactory.registerMemberVariable(RestfulOptions.getType(), VariableFactory.variableType(xString.typeName), "secretKey");
-        VariableFactory.registerMemberVariable(RestfulOptions.getType(), VariableFactory.variableType(xString.typeName), "url");
+        RestfulOptions.getType().addMember(BuilderContext.variableType(xString.typeName), "apiKey");
+        RestfulOptions.getType().addMember(BuilderContext.variableType(xString.typeName), "secretKey");
+        RestfulOptions.getType().addMember(BuilderContext.variableType(xString.typeName), "url");
     }
 }

@@ -5,8 +5,8 @@
  */
 package cn.ma.cei.generator.langs.python3.tools;
 
-import cn.ma.cei.generator.environment.Variable;
-import cn.ma.cei.generator.environment.VariableType;
+import cn.ma.cei.generator.Variable;
+import cn.ma.cei.generator.VariableType;
 import cn.ma.cei.generator.langs.python3.Python3Code;
 import java.util.Arrays;
 import java.util.List;

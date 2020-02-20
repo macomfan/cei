@@ -1,10 +1,10 @@
 package cn.ma.cei.generator.langs.java;
 
+import cn.ma.cei.generator.BuilderContext;
 import cn.ma.cei.generator.builder.JsonBuilderBuilder;
 import cn.ma.cei.generator.builder.StringBuilderBuilder;
-import cn.ma.cei.generator.environment.Variable;
-import cn.ma.cei.generator.environment.VariableFactory;
-import cn.ma.cei.generator.environment.VariableType;
+import cn.ma.cei.generator.Variable;
+import cn.ma.cei.generator.VariableType;
 import cn.ma.cei.generator.builder.ResponseBuilder;
 import cn.ma.cei.generator.builder.RestfulInterfaceBuilder;
 import cn.ma.cei.generator.langs.java.tools.JavaClass;
@@ -34,7 +34,7 @@ public class JavaRestfulInterfaceBuilder extends RestfulInterfaceBuilder {
 
     @Override
     public void defineRequest(Variable request) {
-        Variable options = VariableFactory.createConstantVariable("this.options");
+        Variable options = BuilderContext.createStatement("this.options");
         method.addAssign(method.defineVariable(request), method.newInstance(request.getType(), options));
     }
 
@@ -73,11 +73,11 @@ public class JavaRestfulInterfaceBuilder extends RestfulInterfaceBuilder {
         return new JavaStringBuilderBuilder(method);
     }
 
-    @Override
-    public void setUrl(Variable request) {
-        Variable url = VariableFactory.createConstantVariable("this.options.url");
-        method.addInvoke(request.getDescriptor() + ".setUrl", url);
-    }
+//    @Override
+//    public void setUrl(Variable request) {
+//        Variable url = VariableFactory.createConstantVariable("this.options.url");
+//        method.addInvoke(request.getDescriptor() + ".setUrl", url);
+//    }
 
     @Override
     public void addHeader(Variable request, Variable tag, Variable value) {
@@ -107,7 +107,7 @@ public class JavaRestfulInterfaceBuilder extends RestfulInterfaceBuilder {
 
     @Override
     public void invokeSignature(Variable request, String methodName) {
-        Variable option = VariableFactory.createConstantVariable("this.options");
+        Variable option = BuilderContext.createStatement("this.options");
         method.addInvoke("Signature." + methodName, request, option);
     }
 }

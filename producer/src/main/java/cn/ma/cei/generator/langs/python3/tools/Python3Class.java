@@ -5,20 +5,14 @@
  */
 package cn.ma.cei.generator.langs.python3.tools;
 
-import cn.ma.cei.exception.CEIException;
-import cn.ma.cei.generator.CEIPath;
-import cn.ma.cei.generator.environment.Environment;
-import cn.ma.cei.generator.environment.Variable;
-import cn.ma.cei.generator.environment.VariableType;
+import cn.ma.cei.generator.Variable;
+import cn.ma.cei.generator.VariableType;
 import cn.ma.cei.generator.langs.python3.Python3Code;
 import cn.ma.cei.utils.UniquetList;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
+
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 /**

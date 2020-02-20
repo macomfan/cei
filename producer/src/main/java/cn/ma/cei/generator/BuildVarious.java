@@ -5,8 +5,6 @@ import cn.ma.cei.generator.builder.JsonBuilderBuilder;
 import cn.ma.cei.generator.builder.MethodBuilder;
 import cn.ma.cei.generator.builder.StringBuilderBuilder;
 import cn.ma.cei.generator.buildin.JsonWrapper;
-import cn.ma.cei.generator.environment.Variable;
-import cn.ma.cei.generator.environment.VariableFactory;
 import cn.ma.cei.model.base.xVarious;
 import cn.ma.cei.model.json.*;
 import cn.ma.cei.model.types.xInt;
@@ -42,7 +40,7 @@ public class BuildVarious {
                 if (jsonBuilderBuilder == null) {
                     throw new CEIException("JsonBuilderBuilder is null");
                 }
-                return buildJsonBuilder(valueProcessor.jsonBuilder, jsonBuilderBuilder, methodBuilder);
+                return buildJsonBuilder(valueProcessor.jsonBuilder, jsonBuilderBuilder);
             } else if (valueProcessor.stringBuilder != null) {
                 return buildStringBuilder(valueProcessor, null);
             } else {
@@ -50,7 +48,7 @@ public class BuildVarious {
             }
 
         } else if (RegexHelper.isReference(attrValue) != null) {
-                Variable var = methodBuilder.queryVariable(RegexHelper.isReference(attrValue));
+                Variable var = GlobalContext.getCurrentMethod().getVariable(RegexHelper.isReference(attrValue));
                 if (var == null) {
                     throw new CEIException("Cannot lookup variable: " + var);
                 }
@@ -58,16 +56,16 @@ public class BuildVarious {
         } else {
             List<String> linkedParam = RegexHelper.findReference(attrValue);
             if (linkedParam.isEmpty()) {
-                return VariableFactory.createHardcodeStringVariable(attrValue);
+                return GlobalContext.createStringConstant(attrValue);
             } else {
                 StringBuilderBuilder stringBuilderBuilder = methodBuilder.createStringBuilderBuilder();
                 if (stringBuilderBuilder == null) {
                     throw new CEIException("StringBuilderBuilder is null");
                 }
                 List<Variable> variables = new LinkedList<>();
-                variables.add(VariableFactory.createHardcodeStringVariable(attrValue));
+                variables.add(GlobalContext.createStringConstant(attrValue));
                 linkedParam.forEach(item -> {
-                    Variable param = methodBuilder.queryVariable(item);
+                    Variable param = GlobalContext.getCurrentMethod().getVariable(item);
                     if (param == null) {
                         throw new CEIException("Cannot find variable in target");
                     }
@@ -80,8 +78,8 @@ public class BuildVarious {
         }
     }
 
-    private static Variable buildJsonBuilder(xJsonBuilder jsonBuilder, JsonBuilderBuilder jsonBuilderBuilder, MethodBuilder methodBuilder) {
-        Variable jsonObject = methodBuilder.newLocalVariable(JsonWrapper.getType(), "{jsonBuilder}");
+    private static Variable buildJsonBuilder(xJsonBuilder jsonBuilder, JsonBuilderBuilder jsonBuilderBuilder) {
+        Variable jsonObject = GlobalContext.getCurrentMethod().createLocalVariable(JsonWrapper.getType(), "jsonBuilder");
         jsonBuilderBuilder.defineRootJsonObject(jsonObject);
         jsonBuilder.itemList.forEach(item -> {
             item.startBuilding();
@@ -98,11 +96,11 @@ public class BuildVarious {
                     item.copy = null;
                 }
             }
-            Variable from = getFromVariable(item, methodBuilder);
+            Variable from = getFromVariable(item);
             if (from == null) {
                 throw new CEIException("[BuildJsonBuilder] cannot process from");
             }
-            Variable to = VariableFactory.createHardcodeStringVariable(item.value);
+            Variable to = GlobalContext.createStringConstant(item.value);
 
             if (item instanceof xJsonAuto) {
                 if (from.getType() == xString.inst.getType()) {
@@ -129,9 +127,9 @@ public class BuildVarious {
             return null;
     }
 
-    private static Variable getFromVariable(xJsonType jsonItem, MethodBuilder method) {
+    private static Variable getFromVariable(xJsonType jsonItem) {
         if (jsonItem.key != null && !jsonItem.key.equals("")) {
-            return method.queryVariableAsParam(jsonItem.key);
+            return GlobalContext.getCurrentMethod().getVariableAsParam(jsonItem.key);
         }
         return null;
     }

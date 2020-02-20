@@ -5,8 +5,8 @@
  */
 package cn.ma.cei.generator.langs.java.buildin;
 
-import cn.ma.cei.generator.environment.VariableFactory;
-import cn.ma.cei.generator.environment.VariableType;
+import cn.ma.cei.generator.BuilderContext;
+import cn.ma.cei.generator.VariableType;
 
 /**
  *
@@ -17,6 +17,6 @@ public class TheLinkedList {
     public final static String typeName = "linkedlist";
 
     public static VariableType getType() {
-        return VariableFactory.variableType(typeName, (VariableType)null);
+        return BuilderContext.variableType(typeName, (VariableType)null);
     }
 }

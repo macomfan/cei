@@ -5,10 +5,10 @@
  */
 package cn.ma.cei.generator.langs.golang;
 
+import cn.ma.cei.generator.BuilderContext;
 import cn.ma.cei.generator.builder.ModelBuilder;
-import cn.ma.cei.generator.environment.Variable;
-import cn.ma.cei.generator.environment.VariableFactory;
-import cn.ma.cei.generator.environment.VariableType;
+import cn.ma.cei.generator.Variable;
+import cn.ma.cei.generator.VariableType;
 import cn.ma.cei.generator.langs.golang.tools.GoFile;
 import cn.ma.cei.generator.langs.golang.tools.GoStruct;
 import cn.ma.cei.generator.langs.golang.tools.GoVar;
@@ -29,7 +29,7 @@ public class GoModelBuilder extends ModelBuilder {
     
     @Override
     public String getReference(String modelName) {
-        return VariableFactory.NO_REF;
+        return BuilderContext.NO_REF;
     }
 
     @Override
@@ -38,7 +38,7 @@ public class GoModelBuilder extends ModelBuilder {
     }
 
     @Override
-    public void registerMember(Variable variable) {
+    public void addMember(Variable variable) {
         modelStruct.addPublicMember(new GoVar(variable));
     }
 
