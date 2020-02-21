@@ -1,7 +1,7 @@
 package cn.ma.cei.generator;
 
 import cn.ma.cei.exception.CEIException;
-import cn.ma.cei.generator.builder.RestfulInterfaceBuilder;
+import cn.ma.cei.generator.builder.IRestfulInterfaceBuilder;
 import cn.ma.cei.generator.buildin.RestfulConnection;
 import cn.ma.cei.generator.buildin.RestfulRequest;
 import cn.ma.cei.generator.buildin.RestfulResponse;
@@ -9,7 +9,6 @@ import cn.ma.cei.model.xHeader;
 import cn.ma.cei.model.xInterface;
 import cn.ma.cei.model.xPostBody;
 import cn.ma.cei.model.xQuery;
-import cn.ma.cei.utils.Checker;
 import cn.ma.cei.utils.RegexHelper;
 
 import java.util.LinkedList;
@@ -17,7 +16,7 @@ import java.util.List;
 
 public class BuildRestfulInterface {
 
-    public static void build(xInterface restIf, RestfulInterfaceBuilder builder) {
+    public static void build(xInterface restIf, IRestfulInterfaceBuilder builder) {
 
         Variable request = GlobalContext.getCurrentMethod().createLocalVariable(RestfulRequest.getType(), "request");
         Variable response = GlobalContext.getCurrentMethod().createLocalVariable(RestfulResponse.getType(), "response");
@@ -60,7 +59,7 @@ public class BuildRestfulInterface {
         builder.endMethod();
     }
 
-    private static void makeHeaders(List<xHeader> headers, RestfulInterfaceBuilder builder) {
+    private static void makeHeaders(List<xHeader> headers, IRestfulInterfaceBuilder builder) {
         if (headers == null) {
             return;
         }
@@ -83,7 +82,7 @@ public class BuildRestfulInterface {
         });
     }
 
-    private static void makeQueryString(List<xQuery> queryStrings, RestfulInterfaceBuilder builder) {
+    private static void makeQueryString(List<xQuery> queryStrings, IRestfulInterfaceBuilder builder) {
         if (queryStrings == null) {
             return;
         }
@@ -106,7 +105,7 @@ public class BuildRestfulInterface {
         });
     }
 
-    private static void makePostBody(xPostBody postBody, Variable request, RestfulInterfaceBuilder builder) {
+    private static void makePostBody(xPostBody postBody, Variable request, IRestfulInterfaceBuilder builder) {
         if (postBody != null) {
             postBody.startBuilding();
             Variable result = BuildVarious.createValueFromAttribute("value", postBody, builder);
@@ -117,7 +116,7 @@ public class BuildRestfulInterface {
         }
     }
 
-    private static void makeSignature(String signatureName, Variable request, RestfulInterfaceBuilder builder) {
+    private static void makeSignature(String signatureName, Variable request, IRestfulInterfaceBuilder builder) {
         if (signatureName != null && !signatureName.equals("")) {
             builder.invokeSignature(request, GlobalContext.getCurrentDescriptionConverter().getMethodDescriptor(signatureName));
         }

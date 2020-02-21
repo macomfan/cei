@@ -2,10 +2,10 @@ package cn.ma.cei.generator.langs.cpp;
 
 import cn.ma.cei.generator.Variable;
 import cn.ma.cei.generator.VariableType;
-import cn.ma.cei.generator.builder.ModelBuilder;
+import cn.ma.cei.generator.builder.IModelBuilder;
 import cn.ma.cei.generator.langs.cpp.tools.CppClass;
 
-public class CppModelBuilder extends ModelBuilder {
+public class CppModelBuilder implements IModelBuilder {
 
     private CppClass cppClass = null;
     private String exchangeName;

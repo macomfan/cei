@@ -3,11 +3,11 @@ package cn.ma.cei.generator.langs.java;
 import cn.ma.cei.generator.BuilderContext;
 import cn.ma.cei.generator.builder.JsonCheckerBuilder;
 import cn.ma.cei.generator.Variable;
-import cn.ma.cei.generator.builder.JsonParserBuilder;
+import cn.ma.cei.generator.builder.IJsonParserBuilder;
 import cn.ma.cei.generator.langs.java.tools.JavaMethod;
 import cn.ma.cei.generator.langs.java.buildin.TheLinkedList;
 
-public class JavaJsonParserBuilder extends JsonParserBuilder {
+public class JavaJsonParserBuilder implements IJsonParserBuilder {
 
     private final JavaMethod method;
 

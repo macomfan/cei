@@ -3,14 +3,14 @@ package cn.ma.cei.generator.langs.java;
 import cn.ma.cei.generator.BuilderContext;
 import cn.ma.cei.generator.Variable;
 import cn.ma.cei.generator.VariableType;
-import cn.ma.cei.generator.builder.RestfulClientBuilder;
-import cn.ma.cei.generator.builder.RestfulInterfaceBuilder;
+import cn.ma.cei.generator.builder.IRestfulClientBuilder;
+import cn.ma.cei.generator.builder.IRestfulInterfaceBuilder;
 import cn.ma.cei.generator.buildin.RestfulOptions;
 import cn.ma.cei.generator.langs.java.tools.JavaClass;
 import cn.ma.cei.generator.langs.java.tools.JavaMethod;
 import cn.ma.cei.generator.sMethod;
 
-public class JavaRestfulClientBuilder extends RestfulClientBuilder {
+public class JavaRestfulClientBuilder implements IRestfulClientBuilder {
 
     private final JavaClass mainClass;
     private JavaClass clientClass = null;
@@ -60,7 +60,7 @@ public class JavaRestfulClientBuilder extends RestfulClientBuilder {
     }
 
     @Override
-    public RestfulInterfaceBuilder getRestfulInterfaceBuilder(sMethod method) {
+    public IRestfulInterfaceBuilder createRestfulInterfaceBuilder(sMethod method) {
         return new JavaRestfulInterfaceBuilder(clientClass);
     }
 

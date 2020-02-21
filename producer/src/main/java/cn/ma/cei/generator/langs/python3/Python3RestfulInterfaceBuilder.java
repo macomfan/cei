@@ -6,10 +6,10 @@
 package cn.ma.cei.generator.langs.python3;
 
 import cn.ma.cei.generator.BuilderContext;
-import cn.ma.cei.generator.builder.JsonBuilderBuilder;
-import cn.ma.cei.generator.builder.ResponseBuilder;
-import cn.ma.cei.generator.builder.RestfulInterfaceBuilder;
-import cn.ma.cei.generator.builder.StringBuilderBuilder;
+import cn.ma.cei.generator.builder.IJsonParserBuilder;
+import cn.ma.cei.generator.builder.IJsonBuilderBuilder;
+import cn.ma.cei.generator.builder.IRestfulInterfaceBuilder;
+import cn.ma.cei.generator.builder.IStringBuilderBuilder;
 import cn.ma.cei.generator.Variable;
 import cn.ma.cei.generator.VariableType;
 import cn.ma.cei.generator.langs.python3.tools.Python3Class;
@@ -20,7 +20,7 @@ import java.util.List;
  *
  * @author U0151316
  */
-public class Python3RestfulInterfaceBuilder extends RestfulInterfaceBuilder {
+public class Python3RestfulInterfaceBuilder implements IRestfulInterfaceBuilder {
 
     private Python3Method method;
     private Python3Class clientClass;
@@ -28,11 +28,6 @@ public class Python3RestfulInterfaceBuilder extends RestfulInterfaceBuilder {
     public Python3RestfulInterfaceBuilder(Python3Class clientClass) {
         this.clientClass = clientClass;
         method = new Python3Method(clientClass);
-    }
-
-    @Override
-    public ResponseBuilder getResponseBuilder() {
-        return new Python3ResponseBuilder(method);
     }
 
     @Override
@@ -72,14 +67,15 @@ public class Python3RestfulInterfaceBuilder extends RestfulInterfaceBuilder {
         clientClass.addReference(variableType);
     }
 
+
     @Override
-    public JsonBuilderBuilder createJsonBuilderBuilder() {
+    public IStringBuilderBuilder createStringBuilderBuilder() {
         return null;
     }
 
     @Override
-    public StringBuilderBuilder createStringBuilderBuilder() {
-        return null;
+    public IJsonParserBuilder createJsonParserBuilder() {
+        return new Python3JsonParserBuilder(method);
     }
 
     @Override
@@ -109,7 +105,7 @@ public class Python3RestfulInterfaceBuilder extends RestfulInterfaceBuilder {
     }
 
     @Override
-    public JsonBuilderBuilder getJsonBuilderBuilder() {
+    public IJsonBuilderBuilder createJsonBuilderBuilder() {
         return new Python3JsonBuilderBuilder(method);
     }
 

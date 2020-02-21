@@ -3,7 +3,7 @@ package cn.ma.cei.generator.langs.golang;
 import cn.ma.cei.generator.builder.JsonCheckerBuilder;
 import cn.ma.cei.generator.Variable;
 
-public class GoJsonCheckerBuilder extends JsonCheckerBuilder {
+public class GoJsonCheckerBuilder implements JsonCheckerBuilder {
     @Override
     public void defineJsonChecker(Variable jsonChecker, Variable jsonParser) {
 

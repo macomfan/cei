@@ -1,12 +1,12 @@
 package cn.ma.cei.generator;
 
 import cn.ma.cei.exception.CEIException;
-import cn.ma.cei.generator.builder.ModelBuilder;
+import cn.ma.cei.generator.builder.IModelBuilder;
 import cn.ma.cei.model.xModel;
 
 public class BuildModel {
 
-    public static void build(xModel model, ModelBuilder builder) {
+    public static void build(xModel model, IModelBuilder builder) {
         if (builder == null) {
             throw new CEIException("[BuildModel] ModelBuilder is null");
         }

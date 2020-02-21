@@ -1,17 +1,17 @@
 package cn.ma.cei.generator.langs.java;
 
 import cn.ma.cei.generator.BuilderContext;
-import cn.ma.cei.generator.builder.JsonBuilderBuilder;
-import cn.ma.cei.generator.builder.StringBuilderBuilder;
+import cn.ma.cei.generator.builder.IJsonParserBuilder;
+import cn.ma.cei.generator.builder.IJsonBuilderBuilder;
+import cn.ma.cei.generator.builder.IStringBuilderBuilder;
 import cn.ma.cei.generator.Variable;
 import cn.ma.cei.generator.VariableType;
-import cn.ma.cei.generator.builder.ResponseBuilder;
-import cn.ma.cei.generator.builder.RestfulInterfaceBuilder;
+import cn.ma.cei.generator.builder.IRestfulInterfaceBuilder;
 import cn.ma.cei.generator.langs.java.tools.JavaClass;
 import cn.ma.cei.generator.langs.java.tools.JavaMethod;
 import java.util.List;
 
-public class JavaRestfulInterfaceBuilder extends RestfulInterfaceBuilder {
+public class JavaRestfulInterfaceBuilder implements IRestfulInterfaceBuilder {
 
     private JavaClass clientClass;
 
@@ -20,11 +20,6 @@ public class JavaRestfulInterfaceBuilder extends RestfulInterfaceBuilder {
     public JavaRestfulInterfaceBuilder(JavaClass javaClass) {
         this.clientClass = javaClass;
         method = new JavaMethod(javaClass);
-    }
-
-    @Override
-    public ResponseBuilder getResponseBuilder() {
-        return new JavaResponseBuilder(method);
     }
 
     @Override
@@ -64,13 +59,18 @@ public class JavaRestfulInterfaceBuilder extends RestfulInterfaceBuilder {
     }
 
     @Override
-    public JsonBuilderBuilder createJsonBuilderBuilder() {
+    public IJsonBuilderBuilder createJsonBuilderBuilder() {
         return new JavaJsonBuilderBuilder(method);
     }
 
     @Override
-    public StringBuilderBuilder createStringBuilderBuilder() {
+    public IStringBuilderBuilder createStringBuilderBuilder() {
         return new JavaStringBuilderBuilder(method);
+    }
+
+    @Override
+    public IJsonParserBuilder createJsonParserBuilder() {
+        return new JavaJsonParserBuilder(method);
     }
 
 //    @Override
@@ -98,11 +98,6 @@ public class JavaRestfulInterfaceBuilder extends RestfulInterfaceBuilder {
     @Override
     public void setPostBody(Variable request, Variable postBody) {
         method.addInvoke(request.getDescriptor() + ".setPostBody", postBody);
-    }
-
-    @Override
-    public JsonBuilderBuilder getJsonBuilderBuilder() {
-        return new JavaJsonBuilderBuilder(method);
     }
 
     @Override

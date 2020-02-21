@@ -6,14 +6,14 @@
 package cn.ma.cei.generator.langs.cpp;
 
 import cn.ma.cei.generator.builder.JsonCheckerBuilder;
-import cn.ma.cei.generator.builder.JsonParserBuilder;
+import cn.ma.cei.generator.builder.IJsonParserBuilder;
 import cn.ma.cei.generator.Variable;
 
 /**
  *
  * @author U0151316
  */
-public class CppJsonParserBuilder extends JsonParserBuilder {
+public class CppJsonParserBuilder implements IJsonParserBuilder {
 
     @Override
     public void getJsonString(Variable to, Variable jsonObject, Variable itemName) {

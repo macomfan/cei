@@ -7,7 +7,7 @@ package cn.ma.cei.generator.langs.python3;
 
 import cn.ma.cei.generator.BuilderContext;
 import cn.ma.cei.generator.builder.JsonCheckerBuilder;
-import cn.ma.cei.generator.builder.JsonParserBuilder;
+import cn.ma.cei.generator.builder.IJsonParserBuilder;
 import cn.ma.cei.generator.buildin.TheArray;
 import cn.ma.cei.generator.Variable;
 import cn.ma.cei.generator.langs.python3.tools.Python3Method;
@@ -16,7 +16,7 @@ import cn.ma.cei.generator.langs.python3.tools.Python3Method;
  *
  * @author U0151316
  */
-public class Python3JsonParserBuilder extends JsonParserBuilder {
+public class Python3JsonParserBuilder implements IJsonParserBuilder {
 
     private final Python3Method method;
 

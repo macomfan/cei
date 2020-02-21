@@ -16,17 +16,17 @@ public interface IExchangeBuilder {
      * 
      * @return The new RestfulClientBuilder.
      */
-    RestfulClientBuilder getRestfulClientBuilder(VariableType clientType);
+    IRestfulClientBuilder getRestfulClientBuilder(VariableType clientType);
 
     
-    SignatureBuilder getSignatureBuilder();
+    ISignatureBuilder getSignatureBuilder();
     
     /***
      * To create the ModelBuilder for each model.
      * 
      * @return The new ModelBuilder.
      */
-    ModelBuilder getModelBuilder();
+    IModelBuilder getModelBuilder();
 
     void endExchange();
 }

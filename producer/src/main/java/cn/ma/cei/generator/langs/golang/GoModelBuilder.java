@@ -6,7 +6,7 @@
 package cn.ma.cei.generator.langs.golang;
 
 import cn.ma.cei.generator.BuilderContext;
-import cn.ma.cei.generator.builder.ModelBuilder;
+import cn.ma.cei.generator.builder.IModelBuilder;
 import cn.ma.cei.generator.Variable;
 import cn.ma.cei.generator.VariableType;
 import cn.ma.cei.generator.langs.golang.tools.GoFile;
@@ -17,7 +17,7 @@ import cn.ma.cei.generator.langs.golang.tools.GoVar;
  *
  * @author U0151316
  */
-public class GoModelBuilder extends ModelBuilder {
+public class GoModelBuilder implements IModelBuilder {
 
     private GoStruct modelStruct = null;
     private GoFile mainFile = null;

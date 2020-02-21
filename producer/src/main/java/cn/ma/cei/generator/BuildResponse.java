@@ -2,9 +2,8 @@ package cn.ma.cei.generator;
 
 import cn.ma.cei.generator.builder.JsonCheckerBuilder;
 import cn.ma.cei.exception.CEIException;
-import cn.ma.cei.generator.builder.JsonParserBuilder;
-import cn.ma.cei.generator.builder.ResponseBuilder;
-import cn.ma.cei.generator.builder.RestfulInterfaceBuilder;
+import cn.ma.cei.generator.builder.IJsonParserBuilder;
+import cn.ma.cei.generator.builder.IRestfulInterfaceBuilder;
 import cn.ma.cei.generator.buildin.RestfulResponse;
 import cn.ma.cei.model.xResponse;
 import cn.ma.cei.model.types.xString;
@@ -22,17 +21,13 @@ public class BuildResponse {
         }
     }
 
-    public static Variable build(xResponse response, Variable responseVariable, VariableType returnType, RestfulInterfaceBuilder interfaceBuilder) {
+    public static Variable build(xResponse response, Variable responseVariable, VariableType returnType, IRestfulInterfaceBuilder interfaceBuilder) {
         if (interfaceBuilder == null) {
             throw new CEIException("BuildResponse interfaceBuilder is null");
         }
-        ResponseBuilder responseBuilder = interfaceBuilder.getResponseBuilder();
-        if (responseBuilder == null) {
-            throw new CEIException("ResponseBuilder is null");
-        }
         if (response.jsonParser != null) {
             response.jsonParser.startBuilding();
-            JsonParserBuilder jsonParserBuilder = responseBuilder.getJsonParserBuilder();
+            IJsonParserBuilder jsonParserBuilder = interfaceBuilder.createJsonParserBuilder();
             Variable returnVariable = BuildJsonParser.build(
                     response.jsonParser, responseVariable, returnType, jsonParserBuilder, interfaceBuilder, JsonCheckerBuilder.UsedFor.REPORT_ERROR);
             response.jsonParser.endBuilding();

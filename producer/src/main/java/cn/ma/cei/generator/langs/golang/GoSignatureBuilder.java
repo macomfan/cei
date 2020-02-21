@@ -5,9 +5,10 @@
  */
 package cn.ma.cei.generator.langs.golang;
 
-import cn.ma.cei.generator.builder.JsonBuilderBuilder;
-import cn.ma.cei.generator.builder.SignatureBuilder;
-import cn.ma.cei.generator.builder.StringBuilderBuilder;
+import cn.ma.cei.generator.builder.IJsonParserBuilder;
+import cn.ma.cei.generator.builder.IJsonBuilderBuilder;
+import cn.ma.cei.generator.builder.ISignatureBuilder;
+import cn.ma.cei.generator.builder.IStringBuilderBuilder;
 import cn.ma.cei.generator.Variable;
 import cn.ma.cei.generator.VariableType;
 import cn.ma.cei.generator.langs.golang.tools.*;
@@ -19,7 +20,7 @@ import java.util.List;
  *
  * @author U0151316
  */
-public class GoSignatureBuilder extends SignatureBuilder {
+public class GoSignatureBuilder implements ISignatureBuilder {
 
     private GoFile mainFile;
     private GoMethod method;
@@ -92,12 +93,17 @@ public class GoSignatureBuilder extends SignatureBuilder {
     }
 
     @Override
-    public JsonBuilderBuilder createJsonBuilderBuilder() {
+    public IJsonBuilderBuilder createJsonBuilderBuilder() {
         return null;
     }
 
     @Override
-    public StringBuilderBuilder createStringBuilderBuilder() {
+    public IStringBuilderBuilder createStringBuilderBuilder() {
+        return null;
+    }
+
+    @Override
+    public IJsonParserBuilder createJsonParserBuilder() {
         return null;
     }
 

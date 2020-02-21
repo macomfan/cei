@@ -62,7 +62,7 @@ public class BuildSDK {
             GlobalContext.setCurrentExchange(sdk.name);
             GlobalContext.setCurrentLanguage(frameworks.get1(language));
             GlobalContext.setCurrentFramework(framework);
-            BuildExchange.build(sdk, framework.getExchangeBuilder());
+            BuildExchange.build(sdk, framework.createExchangeBuilder());
             sdk.endBuilding();
         });
     }

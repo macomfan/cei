@@ -7,7 +7,7 @@ package cn.ma.cei.generator.langs.golang;
 
 import cn.ma.cei.generator.BuilderContext;
 import cn.ma.cei.generator.builder.JsonCheckerBuilder;
-import cn.ma.cei.generator.builder.JsonParserBuilder;
+import cn.ma.cei.generator.builder.IJsonParserBuilder;
 import cn.ma.cei.generator.Variable;
 import cn.ma.cei.generator.langs.golang.tools.GoGetValueVar;
 import cn.ma.cei.generator.langs.golang.tools.GoMethod;
@@ -18,7 +18,7 @@ import cn.ma.cei.generator.langs.golang.tools.GoVar;
  *
  * @author U0151316
  */
-public class GoJsonParserBuilder extends JsonParserBuilder {
+public class GoJsonParserBuilder implements IJsonParserBuilder {
 
     private GoMethod method;
 

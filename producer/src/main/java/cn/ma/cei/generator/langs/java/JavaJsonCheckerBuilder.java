@@ -4,7 +4,7 @@ import cn.ma.cei.generator.builder.JsonCheckerBuilder;
 import cn.ma.cei.generator.Variable;
 import cn.ma.cei.generator.langs.java.tools.JavaMethod;
 
-public class JavaJsonCheckerBuilder extends JsonCheckerBuilder {
+public class JavaJsonCheckerBuilder implements JsonCheckerBuilder {
 
     private final JavaMethod method;
 

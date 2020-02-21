@@ -6,7 +6,7 @@
 package cn.ma.cei.generator;
 
 import cn.ma.cei.exception.CEIException;
-import cn.ma.cei.generator.builder.SignatureBuilder;
+import cn.ma.cei.generator.builder.ISignatureBuilder;
 import cn.ma.cei.generator.buildin.RestfulOptions;
 import cn.ma.cei.generator.buildin.RestfulRequest;
 import cn.ma.cei.generator.buildin.SignatureTool;
@@ -32,7 +32,7 @@ import cn.ma.cei.utils.RegexHelper;
  */
 public class BuildSignature {
 
-    public static void build(xSignature signature, SignatureBuilder builder) {
+    public static void build(xSignature signature, ISignatureBuilder builder) {
         if (builder == null) {
             throw new CEIException("[BuildSignature] SignatureBuilder is null");
         }
@@ -87,7 +87,7 @@ public class BuildSignature {
         return variable;
     }
 
-    public static void processGetNow(xGetNow getNow, SignatureBuilder builder) {
+    public static void processGetNow(xGetNow getNow, ISignatureBuilder builder) {
         if (Checker.isEmpty(getNow.output)) {
             throw new CEIException("[BuildSignature] output must be defined for get_now");
         }
@@ -96,7 +96,7 @@ public class BuildSignature {
         builder.getNow(output, format);
     }
 
-    public static void processAddQueryString(xAddQueryString appendQueryString, Variable requestVariable, SignatureBuilder builder) {
+    public static void processAddQueryString(xAddQueryString appendQueryString, Variable requestVariable, ISignatureBuilder builder) {
         if (Checker.isEmpty(appendQueryString.key) || Checker.isEmpty(appendQueryString.value)) {
             throw new CEIException("[BuildSignature] key and value must be defined for append_query_string");
         }
@@ -105,7 +105,7 @@ public class BuildSignature {
         builder.addQueryString(requestVariable, key, variable);
     }
 
-    public static void processCombineQueryString(xCombineQueryString combineQueryString, Variable requestVariable, SignatureBuilder builder) {
+    public static void processCombineQueryString(xCombineQueryString combineQueryString, Variable requestVariable, ISignatureBuilder builder) {
         if (Checker.isEmpty(combineQueryString.output)) {
             throw new CEIException("[BuildSignature] output must be defined for CombineQueryString");
         }
@@ -121,7 +121,7 @@ public class BuildSignature {
         builder.combineQueryString(requestVariable, output, sort, separator);
     }
 
-    public static void processGetRequestInfo(xGetRequestInfo getRequestInfo, Variable requestVariable, SignatureBuilder builder) {
+    public static void processGetRequestInfo(xGetRequestInfo getRequestInfo, Variable requestVariable, ISignatureBuilder builder) {
         if (Checker.isEmpty(getRequestInfo.output)) {
             throw new CEIException("[BuildSignature] output must be defined for GetRequestInfo");
         }
@@ -145,7 +145,7 @@ public class BuildSignature {
         builder.getRequestInfo(requestVariable, output, info, convert);
     }
 
-    public static void processAppendStringArray(xAddStringArray appendStringArray, Variable requestVariable, SignatureBuilder builder) {
+    public static void processAppendStringArray(xAddStringArray appendStringArray, Variable requestVariable, ISignatureBuilder builder) {
         if (Checker.isEmpty(appendStringArray.output)) {
             throw new CEIException("[BuildSignature] output must be defined for AppendStringArray");
         }
@@ -166,7 +166,7 @@ public class BuildSignature {
         builder.addStringArray(output, input);
     }
 
-    public static void processCombineStringArray(xCombineStringArray combineQueryString, SignatureBuilder builder) {
+    public static void processCombineStringArray(xCombineStringArray combineQueryString, ISignatureBuilder builder) {
         if (Checker.isEmpty(combineQueryString.output)) {
             throw new CEIException("[BuildSignature] output must be defined for CombineStringArray");
         }
@@ -180,7 +180,7 @@ public class BuildSignature {
 
     }
 
-    public static void processAppendToString(xAppendToString appendToString, SignatureBuilder builder) {
+    public static void processAppendToString(xAppendToString appendToString, ISignatureBuilder builder) {
         if (Checker.isEmpty(appendToString.output)) {
             throw new CEIException("[BuildSignature] output must be defined for AppendToString");
         }
@@ -202,7 +202,7 @@ public class BuildSignature {
         }
     }
 
-    public static void processBase64(xBase64 base64, SignatureBuilder builder) {
+    public static void processBase64(xBase64 base64, ISignatureBuilder builder) {
         if (Checker.isEmpty(base64.output)) {
             throw new CEIException("[BuildSignature] output must be defined for base64");
         }
@@ -214,7 +214,7 @@ public class BuildSignature {
         builder.base64(output, input);
     }
 
-    public static void processHmacsha256(xHmacsha256 hmacsha256, SignatureBuilder builder) {
+    public static void processHmacsha256(xHmacsha256 hmacsha256, ISignatureBuilder builder) {
         if (Checker.isEmpty(hmacsha256.output)) {
             throw new CEIException("[BuildSignature] output must be defined for hmacsha256");
         }

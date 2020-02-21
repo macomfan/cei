@@ -1,16 +1,16 @@
 package cn.ma.cei.generator.langs.cpp;
 
-import cn.ma.cei.generator.builder.JsonBuilderBuilder;
-import cn.ma.cei.generator.builder.StringBuilderBuilder;
+import cn.ma.cei.generator.builder.IJsonParserBuilder;
+import cn.ma.cei.generator.builder.IJsonBuilderBuilder;
+import cn.ma.cei.generator.builder.IStringBuilderBuilder;
 import cn.ma.cei.generator.Variable;
 import cn.ma.cei.generator.VariableType;
-import cn.ma.cei.generator.builder.ResponseBuilder;
-import cn.ma.cei.generator.builder.RestfulInterfaceBuilder;
+import cn.ma.cei.generator.builder.IRestfulInterfaceBuilder;
 import cn.ma.cei.generator.langs.cpp.tools.CppClass;
 import cn.ma.cei.generator.langs.cpp.tools.CppMethod;
 import java.util.List;
 
-public class CppRestfulInterfaceBuilder extends RestfulInterfaceBuilder {
+public class CppRestfulInterfaceBuilder implements IRestfulInterfaceBuilder {
     
     private CppMethod cppMethod;
     private CppClass cppClass;
@@ -18,12 +18,7 @@ public class CppRestfulInterfaceBuilder extends RestfulInterfaceBuilder {
     public CppRestfulInterfaceBuilder(CppClass cppClass) {
         this.cppClass = cppClass;
     }
-    
-    @Override
-    public ResponseBuilder getResponseBuilder() {
-        return new CppResponseBuilder();
-    }
-    
+
 //    @Override
 //    public void setRequestTarget(Variable request, String target) {
 //        cppMethod.getCode().appendStatementWordsln(request.nameDescriptor + ".target", "=", cppMethod.getCode().toCppString(target));
@@ -51,13 +46,13 @@ public class CppRestfulInterfaceBuilder extends RestfulInterfaceBuilder {
     }
 
     @Override
-    public JsonBuilderBuilder createJsonBuilderBuilder() {
+    public IStringBuilderBuilder createStringBuilderBuilder() {
         return null;
     }
 
     @Override
-    public StringBuilderBuilder createStringBuilderBuilder() {
-        return null;
+    public IJsonParserBuilder createJsonParserBuilder() {
+        return new CppJsonParserBuilder();
     }
 
 
@@ -102,7 +97,7 @@ public class CppRestfulInterfaceBuilder extends RestfulInterfaceBuilder {
     }
 
     @Override
-    public JsonBuilderBuilder getJsonBuilderBuilder() {
+    public IJsonBuilderBuilder createJsonBuilderBuilder() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

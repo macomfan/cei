@@ -2,9 +2,6 @@ package cn.ma.cei.generator;
 
 import cn.ma.cei.exception.CEIException;
 import cn.ma.cei.generator.builder.IExchangeBuilder;
-import cn.ma.cei.generator.builder.ModelBuilder;
-import cn.ma.cei.generator.builder.RestfulClientBuilder;
-import cn.ma.cei.generator.builder.SignatureBuilder;
 import cn.ma.cei.generator.buildin.RestfulOptions;
 import cn.ma.cei.generator.buildin.SignatureTool;
 import cn.ma.cei.model.xSDK;

@@ -6,10 +6,10 @@
 package cn.ma.cei.generator.langs.golang;
 
 import cn.ma.cei.generator.BuilderContext;
-import cn.ma.cei.generator.builder.JsonBuilderBuilder;
-import cn.ma.cei.generator.builder.ResponseBuilder;
-import cn.ma.cei.generator.builder.RestfulInterfaceBuilder;
-import cn.ma.cei.generator.builder.StringBuilderBuilder;
+import cn.ma.cei.generator.builder.IJsonParserBuilder;
+import cn.ma.cei.generator.builder.IJsonBuilderBuilder;
+import cn.ma.cei.generator.builder.IRestfulInterfaceBuilder;
+import cn.ma.cei.generator.builder.IStringBuilderBuilder;
 import cn.ma.cei.generator.Variable;
 import cn.ma.cei.generator.VariableType;
 import cn.ma.cei.generator.langs.golang.tools.*;
@@ -22,23 +22,13 @@ import java.util.List;
 /**
  * @author U0151316
  */
-public class GoRestfulInterfaceBuilder extends RestfulInterfaceBuilder {
+public class GoRestfulInterfaceBuilder implements IRestfulInterfaceBuilder {
 
     private final GoStruct clientStruct;
     private GoMethod method;
 
     public GoRestfulInterfaceBuilder(GoStruct clientStruct) {
         this.clientStruct = clientStruct;
-    }
-
-    @Override
-    public ResponseBuilder getResponseBuilder() {
-        return new GoResponseBuilder(method);
-    }
-
-    @Override
-    public JsonBuilderBuilder getJsonBuilderBuilder() {
-        return new GoJsonBuilderBuilder(method);
     }
 
     @Override
@@ -105,13 +95,18 @@ public class GoRestfulInterfaceBuilder extends RestfulInterfaceBuilder {
     }
 
     @Override
-    public JsonBuilderBuilder createJsonBuilderBuilder() {
+    public IJsonBuilderBuilder createJsonBuilderBuilder() {
+        return new GoJsonBuilderBuilder(method);
+    }
+
+    @Override
+    public IStringBuilderBuilder createStringBuilderBuilder() {
         return null;
     }
 
     @Override
-    public StringBuilderBuilder createStringBuilderBuilder() {
-        return null;
+    public IJsonParserBuilder createJsonParserBuilder() {
+        return new GoJsonParserBuilder(method);
     }
 
     @Override

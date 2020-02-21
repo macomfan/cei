@@ -1,12 +1,12 @@
 package cn.ma.cei.generator.langs.cpp;
 
 import cn.ma.cei.generator.buildin.RestfulOptions;
-import cn.ma.cei.generator.builder.RestfulClientBuilder;
-import cn.ma.cei.generator.builder.RestfulInterfaceBuilder;
+import cn.ma.cei.generator.builder.IRestfulClientBuilder;
+import cn.ma.cei.generator.builder.IRestfulInterfaceBuilder;
 import cn.ma.cei.generator.langs.cpp.tools.CppClass;
 import cn.ma.cei.generator.sMethod;
 
-public class CppRestfulClientBuilder extends RestfulClientBuilder {
+public class CppRestfulClientBuilder implements IRestfulClientBuilder {
     private CppClass cppClass;
     private String exchangeName;
     
@@ -20,7 +20,7 @@ public class CppRestfulClientBuilder extends RestfulClientBuilder {
     }
 
     @Override
-    public RestfulInterfaceBuilder getRestfulInterfaceBuilder(sMethod method) {
+    public IRestfulInterfaceBuilder createRestfulInterfaceBuilder(sMethod method) {
         return new CppRestfulInterfaceBuilder(cppClass);
     }
 

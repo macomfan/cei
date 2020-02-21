@@ -28,7 +28,7 @@ public interface IFramework {
      * 
      * @return the new ExchangeBuilder instance.
      */
-    IExchangeBuilder getExchangeBuilder();
+    IExchangeBuilder createExchangeBuilder();
     
     IDescriptionConverter getDescriptionConverter();
 }

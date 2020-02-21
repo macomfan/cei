@@ -6,7 +6,7 @@
 package cn.ma.cei.generator.langs.python3;
 
 import cn.ma.cei.generator.BuilderContext;
-import cn.ma.cei.generator.builder.ModelBuilder;
+import cn.ma.cei.generator.builder.IModelBuilder;
 import cn.ma.cei.generator.Variable;
 import cn.ma.cei.generator.VariableType;
 import cn.ma.cei.generator.langs.python3.tools.Python3Class;
@@ -16,7 +16,7 @@ import cn.ma.cei.generator.langs.python3.tools.Python3File;
  *
  * @author U0151316
  */
-public class Python3ModelBuilder extends ModelBuilder {
+public class Python3ModelBuilder implements IModelBuilder {
 
     private Python3File mainFile;
     private Python3Class modelClass;

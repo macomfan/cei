@@ -7,9 +7,9 @@ package cn.ma.cei.generator.langs.python3;
 
 import cn.ma.cei.generator.*;
 import cn.ma.cei.generator.builder.IExchangeBuilder;
-import cn.ma.cei.generator.builder.ModelBuilder;
-import cn.ma.cei.generator.builder.RestfulClientBuilder;
-import cn.ma.cei.generator.builder.SignatureBuilder;
+import cn.ma.cei.generator.builder.IModelBuilder;
+import cn.ma.cei.generator.builder.IRestfulClientBuilder;
+import cn.ma.cei.generator.builder.ISignatureBuilder;
 import cn.ma.cei.generator.buildin.*;
 import cn.ma.cei.generator.langs.python3.tools.Python3Class;
 import cn.ma.cei.generator.langs.python3.tools.Python3File;
@@ -66,12 +66,12 @@ public class Python3IExchangeBuilder implements IExchangeBuilder {
     }
 
     @Override
-    public RestfulClientBuilder getRestfulClientBuilder(VariableType clientType) {
+    public IRestfulClientBuilder getRestfulClientBuilder(VariableType clientType) {
         return new Python3RestfulClientBuilder(mainFile);
     }
 
     @Override
-    public ModelBuilder getModelBuilder() {
+    public IModelBuilder getModelBuilder() {
         return new Python3ModelBuilder(mainFile);
     }
 
@@ -83,7 +83,7 @@ public class Python3IExchangeBuilder implements IExchangeBuilder {
     }
 
     @Override
-    public SignatureBuilder getSignatureBuilder() {
+    public ISignatureBuilder getSignatureBuilder() {
         return new Python3SignatureBuilder(signatureClass);
     }
 

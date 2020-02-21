@@ -5,7 +5,7 @@
  */
 package cn.ma.cei.generator.langs.java;
 
-import cn.ma.cei.generator.builder.JsonBuilderBuilder;
+import cn.ma.cei.generator.builder.IJsonBuilderBuilder;
 import cn.ma.cei.generator.Variable;
 import cn.ma.cei.generator.langs.java.tools.JavaMethod;
 
@@ -13,7 +13,7 @@ import cn.ma.cei.generator.langs.java.tools.JavaMethod;
  *
  * @author u0151316
  */
-public class JavaJsonBuilderBuilder extends JsonBuilderBuilder {
+public class JavaJsonBuilderBuilder implements IJsonBuilderBuilder {
 
     private JavaMethod method;
     

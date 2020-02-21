@@ -2,8 +2,8 @@ package cn.ma.cei.generator;
 
 import cn.ma.cei.exception.CEIException;
 import cn.ma.cei.generator.builder.JsonCheckerBuilder;
-import cn.ma.cei.generator.builder.JsonParserBuilder;
-import cn.ma.cei.generator.builder.MethodBuilder;
+import cn.ma.cei.generator.builder.IJsonParserBuilder;
+import cn.ma.cei.generator.builder.IMethodBuilder;
 import cn.ma.cei.generator.buildin.JsonWrapper;
 import cn.ma.cei.model.json.*;
 import cn.ma.cei.model.json.checker.xJsonChecker;
@@ -17,15 +17,15 @@ public class BuildJsonParser {
         xJsonType jsonItem = null;
         Variable parentModel = null;
         Variable parentJsonObject = null;
-        JsonParserBuilder jsonParserBuilder = null;
+        IJsonParserBuilder jsonParserBuilder = null;
     }
 
 
     public static Variable build(xJsonParser jsonParser,
                                  Variable responseVariable,
                                  VariableType outputModelType,
-                                 JsonParserBuilder jsonParserBuilder,
-                                 MethodBuilder method,
+                                 IJsonParserBuilder jsonParserBuilder,
+                                 IMethodBuilder method,
                                  JsonCheckerBuilder.UsedFor usedFor) {
         if (jsonParser == null) {
             throw new CEIException("[BuildJsonParser] The root is not json parser");
@@ -66,15 +66,15 @@ public class BuildJsonParser {
 
     private static void buildJsonChecker(
             xJsonChecker jsonChecker,
-            JsonParserBuilder jsonParserBuilder,
+            IJsonParserBuilder jsonParserBuilder,
             Variable rootJsonObject,
             JsonCheckerBuilder.UsedFor usedFor) {
         JsonCheckerBuilder jsonCheckerBuilder = jsonParserBuilder.createJsonCheckerBuilder();
         if (jsonCheckerBuilder == null) {
             throw new CEIException("[BuildJsonParser] JsonChecker build is null");
         }
-        jsonCheckerBuilder.setUsedFor(usedFor);
-        BuildJsonChecker.build(jsonChecker, rootJsonObject, jsonCheckerBuilder);
+        BuildJsonChecker.build(jsonChecker, rootJsonObject, jsonCheckerBuilder, usedFor);
+
     }
 
     private static void processJsonItem(JsonItemContext context) {

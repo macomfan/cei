@@ -1,13 +1,13 @@
 package cn.ma.cei.generator;
 
 import cn.ma.cei.exception.CEIException;
-import cn.ma.cei.generator.builder.RestfulClientBuilder;
+import cn.ma.cei.generator.builder.IRestfulClientBuilder;
 import cn.ma.cei.generator.buildin.RestfulOptions;
 import cn.ma.cei.model.xRestful;
 
 public class BuildRestfulInterfaceClient {
 
-    public static void build(xRestful client, RestfulClientBuilder builder) {
+    public static void build(xRestful client, IRestfulClientBuilder builder) {
         if (builder == null) {
             throw new CEIException("[BuildRestfulInterfaceClient] RestfulClientBuilder is null");
         }
@@ -26,7 +26,7 @@ public class BuildRestfulInterfaceClient {
                 sMethod method = GlobalContext.getCurrentModel().createMethod(restIf.name);
                 GlobalContext.setCurrentMethod(method);
                 restIf.startBuilding();
-                BuildRestfulInterface.build(restIf, builder.getRestfulInterfaceBuilder(method));
+                BuildRestfulInterface.build(restIf, builder.createRestfulInterfaceBuilder(method));
                 restIf.endBuilding();
                 GlobalContext.setCurrentMethod(null);
             });

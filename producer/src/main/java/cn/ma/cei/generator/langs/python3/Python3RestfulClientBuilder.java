@@ -6,8 +6,8 @@
 package cn.ma.cei.generator.langs.python3;
 
 import cn.ma.cei.generator.BuilderContext;
-import cn.ma.cei.generator.builder.RestfulClientBuilder;
-import cn.ma.cei.generator.builder.RestfulInterfaceBuilder;
+import cn.ma.cei.generator.builder.IRestfulClientBuilder;
+import cn.ma.cei.generator.builder.IRestfulInterfaceBuilder;
 import cn.ma.cei.generator.buildin.RestfulOptions;
 import cn.ma.cei.generator.Variable;
 import cn.ma.cei.generator.langs.python3.tools.Python3Class;
@@ -19,7 +19,7 @@ import cn.ma.cei.generator.sMethod;
  *
  * @author U0151316
  */
-public class Python3RestfulClientBuilder extends RestfulClientBuilder {
+public class Python3RestfulClientBuilder implements IRestfulClientBuilder {
     
     private Python3File mainFile;
     private Python3Class clientClass = null;
@@ -49,7 +49,7 @@ public class Python3RestfulClientBuilder extends RestfulClientBuilder {
     }
 
     @Override
-    public RestfulInterfaceBuilder getRestfulInterfaceBuilder(sMethod method) {
+    public IRestfulInterfaceBuilder createRestfulInterfaceBuilder(sMethod method) {
         return new Python3RestfulInterfaceBuilder(clientClass);
     }
 

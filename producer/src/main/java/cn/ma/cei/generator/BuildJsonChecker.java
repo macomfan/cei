@@ -1,7 +1,6 @@
 package cn.ma.cei.generator;
 
 import cn.ma.cei.generator.builder.JsonCheckerBuilder;
-import cn.ma.cei.generator.builder.MethodBuilder;
 import cn.ma.cei.generator.buildin.JsonChecker;
 import cn.ma.cei.model.json.checker.xJsonChecker;
 import cn.ma.cei.model.json.checker.xJsonEqual;
@@ -15,7 +14,7 @@ public class BuildJsonChecker {
         Variable value;
     }
 
-    public static void build(xJsonChecker jsonChecker, Variable jsonParser, JsonCheckerBuilder builder) {
+    public static void build(xJsonChecker jsonChecker, Variable jsonParser, JsonCheckerBuilder builder, JsonCheckerBuilder.UsedFor usedFor) {
         Variable jsonCheckerVar = GlobalContext.getCurrentMethod().createLocalVariable(JsonChecker.getType(), "jsonChecker");
         builder.defineJsonChecker(jsonCheckerVar, jsonParser);
         jsonChecker.items.forEach(item -> {
@@ -29,7 +28,11 @@ public class BuildJsonChecker {
                 ProcessNotEqual((xJsonNotEqual) item);
             }
         });
-        builder.completeJsonChecker(jsonCheckerVar);
+        if (usedFor == JsonCheckerBuilder.UsedFor.REPORT_ERROR) {
+            builder.reportError(jsonCheckerVar);
+        } else if (usedFor == JsonCheckerBuilder.UsedFor.RETURN_RESULT) {
+            builder.returnResult(jsonCheckerVar);
+        }
     }
 
     private static void ProcessEqual(xJsonEqual jsonEqual, JsonCheckerBuilder builder) {

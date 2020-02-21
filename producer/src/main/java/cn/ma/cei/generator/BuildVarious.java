@@ -1,9 +1,9 @@
 package cn.ma.cei.generator;
 
 import cn.ma.cei.exception.CEIException;
-import cn.ma.cei.generator.builder.JsonBuilderBuilder;
-import cn.ma.cei.generator.builder.MethodBuilder;
-import cn.ma.cei.generator.builder.StringBuilderBuilder;
+import cn.ma.cei.generator.builder.IJsonBuilderBuilder;
+import cn.ma.cei.generator.builder.IMethodBuilder;
+import cn.ma.cei.generator.builder.IStringBuilderBuilder;
 import cn.ma.cei.generator.buildin.JsonWrapper;
 import cn.ma.cei.model.base.xVarious;
 import cn.ma.cei.model.json.*;
@@ -18,7 +18,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class BuildVarious {
-    public static Variable createValueFromAttribute(String attrName, xVarious various, MethodBuilder methodBuilder) {
+    public static Variable createValueFromAttribute(String attrName, xVarious various, IMethodBuilder methodBuilder) {
         Field field = ReflectionHelper.getFieldByName(various, attrName);
         if (field == null) {
             throw new CEIException("Cannot find attribute " + attrName);
@@ -36,7 +36,7 @@ public class BuildVarious {
                 throw new CEIException("Attribute " + attrName + " do not have both value and value processor");
             }
             if (valueProcessor.jsonBuilder != null) {
-                JsonBuilderBuilder jsonBuilderBuilder = methodBuilder.createJsonBuilderBuilder();
+                IJsonBuilderBuilder jsonBuilderBuilder = methodBuilder.createJsonBuilderBuilder();
                 if (jsonBuilderBuilder == null) {
                     throw new CEIException("JsonBuilderBuilder is null");
                 }
@@ -58,7 +58,7 @@ public class BuildVarious {
             if (linkedParam.isEmpty()) {
                 return GlobalContext.createStringConstant(attrValue);
             } else {
-                StringBuilderBuilder stringBuilderBuilder = methodBuilder.createStringBuilderBuilder();
+                IStringBuilderBuilder stringBuilderBuilder = methodBuilder.createStringBuilderBuilder();
                 if (stringBuilderBuilder == null) {
                     throw new CEIException("StringBuilderBuilder is null");
                 }
@@ -78,7 +78,7 @@ public class BuildVarious {
         }
     }
 
-    private static Variable buildJsonBuilder(xJsonBuilder jsonBuilder, JsonBuilderBuilder jsonBuilderBuilder) {
+    private static Variable buildJsonBuilder(xJsonBuilder jsonBuilder, IJsonBuilderBuilder jsonBuilderBuilder) {
         Variable jsonObject = GlobalContext.getCurrentMethod().createLocalVariable(JsonWrapper.getType(), "jsonBuilder");
         jsonBuilderBuilder.defineRootJsonObject(jsonObject);
         jsonBuilder.itemList.forEach(item -> {
@@ -123,7 +123,7 @@ public class BuildVarious {
         return jsonObject;
     }
 
-    private static Variable buildStringBuilder(xAttribute valueProcessor, StringBuilderBuilder builder) {
+    private static Variable buildStringBuilder(xAttribute valueProcessor, IStringBuilderBuilder builder) {
             return null;
     }
 

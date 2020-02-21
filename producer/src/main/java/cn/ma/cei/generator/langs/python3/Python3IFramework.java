@@ -22,7 +22,7 @@ public class Python3IFramework implements IFramework {
     }
 
     @Override
-    public IExchangeBuilder getExchangeBuilder() {
+    public IExchangeBuilder createExchangeBuilder() {
         return new Python3IExchangeBuilder();
     }
 

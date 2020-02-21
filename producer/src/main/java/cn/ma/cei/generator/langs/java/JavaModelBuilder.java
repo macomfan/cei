@@ -2,10 +2,10 @@ package cn.ma.cei.generator.langs.java;
 
 import cn.ma.cei.generator.Variable;
 import cn.ma.cei.generator.VariableType;
-import cn.ma.cei.generator.builder.ModelBuilder;
+import cn.ma.cei.generator.builder.IModelBuilder;
 import cn.ma.cei.generator.langs.java.tools.JavaClass;
 
-public class JavaModelBuilder extends ModelBuilder {
+public class JavaModelBuilder implements IModelBuilder {
     
     private final JavaClass mainClass;
     private JavaClass modelClass;

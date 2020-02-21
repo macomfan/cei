@@ -5,9 +5,10 @@
  */
 package cn.ma.cei.generator.langs.python3;
 
-import cn.ma.cei.generator.builder.JsonBuilderBuilder;
-import cn.ma.cei.generator.builder.SignatureBuilder;
-import cn.ma.cei.generator.builder.StringBuilderBuilder;
+import cn.ma.cei.generator.builder.IJsonParserBuilder;
+import cn.ma.cei.generator.builder.IJsonBuilderBuilder;
+import cn.ma.cei.generator.builder.ISignatureBuilder;
+import cn.ma.cei.generator.builder.IStringBuilderBuilder;
 import cn.ma.cei.generator.buildin.SignatureTool;
 import cn.ma.cei.generator.Variable;
 import cn.ma.cei.generator.VariableType;
@@ -20,7 +21,7 @@ import java.util.List;
  *
  * @author u0151316
  */
-public class Python3SignatureBuilder extends SignatureBuilder {
+public class Python3SignatureBuilder implements ISignatureBuilder {
 
     private Python3Method method;
     private Python3Class parent;
@@ -91,12 +92,17 @@ public class Python3SignatureBuilder extends SignatureBuilder {
     }
 
     @Override
-    public JsonBuilderBuilder createJsonBuilderBuilder() {
+    public IJsonBuilderBuilder createJsonBuilderBuilder() {
         return null;
     }
 
     @Override
-    public StringBuilderBuilder createStringBuilderBuilder() {
+    public IStringBuilderBuilder createStringBuilderBuilder() {
+        return null;
+    }
+
+    @Override
+    public IJsonParserBuilder createJsonParserBuilder() {
         return null;
     }
 

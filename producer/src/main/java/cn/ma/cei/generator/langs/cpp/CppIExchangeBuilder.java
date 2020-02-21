@@ -1,11 +1,10 @@
 package cn.ma.cei.generator.langs.cpp;
 
-import cn.ma.cei.generator.Variable;
 import cn.ma.cei.generator.VariableType;
 import cn.ma.cei.generator.builder.IExchangeBuilder;
-import cn.ma.cei.generator.builder.ModelBuilder;
-import cn.ma.cei.generator.builder.RestfulClientBuilder;
-import cn.ma.cei.generator.builder.SignatureBuilder;
+import cn.ma.cei.generator.builder.IModelBuilder;
+import cn.ma.cei.generator.builder.IRestfulClientBuilder;
+import cn.ma.cei.generator.builder.ISignatureBuilder;
 
 public class CppIExchangeBuilder implements IExchangeBuilder {
     
@@ -30,12 +29,12 @@ public class CppIExchangeBuilder implements IExchangeBuilder {
     }
 
     @Override
-    public RestfulClientBuilder getRestfulClientBuilder(VariableType clientType) {
+    public IRestfulClientBuilder getRestfulClientBuilder(VariableType clientType) {
         return new CppRestfulClientBuilder(exchangeName);
     }
 
     @Override
-    public ModelBuilder getModelBuilder() {
+    public IModelBuilder getModelBuilder() {
         return new CppModelBuilder(exchangeName);
     }
 
@@ -45,7 +44,7 @@ public class CppIExchangeBuilder implements IExchangeBuilder {
     }
 
     @Override
-    public SignatureBuilder getSignatureBuilder() {
+    public ISignatureBuilder getSignatureBuilder() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }
