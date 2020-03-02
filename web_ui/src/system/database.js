@@ -26,7 +26,7 @@ function updateExchangeList(data) {
  *           ]
  * }
  */
-var exchangeInfo = null
+let exchangeInfo = null;
 
 function updateExchangeInfo(data) {
   exchangeInfo = data
@@ -200,7 +200,7 @@ export default {
   // bindModelData(func, modelName) {
 
   // }
-  
+
   submitModelUpdate(modelUpdated, result) {
     Connection.request(Connection.REQ_MODEL_UPDATE, {
       exchangeName: currentExchange,
@@ -208,7 +208,7 @@ export default {
     }, () => {
       result()
     }, () => {
-      
+
     })
   },
 

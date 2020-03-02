@@ -1,7 +1,7 @@
 package cn.ma.cei.generator;
 
 import cn.ma.cei.exception.CEIException;
-import cn.ma.cei.generator.builder.JsonCheckerBuilder;
+import cn.ma.cei.generator.builder.IJsonCheckerBuilder;
 import cn.ma.cei.generator.builder.IJsonParserBuilder;
 import cn.ma.cei.generator.builder.IMethodBuilder;
 import cn.ma.cei.generator.buildin.JsonWrapper;
@@ -26,7 +26,7 @@ public class BuildJsonParser {
                                  VariableType outputModelType,
                                  IJsonParserBuilder jsonParserBuilder,
                                  IMethodBuilder method,
-                                 JsonCheckerBuilder.UsedFor usedFor) {
+                                 IJsonCheckerBuilder.UsedFor usedFor) {
         if (jsonParser == null) {
             throw new CEIException("[BuildJsonParser] The root is not json parser");
         }
@@ -68,8 +68,8 @@ public class BuildJsonParser {
             xJsonChecker jsonChecker,
             IJsonParserBuilder jsonParserBuilder,
             Variable rootJsonObject,
-            JsonCheckerBuilder.UsedFor usedFor) {
-        JsonCheckerBuilder jsonCheckerBuilder = jsonParserBuilder.createJsonCheckerBuilder();
+            IJsonCheckerBuilder.UsedFor usedFor) {
+        IJsonCheckerBuilder jsonCheckerBuilder = jsonParserBuilder.createJsonCheckerBuilder();
         if (jsonCheckerBuilder == null) {
             throw new CEIException("[BuildJsonParser] JsonChecker build is null");
         }

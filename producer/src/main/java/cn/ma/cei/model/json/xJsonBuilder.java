@@ -20,7 +20,6 @@ public class xJsonBuilder extends xBuilder {
 
     @XmlAnyElement(lax = true)
     @CEIXmlAnyElementTypes({
-        xJsonAuto.class,
         xJsonString.class,
         xJsonInteger.class,
         xJsonBoolean.class,

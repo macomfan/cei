@@ -24,17 +24,23 @@ public class BuildExchange {
             });
         }
 
-        if (sdk.restfulList != null) {
-            sdk.restfulList.forEach((restful) -> {
-                restful.startBuilding();
-                GlobalContext.setupRunTimeVariableType(restful.name, BuilderContext.NO_REF);
-                VariableType clientType = GlobalContext.variableType(restful.name);
-                GlobalContext.setCurrentModel(clientType);
-                BuildRestfulInterfaceClient.build(restful, builder.getRestfulClientBuilder(clientType));
-                restful.endBuilding();
-                GlobalContext.setCurrentModel(null);
-            });
+        if (sdk.clients != null) {
+            if (sdk.clients.restfulList != null) {
+                sdk.clients.restfulList.forEach((restful) -> {
+                    restful.startBuilding();
+                    GlobalContext.setupRunTimeVariableType(restful.name, BuilderContext.NO_REF);
+                    VariableType clientType = GlobalContext.variableType(restful.name);
+                    GlobalContext.setCurrentModel(clientType);
+                    BuildRestfulInterfaceClient.build(restful, builder.getRestfulClientBuilder(clientType));
+                    restful.endBuilding();
+                    GlobalContext.setCurrentModel(null);
+                });
+            }
+        } else {
+
         }
+
+
 
         VariableType signatureType = GlobalContext.variableType(SignatureTool.typeName);
         if (sdk.signatureList != null) {

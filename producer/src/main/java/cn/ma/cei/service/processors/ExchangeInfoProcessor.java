@@ -1,11 +1,10 @@
 package cn.ma.cei.service.processors;
 
 import cn.ma.cei.finalizer.XMLDatabase;
-import cn.ma.cei.model.xRestful;
+import cn.ma.cei.model.restful.xRestful;
 import cn.ma.cei.service.ProcessContext;
 import cn.ma.cei.service.messages.ExchangeInfoMessage;
 import cn.ma.cei.service.response.ExchangeInfo;
-import cn.ma.cei.service.response.Exchanges;
 
 import java.util.Set;
 

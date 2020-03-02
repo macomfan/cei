@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sdk xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+     xsi:schemaLocation="https://github.com/macomfan/cei https://github.com/macomfan/cei/ceisdk.xsd"
+     xmlns="https://github.com/macomfan/cei"
+     name="binance">
+	<model name="Symbol">
+		<string name="symbol"/>
+		<string name="status"/>
+		<string name="baseAsset"/>
+		<int name="baseAssetPrecision"/>
+		<string name="quoteAsset"/>
+		<int name="quotePrecision"/>
+		<string_array name="orderTypes"/>
+		<boolean name="icebergAllowed"/>
+		<boolean name="ocoAllowed"/>
+	</model>
+</sdk>

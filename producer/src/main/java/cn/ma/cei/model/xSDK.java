@@ -1,9 +1,13 @@
 package cn.ma.cei.model;
 
 import cn.ma.cei.model.base.xStandalone;
+import cn.ma.cei.model.restful.xRestful;
+import cn.ma.cei.model.signature.xSignature;
+import cn.ma.cei.model.websocket.xWebSocket;
 
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.util.LinkedList;
 import java.util.List;
@@ -17,14 +21,18 @@ public class xSDK extends xStandalone<xSDK> {
     @XmlElement(name = "definition")
     public xSDKDefinition definition;
 
+    @XmlElementWrapper(name = "models")
     @XmlElement(name = "model")
     public List<xModel> modelList;
 
+    @XmlElementWrapper(name = "signatures")
     @XmlElement(name = "signature")
     public List<xSignature> signatureList;
 
-    @XmlElement(name = "restful")
-    public List<xRestful> restfulList;
+    @XmlElement(name = "clients")
+    public xSDKClients clients;
+
+
 
     private <T> List<T> mergeList(List<T> dst, List<T> src) {
         if (dst == null) {
@@ -37,9 +45,9 @@ public class xSDK extends xStandalone<xSDK> {
     }
 
     public void merge(xSDK sdk) {
-        restfulList = mergeList(restfulList, sdk.restfulList);
         modelList = mergeList(modelList, sdk.modelList);
         signatureList = mergeList(signatureList, sdk.signatureList);
+        clients.merge(sdk.clients);
     }
 
 
@@ -49,6 +57,5 @@ public class xSDK extends xStandalone<xSDK> {
         checkMemberNotNull(name, "exchange");
         checkMember(modelList);
         checkMember(signatureList);
-        checkMember(restfulList);
     }
 }

@@ -1,6 +1,7 @@
 package cn.ma.cei.xml;
 
 import cn.ma.cei.exception.CEIException;
+import cn.ma.cei.model.base.xElement;
 import cn.ma.cei.utils.ReflectionHelper;
 import com.alibaba.fastjson.JSONObject;
 
@@ -15,8 +16,8 @@ import java.util.List;
 
 public class Convert {
     public static void doConvert(IXmlJsonConverter converter, Object xmlObject) {
-        if(!xmlObject.getClass().isAnnotationPresent(XmlRootElement.class)) {
-            throw new CEIException("[XMLToJson] XmlRootElement is not define");
+        if(!(xmlObject instanceof xElement)) {
+            throw new CEIException("[XMLToJson] Object is not an XML element:" + xmlObject.getClass());
         }
         converter.objectType(xmlObject);
         List<Field> fields = ReflectionHelper.getAllFields(xmlObject);

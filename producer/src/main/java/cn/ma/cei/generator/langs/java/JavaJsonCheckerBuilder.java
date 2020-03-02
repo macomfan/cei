@@ -1,10 +1,10 @@
 package cn.ma.cei.generator.langs.java;
 
-import cn.ma.cei.generator.builder.JsonCheckerBuilder;
+import cn.ma.cei.generator.builder.IJsonCheckerBuilder;
 import cn.ma.cei.generator.Variable;
 import cn.ma.cei.generator.langs.java.tools.JavaMethod;
 
-public class JavaJsonCheckerBuilder implements JsonCheckerBuilder {
+public class JavaJsonCheckerBuilder implements IJsonCheckerBuilder {
 
     private final JavaMethod method;
 

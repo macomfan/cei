@@ -25,7 +25,7 @@ public class XmlToJson implements IXmlJsonConverter {
         try {
             jsonObject.put("_" + item.getName(), item.get(xmlObject));
         } catch (Exception e) {
-            throw new CEIException("[XmlToJson] Failed to do attribute");
+            throw new CEIException("[XmlToJson] Failed to do attribute: " + item.getName());
         }
     }
 

@@ -5,7 +5,7 @@
  */
 package cn.ma.cei.generator.langs.cpp;
 
-import cn.ma.cei.generator.builder.JsonCheckerBuilder;
+import cn.ma.cei.generator.builder.IJsonCheckerBuilder;
 import cn.ma.cei.generator.builder.IJsonParserBuilder;
 import cn.ma.cei.generator.Variable;
 
@@ -36,7 +36,7 @@ public class CppJsonParserBuilder implements IJsonParserBuilder {
     }
 
     @Override
-    public JsonCheckerBuilder createJsonCheckerBuilder() {
+    public IJsonCheckerBuilder createJsonCheckerBuilder() {
         return null;
     }
 

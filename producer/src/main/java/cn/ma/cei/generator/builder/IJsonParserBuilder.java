@@ -64,5 +64,5 @@ public interface IJsonParserBuilder {
 
     void defineRootJsonObject(Variable jsonObject, Variable responseVariable);
 
-    JsonCheckerBuilder createJsonCheckerBuilder();
+    IJsonCheckerBuilder createJsonCheckerBuilder();
 }

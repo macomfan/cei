@@ -1,6 +1,6 @@
 package cn.ma.cei.generator;
 
-import cn.ma.cei.generator.builder.JsonCheckerBuilder;
+import cn.ma.cei.generator.builder.IJsonCheckerBuilder;
 import cn.ma.cei.exception.CEIException;
 import cn.ma.cei.generator.builder.IJsonParserBuilder;
 import cn.ma.cei.generator.builder.IRestfulInterfaceBuilder;
@@ -29,7 +29,7 @@ public class BuildResponse {
             response.jsonParser.startBuilding();
             IJsonParserBuilder jsonParserBuilder = interfaceBuilder.createJsonParserBuilder();
             Variable returnVariable = BuildJsonParser.build(
-                    response.jsonParser, responseVariable, returnType, jsonParserBuilder, interfaceBuilder, JsonCheckerBuilder.UsedFor.REPORT_ERROR);
+                    response.jsonParser, responseVariable, returnType, jsonParserBuilder, interfaceBuilder, IJsonCheckerBuilder.UsedFor.REPORT_ERROR);
             response.jsonParser.endBuilding();
             return returnVariable;
         }

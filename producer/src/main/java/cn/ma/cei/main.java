@@ -2,10 +2,10 @@ package cn.ma.cei;
 
 import cn.ma.cei.finalizer.Finalizer;
 import cn.ma.cei.generator.BuildSDK;
-import cn.ma.cei.generator.langs.cpp.CppIFramework;
-import cn.ma.cei.generator.langs.golang.GoIFramework;
-import cn.ma.cei.generator.langs.java.JavaIFramework;
-import cn.ma.cei.generator.langs.python3.Python3IFramework;
+import cn.ma.cei.generator.langs.cpp.CppFramework;
+import cn.ma.cei.generator.langs.golang.GoFramework;
+import cn.ma.cei.generator.langs.java.JavaFramework;
+import cn.ma.cei.generator.langs.python3.Python3Framework;
 import cn.ma.cei.model.xSDK;
 import cn.ma.cei.utils.RegexHelper;
 import cn.ma.cei.xml.JAXBWrapper;
@@ -80,10 +80,10 @@ public class main {
         finalizer.addSDK(sdks);
         List<xSDK> finalSDKs = finalizer.finalizeSDK();
 
-        BuildSDK.registerFramework(new JavaIFramework());
-        BuildSDK.registerFramework(new CppIFramework());
-        BuildSDK.registerFramework(new Python3IFramework());
-        BuildSDK.registerFramework(new GoIFramework());
+        BuildSDK.registerFramework(new JavaFramework());
+        BuildSDK.registerFramework(new CppFramework());
+        BuildSDK.registerFramework(new Python3Framework());
+        BuildSDK.registerFramework(new GoFramework());
 //        BuildSDK.build(finalSDKs, Environment.Language.java, "C:\\dev\\cei\\output");
 //        BuildSDK.build(finalSDKs, Environment.Language.python3, "C:\\dev\\cei\\output");
 //        try {

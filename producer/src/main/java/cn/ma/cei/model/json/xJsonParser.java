@@ -14,7 +14,6 @@ public class xJsonParser extends xElement {
 
     @XmlAnyElement(lax = true)
     @CEIXmlAnyElementTypes({
-            xJsonAuto.class,
             xJsonValue.class,
             xJsonString.class,
             xJsonInteger.class,

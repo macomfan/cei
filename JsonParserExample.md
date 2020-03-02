@@ -229,10 +229,10 @@
 ```xml
 <json_parser model="OrderDepth">
     <json_object_array key="bids" value="{bids}" model="DepthEntity">
-        <json_value key="\" value="data"/>
+        <json_value key="\" value="{data}"/>
     </json_object_array>
     <json_object_array key="asks" value="{asks}" model="DepthEntity">
-        <json_value key="\" value="data"/>
+        <json_value key="\" value="{data}"/>
     </json_object_array>
 </json_parser>
 ```

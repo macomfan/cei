@@ -1,9 +1,8 @@
 package cn.ma.cei.finalizer;
 
 import cn.ma.cei.exception.CEIException;
-import cn.ma.cei.model.types.*;
 import cn.ma.cei.model.xModel;
-import cn.ma.cei.model.xRestful;
+import cn.ma.cei.model.restful.xRestful;
 import cn.ma.cei.model.xSDK;
 import cn.ma.cei.utils.NormalMap;
 import cn.ma.cei.utils.SecondLevelMap;
@@ -31,7 +30,7 @@ public class XMLDatabase {
             return null;
         }
         xSDK sdk = sdkMap.get(exchangeName);
-        for (xRestful item : sdk.restfulList) {
+        for (xRestful item : sdk.clients.restfulList) {
             if (item.name.equals(clientName)) {
                 return item;
             }
@@ -47,7 +46,7 @@ public class XMLDatabase {
         xSDK sdk = getSDK(exchangeName);
         if (sdk == null) return null;
         Set<String> res = new HashSet<>();
-        sdk.restfulList.forEach((client) -> res.add(client.name));
+        sdk.clients.restfulList.forEach((client) -> res.add(client.name));
         return res;
     }
 

@@ -22,16 +22,15 @@ public class JAXBWrapper<T> {
     public JAXBWrapper(Class<T> rootClass) {
         this.rootClass = rootClass;
         clsForLoadingJAXB.add(rootClass);
-        Set<Class<?>> checkedClasses = new HashSet<>();
-        checkCurrentClass(rootClass, checkedClasses);
+        checkCurrentClass(rootClass, new HashSet<>());
     }
 
     private void checkCurrentClass(Class<?> cls, Set<Class<?>> checkedClasses) {
-        if (checkedClasses.contains(cls)) {
+        if (cls == null || checkedClasses.contains(cls)) {
             return;
         }
         checkedClasses.add(cls);
-        if (cls.getName().equals("java.lang.Object") || !cls.isAnnotationPresent(XmlRootElement.class)) {
+        if (cls.getName().equals("java.lang.Object")) {
             return;
         }
         for (Field field : cls.getDeclaredFields()) {
@@ -66,7 +65,7 @@ public class JAXBWrapper<T> {
             System.err.println(file.getPath());
             System.err.println(e.getCause().getMessage());
         }
-        return null;
+        return  null;
     }
 
     public List<T> loadFromFolder(String path) {

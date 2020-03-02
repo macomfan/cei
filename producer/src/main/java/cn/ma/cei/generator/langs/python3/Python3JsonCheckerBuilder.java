@@ -1,9 +1,9 @@
 package cn.ma.cei.generator.langs.python3;
 
-import cn.ma.cei.generator.builder.JsonCheckerBuilder;
+import cn.ma.cei.generator.builder.IJsonCheckerBuilder;
 import cn.ma.cei.generator.Variable;
 
-public class Python3JsonCheckerBuilder implements JsonCheckerBuilder {
+public class Python3JsonCheckerBuilder implements IJsonCheckerBuilder {
     @Override
     public void defineJsonChecker(Variable jsonChecker, Variable jsonParser) {
 

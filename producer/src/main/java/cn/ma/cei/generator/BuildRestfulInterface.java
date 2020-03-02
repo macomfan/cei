@@ -5,10 +5,10 @@ import cn.ma.cei.generator.builder.IRestfulInterfaceBuilder;
 import cn.ma.cei.generator.buildin.RestfulConnection;
 import cn.ma.cei.generator.buildin.RestfulRequest;
 import cn.ma.cei.generator.buildin.RestfulResponse;
-import cn.ma.cei.model.xHeader;
-import cn.ma.cei.model.xInterface;
-import cn.ma.cei.model.xPostBody;
-import cn.ma.cei.model.xQuery;
+import cn.ma.cei.model.restful.xHeader;
+import cn.ma.cei.model.restful.xInterface;
+import cn.ma.cei.model.restful.xPostBody;
+import cn.ma.cei.model.restful.xQuery;
 import cn.ma.cei.utils.RegexHelper;
 
 import java.util.LinkedList;
@@ -43,7 +43,7 @@ public class BuildRestfulInterface {
         builder.startMethod(returnType, GlobalContext.getCurrentDescriptionConverter().getMethodDescriptor(restIf.name), inputVariableList);
         {
             builder.defineRequest(request);
-            builder.setRequestTarget(request, BuildVarious.createValueFromAttribute("target", restIf.request, builder));
+            builder.setRequestTarget(request, BuildAttributeExtension.createValueFromAttribute("target", restIf.request, builder));
 
             Variable requestMethod = GlobalContext.createStatement(Constant.requestMethod().tryGet(restIf.request.method));
             builder.setRequestMethod(request, requestMethod);
@@ -89,18 +89,9 @@ public class BuildRestfulInterface {
         Variable request = GlobalContext.getCurrentMethod().getVariable("request");
         queryStrings.forEach((queryString) -> {
             queryString.startBuilding();
-            Variable var = BuildVarious.createValueFromAttribute("value", queryString, builder);
-//            String value = VariableFactory.isReference(queryString.value);
-//            if (value == null) {
-//                var = VariableFactory.createHardcodeStringVariable(queryString.value);
-//            } else {
-//                var = builder.queryVariable(value);
-//                if (var == null) {
-//                    throw new CEIException("Cannot lookup variable: " + var);
-//                }
-//            }
-            Variable queryStringName = GlobalContext.createStringConstant(queryString.key);
-            builder.addToQueryString(request, queryStringName, var);
+            Variable var = BuildAttributeExtension.createValueFromAttribute("value", queryString, builder);
+            Variable key = BuildAttributeExtension.createValueFromAttribute("key", queryString, builder);
+            builder.addToQueryString(request, key, var);
             queryString.endBuilding();
         });
     }
@@ -108,7 +99,7 @@ public class BuildRestfulInterface {
     private static void makePostBody(xPostBody postBody, Variable request, IRestfulInterfaceBuilder builder) {
         if (postBody != null) {
             postBody.startBuilding();
-            Variable result = BuildVarious.createValueFromAttribute("value", postBody, builder);
+            Variable result = BuildAttributeExtension.createValueFromAttribute("value", postBody, builder);
             if (result != null) {
                 builder.setPostBody(request, result);
             }

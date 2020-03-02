@@ -17,7 +17,7 @@ public class BuilderContext {
     }
 
     public static void setupBuildInVariableType(String typeName, String typeDescriptor, String reference) {
-        GlobalContext.setupBuildInVariableType(typeName, typeDescriptor, typeDescriptor);
+        GlobalContext.setupBuildInVariableType(typeName, typeDescriptor, reference);
     }
 
     public static String genericTypeName(String typeName, String... typeNames) {

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sdk xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+     xsi:schemaLocation="https://github.com/macomfan/cei https://github.com/macomfan/cei/ceisdk.xsd"
+     xmlns="https://github.com/macomfan/cei"
+     name="binance">
+	<model name="CandlestickData">
+		<int name="openTime"/>
+		<decimal name="open"/>
+		<decimal name="high"/>
+		<decimal name="low"/>
+		<decimal name="close"/>
+		<decimal name="volume"/>
+		<int name="closeTime"/>
+		<decimal name="quoteAssetVolume"/>
+		<int name="numberOfTrades"/>
+		<decimal name="takerBuyBaseAssetVolume"/>
+		<decimal name="takerBuyQuoteAssetVolume"/>
+	</model>
+</sdk>

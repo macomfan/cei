@@ -1,6 +1,6 @@
 package cn.ma.cei.generator;
 
-import cn.ma.cei.generator.builder.JsonCheckerBuilder;
+import cn.ma.cei.generator.builder.IJsonCheckerBuilder;
 import cn.ma.cei.generator.buildin.JsonChecker;
 import cn.ma.cei.model.json.checker.xJsonChecker;
 import cn.ma.cei.model.json.checker.xJsonEqual;
@@ -9,12 +9,12 @@ import cn.ma.cei.model.json.checker.xJsonNotEqual;
 public class BuildJsonChecker {
     static class JsonCheckContext {
         Variable jsonCheckerObject;
-        JsonCheckerBuilder jsonCheckerBuilder;
+        IJsonCheckerBuilder jsonCheckerBuilder;
         Variable key;
         Variable value;
     }
 
-    public static void build(xJsonChecker jsonChecker, Variable jsonParser, JsonCheckerBuilder builder, JsonCheckerBuilder.UsedFor usedFor) {
+    public static void build(xJsonChecker jsonChecker, Variable jsonParser, IJsonCheckerBuilder builder, IJsonCheckerBuilder.UsedFor usedFor) {
         Variable jsonCheckerVar = GlobalContext.getCurrentMethod().createLocalVariable(JsonChecker.getType(), "jsonChecker");
         builder.defineJsonChecker(jsonCheckerVar, jsonParser);
         jsonChecker.items.forEach(item -> {
@@ -28,14 +28,14 @@ public class BuildJsonChecker {
                 ProcessNotEqual((xJsonNotEqual) item);
             }
         });
-        if (usedFor == JsonCheckerBuilder.UsedFor.REPORT_ERROR) {
+        if (usedFor == IJsonCheckerBuilder.UsedFor.REPORT_ERROR) {
             builder.reportError(jsonCheckerVar);
-        } else if (usedFor == JsonCheckerBuilder.UsedFor.RETURN_RESULT) {
+        } else if (usedFor == IJsonCheckerBuilder.UsedFor.RETURN_RESULT) {
             builder.returnResult(jsonCheckerVar);
         }
     }
 
-    private static void ProcessEqual(xJsonEqual jsonEqual, JsonCheckerBuilder builder) {
+    private static void ProcessEqual(xJsonEqual jsonEqual, IJsonCheckerBuilder builder) {
 //        Variable key = VariableFactory.createHardcodeStringVariable(jsonEqual.key);
 //        builder.setEqual();
     }

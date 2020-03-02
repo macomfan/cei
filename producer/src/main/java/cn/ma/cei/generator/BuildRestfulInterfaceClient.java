@@ -3,7 +3,7 @@ package cn.ma.cei.generator;
 import cn.ma.cei.exception.CEIException;
 import cn.ma.cei.generator.builder.IRestfulClientBuilder;
 import cn.ma.cei.generator.buildin.RestfulOptions;
-import cn.ma.cei.model.xRestful;
+import cn.ma.cei.model.restful.xRestful;
 
 public class BuildRestfulInterfaceClient {
 
@@ -15,8 +15,8 @@ public class BuildRestfulInterfaceClient {
         if (client.timeout != null) {
             options.connectionTimeout = client.timeout;
         }
-        if (client.definition != null) {
-            options.url = client.definition.url;
+        if (client.connection != null) {
+            options.url = client.connection.url;
         }
 
         builder.startClient(GlobalContext.getCurrentModel().getDescriptor(), options);

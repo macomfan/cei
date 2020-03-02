@@ -5,120 +5,168 @@
      name="test">
 
     <definition document="https://huobiapi.github.io/docs/spot/v1/en/"/>
-    <model name="ss">
-        <string name="zxczcx"/>
-    </model>
 
-    <model name="ExchangeInfo">
-        <string name="ExchangeName"/>
-        <int name="Timestamp"/>
-        <object_array name="Symbols" model="Symbols"/>
-    </model>
+    <models>
+        <model name="ExchangeInfo">
+            <string name="ExchangeName"/>
+            <int name="Timestamp"/>
+            <object_array name="Symbols" model="Symbols"/>
+        </model>
 
-    <model name="Symbols">
-        <string name="Name"/>
-        <string name="Status"/>
-        <boolean name="OCOAllowed"/>
-        <int name="Precision"/>
-    </model>
+        <model name="Symbols">
+            <string name="Name"/>
+            <string name="Status"/>
+            <boolean name="OCOAllowed"/>
+            <int name="Precision"/>
+        </model>
 
-    <model name="LastTrade">
-        <decimal name="Price"/>
-        <decimal name="Volume"/>
-        <int name="Timestamp"/>
-        <string name="Symbol"/>
-    </model>
+        <model name="LastTrade">
+            <decimal name="Price"/>
+            <decimal name="Volume"/>
+            <int name="Timestamp"/>
+            <string name="Symbol"/>
+        </model>
 
-    <model name="Order">
-        <int name="OrderId"/>
-    </model>
+        <model name="Order">
+            <int name="OrderId"/>
+        </model>
 
-    <model name="HistoricalTrade">
-        <object_array name="data" model="TradeEntity"/>
-    </model>
+        <model name="HistoricalTrade">
+            <object_array name="data" model="TradeEntity"/>
+        </model>
 
-    <model name="TradeEntity">
-        <decimal name="price"/>
-        <decimal name="volume"/>
-    </model>
+        <model name="TradeEntity">
+            <decimal name="price"/>
+            <decimal name="volume"/>
+        </model>
+    </models>
 
-    <signature name="restful">
-        <get_now output="{timestamp}" format=""/>
-        <add_query_string key="accessKeyId" value="{apiKey}"/>
-        <add_query_string key="signatureMethod" value="HmacSHA256"/>
-        <add_query_string key="signatureVersion" value="2"/>
-        <add_query_string key="timestamp" value="{timestamp}"/>
-        <combine_query_string output="{queryString}" sort="asc" separator="&amp;"/>
-        <get_request_info output="{method}" info="method" convert="uppercase"/>
-        <get_request_info output="{host}" info="host"/>
-        <get_request_info output="{target}" info="target"/>
-        <add_string_array output="{buffer}" input="{method}"/>
-        <add_string_array output="{buffer}" input="{host}"/>
-        <add_string_array output="{buffer}" input="{target}"/>
-        <add_string_array output="{buffer}" input="{queryString}"/>
-        <combine_string_array output="{newbuffer}" input="{buffer}" separator="\n"/>
-        <hmacsha256 output="{hmacsha256}" input="{newbuffer}" key="{secretKey}"/>
-        <base64 output="{result}" input="{hmacsha256}"/>
-        <add_query_string key="Signature" value="{result}"/>
-    </signature>
+    <signatures>
+        <restful name="restful">
+            <get_now output="{timestamp}" format=""/>
+            <add_query_string key="accessKeyId" value="{apiKey}"/>
+            <add_query_string key="signatureMethod" value="HmacSHA256"/>
+            <add_query_string key="signatureVersion" value="2"/>
+            <add_query_string key="timestamp" value="{timestamp}"/>
+            <combine_query_string output="{queryString}" sort="asc" separator="&amp;"/>
+            <get_request_info output="{method}" info="method" convert="uppercase"/>
+            <get_request_info output="{host}" info="host"/>
+            <get_request_info output="{target}" info="target"/>
+            <string_builder name="{buffer}">
+                <add_string_array input="{method}"/>
+                <add_string_array input="{host}"/>
+                <add_string_array input="{target}"/>
+                <add_string_array input="{queryString}"/>
+                <combine_string_array separator="\n"/>
+            </string_builder>
+            <hmacsha256 output="{hmacsha256}" input="{buffer}" key="{secretKey}"/>
+            <base64 output="{result}" input="{hmacsha256}"/>
+            <add_query_string key="Signature" value="{result}"/>
+        </restful>
+    </signatures>
 
-    <restful name="MarketClient">
-        <definition url="https://api.huobipro.com"/>
-        <interface name="getExchangeInfo">
-            <request method="get" target="/api/v1/exchangeInfo"/>
-            <response model="ExchangeInfo">
-                <json_parser>
-                    <json_value copy="ExchangeName"/>
-                    <json_value copy="Timestamp"/>
-                    <json_object_array copy="Symbols" model="Symbols">
-                        <json_value copy="Name"/>
-                        <json_value copy="Status"/>
-                        <json_value copy="OCOAllowed"/>
-                        <json_value copy="Precision"/>
-                    </json_object_array>
-                </json_parser>
-            </response>
-        </interface>
+    <clients>
+        <restful name="MarketClient">
+            <connection url="https://api.huobipro.com"/>
+            <interfaces>
+                <interface name="getExchangeInfo">
+                    <request method="get" target="/api/v1/exchangeInfo"/>
+                    <response model="ExchangeInfo">
+                        <json_parser>
+                            <json_value copy="ExchangeName"/>
+                            <json_value copy="Timestamp"/>
+                            <json_object_array copy="Symbols" model="Symbols">
+                                <json_value copy="Name"/>
+                                <json_value copy="Status"/>
+                                <json_value copy="OCOAllowed"/>
+                                <json_value copy="Precision"/>
+                            </json_object_array>
+                        </json_parser>
+                    </response>
+                </interface>
 
-        <interface name="getLastTrade">
-            <inputs>
-                <string name="symbol"/>
-            </inputs>
-            <request method="get" target="/api/v1/lastTrade">
-                <query_strings>
-                    <query key="symbol" value="{symbol}"/>
-                </query_strings>
-            </request>
-            <response model="LastTrade">
-                <json_parser>
-                    <json_value copy="Price"/>
-                    <json_value copy="Volume"/>
-                    <json_value copy="Timestamp"/>
-                    <json_value copy="Symbol"/>
-                </json_parser>
-            </response>
-        </interface>
+                <interface name="getLastTrade">
+                    <inputs>
+                        <string name="symbol"/>
+                    </inputs>
+                    <request method="get" target="/api/v1/lastTrade">
+                        <query_strings>
+                            <query key="symbol" value="{symbol}"/>
+                        </query_strings>
+                    </request>
+                    <response model="LastTrade">
+                        <json_parser>
+                            <json_value copy="Price"/>
+                            <json_value copy="Volume"/>
+                            <json_value copy="Timestamp"/>
+                            <json_value copy="Symbol"/>
+                        </json_parser>
+                    </response>
+                </interface>
 
-        <interface name="placeOrder">
-            <inputs>
-                <string name="account_id"/>
-                <decimal name="price"/>
-            </inputs>
-            <request method="post" target="/api/v1/placeOrder">
-                <post_body>
-                    <attribute for="value">
-                        <json_builder>
-                            <json_string value="account-id" key="{account_id}"/>
-                            <json_decimal copy="price"/>
-                        </json_builder>
-                    </attribute>
-                </post_body>
-            </request>
-            <response model="Order">
-                <json_parser>
-                    <json_value key="\[0]" value="{OrderId}"/>
-                </json_parser>
-            </response>
-        </interface>
-    </restful>
+                <interface name="placeOrder">
+                    <inputs>
+                        <string name="account_id"/>
+                        <decimal name="price"/>
+                    </inputs>
+                    <request method="post" target="/api/v1/placeOrder">
+                        <post_body>
+                            <attribute for="value" result="{jsonResult}">
+                                <json_builder name="{jsonResult}">
+                                    <json_string key="account-id" value="{account_id}"/>
+                                    <json_decimal copy="price"/>
+                                </json_builder>
+                            </attribute>
+                        </post_body>
+                    </request>
+                    <response model="Order">
+                        <json_parser>
+                            <json_value key="\[0]" value="{OrderId}"/>
+                        </json_parser>
+                    </response>
+                </interface>
+            </interfaces>
+        </restful>
+
+        <websocket name="WSClient">
+            <connection url=""/>
+            <actions>
+                <action name="onPing">
+                    <trigger>
+                        <json_checker>
+                            <json_equal key="type" value="ping"/>
+                        </json_checker>
+                    </trigger>
+                    <send>
+                        <attribute for="value" result="{jsonResult}">
+                            <get_now output="{ts}" format=""/>
+                            <json_builder name="{jsonResult}">
+                                <json_value key="op" value="{pong}"/>
+                                <json_value key="ts" value="{ts}"/>
+                            </json_builder>
+                        </attribute>
+                    </send>
+                </action>
+            </actions>
+            <interfaces>
+                <interface name="requestKline">
+                    <inputs>
+                        <string name="symbol"/>
+                    </inputs>
+                    <callback name="onkline" type="disposable">
+                        <trigger>
+                            <json_checker>
+                                <json_equal key="ch" value="{symbol}"/>
+                            </json_checker>
+                        </trigger>
+                        <response model="sss">
+                            <json_parser>
+                                <json_string key="ch" value="{ch}"/>
+                            </json_parser>
+                        </response>
+                    </callback>
+                </interface>
+            </interfaces>
+        </websocket>
+    </clients>
 </sdk>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sdk xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+     xsi:schemaLocation="https://github.com/macomfan/cei https://github.com/macomfan/cei/ceisdk.xsd"
+     xmlns="https://github.com/macomfan/cei"
+     name="binance">
+	<model name="AggregateTradeList">
+		<object_array name="data" model="AggregateTrade"/>
+	</model>
+</sdk>

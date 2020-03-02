@@ -22,7 +22,7 @@ import cn.ma.cei.model.signature.xGetNow;
 import cn.ma.cei.model.signature.xHmacsha256;
 import cn.ma.cei.model.types.xString;
 import cn.ma.cei.model.types.xStringArray;
-import cn.ma.cei.model.xSignature;
+import cn.ma.cei.model.signature.xSignature;
 import cn.ma.cei.utils.Checker;
 import cn.ma.cei.utils.RegexHelper;
 

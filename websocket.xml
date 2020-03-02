@@ -12,20 +12,72 @@
         <object name="tick" refer="CandlestickData"/>
     </model>
 
-    <websocket name="WSClient" url="wss:\\aaaaa{stream}">
-        <inputs>
-            <string name="stream"/>
-        </inputs>
-        <on_connect>
+    <websocket name="WSClient">
+		<connection url="wss:\\aaaaa">
+			<inputs>
+				<string name="stream"/>
+			</inputs>
+			<connect target="{stream}"/>
+			<on_connect>
+				<send>
+					<signature name="wssignature"/>
+				</send>
+			</on_connect>
+		</connection>
 
-        </on_connect>
-        <event>
-
+        <event name="pong">
+            <tirgger>
+                <json_parser>
+                    <json_checker>
+                        <json_equal key="type" value="ping"/>
+                    </json_checker>
+                </json_parser>
+            </tirgger>
+			<send>
+				
+			</send>
         </event>
-        <subscript>
-            <input>
-
-            </input>
+		<event>
+		    <tirgger int="30">
+			<send/>
+		</event>
+		
+		<callback name="onError">
+			<tirgger>
+                <json_parser>
+                    <json_checker>
+                        <json_include key="error"/>
+                    </json_checker>
+                </json_parser>
+            </tirgger>
+			<response>
+			    <json_parser model="WSError">
+                    <json_value copy="errorCode"/>
+                </json_parser>
+			</response>
+		</callback>
+		
+		
+		<event name="error">
+			<tirgger>
+                <json_parser>
+                    <json_checker>
+                        <json_equal key="event" value="error"/>
+                    </json_checker>
+                </json_parser>
+            </tirgger>
+			<response>
+				
+			</response>
+		</event>
+        <interface name="subscriptKLine">
+            <inputs>
+				<string name="symbol"/>
+            </inputs>
+			<>
+				<json_builder>
+				</json_builder>
+			</subscript>
             <tirgger>
                 <json_parser>
                     <json_checker>
@@ -33,9 +85,32 @@
                     </json_checker>
                 </json_parser>
             </tirgger>
+			<response>
+			    <json_parser model="WSCandlestick">
+                    <json_value copy="ch"/>
+                </json_parser>
+			</response>
         </subscript>
-        <request>
-
+        <interface name="requestKLine">
+            <inputs>
+				<string name="symbol"/>
+            </inputs>
+			<request>
+				<json_builder>
+				</json_builder>
+			</request>
+            <tirgger>
+                <json_parser>
+                    <json_checker>
+                        <json_equal key="ch" value="kline"/>
+                    </json_checker>
+                </json_parser>
+            </tirgger>
+			<response>
+			    <json_parser model="WSCandlestick">
+                    <json_value copy="ch"/>
+                </json_parser>
+			</response>
         </request>
     </websocket>
 </sdk>
