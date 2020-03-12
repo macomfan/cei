@@ -1,10 +1,7 @@
 package cn.ma.cei.generator.langs.java;
 
 import cn.ma.cei.generator.*;
-import cn.ma.cei.generator.builder.IExchangeBuilder;
-import cn.ma.cei.generator.builder.IModelBuilder;
-import cn.ma.cei.generator.builder.IRestfulClientBuilder;
-import cn.ma.cei.generator.builder.ISignatureBuilder;
+import cn.ma.cei.generator.builder.*;
 import cn.ma.cei.generator.buildin.*;
 import cn.ma.cei.generator.langs.java.buildin.TheLinkedList;
 import cn.ma.cei.generator.langs.java.tools.JavaClass;
@@ -48,6 +45,12 @@ public class JavaExchangeBuilder implements IExchangeBuilder {
         BuilderContext.setupBuildInVariableType(TheStream.typeName, "byte[]", BuilderContext.NO_REF);
         BuilderContext.setupBuildInVariableType(JsonChecker.typeName, "JsonChecker", "cn.ma.cei.impl.JsonChecker");
 
+        BuilderContext.setupBuildInVariableType(WebSocketConnection.typeName, "WebSocketConnection", "cn.ma.cei.impl.WebSocketConnection");
+        BuilderContext.setupBuildInVariableType(WebSocketAction.typeName, "WebSocketAction", "cn.ma.cei.impl.WebSocketAction");
+        BuilderContext.setupBuildInVariableType(WebSocketMessage.typeName, "WebSocketMessage", "cn.ma.cei.impl.WebSocketMessage");
+        BuilderContext.setupBuildInVariableType(WebSocketCallback.typeName, "WebSocketCallback", "cn.ma.cei.impl.WebSocketCallback");
+        BuilderContext.setupBuildInVariableType(WebSocketOptions.typeName, "WebSocketOptions", "cn.ma.cei.impl.WebSocketOptions");
+
         CEIPath workingFolder = BuilderContext.getWorkingFolder();
         CEIPath exchangeFolder = CEIPath.appendPath(workingFolder, "src", "main", "java", "cn", "ma", "cei", "exchanges");
         exchangeFolder.mkdirs();
@@ -58,17 +61,22 @@ public class JavaExchangeBuilder implements IExchangeBuilder {
     }
 
     @Override
-    public IRestfulClientBuilder getRestfulClientBuilder(VariableType clientType) {
-        return new JavaRestfulClientBuilder(clientType, mainClass);
+    public IRestfulClientBuilder createRestfulClientBuilder() {
+        return new JavaRestfulClientBuilder(mainClass);
     }
 
     @Override
-    public IModelBuilder getModelBuilder() {
+    public IWebSocketClientBuilder createWebSocketClientBuilder() {
+        return new JavaWebSocketClientBuilder(mainClass);
+    }
+
+    @Override
+    public IModelBuilder createModelBuilder() {
         return new JavaModelBuilder(mainClass);
     }
 
     @Override
-    public ISignatureBuilder getSignatureBuilder() {
+    public ISignatureBuilder createSignatureBuilder() {
         return new JavaSignatureBuilder(signatureClass);
     }
 

@@ -4,15 +4,17 @@ import cn.ma.cei.model.base.xElement;
 
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 
-public class xEvent extends xElement {
+@XmlRootElement(name = "action")
+public class xAction extends xElement {
 
     @XmlAttribute(name = "name")
-    String name;
+    public String name;
 
     @XmlElement(name = "trigger")
-    xTrigger trigger;
+    public xTrigger trigger;
 
     @XmlElement(name = "send")
-    xSend send;
+    public xSend send;
 }

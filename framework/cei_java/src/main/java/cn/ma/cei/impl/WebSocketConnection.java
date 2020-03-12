@@ -23,28 +23,39 @@ public class WebSocketConnection extends WebSocketListener {
 
     private static final OkHttpClient client = new OkHttpClient();
     private WebSocket webSocket = null;
+    private OnConnect onConnect = null;
 
     private List<WebSocketEvent> events = new LinkedList<>();
 
     @FunctionalInterface
-    public interface Function<T> {
+    public interface OnConnect {
+        void onConnect();
+    }
 
+    @FunctionalInterface
+    public interface Function<T> {
         public void onEvent(T t);
     }
 
-    public void registerEvent(WebSocketEvent event) {
+
+    public void registerAction(WebSocketEvent.IChecker checker, OnConnect onConnect) {
 
     }
 
-    public void connect(WebSocketOption request) {
+    public void connect(WebSocketOption request, OnConnect onConnect) {
+        this.onConnect = onConnect;
         Request okhttpRequest = new Request.Builder().url(request.url).build();
         webSocket = client.newWebSocket(okhttpRequest, this);
     }
+
 
     @Override
     public void onOpen(WebSocket webSocket, Response response) {
         super.onOpen(webSocket, response);
         System.err.println("onOpen");
+        if (onConnect != null) {
+            onConnect.onConnect();
+        }
     }
 
     @Override

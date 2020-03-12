@@ -23,6 +23,7 @@ public class XmlToJson implements IXmlJsonConverter {
     @Override
     public void doAttribute(Object xmlObject, Field item) {
         try {
+            item.setAccessible(true);
             jsonObject.put("_" + item.getName(), item.get(xmlObject));
         } catch (Exception e) {
             throw new CEIException("[XmlToJson] Failed to do attribute: " + item.getName());

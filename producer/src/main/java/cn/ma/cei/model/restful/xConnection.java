@@ -12,4 +12,7 @@ public class xConnection extends xElement {
 
     @XmlAttribute(name = "url", required = true)
     public String url;
+
+    @XmlAttribute(name = "timeout_s")
+    public Integer timeout;
 }

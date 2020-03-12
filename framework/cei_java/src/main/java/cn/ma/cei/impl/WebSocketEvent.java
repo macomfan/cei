@@ -28,6 +28,13 @@ public class WebSocketEvent {
         void onReceive(WebSocketMessage msg);
     }
 
+    public void setTrigger(IChecker checker) {
+
+    }
+    public void setEvent(ISystemCallback callback) {
+
+    }
+
     public void registerUser(IChecker when, IUserCallback callback) {
 
     }

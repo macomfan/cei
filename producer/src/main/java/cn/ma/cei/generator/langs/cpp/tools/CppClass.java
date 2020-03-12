@@ -1,4 +1,4 @@
-package cn.ma.cei.generator.langs.cpp.tools;
+ package cn.ma.cei.generator.langs.cpp.tools;
 
 import cn.ma.cei.generator.Variable;
 import cn.ma.cei.generator.VariableType;
@@ -32,9 +32,9 @@ public class CppClass {
     private final String className;
     private final String exchangeName;
 
-    public CppClass(String exchangName, String className) {
+    public CppClass(String exchangeName, String className) {
         this.className = className;
-        this.exchangeName = exchangName;
+        this.exchangeName = exchangeName;
     }
 
     public String getClassName() {

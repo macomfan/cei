@@ -31,6 +31,7 @@ public class JavaClass {
 
     private String className = "";
     private String packageName = "";
+    private VariableType superClass = null;
     private ClassType type = ClassType.STANDARD;
 
     private UniquetList<String, Variable> privateMemberList = new UniquetList<>();
@@ -45,7 +46,11 @@ public class JavaClass {
     public JavaClass(String className, String packageName) {
         this.className = className;
         this.packageName = packageName.toLowerCase();
-        this.type = ClassType.STANDARD;
+    }
+
+    public JavaClass(String className, VariableType superClass) {
+        this(className);
+        this.superClass = superClass;
     }
 
     public JavaClass(String className) {

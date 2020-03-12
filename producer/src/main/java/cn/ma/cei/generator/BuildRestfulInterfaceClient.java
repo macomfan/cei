@@ -12,25 +12,23 @@ public class BuildRestfulInterfaceClient {
             throw new CEIException("[BuildRestfulInterfaceClient] RestfulClientBuilder is null");
         }
         RestfulOptions options = new RestfulOptions();
-        if (client.timeout != null) {
-            options.connectionTimeout = client.timeout;
+        if (client.connection.timeout != null) {
+            options.connectionTimeout = client.connection.timeout;
         }
         if (client.connection != null) {
             options.url = client.connection.url;
         }
 
-        builder.startClient(GlobalContext.getCurrentModel().getDescriptor(), options);
+        builder.startClient(GlobalContext.getCurrentModel(), options);
 
         if (client.interfaceList != null) {
-            client.interfaceList.forEach((restIf) -> {
+            client.interfaceList.forEach((restIf) -> restIf.doBuild(() -> {
                 sMethod method = GlobalContext.getCurrentModel().createMethod(restIf.name);
                 GlobalContext.setCurrentMethod(method);
-                restIf.startBuilding();
                 BuildRestfulInterface.build(restIf, builder.createRestfulInterfaceBuilder(method));
-                restIf.endBuilding();
                 GlobalContext.setCurrentMethod(null);
-            });
-    }
+            }));
+        }
         builder.endClient();
     }
 }

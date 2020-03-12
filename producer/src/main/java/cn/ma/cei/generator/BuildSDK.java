@@ -5,15 +5,14 @@
  */
 package cn.ma.cei.generator;
 
-import cn.ma.cei.generator.builder.IFramework;
 import cn.ma.cei.exception.CEIException;
+import cn.ma.cei.generator.builder.IFramework;
 import cn.ma.cei.model.xSDK;
 import cn.ma.cei.utils.MapWithValue2;
 
 import java.util.List;
 
 /**
- *
  * @author u0151316
  */
 public class BuildSDK {
@@ -24,7 +23,7 @@ public class BuildSDK {
         public boolean addTimestamp = true;
     }
 
-    public final static MapWithValue2<String , Language, IFramework> frameworks = new MapWithValue2<>();
+    public final static MapWithValue2<String, Language, IFramework> frameworks = new MapWithValue2<>();
 
     public static void registerFramework(IFramework framework) {
         Language language = framework.getLanguage();
@@ -57,13 +56,11 @@ public class BuildSDK {
         IFramework framework = frameworks.get2(language);
         GlobalContext.setWorkingFolder(CEIPath.appendPath(buildFolder, frameworks.get1(language).getWorkingName()));
 
-        sdks.forEach((sdk) -> {
-            sdk.startBuilding();
+        sdks.forEach((sdk) -> sdk.doBuild(() -> {
             GlobalContext.setCurrentExchange(sdk.name);
             GlobalContext.setCurrentLanguage(frameworks.get1(language));
             GlobalContext.setCurrentFramework(framework);
             BuildExchange.build(sdk, framework.createExchangeBuilder());
-            sdk.endBuilding();
-        });
+        }));
     }
 }

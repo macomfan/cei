@@ -1,5 +1,6 @@
 package cn.ma.cei.generator.langs.cpp;
 
+import cn.ma.cei.generator.VariableType;
 import cn.ma.cei.generator.buildin.RestfulOptions;
 import cn.ma.cei.generator.builder.IRestfulClientBuilder;
 import cn.ma.cei.generator.builder.IRestfulInterfaceBuilder;
@@ -15,8 +16,8 @@ public class CppRestfulClientBuilder implements IRestfulClientBuilder {
     }
     
     @Override
-    public void startClient(String clientDescriptor, RestfulOptions options) {
-        cppClass = new CppClass(exchangeName, clientDescriptor);
+    public void startClient(VariableType clientType, RestfulOptions options) {
+        cppClass = new CppClass(exchangeName, clientType.getDescriptor());
     }
 
     @Override

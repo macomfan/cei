@@ -134,7 +134,7 @@ class GlobalContext {
             return variableTypes.get(finalName);
         }
         if (!variableTypeInfo.containsKey(typeName)) {
-            throw new CEIException("[Context] The VariableType: " + typeName + "has not been setup");
+            throw new CEIException("[Context] VariableType: " + typeName + " has not been setup");
         }
         if (argsTypes != null && argsTypes.length != 0 && isGenericType) {
             List<String> references = new LinkedList<>(variableTypeInfo.get(typeName).get2());

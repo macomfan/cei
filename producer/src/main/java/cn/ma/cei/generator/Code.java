@@ -6,7 +6,6 @@
 package cn.ma.cei.generator;
 
 /**
- *
  * @author u0151316
  */
 public class Code {
@@ -35,15 +34,17 @@ public class Code {
 
     public void appendWords(String... statements) {
         appendBlock();
-        String str = "";
+        StringBuilder str = new StringBuilder();
         for (String statement : statements) {
-            if (str.equals("")) {
-                str += statement;
-            } else {
-                str += " " + statement;
+            if (statement != null && !"".equals(statement)) {
+                if (str.toString().equals("")) {
+                    str.append(statement);
+                } else {
+                    str.append(" ").append(statement);
+                }
             }
         }
-        append(str);
+        append(str.toString());
     }
 
     public void appendWordsln(String... statements) {

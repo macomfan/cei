@@ -2,9 +2,9 @@ package cn.ma.cei.generator;
 
 import cn.ma.cei.generator.builder.IJsonCheckerBuilder;
 import cn.ma.cei.generator.buildin.JsonChecker;
-import cn.ma.cei.model.json.checker.xJsonChecker;
-import cn.ma.cei.model.json.checker.xJsonEqual;
-import cn.ma.cei.model.json.checker.xJsonNotEqual;
+import cn.ma.cei.model.json.xJsonChecker;
+import cn.ma.cei.model.json.xJsonEqual;
+import cn.ma.cei.model.json.xJsonNotEqual;
 
 public class BuildJsonChecker {
     static class JsonCheckContext {

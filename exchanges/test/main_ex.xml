@@ -129,7 +129,31 @@
         </restful>
 
         <websocket name="WSClient">
-            <connection url=""/>
+            <connection>
+                <url>
+					<attribute for="target">
+						<get_now output="{ts}" format=""/>
+						<json_builder name="{jsonResult}">
+							<json_value key="op" value="{pong}"/>
+							<json_value key="ts" value="{ts}"/>
+						</json_builder>
+					</attribute>
+				</url>
+				<inputs>
+                        <string name="symbol"/>
+                    </inputs>
+                <on_connect>
+				    <send>
+                        <attribute for="value" result="{jsonResult}">
+                            <get_now output="{ts}" format=""/>
+                            <json_builder name="{jsonResult}">
+                                <json_value key="op" value="{pong}"/>
+                                <json_value key="ts" value="{ts}"/>
+                            </json_builder>
+                        </attribute>
+                    </send>
+                </on_connect>
+            </connection>
             <actions>
                 <action name="onPing">
                     <trigger>
@@ -153,13 +177,16 @@
                     <inputs>
                         <string name="symbol"/>
                     </inputs>
+				    <send value="aaaa">
+
+                    </send>
                     <callback name="onkline" type="disposable">
                         <trigger>
                             <json_checker>
                                 <json_equal key="ch" value="{symbol}"/>
                             </json_checker>
                         </trigger>
-                        <response model="sss">
+                        <response model="TradeEntity">
                             <json_parser>
                                 <json_string key="ch" value="{ch}"/>
                             </json_parser>

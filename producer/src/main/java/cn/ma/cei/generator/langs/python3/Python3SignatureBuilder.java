@@ -5,10 +5,7 @@
  */
 package cn.ma.cei.generator.langs.python3;
 
-import cn.ma.cei.generator.builder.IJsonParserBuilder;
-import cn.ma.cei.generator.builder.IJsonBuilderBuilder;
-import cn.ma.cei.generator.builder.ISignatureBuilder;
-import cn.ma.cei.generator.builder.IStringBuilderBuilder;
+import cn.ma.cei.generator.builder.*;
 import cn.ma.cei.generator.buildin.SignatureTool;
 import cn.ma.cei.generator.Variable;
 import cn.ma.cei.generator.VariableType;
@@ -92,25 +89,15 @@ public class Python3SignatureBuilder implements ISignatureBuilder {
     }
 
     @Override
-    public IJsonBuilderBuilder createJsonBuilderBuilder() {
-        return null;
-    }
-
-    @Override
-    public IStringBuilderBuilder createStringBuilderBuilder() {
-        return null;
-    }
-
-    @Override
-    public IJsonParserBuilder createJsonParserBuilder() {
-        return null;
-    }
-
-    @Override
     public void startMethod(VariableType returnType, String methodDescriptor, List<Variable> params) {
         method = new Python3Method(parent);
         parent.addReference(SignatureTool.getType());
         method.startStaticMethod(null, methodDescriptor, params);
+    }
+
+    @Override
+    public IDataProcessorBuilder createDataProcessorBuilder() {
+        return null;
     }
 
     @Override

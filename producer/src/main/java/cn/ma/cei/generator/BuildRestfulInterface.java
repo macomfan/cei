@@ -13,6 +13,7 @@ import cn.ma.cei.utils.RegexHelper;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class BuildRestfulInterface {
 
@@ -23,38 +24,42 @@ public class BuildRestfulInterface {
 
         List<Variable> inputVariableList = new LinkedList<>();
         if (restIf.inputList != null) {
-            restIf.inputList.forEach((input) -> {
-                input.startBuilding();
+            restIf.inputList.forEach((input) -> input.doBuild(() -> {
                 Variable inputVariable = GlobalContext.getCurrentMethod().createInputVariable(input.getType(), input.name);
                 inputVariableList.add(inputVariable);
-                input.endBuilding();
+            }));
+        }
+
+        AtomicReference<VariableType> returnType = new AtomicReference<>();
+        if (restIf.response != null) {
+            restIf.response.doBuild(() -> {
+                returnType.set(BuildResponse.getReturnType(restIf.response));
+                GlobalContext.getCurrentMethod().setReturnType(returnType.get());
             });
         }
 
-        VariableType returnType = null;
-        if (restIf.response != null) {
-            restIf.response.startBuilding();
-            returnType = BuildResponse.getReturnType(restIf.response);
-            GlobalContext.getCurrentMethod().setReturnType(returnType);
-            restIf.response.endBuilding();
-        }
 
-
-        builder.startMethod(returnType, GlobalContext.getCurrentDescriptionConverter().getMethodDescriptor(restIf.name), inputVariableList);
+        builder.startMethod(returnType.get(), GlobalContext.getCurrentDescriptionConverter().getMethodDescriptor(restIf.name), inputVariableList);
         {
-            builder.defineRequest(request);
-            builder.setRequestTarget(request, BuildAttributeExtension.createValueFromAttribute("target", restIf.request, builder));
-
-            Variable requestMethod = GlobalContext.createStatement(Constant.requestMethod().tryGet(restIf.request.method));
-            builder.setRequestMethod(request, requestMethod);
+            restIf.request.doBuild(() -> {
+                builder.defineRequest(request);
+                builder.setRequestTarget(request, BuildAttributeExtension.createValueFromAttribute("target", restIf.request, builder));
+                Variable requestMethod = GlobalContext.createStatement(Constant.requestMethod().tryGet(restIf.request.method));
+                builder.setRequestMethod(request, requestMethod);
+            });
             makeHeaders(restIf.request.headers, builder);
             makeQueryString(restIf.request.queryStrings, builder);
             makePostBody(restIf.request.postBody, request, builder);
-            makeSignature(restIf.request.signature, request, builder);
+
+            restIf.request.doBuild(() -> makeSignature(restIf.request.signature, request, builder));
+
             builder.onAddReference(RestfulConnection.getType());
-            builder.invokeQuery(response, request);
-            Variable returnVariable = BuildResponse.build(restIf.response, response, returnType, builder);
-            builder.returnResult(returnVariable);
+            VariableType finalReturnType = returnType.get();
+            restIf.response.doBuild(() -> {
+                builder.invokeQuery(response, request);
+                Variable returnVariable = BuildResponse.build(restIf.response, response, finalReturnType, builder);
+                builder.returnResult(returnVariable);
+            });
         }
         builder.endMethod();
     }
@@ -64,8 +69,7 @@ public class BuildRestfulInterface {
             return;
         }
         Variable request = GlobalContext.getCurrentMethod().getVariable("request");
-        headers.forEach((header) -> {
-            header.startBuilding();
+        headers.forEach((header) -> header.doBuild(() -> {
             Variable var;
             String value = RegexHelper.isReference(header.value);
             if (value == null) {
@@ -78,8 +82,7 @@ public class BuildRestfulInterface {
             }
             Variable tag = GlobalContext.createStringConstant(header.tag);
             builder.addHeader(request, tag, var);
-            header.endBuilding();
-        });
+        }));
     }
 
     private static void makeQueryString(List<xQuery> queryStrings, IRestfulInterfaceBuilder builder) {
@@ -87,24 +90,23 @@ public class BuildRestfulInterface {
             return;
         }
         Variable request = GlobalContext.getCurrentMethod().getVariable("request");
-        queryStrings.forEach((queryString) -> {
-            queryString.startBuilding();
+        queryStrings.forEach((queryString) -> queryString.doBuild(() -> {
             Variable var = BuildAttributeExtension.createValueFromAttribute("value", queryString, builder);
             Variable key = BuildAttributeExtension.createValueFromAttribute("key", queryString, builder);
             builder.addToQueryString(request, key, var);
-            queryString.endBuilding();
-        });
+        }));
     }
 
     private static void makePostBody(xPostBody postBody, Variable request, IRestfulInterfaceBuilder builder) {
-        if (postBody != null) {
-            postBody.startBuilding();
+        if (postBody == null) {
+            return;
+        }
+        postBody.doBuild(() -> {
             Variable result = BuildAttributeExtension.createValueFromAttribute("value", postBody, builder);
             if (result != null) {
                 builder.setPostBody(request, result);
             }
-            postBody.endBuilding();
-        }
+        });
     }
 
     private static void makeSignature(String signatureName, Variable request, IRestfulInterfaceBuilder builder) {

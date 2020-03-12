@@ -1,11 +1,8 @@
 package cn.ma.cei.generator.langs.cpp;
 
-import cn.ma.cei.generator.builder.IJsonParserBuilder;
-import cn.ma.cei.generator.builder.IJsonBuilderBuilder;
-import cn.ma.cei.generator.builder.IStringBuilderBuilder;
+import cn.ma.cei.generator.builder.*;
 import cn.ma.cei.generator.Variable;
 import cn.ma.cei.generator.VariableType;
-import cn.ma.cei.generator.builder.IRestfulInterfaceBuilder;
 import cn.ma.cei.generator.langs.cpp.tools.CppClass;
 import cn.ma.cei.generator.langs.cpp.tools.CppMethod;
 import java.util.List;
@@ -45,20 +42,25 @@ public class CppRestfulInterfaceBuilder implements IRestfulInterfaceBuilder {
         
     }
 
-    @Override
-    public IStringBuilderBuilder createStringBuilderBuilder() {
-        return null;
-    }
-
-    @Override
-    public IJsonParserBuilder createJsonParserBuilder() {
-        return new CppJsonParserBuilder();
-    }
+//    @Override
+//    public IStringBuilderBuilder createStringBuilderBuilder() {
+//        return null;
+//    }
+//
+//    @Override
+//    public IJsonParserBuilder createJsonParserBuilder() {
+//        return new CppJsonParserBuilder();
+//    }
 
 
     @Override
     public void startMethod(VariableType returnType, String methodDescriptor, List<Variable> params) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public IDataProcessorBuilder createDataProcessorBuilder() {
+        return null;
     }
 
     @Override
@@ -96,10 +98,10 @@ public class CppRestfulInterfaceBuilder implements IRestfulInterfaceBuilder {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    @Override
-    public IJsonBuilderBuilder createJsonBuilderBuilder() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+//    @Override
+//    public IJsonBuilderBuilder createJsonBuilderBuilder() {
+//        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+//    }
 
     @Override
     public void invokeSignature(Variable request, String methodName) {

@@ -22,21 +22,19 @@ public class GoRestfulClientBuilder implements IRestfulClientBuilder {
 
     private GoFile clientFile;
     private GoStruct clientStruct;
-    private VariableType clientType;
 
-    public GoRestfulClientBuilder(VariableType clientType, GoFile clientFile) {
+    public GoRestfulClientBuilder(GoFile clientFile) {
         this.clientFile = clientFile;
-        this.clientType = clientType;
     }
 
     @Override
-    public void startClient(String clientDescriptor, RestfulOptions options) {
-        clientStruct = new GoStruct(clientDescriptor);
+    public void startClient(VariableType clientType, RestfulOptions options) {
+        clientStruct = new GoStruct(clientType.getDescriptor());
         clientStruct.addPrivateMember(new GoPtrVar(clientType.addMember(RestfulOptions.getType(), "options")));
         GoMethod constructor = new GoMethod(null);
-        constructor.getCode().appendWordsln("func", "New" + clientDescriptor + "(options *" + RestfulOptions.getType().getDescriptor() + ")", "*" + clientDescriptor, "{");
+        constructor.getCode().appendWordsln("func", "New" + clientType.getDescriptor() + "(options *" + RestfulOptions.getType().getDescriptor() + ")", "*" + clientType.getDescriptor(), "{");
         constructor.getCode().newBlock(() -> {
-            constructor.getCode().appendWordsln("inst", ":=", "new(" + clientDescriptor + ")");
+            constructor.getCode().appendWordsln("inst", ":=", "new(" + clientType.getDescriptor() + ")");
             Variable url = BuilderContext.createStringConstant(options.url);
             constructor.getCode().appendWordsln("if", "options", "!=", "nil", "{");
             constructor.getCode().newBlock(() -> {

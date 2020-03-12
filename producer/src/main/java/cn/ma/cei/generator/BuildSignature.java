@@ -45,8 +45,7 @@ public class BuildSignature {
         builder.startMethod(null,
                 GlobalContext.getCurrentMethod().getDescriptor(),
                 GlobalContext.getCurrentMethod().getInputVariableList());
-        signature.items.forEach(item -> {
-            item.startBuilding();
+        signature.items.forEach(item -> item.doBuild(() ->{
             if (item instanceof xGetNow) {
                 processGetNow((xGetNow) item, builder);
             } else if (item instanceof xAddQueryString) {
@@ -66,8 +65,7 @@ public class BuildSignature {
             } else if (item instanceof xAppendToString) {
                 processAppendToString((xAppendToString) item, builder);
             }
-            item.endBuilding();
-        });
+        }));
         builder.endMethod();
     }
 

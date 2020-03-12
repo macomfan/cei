@@ -6,10 +6,7 @@
 package cn.ma.cei.generator.langs.python3;
 
 import cn.ma.cei.generator.BuilderContext;
-import cn.ma.cei.generator.builder.IJsonParserBuilder;
-import cn.ma.cei.generator.builder.IJsonBuilderBuilder;
-import cn.ma.cei.generator.builder.IRestfulInterfaceBuilder;
-import cn.ma.cei.generator.builder.IStringBuilderBuilder;
+import cn.ma.cei.generator.builder.*;
 import cn.ma.cei.generator.Variable;
 import cn.ma.cei.generator.VariableType;
 import cn.ma.cei.generator.langs.python3.tools.Python3Class;
@@ -68,19 +65,24 @@ public class Python3RestfulInterfaceBuilder implements IRestfulInterfaceBuilder 
     }
 
 
-    @Override
-    public IStringBuilderBuilder createStringBuilderBuilder() {
-        return null;
-    }
-
-    @Override
-    public IJsonParserBuilder createJsonParserBuilder() {
-        return new Python3JsonParserBuilder(method);
-    }
+//    @Override
+//    public IStringBuilderBuilder createStringBuilderBuilder() {
+//        return null;
+//    }
+//
+//    @Override
+//    public IJsonParserBuilder createJsonParserBuilder() {
+//        return new Python3JsonParserBuilder(method);
+//    }
 
     @Override
     public void startMethod(VariableType returnType, String methodDescriptor, List<Variable> params) {
         method.startMethod(returnType, methodDescriptor, params);
+    }
+
+    @Override
+    public IDataProcessorBuilder createDataProcessorBuilder() {
+        return null;
     }
 
     @Override
@@ -104,10 +106,10 @@ public class Python3RestfulInterfaceBuilder implements IRestfulInterfaceBuilder 
         method.addInvoke(request.getDescriptor() + ".set_post_body", postBody);
     }
 
-    @Override
-    public IJsonBuilderBuilder createJsonBuilderBuilder() {
-        return new Python3JsonBuilderBuilder(method);
-    }
+//    @Override
+//    public IJsonBuilderBuilder createJsonBuilderBuilder() {
+//        return new Python3JsonBuilderBuilder(method);
+//    }
 
     @Override
     public void invokeSignature(Variable request, String methodName) {

@@ -5,14 +5,16 @@ import cn.ma.cei.model.xResponse;
 
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 
+@XmlRootElement(name = "callback")
 public class xCallback extends xElement {
     @XmlAttribute(name = "name")
-    String name;
+    public String name;
 
     @XmlElement(name = "trigger")
-    xTrigger trigger;
+    public xTrigger trigger;
 
     @XmlElement(name = "response")
-    xResponse response;
+    public xResponse response;
 }

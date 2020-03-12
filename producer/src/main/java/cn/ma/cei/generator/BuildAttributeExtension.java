@@ -1,8 +1,9 @@
 package cn.ma.cei.generator;
 
 import cn.ma.cei.exception.CEIException;
-import cn.ma.cei.generator.builder.IJsonBuilderBuilder;
 import cn.ma.cei.generator.builder.IMethodBuilder;
+import cn.ma.cei.generator.builder.IDataProcessorBuilder;
+import cn.ma.cei.generator.builder.IJsonBuilderBuilder;
 import cn.ma.cei.generator.builder.IStringBuilderBuilder;
 import cn.ma.cei.generator.buildin.JsonWrapper;
 import cn.ma.cei.model.base.xAttributeExtension;
@@ -10,6 +11,7 @@ import cn.ma.cei.model.json.*;
 import cn.ma.cei.model.types.xInt;
 import cn.ma.cei.model.types.xString;
 import cn.ma.cei.model.xAttribute;
+import cn.ma.cei.utils.Checker;
 import cn.ma.cei.utils.ReflectionHelper;
 import cn.ma.cei.utils.RegexHelper;
 
@@ -19,6 +21,9 @@ import java.util.List;
 
 public class BuildAttributeExtension {
     public static Variable createValueFromAttribute(String attrName, xAttributeExtension various, IMethodBuilder methodBuilder) {
+        Checker.isNull(methodBuilder, BuildAttributeExtension.class, "IMethodBuilder");
+        IDataProcessorBuilder implementationBuilder = methodBuilder.createDataProcessorBuilder();
+        Checker.isNull(implementationBuilder, BuildAttributeExtension.class, "IDataProcessorBuilder");
         Field field = ReflectionHelper.getFieldByName(various, attrName);
         if (field == null) {
             throw new CEIException("Cannot find attribute " + attrName);
@@ -36,10 +41,7 @@ public class BuildAttributeExtension {
                 throw new CEIException("Attribute " + attrName + " do not have both value and value processor");
             }
             if (valueProcessor.jsonBuilder != null) {
-                IJsonBuilderBuilder jsonBuilderBuilder = methodBuilder.createJsonBuilderBuilder();
-                if (jsonBuilderBuilder == null) {
-                    throw new CEIException("JsonBuilderBuilder is null");
-                }
+                IJsonBuilderBuilder jsonBuilderBuilder = implementationBuilder.createJsonBuilderBuilder();
                 return buildJsonBuilder(valueProcessor.jsonBuilder, jsonBuilderBuilder);
             } else if (valueProcessor.stringBuilder != null) {
                 return buildStringBuilder(valueProcessor, null);
@@ -58,7 +60,7 @@ public class BuildAttributeExtension {
             if (linkedParam.isEmpty()) {
                 return GlobalContext.createStringConstant(attrValue);
             } else {
-                IStringBuilderBuilder stringBuilderBuilder = methodBuilder.createStringBuilderBuilder();
+                IStringBuilderBuilder stringBuilderBuilder = implementationBuilder.createStringBuilderBuilder();
                 if (stringBuilderBuilder == null) {
                     throw new CEIException("StringBuilderBuilder is null");
                 }
@@ -79,10 +81,12 @@ public class BuildAttributeExtension {
     }
 
     private static Variable buildJsonBuilder(xJsonBuilder jsonBuilder, IJsonBuilderBuilder jsonBuilderBuilder) {
+        if (jsonBuilderBuilder == null) {
+            throw new CEIException("JsonBuilderBuilder is null");
+        }
         Variable jsonObject = GlobalContext.getCurrentMethod().createLocalVariable(JsonWrapper.getType(), "jsonBuilder");
         jsonBuilderBuilder.defineRootJsonObject(jsonObject);
-        jsonBuilder.itemList.forEach(item -> {
-            item.startBuilding();
+        jsonBuilder.itemList.forEach(item -> item.doBuild(() ->{
             if (item.copy == null) {
                 if (item.key == null || item.value == null) {
                     throw new CEIException("[BuildJsonBuilder] from, to and copy cannot be null");
@@ -118,8 +122,7 @@ public class BuildAttributeExtension {
             } else if (item instanceof xJsonDecimal) {
                 jsonBuilderBuilder.addJsonNumber(from, jsonObject, to);
             }
-            item.endBuilding();
-        });
+        }));
         return jsonObject;
     }
 

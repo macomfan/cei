@@ -4,6 +4,7 @@ package cn.ma.cei.model.restful;
 import cn.ma.cei.model.base.xElement;
 import cn.ma.cei.model.base.xType;
 import cn.ma.cei.model.types.xBoolean;
+import cn.ma.cei.model.types.xDecimal;
 import cn.ma.cei.model.types.xInt;
 import cn.ma.cei.model.types.xString;
 import cn.ma.cei.model.xResponse;
@@ -21,7 +22,7 @@ public class xInterface extends xElement {
 
     @XmlElementWrapper(name = "inputs")
     @XmlAnyElement(lax = true)
-    @CEIXmlAnyElementTypes({xString.class, xBoolean.class, xInt.class})
+    @CEIXmlAnyElementTypes({xString.class, xBoolean.class, xInt.class, xDecimal.class})
     public List<xType> inputList;
 
     @XmlElement(name = "request")

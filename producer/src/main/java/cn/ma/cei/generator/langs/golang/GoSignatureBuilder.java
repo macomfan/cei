@@ -5,10 +5,7 @@
  */
 package cn.ma.cei.generator.langs.golang;
 
-import cn.ma.cei.generator.builder.IJsonParserBuilder;
-import cn.ma.cei.generator.builder.IJsonBuilderBuilder;
-import cn.ma.cei.generator.builder.ISignatureBuilder;
-import cn.ma.cei.generator.builder.IStringBuilderBuilder;
+import cn.ma.cei.generator.builder.*;
 import cn.ma.cei.generator.Variable;
 import cn.ma.cei.generator.VariableType;
 import cn.ma.cei.generator.langs.golang.tools.*;
@@ -92,20 +89,20 @@ public class GoSignatureBuilder implements ISignatureBuilder {
         //signatureStruct.addReference(variableType);
     }
 
-    @Override
-    public IJsonBuilderBuilder createJsonBuilderBuilder() {
-        return null;
-    }
-
-    @Override
-    public IStringBuilderBuilder createStringBuilderBuilder() {
-        return null;
-    }
-
-    @Override
-    public IJsonParserBuilder createJsonParserBuilder() {
-        return null;
-    }
+//    @Override
+//    public IJsonBuilderBuilder createJsonBuilderBuilder() {
+//        return null;
+//    }
+//
+//    @Override
+//    public IStringBuilderBuilder createStringBuilderBuilder() {
+//        return null;
+//    }
+//
+//    @Override
+//    public IJsonParserBuilder createJsonParserBuilder() {
+//        return null;
+//    }
 
     @Override
     public void startMethod(VariableType returnType, String methodDescriptor, List<Variable> params) {
@@ -115,6 +112,11 @@ public class GoSignatureBuilder implements ISignatureBuilder {
             tmp.add(new GoPtrVar(item));
         });
         method.startMethod(null, WordSplitter.getLowerCamelCase(methodDescriptor), tmp);
+    }
+
+    @Override
+    public IDataProcessorBuilder createDataProcessorBuilder() {
+        return null;
     }
 
     @Override

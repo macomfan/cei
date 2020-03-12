@@ -1,12 +1,9 @@
 package cn.ma.cei.generator.langs.java;
 
 import cn.ma.cei.generator.BuilderContext;
-import cn.ma.cei.generator.builder.IJsonParserBuilder;
-import cn.ma.cei.generator.builder.IJsonBuilderBuilder;
-import cn.ma.cei.generator.builder.IStringBuilderBuilder;
+import cn.ma.cei.generator.builder.*;
 import cn.ma.cei.generator.Variable;
 import cn.ma.cei.generator.VariableType;
-import cn.ma.cei.generator.builder.IRestfulInterfaceBuilder;
 import cn.ma.cei.generator.langs.java.tools.JavaClass;
 import cn.ma.cei.generator.langs.java.tools.JavaMethod;
 import java.util.List;
@@ -58,20 +55,20 @@ public class JavaRestfulInterfaceBuilder implements IRestfulInterfaceBuilder {
         clientClass.addReference(variableType);
     }
 
-    @Override
-    public IJsonBuilderBuilder createJsonBuilderBuilder() {
-        return new JavaJsonBuilderBuilder(method);
-    }
-
-    @Override
-    public IStringBuilderBuilder createStringBuilderBuilder() {
-        return new JavaStringBuilderBuilder(method);
-    }
-
-    @Override
-    public IJsonParserBuilder createJsonParserBuilder() {
-        return new JavaJsonParserBuilder(method);
-    }
+//    @Override
+//    public IJsonBuilderBuilder createJsonBuilderBuilder() {
+//        return new JavaJsonBuilderBuilder(method);
+//    }
+//
+//    @Override
+//    public IStringBuilderBuilder createStringBuilderBuilder() {
+//        return new JavaStringBuilderBuilder(method);
+//    }
+//
+//    @Override
+//    public IJsonParserBuilder createJsonParserBuilder() {
+//        return new JavaJsonParserBuilder(method);
+//    }
 
 //    @Override
 //    public void setUrl(Variable request) {
@@ -87,6 +84,11 @@ public class JavaRestfulInterfaceBuilder implements IRestfulInterfaceBuilder {
     @Override
     public void startMethod(VariableType returnType, String methodDescriptor, List<Variable> params) {
         method.startMethod(returnType, methodDescriptor, params);
+    }
+
+    @Override
+    public IDataProcessorBuilder createDataProcessorBuilder() {
+        return new JavaDataProcessorBuilder(method);
     }
 
     @Override

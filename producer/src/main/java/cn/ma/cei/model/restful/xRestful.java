@@ -13,11 +13,11 @@ public class xRestful extends xElement {
     @XmlAttribute(name = "name")
     public String name;
 
-    @XmlAttribute(name = "successful_code")
-    public String successfulCode;
-
-    @XmlAttribute(name = "timeout")
-    public Integer timeout;
+//    @XmlAttribute(name = "successful_code")
+//    public String successfulCode;
+//
+//    @XmlAttribute(name = "timeout")
+//    public Integer timeout;
 
     @XmlElement(name = "connection")
     public xConnection connection;

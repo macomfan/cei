@@ -6,10 +6,7 @@
 package cn.ma.cei.generator.langs.golang;
 
 import cn.ma.cei.generator.*;
-import cn.ma.cei.generator.builder.IExchangeBuilder;
-import cn.ma.cei.generator.builder.IModelBuilder;
-import cn.ma.cei.generator.builder.IRestfulClientBuilder;
-import cn.ma.cei.generator.builder.ISignatureBuilder;
+import cn.ma.cei.generator.builder.*;
 import cn.ma.cei.generator.buildin.*;
 import cn.ma.cei.generator.langs.golang.tools.GoFile;
 import cn.ma.cei.model.types.xBoolean;
@@ -62,17 +59,22 @@ public class GoExchangeBuilder implements IExchangeBuilder {
     }
 
     @Override
-    public IRestfulClientBuilder getRestfulClientBuilder(VariableType clientType) {
-        return new GoRestfulClientBuilder(clientType, mainFile);
+    public IRestfulClientBuilder createRestfulClientBuilder() {
+        return new GoRestfulClientBuilder(mainFile);
     }
 
     @Override
-    public ISignatureBuilder getSignatureBuilder() {
+    public IWebSocketClientBuilder createWebSocketClientBuilder() {
+        return null;
+    }
+
+    @Override
+    public ISignatureBuilder createSignatureBuilder() {
         return new GoSignatureBuilder(mainFile);
     }
 
     @Override
-    public IModelBuilder getModelBuilder() {
+    public IModelBuilder createModelBuilder() {
         return new GoModelBuilder(mainFile);
     }
 

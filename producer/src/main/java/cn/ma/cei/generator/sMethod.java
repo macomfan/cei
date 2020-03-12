@@ -10,7 +10,14 @@ import java.util.List;
 public class sMethod {
     private String name;
     private UniquetList<String, Variable> variableList = new UniquetList<>();
+    private UniquetList<String, sMethod> nestedMethodList = new UniquetList<>();
     private VariableType returnType;
+
+    public sMethod createNestedMethod(String name) {
+        sMethod method = new sMethod(name);
+        nestedMethodList.put(name, method);
+        return method;
+    }
 
     public void setReturnType(VariableType returnType) {
         this.returnType = returnType;

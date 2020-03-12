@@ -10,18 +10,32 @@ import java.util.List;
 
 @XmlRootElement(name = "")
 public abstract class xElement {
-    public void startBuilding() {
-        BuildTracer.startBuilding(this);
+
+    @FunctionalInterface
+    public interface Building {
+        void doBuild();
     }
 
-    public void endBuilding() {
+    @FunctionalInterface
+    public interface BuildingWithReturn<T> {
+        T doBuild();
+    }
+
+    public <T> T doBuildWithReturn(BuildingWithReturn<T> building) {
+        BuildTracer.startBuilding(this);
+        T res = building.doBuild();
+        BuildTracer.endBuilding();
+        return res;
+    }
+
+    public void doBuild(Building building) {
+        BuildTracer.startBuilding(this);
+        building.doBuild();
         BuildTracer.endBuilding();
     }
 
     public void doCheck() {
-        startBuilding();
-        customCheck();
-        endBuilding();
+        doBuild(this::customCheck);
     }
 
     public <T extends xElement> void checkMember(T member) {

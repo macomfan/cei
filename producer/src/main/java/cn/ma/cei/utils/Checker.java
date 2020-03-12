@@ -5,6 +5,10 @@
  */
 package cn.ma.cei.utils;
 
+import cn.ma.cei.exception.CEIException;
+
+import java.lang.reflect.ParameterizedType;
+
 /**
  *
  * @author u0151316
@@ -14,5 +18,10 @@ public class Checker {
     public static boolean isEmpty(String value) {
         return (value == null || "".equals(value));
     }
-    
+
+    public static void isNull(Object obj, Class<?> currentCls, String objectName) {
+        if (obj == null) {
+            throw new CEIException("[" + currentCls.getSimpleName() + "] " + objectName + " is null.");
+        }
+    }
 }

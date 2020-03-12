@@ -1,7 +1,6 @@
 package cn.ma.cei.model.json;
 
 import cn.ma.cei.model.base.xElement;
-import cn.ma.cei.model.json.checker.xJsonChecker;
 import cn.ma.cei.xml.CEIXmlAnyElementTypes;
 
 import javax.xml.bind.annotation.XmlAnyElement;

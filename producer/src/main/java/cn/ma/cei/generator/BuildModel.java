@@ -17,12 +17,10 @@ public class BuildModel {
         GlobalContext.setCurrentModel(modelType);
         builder.startModel(modelType);
 
-        model.memberList.forEach((item) -> {
-            item.startBuilding();
+        model.memberList.forEach(item -> item.doBuild(() -> {
             Variable member = modelType.addMember(item.getType(), item.name);
             builder.addMember(member);
-            item.endBuilding();
-        });
+        }));
         builder.endModel();
         GlobalContext.setCurrentModel(null);
     }

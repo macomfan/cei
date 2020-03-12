@@ -6,10 +6,7 @@
 package cn.ma.cei.generator.langs.golang;
 
 import cn.ma.cei.generator.BuilderContext;
-import cn.ma.cei.generator.builder.IJsonParserBuilder;
-import cn.ma.cei.generator.builder.IJsonBuilderBuilder;
-import cn.ma.cei.generator.builder.IRestfulInterfaceBuilder;
-import cn.ma.cei.generator.builder.IStringBuilderBuilder;
+import cn.ma.cei.generator.builder.*;
 import cn.ma.cei.generator.Variable;
 import cn.ma.cei.generator.VariableType;
 import cn.ma.cei.generator.langs.golang.tools.*;
@@ -94,20 +91,20 @@ public class GoRestfulInterfaceBuilder implements IRestfulInterfaceBuilder {
         clientStruct.addReference(variableType);
     }
 
-    @Override
-    public IJsonBuilderBuilder createJsonBuilderBuilder() {
-        return new GoJsonBuilderBuilder(method);
-    }
-
-    @Override
-    public IStringBuilderBuilder createStringBuilderBuilder() {
-        return null;
-    }
-
-    @Override
-    public IJsonParserBuilder createJsonParserBuilder() {
-        return new GoJsonParserBuilder(method);
-    }
+//    @Override
+//    public IJsonBuilderBuilder createJsonBuilderBuilder() {
+//        return new GoJsonBuilderBuilder(method);
+//    }
+//
+//    @Override
+//    public IStringBuilderBuilder createStringBuilderBuilder() {
+//        return null;
+//    }
+//
+//    @Override
+//    public IJsonParserBuilder createJsonParserBuilder() {
+//        return new GoJsonParserBuilder(method);
+//    }
 
     @Override
     public void startMethod(VariableType returnType, String methodDescriptor, List<Variable> params) {
@@ -117,6 +114,11 @@ public class GoRestfulInterfaceBuilder implements IRestfulInterfaceBuilder {
             tmp.add(new GoInterfaceVar(item));
         });
         method.startMethod(new GoPtrType(returnType), methodDescriptor, tmp);
+    }
+
+    @Override
+    public IDataProcessorBuilder createDataProcessorBuilder() {
+        return null;
     }
 
     @Override
