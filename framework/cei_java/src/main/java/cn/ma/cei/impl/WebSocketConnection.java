@@ -25,7 +25,7 @@ public class WebSocketConnection extends WebSocketListener {
     private WebSocket webSocket = null;
     private OnConnect onConnect = null;
 
-    private List<WebSocketEvent> events = new LinkedList<>();
+    private List<WebSocketAction> events = new LinkedList<>();
 
     @FunctionalInterface
     public interface OnConnect {
@@ -38,7 +38,7 @@ public class WebSocketConnection extends WebSocketListener {
     }
 
 
-    public void registerAction(WebSocketEvent.IChecker checker, OnConnect onConnect) {
+    public void registerAction(WebSocketAction.IChecker checker, OnConnect onConnect) {
 
     }
 

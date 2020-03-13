@@ -70,6 +70,10 @@ public class BuildWebSocketAction {
             GlobalContext.setCurrentMethod(interfaceMethod);
         }
 
+        if (context.response != null) {
+
+        }
+
         actionBuilder.registerAction(actionVariable);
         // End action
         actionBuilder.endAction();

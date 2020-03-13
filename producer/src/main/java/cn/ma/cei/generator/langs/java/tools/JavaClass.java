@@ -6,6 +6,7 @@ import cn.ma.cei.generator.CEIPath;
 import cn.ma.cei.generator.Variable;
 import cn.ma.cei.generator.VariableType;
 import cn.ma.cei.generator.langs.java.JavaCode;
+import cn.ma.cei.utils.Checker;
 import cn.ma.cei.utils.UniquetList;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -51,6 +52,7 @@ public class JavaClass {
     public JavaClass(String className, VariableType superClass) {
         this(className);
         this.superClass = superClass;
+        addReference(superClass);
     }
 
     public JavaClass(String className) {
@@ -89,7 +91,7 @@ public class JavaClass {
 
     public void build(CEIPath folder) {
         if (type == ClassType.INNER) {
-            defineClass(className, () -> {
+            defineClass(className, superClass, () -> {
                 code.endln();
                 writeMemberVariable(code);
                 writeMethods(code);
@@ -97,7 +99,7 @@ public class JavaClass {
         } else {
             writeReference(code);
 
-            defineClass(className, () -> {
+            defineClass(className, superClass, () -> {
                 code.endln();
                 innerClasses.values().forEach(value -> {
                     value.build(folder);
@@ -161,14 +163,19 @@ public class JavaClass {
         void inClass();
     }
 
-    private void defineClass(String clsName, ClassContent classContent) {
+    private void defineClass(String clsName, VariableType supperCls, ClassContent classContent) {
         String header;
         if (type == ClassType.INNER) {
             header = "static public class";
         } else {
             header = "public class";
         }
-        code.appendWordsln(header, clsName, "{");
+        if (supperCls != null ) {
+            code.appendWordsln(header, clsName, "extends", supperCls.getDescriptor(), "{");
+        } else {
+            code.appendWordsln(header, clsName, "{");
+        }
+
         code.newBlock(() -> {
             classContent.inClass();
         });
