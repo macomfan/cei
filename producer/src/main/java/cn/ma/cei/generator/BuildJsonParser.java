@@ -26,7 +26,6 @@ public class BuildJsonParser {
                                  Variable inputVariable,
                                  VariableType outputModelType,
                                  IDataProcessorBuilder dataProcessorBuilder,
-                                 IMethodBuilder method,
                                  IJsonCheckerBuilder.UsedFor usedFor) {
         Checker.isNull(dataProcessorBuilder, BuildJsonParser.class, "IDataProcessorBuilder");
         IJsonParserBuilder jsonParserBuilder = dataProcessorBuilder.createJsonParserBuilder();

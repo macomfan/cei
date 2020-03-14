@@ -95,8 +95,8 @@ public class RestfulRequest {
         requestBody_ = body;
     }
 
-    public void setPostBody(JsonWrapper jsonObject) {
-        requestBody_ = jsonObject.toBytes();
+    public void setPostBody(String value) {
+        requestBody_ = value.getBytes();
     }
 
     public byte[] getPostBody() {

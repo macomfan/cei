@@ -1,11 +1,12 @@
 package cn.ma.cei.generator;
 
-import cn.ma.cei.generator.builder.IJsonCheckerBuilder;
 import cn.ma.cei.exception.CEIException;
-import cn.ma.cei.generator.builder.IRestfulInterfaceBuilder;
+import cn.ma.cei.generator.builder.IDataProcessorBuilder;
+import cn.ma.cei.generator.builder.IJsonCheckerBuilder;
+import cn.ma.cei.generator.builder.IMethodBuilder;
 import cn.ma.cei.generator.buildin.RestfulResponse;
-import cn.ma.cei.model.xResponse;
 import cn.ma.cei.model.types.xString;
+import cn.ma.cei.model.xResponse;
 
 public class BuildResponse {
 
@@ -20,17 +21,14 @@ public class BuildResponse {
         }
     }
 
-    public static Variable build(xResponse response, Variable responseVariable, VariableType returnType, IRestfulInterfaceBuilder interfaceBuilder) {
-        if (interfaceBuilder == null) {
-            throw new CEIException("BuildResponse interfaceBuilder is null");
-        }
+    public static Variable build(xResponse response,
+                                 Variable responseVariable, VariableType returnType, IDataProcessorBuilder dataProcessorBuilder) {
         if (response.jsonParser != null) {
             return response.jsonParser.doBuildWithReturn(() -> BuildJsonParser.build(
                     response.jsonParser,
                     responseVariable,
                     returnType,
-                    interfaceBuilder.createDataProcessorBuilder(),
-                    interfaceBuilder,
+                    dataProcessorBuilder,
                     IJsonCheckerBuilder.UsedFor.REPORT_ERROR));
         }
         return null;

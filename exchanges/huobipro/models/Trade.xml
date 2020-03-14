@@ -1,11 +1,17 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<sdk exchange="huobipro">
-    <model name="Trade">
-        <int name="id"/>
-        <int name="tradeID"/>
-        <decimal name="price"/>
-        <decimal name="amount"/>
-        <string name="direction"/>
-        <int name="ts"/>
-    </model>
+<sdk xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+     xsi:schemaLocation="https://github.com/macomfan/cei https://github.com/macomfan/cei/ceisdk.xsd"
+     xmlns="https://github.com/macomfan/cei"
+     name="huobipro">
+    <models>
+        <model name="Trade">
+            <int name="id"/>
+            <int name="tradeID"/>
+            <decimal name="price"/>
+            <decimal name="amount"/>
+            <string name="direction"/>
+            <int name="ts"/>
+        </model>
+    </models>
+
 </sdk>

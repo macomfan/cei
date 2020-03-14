@@ -57,7 +57,7 @@ public class BuildRestfulInterface {
             VariableType finalReturnType = returnType.get();
             restIf.response.doBuild(() -> {
                 builder.invokeQuery(response, request);
-                Variable returnVariable = BuildResponse.build(restIf.response, response, finalReturnType, builder);
+                Variable returnVariable = BuildResponse.build(restIf.response, response, finalReturnType, builder.createDataProcessorBuilder());
                 builder.returnResult(returnVariable);
             });
         }

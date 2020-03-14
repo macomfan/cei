@@ -8,6 +8,7 @@ package cn.ma.cei.utils;
 import cn.ma.cei.exception.CEIException;
 
 import java.lang.reflect.ParameterizedType;
+import java.util.List;
 
 /**
  *
@@ -23,5 +24,9 @@ public class Checker {
         if (obj == null) {
             throw new CEIException("[" + currentCls.getSimpleName() + "] " + objectName + " is null.");
         }
+    }
+
+    public static <T> boolean isNull(List<T> obj) {
+        return obj == null || obj.size() == 0;
     }
 }

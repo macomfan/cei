@@ -1,7 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<sdk exchange="huobipro">
-    <model name="Currencies">
-        <string name="status"/>
-        <string_array name="data"/>
-    </model>
+<sdk xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+     xsi:schemaLocation="https://github.com/macomfan/cei https://github.com/macomfan/cei/ceisdk.xsd"
+     xmlns="https://github.com/macomfan/cei"
+     name="huobipro">
+    <models>
+        <model name="Currencies">
+            <string name="status"/>
+            <string_array name="data"/>
+        </model>
+    </models>
 </sdk>

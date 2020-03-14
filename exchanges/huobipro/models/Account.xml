@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<sdk exchange="huobipro">
+<sdk xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+     xsi:schemaLocation="https://github.com/macomfan/cei https://github.com/macomfan/cei/ceisdk.xsd"
+     xmlns="https://github.com/macomfan/cei"
+     name="huobipro">
+	 <models>
     <model name="Account">
         <string name="status"/>
         <object_array name="data" refer="AccountData"/>
@@ -11,4 +15,5 @@
         <string name="type"/>
         <string name="subtype"/>
     </model>
+	</models>
 </sdk>

@@ -53,8 +53,8 @@ public class JavaWebSocketActionBuilder implements IWebSocketActionBuilder {
     }
 
     @Override
-    public void setSendToAction(Variable action, sMethod send) {
-        method.addLambda(action, "setAction", send.getInputVariableList());
+    public void setActionToAction(Variable action, sMethod actionMethod) {
+        method.addLambda(action, "setAction", actionMethod.getInputVariableList());
         method.addCode(sendBuilder.method.getCode());
         method.endLambda();
     }

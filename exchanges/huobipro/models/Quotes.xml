@@ -4,9 +4,9 @@
      xmlns="https://github.com/macomfan/cei"
      name="huobipro">
     <models>
-    <model name="OrderID">
-        <string name="status"/>
-        <int name="data"/>
+    <model name="Quote">
+        <decimal name="price"/>
+        <decimal name="amount"/>
     </model>
     </models>
 </sdk>

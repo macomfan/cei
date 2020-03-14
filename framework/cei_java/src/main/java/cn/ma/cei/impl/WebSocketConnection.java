@@ -38,13 +38,17 @@ public class WebSocketConnection extends WebSocketListener {
     }
 
 
-    public void registerAction(WebSocketAction.IChecker checker, OnConnect onConnect) {
+    public void registerAction(WebSocketAction action) {
 
     }
 
-    public void connect(WebSocketOption request, OnConnect onConnect) {
-        this.onConnect = onConnect;
-        Request okhttpRequest = new Request.Builder().url(request.url).build();
+    public void setOnConnect(OnConnect onConnect) {
+
+    }
+
+    public void connectWebSocket(String url, WebSocketOption option) {
+        //this.onConnect = onConnect;
+        Request okhttpRequest = new Request.Builder().url(url).build();
         webSocket = client.newWebSocket(okhttpRequest, this);
     }
 
@@ -75,10 +79,10 @@ public class WebSocketConnection extends WebSocketListener {
         });
     }
     
-    public void send(JsonWrapper msg) {
-        if (webSocket != null) {
+    public void send(String msg) {
+        if (msg != null || !msg.isEmpty()) {
             System.out.println(msg);
-            webSocket.send(msg.toJsonString());
+            webSocket.send(msg);
         }
     }
 

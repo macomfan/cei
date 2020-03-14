@@ -20,12 +20,14 @@ public class BuildWebSocketAction {
         public xTrigger trigger = null;
         public xResponse response = null;
         public xSend send = null;
+        public VariableType callbackMessageType = null;
     }
 
-    public static void build(xCallback callback, IWebSocketActionBuilder actionBuilder) {
+    public static void build(xCallback callback, VariableType callbackMessageType, IWebSocketActionBuilder actionBuilder) {
         ActionContext context = new ActionContext();
         context.name = callback.name;
         context.response = callback.response;
+        context.callbackMessageType = callbackMessageType;
         context.trigger = callback.trigger;
         BuildWebSocketAction.build(context, actionBuilder);
     }
@@ -38,6 +40,8 @@ public class BuildWebSocketAction {
         context.trigger = action.trigger;
         BuildWebSocketAction.build(context, actionBuilder);
     }
+
+
 
     public static void build(ActionContext context,
                              IWebSocketActionBuilder actionBuilder) {
@@ -64,14 +68,21 @@ public class BuildWebSocketAction {
             sMethod send = interfaceMethod.createNestedMethod(context.name + "Send");
             GlobalContext.setCurrentMethod(send);
             // Build send
-            Variable connectionVariable = send.createInputVariable(WebSocketConnection.getType(), "connection");
-            BuildWebSocketImplementation.buildSendInAction(context.send, connectionVariable, actionBuilder.createImplementationBuilderForSend());
-            actionBuilder.setSendToAction(actionVariable, send);
+            Variable msg = send.createInputVariable(WebSocketMessage.getType(), "msg");
+            BuildWebSocketImplementation.buildSendInAction(context.send, msg, actionBuilder.createImplementationBuilderForSend());
+            actionBuilder.setActionToAction(actionVariable, send);
             GlobalContext.setCurrentMethod(interfaceMethod);
         }
 
         if (context.response != null) {
-
+            Variable callbackVariable = interfaceMethod.getVariable(context.name);
+            sMethod response = interfaceMethod.createNestedMethod(context.name + "Response");
+            GlobalContext.setCurrentMethod(response);
+            // Build response
+            Variable msg = response.createInputVariable(WebSocketMessage.getType(), "msg");
+            BuildWebSocketImplementation.buildResponse(context.response, msg, context.callbackMessageType, callbackVariable, actionBuilder.createImplementationBuilderForSend());
+            actionBuilder.setActionToAction(actionVariable, response);
+            GlobalContext.setCurrentMethod(interfaceMethod);
         }
 
         actionBuilder.registerAction(actionVariable);

@@ -75,7 +75,7 @@ public class main {
 //            code.endln();
 //        });
 //        code.appendln("}");
-        List<xSDK> sdks = (new JAXBWrapper<>(xSDK.class)).loadFromFolder("C:\\dev\\cei\\exchanges\\test");
+        List<xSDK> sdks = (new JAXBWrapper<>(xSDK.class)).loadFromFolder("C:\\dev\\cei\\exchanges");
         Finalizer finalizer = new Finalizer();
         finalizer.addSDK(sdks);
         List<xSDK> finalSDKs = finalizer.finalizeSDK();

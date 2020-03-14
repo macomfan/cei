@@ -17,5 +17,7 @@ public interface IWebSocketImplementationBuilder extends IMethodBuilder {
 
     void endTrigger();
 
-    void send(Variable connection, Variable send);
+    void send(Variable send);
+
+    void callback(Variable callbackVariable, Variable response);
 }

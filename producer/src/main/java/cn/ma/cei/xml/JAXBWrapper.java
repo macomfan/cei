@@ -3,8 +3,9 @@ package cn.ma.cei.xml;
 import cn.ma.cei.exception.CEIException;
 
 import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.UnmarshalException;
 import javax.xml.bind.Unmarshaller;
-import javax.xml.bind.annotation.XmlRootElement;
 import java.io.File;
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
@@ -61,11 +62,14 @@ public class JAXBWrapper<T> {
             JAXBContext context = JAXBContext.newInstance(tmp, null);
             Unmarshaller unmarshaller = context.createUnmarshaller();
             return rootClass.cast(unmarshaller.unmarshal(file));
-        } catch (Exception e) {
-            System.err.println(file.getPath());
-            System.err.println(e.getCause().getMessage());
+        } catch (UnmarshalException e) {
+            System.err.println("Load XML file error: " + file.getPath());
+            System.err.println(e.getMessage());
+        } catch (JAXBException e) {
+            System.err.println("Load XML file error: " + file.getPath());
+            System.err.println(e.getMessage());
         }
-        return  null;
+        return null;
     }
 
     public List<T> loadFromFolder(String path) {

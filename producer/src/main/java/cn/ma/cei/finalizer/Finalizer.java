@@ -4,6 +4,7 @@ import cn.ma.cei.model.base.xReferable;
 import cn.ma.cei.model.base.xType;
 import cn.ma.cei.model.xModel;
 import cn.ma.cei.model.xSDK;
+import cn.ma.cei.utils.Checker;
 
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -31,12 +32,9 @@ public class Finalizer {
         orgSDKList.add(sdk);
     }
 
-    private void mergeSDK(xSDK tag, xSDK src) {
-
-    }
-
     public List<xSDK> finalizeSDK() {
         System.out.println("-- Start finalize");
+        // Merge SDK
         orgSDKList.forEach(sdk-> {
             if (sdkMap.containsKey(sdk.name)) {
                 xSDK orgSdk = sdkMap.get(sdk.name);
@@ -45,18 +43,22 @@ public class Finalizer {
                 sdkMap.put(sdk.name, sdk);
             }
         });
-        // Merge SDK
-//        if (sdkMap.containsKey(sdk.exchange)) {
-//            // Merge
-//        } else {
-//            // Build database
-//            sdkMap.put(sdk.exchange, sdk);
-//        }
-        // Model dependence decision.
-        sdkMap.values().forEach(sdk -> {
+
+        sdkMap.values().forEach((sdk) -> {
             sdk.doCheck();
+            XMLDatabase.attachSDK(sdk);
+        });
+
+        // Check model dependency
+        sdkMap.values().forEach(sdk -> {
+            if (Checker.isNull(sdk.modelList)) {
+                return;
+            }
             Dependence<xModel> dependence = new Dependence<>();
-            for (xModel model : sdk.modelList) {
+            sdk.modelList.forEach((model) -> {
+                if (Checker.isNull(model.memberList)) {
+                    return;
+                }
                 boolean referToOther = false;
                 for (xType item : model.memberList) {
                     if (item instanceof xReferable) {
@@ -68,15 +70,12 @@ public class Finalizer {
                 if (!referToOther) {
                     dependence.addNode(model, null);
                 }
-            }
+            });
             sdk.modelList = dependence.decision();
         });
         // Check error
         System.out.println("-- Start end");
-        sdkMap.values().forEach((sdk) -> {
-            sdk.doCheck();
-            XMLDatabase.attachSDK(sdk);
-        });
+
         return new LinkedList<>(sdkMap.values());
     }
 }

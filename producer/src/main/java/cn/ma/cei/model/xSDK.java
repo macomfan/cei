@@ -32,22 +32,11 @@ public class xSDK extends xStandalone<xSDK> {
     @XmlElement(name = "clients")
     public xSDKClients clients;
 
-
-
-    private <T> List<T> mergeList(List<T> dst, List<T> src) {
-        if (dst == null) {
-            dst = new LinkedList<>();
-        }
-        if (src != null) {
-            dst.addAll(src);
-        }
-        return dst;
-    }
-
+    @Override
     public void merge(xSDK sdk) {
         modelList = mergeList(modelList, sdk.modelList);
         signatureList = mergeList(signatureList, sdk.signatureList);
-        clients.merge(sdk.clients);
+        clients = mergeElement(clients, sdk.clients);
     }
 
 

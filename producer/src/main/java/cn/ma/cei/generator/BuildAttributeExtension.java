@@ -38,11 +38,12 @@ public class BuildAttributeExtension {
             // not define
             xAttribute valueProcessor = various.getAttributeByName(attrName);
             if (valueProcessor == null) {
-                throw new CEIException("Attribute " + attrName + " do not have both value and value processor");
+                throw new CEIException("Attribute " + attrName + " do not have both value and value extension");
             }
             if (valueProcessor.jsonBuilder != null) {
                 IJsonBuilderBuilder jsonBuilderBuilder = implementationBuilder.createJsonBuilderBuilder();
-                return buildJsonBuilder(valueProcessor.jsonBuilder, jsonBuilderBuilder);
+                Variable jsonBuilder = buildJsonBuilder(valueProcessor.jsonBuilder, jsonBuilderBuilder);
+                return implementationBuilder.jsonBuilderToString(jsonBuilder);
             } else if (valueProcessor.stringBuilder != null) {
                 return buildStringBuilder(valueProcessor, null);
             } else {
@@ -123,6 +124,7 @@ public class BuildAttributeExtension {
                 jsonBuilderBuilder.addJsonNumber(from, jsonObject, to);
             }
         }));
+
         return jsonObject;
     }
 

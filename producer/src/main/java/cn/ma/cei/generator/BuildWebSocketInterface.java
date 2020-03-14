@@ -42,7 +42,8 @@ public class BuildWebSocketInterface {
         // Build callback
         if (intf.callbacks != null) {
             intf.callbacks.forEach(callback -> {
-                BuildWebSocketAction.build(callback, builder.createWebSocketActionBuilder());
+                VariableType callbackMessageType = getCallbackMessageType(callback);
+                BuildWebSocketAction.build(callback, callbackMessageType, builder.createWebSocketActionBuilder());
             });
         }
         // Build send

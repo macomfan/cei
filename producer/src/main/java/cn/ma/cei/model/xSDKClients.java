@@ -21,14 +21,4 @@ public class xSDKClients extends xStandalone<xSDKClients> {
         restfulList = mergeList(restfulList, clients.restfulList);
         webSocketList = mergeList(webSocketList, clients.webSocketList);
     }
-
-    private <T> List<T> mergeList(List<T> dst, List<T> src) {
-        if (dst == null) {
-            dst = new LinkedList<>();
-        }
-        if (src != null) {
-            dst.addAll(src);
-        }
-        return dst;
-    }
 }

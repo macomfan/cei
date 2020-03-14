@@ -37,7 +37,12 @@ public class JavaWebSocketImplementationBuilder implements IWebSocketImplementat
     }
 
     @Override
-    public void send(Variable connection, Variable send) {
+    public void send(Variable send) {
+        method.addInvoke("send", send);
+    }
 
+    @Override
+    public void callback(Variable callbackVariable, Variable response) {
+        method.addInvoke(callbackVariable.getDescriptor() + ".invoke", response);
     }
 }

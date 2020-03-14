@@ -130,15 +130,7 @@
 
         <websocket name="WSClient">
             <connection>
-                <url>
-					<attribute for="target">
-						<get_now output="{ts}" format=""/>
-						<json_builder name="{jsonResult}">
-							<json_value key="op" value="{pong}"/>
-							<json_value key="ts" value="{ts}"/>
-						</json_builder>
-					</attribute>
-				</url>
+                <url target="ws"/>
 				<inputs>
                         <string name="symbol"/>
                     </inputs>
@@ -188,7 +180,7 @@
                         </trigger>
                         <response model="TradeEntity">
                             <json_parser>
-                                <json_string key="ch" value="{ch}"/>
+                                <json_value key="price" value="{price}"/>
                             </json_parser>
                         </response>
                     </callback>

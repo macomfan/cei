@@ -1,10 +1,14 @@
 package cn.ma.cei.generator.langs.java;
 
+import cn.ma.cei.generator.BuilderContext;
+import cn.ma.cei.generator.Variable;
 import cn.ma.cei.generator.builder.IDataProcessorBuilder;
 import cn.ma.cei.generator.builder.IJsonBuilderBuilder;
 import cn.ma.cei.generator.builder.IJsonParserBuilder;
 import cn.ma.cei.generator.builder.IStringBuilderBuilder;
 import cn.ma.cei.generator.langs.java.tools.JavaMethod;
+
+import java.nio.Buffer;
 
 public class JavaDataProcessorBuilder implements IDataProcessorBuilder {
     JavaMethod method;
@@ -26,5 +30,10 @@ public class JavaDataProcessorBuilder implements IDataProcessorBuilder {
     @Override
     public IJsonParserBuilder createJsonParserBuilder() {
         return new JavaJsonParserBuilder(method);
+    }
+
+    @Override
+    public Variable jsonBuilderToString(Variable jsonbuilder) {
+        return BuilderContext.createStatement(jsonbuilder.getDescriptor() + ".toJsonString()");
     }
 }

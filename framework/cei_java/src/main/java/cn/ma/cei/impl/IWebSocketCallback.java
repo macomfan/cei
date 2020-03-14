@@ -11,5 +11,5 @@ package cn.ma.cei.impl;
  */
 @FunctionalInterface
 public interface IWebSocketCallback<T> {
-    void onRecieve(T data);
+    void invoke(T data);
 }

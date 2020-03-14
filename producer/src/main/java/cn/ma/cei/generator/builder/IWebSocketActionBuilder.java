@@ -14,9 +14,9 @@ public interface IWebSocketActionBuilder {
 
     void registerAction(Variable action);
 
-    void setTriggerToAction(Variable action, sMethod trigger);
+    void setTriggerToAction(Variable action, sMethod triggerMethod);
 
-    void setSendToAction(Variable action, sMethod send);
+    void setActionToAction(Variable action, sMethod actionMethod);
 
     void endAction();
 }

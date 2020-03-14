@@ -42,7 +42,7 @@ public class StartService {
 //        });
 
         JAXBWrapper wrapper = new JAXBWrapper(xSDK.class);
-        List<xSDK> sdks = wrapper.loadFromFolder("C:\\dev\\cei\\exchanges");
+        List<xSDK> sdks = wrapper.loadFromFolder("C:\\dev\\cei\\exchanges\\test");
         Finalizer finalizer = new Finalizer();
         finalizer.addSDK(sdks);
         List<xSDK> finalSDKs = finalizer.finalizeSDK();

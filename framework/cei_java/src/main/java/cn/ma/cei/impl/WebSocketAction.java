@@ -31,7 +31,7 @@ public class WebSocketAction {
     public void setTrigger(IChecker checker) {
 
     }
-    public void setEvent(ISystemCallback callback) {
+    public void setAction(ISystemCallback callback) {
 
     }
 
