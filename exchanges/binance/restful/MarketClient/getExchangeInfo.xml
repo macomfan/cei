@@ -3,32 +3,38 @@
 	 xsi:schemaLocation="https://github.com/macomfan/cei https://github.com/macomfan/cei/ceisdk.xsd"
 	 xmlns="https://github.com/macomfan/cei"
 	 name="binance">
-	<restful name="MarketClient">
-		<interface name="getExchangeInfo">
-			<request method="get" target="/api/v3/exchangeInfo"/>
-			<response model="ExchangeInfo">
-				<json_parser>
-					<json_value copy="timezone"/>
-					<json_value copy="serverTime"/>
-					<json_object_array copy="rateLimits" model="RateLimits">
-						<json_value copy="rateLimitType"/>
-						<json_value copy="interval"/>
-						<json_value copy="intervalNum"/>
-						<json_value copy="limit"/>
-					</json_object_array>
-					<json_object_array copy="symbols" model="Symbol">
-						<json_value copy="symbol"/>
-						<json_value copy="status"/>
-						<json_value copy="baseAsset"/>
-						<json_value copy="baseAssetPrecision"/>
-						<json_value copy="quoteAsset"/>
-						<json_value copy="quotePrecision"/>
-						<json_value copy="orderTypes"/>
-						<json_value copy="icebergAllowed"/>
-						<json_value copy="ocoAllowed"/>
-					</json_object_array>
-				</json_parser>
-			</response>
-		</interface>
-	</restful>
+	<clients>
+		<restful name="MarketClient">
+			<interfaces>
+				<interface name="getExchangeInfo">
+					<request method="get" target="/api/v3/exchangeInfo"/>
+					<response model="ExchangeInfo">
+						<json_parser>
+							<json_value copy="timezone"/>
+							<json_value copy="serverTime"/>
+							<json_object_array copy="rateLimits" model="RateLimits">
+								<json_value copy="rateLimitType"/>
+								<json_value copy="interval"/>
+								<json_value copy="intervalNum"/>
+								<json_value copy="limit"/>
+							</json_object_array>
+							<json_object_array copy="symbols" model="Symbol">
+								<json_value copy="symbol"/>
+								<json_value copy="status"/>
+								<json_value copy="baseAsset"/>
+								<json_value copy="baseAssetPrecision"/>
+								<json_value copy="quoteAsset"/>
+								<json_value copy="quotePrecision"/>
+								<json_value copy="orderTypes"/>
+								<json_value copy="icebergAllowed"/>
+								<json_value copy="ocoAllowed"/>
+							</json_object_array>
+						</json_parser>
+					</response>
+				</interface>
+			</interfaces>
+
+		</restful>
+	</clients>
+
 </sdk>

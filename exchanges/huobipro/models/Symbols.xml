@@ -6,7 +6,7 @@
     <models>
     <model name="Symbols">
         <string name="status"/>
-        <object_array name="data" refer="SymbolsData"/>
+        <object_array name="data" model="SymbolsData"/>
     </model>
 
     <model name="SymbolsData">

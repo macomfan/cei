@@ -10,7 +10,7 @@
         <int name="ts"/>
         <int name="tsInTick"/>
         <int name="idInTick"/>
-        <object_array name="data" refer="Trade"/>
+        <object_array name="data" model="Trade"/>
     </model>
     </models>
 </sdk>

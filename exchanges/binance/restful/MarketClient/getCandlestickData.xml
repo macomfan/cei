@@ -1,34 +1,39 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <sdk xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	 xsi:schemaLocation="https://github.com/macomfan/cei https://github.com/macomfan/cei/ceisdk.xsd"
-	 xmlns="https://github.com/macomfan/cei"
-	 name="binance">
-	<restful name="MarketClient">
-		<interface name="getCandlestickData">
-			<inputs>
-				<string name="symbol"/>
-				<string name="interval"/>
-				<int name="startTime"/>
-				<int name="endTime"/>
-				<int name="limit"/>
-			</inputs>
-			<request method="get" target="/api/v3/klines">
-				<query_strings>
-					<query key="symbol" value="{symbol}"/>
-					<query key="interval" value="{interval}"/>
-					<query key="startTime" value="{startTime}"/>
-					<query key="endTime" value="{endTime}"/>
-					<query key="limit" value="{limit}"/>
-				</query_strings>
-			</request>
-			<response model="CandlestickDataList">
-				<json_parser>
-					<json_object_array value="{data}" model="CandlestickData">
-						<json_value key="\[0]" value="{price}"/>
-						<json_value key="\[1]" value="{amount}"/>
-					</json_object_array>
-				</json_parser>
-			</response>
-		</interface>
-	</restful>
+     xsi:schemaLocation="https://github.com/macomfan/cei https://github.com/macomfan/cei/ceisdk.xsd"
+     xmlns="https://github.com/macomfan/cei"
+     name="binance">
+    <clients>
+        <restful name="MarketClient">
+            <interfaces>
+                <interface name="getCandlestickData">
+                    <inputs>
+                        <string name="symbol"/>
+                        <string name="interval"/>
+                        <int name="startTime"/>
+                        <int name="endTime"/>
+                        <int name="limit"/>
+                    </inputs>
+                    <request method="get" target="/api/v3/klines">
+                        <query_strings>
+                            <query key="symbol" value="{symbol}"/>
+                            <query key="interval" value="{interval}"/>
+                            <query key="startTime" value="{startTime}"/>
+                            <query key="endTime" value="{endTime}"/>
+                            <query key="limit" value="{limit}"/>
+                        </query_strings>
+                    </request>
+                    <response model="CandlestickDataList">
+                        <json_parser>
+                            <json_object_array value="{data}" model="CandlestickData">
+                                <json_value key="\[0]" value="{price}"/>
+                                <json_value key="\[1]" value="{amount}"/>
+                            </json_object_array>
+                        </json_parser>
+                    </response>
+                </interface>
+            </interfaces>
+        </restful>
+    </clients>
+
 </sdk>

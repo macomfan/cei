@@ -3,8 +3,11 @@
      xsi:schemaLocation="https://github.com/macomfan/cei https://github.com/macomfan/cei/ceisdk.xsd"
      xmlns="https://github.com/macomfan/cei"
      name="binance">
-	<model name="DepthEntity">
-		<decimal name="price"/>
-		<decimal name="qty"/>
-	</model>
+	<models>
+		<model name="DepthEntity">
+			<decimal name="price"/>
+			<decimal name="qty"/>
+		</model>
+	</models>
+
 </sdk>

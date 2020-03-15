@@ -3,9 +3,12 @@
      xsi:schemaLocation="https://github.com/macomfan/cei https://github.com/macomfan/cei/ceisdk.xsd"
      xmlns="https://github.com/macomfan/cei"
      name="binance">
-	<model name="Depth">
-		<int name="lastUpdateId"/>
-		<object_array name="bids" model="DepthEntity"/>
-		<object_array name="asks" model="DepthEntity"/>
-	</model>
+	<models>
+		<model name="Depth">
+			<int name="lastUpdateId"/>
+			<object_array name="bids" model="DepthEntity"/>
+			<object_array name="asks" model="DepthEntity"/>
+		</model>
+	</models>
+
 </sdk>

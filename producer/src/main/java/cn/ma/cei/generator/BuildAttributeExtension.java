@@ -22,8 +22,8 @@ import java.util.List;
 public class BuildAttributeExtension {
     public static Variable createValueFromAttribute(String attrName, xAttributeExtension various, IMethodBuilder methodBuilder) {
         Checker.isNull(methodBuilder, BuildAttributeExtension.class, "IMethodBuilder");
-        IDataProcessorBuilder implementationBuilder = methodBuilder.createDataProcessorBuilder();
-        Checker.isNull(implementationBuilder, BuildAttributeExtension.class, "IDataProcessorBuilder");
+        IDataProcessorBuilder dataProcessorBuilder = methodBuilder.createDataProcessorBuilder();
+        Checker.isNull(dataProcessorBuilder, BuildAttributeExtension.class, "IDataProcessorBuilder");
         Field field = ReflectionHelper.getFieldByName(various, attrName);
         if (field == null) {
             throw new CEIException("Cannot find attribute " + attrName);
@@ -41,9 +41,9 @@ public class BuildAttributeExtension {
                 throw new CEIException("Attribute " + attrName + " do not have both value and value extension");
             }
             if (valueProcessor.jsonBuilder != null) {
-                IJsonBuilderBuilder jsonBuilderBuilder = implementationBuilder.createJsonBuilderBuilder();
+                IJsonBuilderBuilder jsonBuilderBuilder = dataProcessorBuilder.createJsonBuilderBuilder();
                 Variable jsonBuilder = buildJsonBuilder(valueProcessor.jsonBuilder, jsonBuilderBuilder);
-                return implementationBuilder.jsonBuilderToString(jsonBuilder);
+                return dataProcessorBuilder.jsonBuilderToString(jsonBuilder);
             } else if (valueProcessor.stringBuilder != null) {
                 return buildStringBuilder(valueProcessor, null);
             } else {
@@ -61,10 +61,6 @@ public class BuildAttributeExtension {
             if (linkedParam.isEmpty()) {
                 return GlobalContext.createStringConstant(attrValue);
             } else {
-                IStringBuilderBuilder stringBuilderBuilder = implementationBuilder.createStringBuilderBuilder();
-                if (stringBuilderBuilder == null) {
-                    throw new CEIException("StringBuilderBuilder is null");
-                }
                 List<Variable> variables = new LinkedList<>();
                 variables.add(GlobalContext.createStringConstant(attrValue));
                 linkedParam.forEach(item -> {
@@ -76,7 +72,7 @@ public class BuildAttributeExtension {
                 });
                 Variable[] params = new Variable[variables.size()];
                 variables.toArray(params);
-                return stringBuilderBuilder.stringReplacement(params);
+                return dataProcessorBuilder.stringReplacement(params);
             }
         }
     }

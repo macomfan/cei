@@ -12,8 +12,5 @@ public class JavaStringBuilderBuilder implements IStringBuilderBuilder {
         this.method = method;
     }
 
-    @Override
-    public Variable stringReplacement(Variable... items) {
-        return BuilderContext.createStatement(method.invoke("StringUtils.replace", items));
-    }
+
 }

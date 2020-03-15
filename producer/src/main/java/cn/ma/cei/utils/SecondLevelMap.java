@@ -19,10 +19,7 @@ public class SecondLevelMap<Level1, Level2, Value> {
             return false;
         }
         NormalMap<Level2, Value> map2 = map.get(key1);
-        if (!map2.containsKey(key2)) {
-            return false;
-        }
-        return true;
+        return map2.containsKey(key2);
     }
 
     /***

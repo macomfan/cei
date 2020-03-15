@@ -33,7 +33,12 @@ public class JavaDataProcessorBuilder implements IDataProcessorBuilder {
     }
 
     @Override
-    public Variable jsonBuilderToString(Variable jsonbuilder) {
-        return BuilderContext.createStatement(jsonbuilder.getDescriptor() + ".toJsonString()");
+    public Variable jsonBuilderToString(Variable jsonBuilder) {
+        return BuilderContext.createStatement(jsonBuilder.getDescriptor() + ".toJsonString()");
+    }
+
+    @Override
+    public Variable stringReplacement(Variable... items) {
+        return BuilderContext.createStatement(method.invoke("StringBuilder.replace", items));
     }
 }

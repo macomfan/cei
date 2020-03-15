@@ -3,14 +3,20 @@
 	 xsi:schemaLocation="https://github.com/macomfan/cei https://github.com/macomfan/cei/ceisdk.xsd"
 	 xmlns="https://github.com/macomfan/cei"
 	 name="binance">
-	<restful name="MarketClient">
-		<interface name="getTimestamp">
-			<request method="get" target="/api/v3/time"/>
-			<response model="Timestamp">
-				<json_parser>
-					<json_value copy="serverTime"/>
-				</json_parser>
-			</response>
-		</interface>
-	</restful>
+	<clients>
+		<restful name="MarketClient">
+			<interfaces>
+				<interface name="getTimestamp">
+					<request method="get" target="/api/v3/time"/>
+					<response model="Timestamp">
+						<json_parser>
+							<json_value copy="serverTime"/>
+						</json_parser>
+					</response>
+				</interface>
+			</interfaces>
+
+		</restful>
+	</clients>
+
 </sdk>

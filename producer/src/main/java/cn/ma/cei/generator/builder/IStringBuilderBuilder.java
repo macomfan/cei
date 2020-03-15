@@ -4,5 +4,4 @@ import cn.ma.cei.generator.Variable;
 
 public interface IStringBuilderBuilder {
 
-    Variable stringReplacement(Variable... items);
 }

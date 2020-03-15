@@ -6,7 +6,9 @@
 
 	<definition document="https://binance-docs.github.io/apidocs/spot/cn/"/>
 
-    <restful name="MarketClient">
-		<connection url="https://api.binance.com"/>
-    </restful>
+	<clients>
+		<restful name="MarketClient">
+			<connection url="https://api.binance.com"/>
+		</restful>
+	</clients>
 </sdk> 

@@ -1,10 +1,12 @@
 package cn.ma.cei.xml;
 
+import cn.ma.cei.exception.CEIErrorType;
+import cn.ma.cei.exception.CEIErrors;
 import cn.ma.cei.exception.CEIException;
+import cn.ma.cei.model.xSDK;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
-import javax.xml.bind.UnmarshalException;
 import javax.xml.bind.Unmarshaller;
 import java.io.File;
 import java.lang.reflect.Field;
@@ -15,13 +17,12 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
-public class JAXBWrapper<T> {
+public class JAXBWrapper {
 
     private Set<Class<?>> clsForLoadingJAXB = new HashSet<>();
-    private Class<T> rootClass;
+    private Class<xSDK> rootClass = xSDK.class;
 
-    public JAXBWrapper(Class<T> rootClass) {
-        this.rootClass = rootClass;
+    public JAXBWrapper() {
         clsForLoadingJAXB.add(rootClass);
         checkCurrentClass(rootClass, new HashSet<>());
     }
@@ -56,27 +57,30 @@ public class JAXBWrapper<T> {
         checkCurrentClass(cls.getSuperclass(), checkedClasses);
     }
 
-    public T loadFromXML(File file) {
+    public xSDK loadFromXML(File file) {
         try {
             Class<?>[] tmp = clsForLoadingJAXB.toArray(new Class[0]);
             JAXBContext context = JAXBContext.newInstance(tmp, null);
             Unmarshaller unmarshaller = context.createUnmarshaller();
-            return rootClass.cast(unmarshaller.unmarshal(file));
-        } catch (UnmarshalException e) {
-            System.err.println("Load XML file error: " + file.getPath());
-            System.err.println(e.getMessage());
+            xSDK sdk = rootClass.cast(unmarshaller.unmarshal(file));
+            sdk.filename = file.getPath();
+            sdk.doCheck();
+            return sdk;
         } catch (JAXBException e) {
-            System.err.println("Load XML file error: " + file.getPath());
-            System.err.println(e.getMessage());
+            CEIErrors.showFailure(CEIErrorType.XML, "Load XML file error: %s \n %s", file.getPath(), e.getMessage());
+        } catch (CEIException e) {
+            System.err.println("Error to process XML: " + file.getPath());
+            throw e;
         }
         return null;
     }
 
-    public List<T> loadFromFolder(String path) {
-        List<T> result = new LinkedList<>();
+    public List<xSDK> loadFromFolder(String path) {
+        List<xSDK> result = new LinkedList<>();
         File folder = new File(path);
         if (!folder.exists()) {
-            throw new CEIException("Path not exist");
+            CEIErrors.showFailure(CEIErrorType.CONFIG, "Path does not exist: " + path);
+            return null;
         } else {
             File[] files = folder.listFiles();
             if (files == null) {

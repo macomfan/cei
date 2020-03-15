@@ -1,5 +1,6 @@
 package cn.ma.cei.generator.builder;
 
+import cn.ma.cei.generator.BuilderContext;
 import cn.ma.cei.generator.Variable;
 
 public interface IDataProcessorBuilder {
@@ -9,5 +10,7 @@ public interface IDataProcessorBuilder {
 
     IJsonParserBuilder createJsonParserBuilder();
 
-    Variable jsonBuilderToString(Variable jsonbuilder);
+    Variable jsonBuilderToString(Variable jsonBuilder);
+
+    Variable stringReplacement(Variable... items);
 }

@@ -3,17 +3,19 @@
      xsi:schemaLocation="https://github.com/macomfan/cei https://github.com/macomfan/cei/ceisdk.xsd"
      xmlns="https://github.com/macomfan/cei"
      name="binance">
-	<model name="CandlestickData">
-		<int name="openTime"/>
-		<decimal name="open"/>
-		<decimal name="high"/>
-		<decimal name="low"/>
-		<decimal name="close"/>
-		<decimal name="volume"/>
-		<int name="closeTime"/>
-		<decimal name="quoteAssetVolume"/>
-		<int name="numberOfTrades"/>
-		<decimal name="takerBuyBaseAssetVolume"/>
-		<decimal name="takerBuyQuoteAssetVolume"/>
-	</model>
+	<models>
+		<model name="CandlestickData">
+			<int name="openTime"/>
+			<decimal name="open"/>
+			<decimal name="high"/>
+			<decimal name="low"/>
+			<decimal name="close"/>
+			<decimal name="volume"/>
+			<int name="closeTime"/>
+			<decimal name="quoteAssetVolume"/>
+			<int name="numberOfTrades"/>
+			<decimal name="takerBuyBaseAssetVolume"/>
+			<decimal name="takerBuyQuoteAssetVolume"/>
+		</model>
+	</models>
 </sdk>

@@ -39,7 +39,6 @@ public class xSDK extends xStandalone<xSDK> {
         clients = mergeElement(clients, sdk.clients);
     }
 
-
     @Override
     public void customCheck() {
         super.customCheck();

@@ -75,10 +75,7 @@ public class main {
 //            code.endln();
 //        });
 //        code.appendln("}");
-        List<xSDK> sdks = (new JAXBWrapper<>(xSDK.class)).loadFromFolder("C:\\dev\\cei\\exchanges");
-        Finalizer finalizer = new Finalizer();
-        finalizer.addSDK(sdks);
-        List<xSDK> finalSDKs = finalizer.finalizeSDK();
+
 
         BuildSDK.registerFramework(new JavaFramework());
         BuildSDK.registerFramework(new CppFramework());
@@ -87,13 +84,18 @@ public class main {
 //        BuildSDK.build(finalSDKs, Environment.Language.java, "C:\\dev\\cei\\output");
 //        BuildSDK.build(finalSDKs, Environment.Language.python3, "C:\\dev\\cei\\output");
 //        try {
-            BuildSDK.build(finalSDKs, "java", "C:\\dev\\cei\\output");
+            BuildSDK.build("C:\\dev\\cei\\exchanges", "java", "C:\\dev\\cei\\output");
 //            BuildSDK.build(finalSDKs, "golang", "C:\\dev\\cei\\output");
 //            BuildSDK.build(finalSDKs, "python3", "C:\\dev\\cei\\output");
 //        } catch (Exception e) {
 //            System.err.println(BuildTracer.getTraceString());
 //        }
         System.out.println("==============");
+        List<xSDK> sdks = (new JAXBWrapper()).loadFromFolder("C:\\dev\\cei\\exchanges");
+        Finalizer finalizer = new Finalizer();
+        finalizer.addSDK(sdks);
+        List<xSDK> finalSDKs = finalizer.finalizeSDK();
+
         XmlToJson xmlToJson = new XmlToJson();
         Convert.doConvert(xmlToJson, finalSDKs.get(0));
         System.out.println(xmlToJson.toJsonString());

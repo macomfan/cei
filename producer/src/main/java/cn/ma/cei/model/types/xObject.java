@@ -18,5 +18,4 @@ public class xObject extends xReferable {
         }
         return BuilderContext.variableType(model);
     }
-
 }

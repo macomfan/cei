@@ -8,8 +8,8 @@
         <string name="status"/>
         <string name="ch"/>
         <int name="ts"/>
-        <object_array name="bids" refer="Quote"/>
-        <object_array name="asks" refer="Quote"/>
+        <object_array name="bids" model="Quote"/>
+        <object_array name="asks" model="Quote"/>
     </model>
     </models>
 </sdk>

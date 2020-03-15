@@ -3,31 +3,36 @@
 	 xsi:schemaLocation="https://github.com/macomfan/cei https://github.com/macomfan/cei/ceisdk.xsd"
 	 xmlns="https://github.com/macomfan/cei"
 	 name="binance">
-	<restful name="MarketClient">
-		<interface name="getDepth">
-			<inputs>
-				<string name="symbol"/>
-				<int name="limit"/>
-			</inputs>
-			<request method="get" target="/api/v3/depth">
-				<query_strings>
-					<query key="symbol" value="{symbol}"/>
-					<query key="limit" value="{limit}"/>
-				</query_strings>
-			</request>
-			<response model="Depth">
-				<json_parser>
-					<json_value copy="lastUpdateId"/>
-					<json_object_array copy="bids" model="DepthEntity">
-						<json_value key="\[0]" value="{price}"/>
-						<json_value key="\[1]" value="{qty}"/>
-					</json_object_array>
-					<json_object_array copy="asks" model="DepthEntity">
-						<json_value key="\[0]" value="{price}"/>
-						<json_value key="\[1]" value="{qty}"/>
-					</json_object_array>
-				</json_parser>
-			</response>
-		</interface>
-	</restful>
+	<clients>
+		<restful name="MarketClient">
+			<interfaces>
+				<interface name="getDepth">
+					<inputs>
+						<string name="symbol"/>
+						<int name="limit"/>
+					</inputs>
+					<request method="get" target="/api/v3/depth">
+						<query_strings>
+							<query key="symbol" value="{symbol}"/>
+							<query key="limit" value="{limit}"/>
+						</query_strings>
+					</request>
+					<response model="Depth">
+						<json_parser>
+							<json_value copy="lastUpdateId"/>
+							<json_object_array copy="bids" model="DepthEntity">
+								<json_value key="\[0]" value="{price}"/>
+								<json_value key="\[1]" value="{qty}"/>
+							</json_object_array>
+							<json_object_array copy="asks" model="DepthEntity">
+								<json_value key="\[0]" value="{price}"/>
+								<json_value key="\[1]" value="{qty}"/>
+							</json_object_array>
+						</json_parser>
+					</response>
+				</interface>
+			</interfaces>
+		</restful>
+	</clients>
+
 </sdk>

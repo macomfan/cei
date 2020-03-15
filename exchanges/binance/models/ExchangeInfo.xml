@@ -3,10 +3,13 @@
      xsi:schemaLocation="https://github.com/macomfan/cei https://github.com/macomfan/cei/ceisdk.xsd"
      xmlns="https://github.com/macomfan/cei"
      name="binance">
-    <model name="ExchangeInfo">
-        <string name="timezone"/>
-        <int name="serverTime"/>
-        <object_array name="rateLimits" model="RateLimits"/>
-        <object_array name="symbols" model="Symbol"/>
-    </model>
+    <models>
+        <model name="ExchangeInfo">
+            <string name="timezone"/>
+            <int name="serverTime"/>
+            <object_array name="rateLimits" model="RateLimits"/>
+            <object_array name="symbols" model="Symbol"/>
+        </model>
+    </models>
+
 </sdk>

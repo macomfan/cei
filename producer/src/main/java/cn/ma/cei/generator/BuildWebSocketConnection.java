@@ -1,19 +1,17 @@
 package cn.ma.cei.generator;
 
 import cn.ma.cei.exception.CEIException;
-import cn.ma.cei.generator.builder.IWebSocketActionBuilder;
 import cn.ma.cei.generator.builder.IWebSocketInterfaceBuilder;
-import cn.ma.cei.generator.buildin.WebSocketAction;
 import cn.ma.cei.generator.buildin.WebSocketConnection;
 import cn.ma.cei.generator.buildin.WebSocketOptions;
 import cn.ma.cei.model.websocket.xAction;
-import cn.ma.cei.model.websocket.xConnection;
+import cn.ma.cei.model.websocket.xWSConnection;
 
 import java.util.LinkedList;
 import java.util.List;
 
 public class BuildWebSocketConnection {
-    public static void build(xConnection connection, List<xAction> actions, IWebSocketInterfaceBuilder builder) {
+    public static void build(xWSConnection connection, List<xAction> actions, IWebSocketInterfaceBuilder builder) {
         if (builder == null) {
             throw new CEIException("Builder is null");
         }

@@ -26,26 +26,57 @@ public class Finalizer {
         //  - Model
         //  - Restful
         //  - Signature
+        sdk.doCheck();
         if (sdk.modelList != null) {
             sdk.modelList.forEach(model -> XMLDatabase.registerModel(sdk.name, model.name, model));
         }
+        if (sdk.clients != null) {
+            if (sdk.clients.restfulList != null) {
+                sdk.clients.restfulList.forEach(client -> {
+                    if (client.connection != null) {
+                        XMLDatabase.registerRestfulClient(sdk.name, client.name, client.connection);
+                    }
+                    if (client.interfaceList != null) {
+                        client.interfaceList.forEach(intf -> {
+                            XMLDatabase.registerRestfulInterface(sdk.name, client.name, intf.name, intf);
+                        });
+                    }
+                });
+            }
+            if (sdk.clients.webSocketList != null) {
+                sdk.clients.webSocketList.forEach(client -> {
+                    if (client.connection != null) {
+                        XMLDatabase.registerWebSocketClient(sdk.name, client.name, client.connection);
+                    }
+                    if (client.interfaces != null) {
+                        client.interfaces.forEach(intf -> {
+                            XMLDatabase.registerWebSocketInterface(sdk.name, client.name, intf.name, intf);
+                        });
+                    }
+                });
+            }
+        }
+
         orgSDKList.add(sdk);
     }
 
     public List<xSDK> finalizeSDK() {
         System.out.println("-- Start finalize");
         // Merge SDK
-        orgSDKList.forEach(sdk-> {
+        orgSDKList.forEach(sdk -> {
             if (sdkMap.containsKey(sdk.name)) {
                 xSDK orgSdk = sdkMap.get(sdk.name);
                 orgSdk.merge(sdk);
+                XMLDatabase.attachSDK(sdk);
             } else {
                 sdkMap.put(sdk.name, sdk);
             }
         });
 
+
+
         sdkMap.values().forEach((sdk) -> {
-            sdk.doCheck();
+            //sdk.doCheck();
             XMLDatabase.attachSDK(sdk);
         });
 

@@ -3,7 +3,10 @@
      xsi:schemaLocation="https://github.com/macomfan/cei https://github.com/macomfan/cei/ceisdk.xsd"
      xmlns="https://github.com/macomfan/cei"
      name="binance">
-	<model name="CandlestickDataList">
-		<object_array name="data" model="CandlestickData"/>
-	</model>
+	<models>
+		<model name="CandlestickDataList">
+			<object_array name="data" model="CandlestickData"/>
+		</model>
+	</models>
+
 </sdk>

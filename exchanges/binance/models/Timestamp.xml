@@ -3,7 +3,10 @@
      xsi:schemaLocation="https://github.com/macomfan/cei https://github.com/macomfan/cei/ceisdk.xsd"
      xmlns="https://github.com/macomfan/cei"
      name="binance">
-    <model name="Timestamp">
-        <int name="serverTime"/>
-    </model>
+    <models>
+        <model name="Timestamp">
+            <int name="serverTime"/>
+        </model>
+    </models>
+
 </sdk>

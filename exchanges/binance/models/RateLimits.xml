@@ -3,10 +3,13 @@
      xsi:schemaLocation="https://github.com/macomfan/cei https://github.com/macomfan/cei/ceisdk.xsd"
      xmlns="https://github.com/macomfan/cei"
      name="binance">
-	<model name="RateLimits">
-		<string name="rateLimitType"/>
-		<string name="interval"/>
-		<int name="intervalNum"/>
-		<int name="limit"/>
-	</model>
+	<models>
+		<model name="RateLimits">
+			<string name="rateLimitType"/>
+			<string name="interval"/>
+			<int name="intervalNum"/>
+			<int name="limit"/>
+		</model>
+	</models>
+
 </sdk>

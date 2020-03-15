@@ -1,6 +1,6 @@
 package cn.ma.cei.utils;
 
-import cn.ma.cei.exception.CEIException;
+import cn.ma.cei.exception.CEIInnerException;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -20,7 +20,7 @@ public class NormalMap<Key, Value> {
     public Value tryGet(Key key) {
         Value res = map.get(key);
         if (res == null) {
-            throw new CEIException("Cannot find in Map: " + key);
+            throw new CEIInnerException("Cannot find in Map: " + key);
         }
         return res;
     }
@@ -31,7 +31,7 @@ public class NormalMap<Key, Value> {
 
     public void tryPut(Key key, Value value) {
         if (map.containsKey(key)) {
-            throw new CEIException("Has existed in Map: " + key);
+            throw new CEIInnerException("Has existed in Map: " + key);
         }
         map.put(key, value);
     }

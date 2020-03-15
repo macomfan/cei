@@ -1,7 +1,6 @@
 package cn.ma.cei.model.websocket;
 
 import cn.ma.cei.model.base.xElement;
-import cn.ma.cei.xml.CEIXmlAnyElementTypes;
 
 import javax.xml.bind.annotation.*;
 import java.util.List;
@@ -13,7 +12,7 @@ public class xWebSocket extends xElement {
     public String name;
 
     @XmlElement(name = "connection")
-    public xConnection connection;
+    public xWSConnection connection;
 
     @XmlElementWrapper(name = "actions")
     @XmlElement(name = "action")
@@ -21,5 +20,5 @@ public class xWebSocket extends xElement {
 
     @XmlElementWrapper(name = "interfaces")
     @XmlElement(name = "interface")
-    public List<xInterface> interfaces;
+    public List<xWSInterface> interfaces;
 }

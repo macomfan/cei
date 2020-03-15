@@ -6,9 +6,11 @@
 package cn.ma.cei.generator;
 
 import cn.ma.cei.exception.CEIException;
+import cn.ma.cei.finalizer.Finalizer;
 import cn.ma.cei.generator.builder.IFramework;
 import cn.ma.cei.model.xSDK;
 import cn.ma.cei.utils.MapWithValue2;
+import cn.ma.cei.xml.JAXBWrapper;
 
 import java.util.List;
 
@@ -33,7 +35,13 @@ public class BuildSDK {
         frameworks.put(language.getName(), language, framework);
     }
 
-    public static void build(List<xSDK> sdks, String language, String outputFolder) {
+    public static void build(String inputFolder, String language, String outputFolder) {
+        List<xSDK> sdks = (new JAXBWrapper()).loadFromFolder("C:\\dev\\cei\\exchanges");
+        Finalizer finalizer = new Finalizer();
+        finalizer.addSDK(sdks);
+        List<xSDK> finalSDKs = finalizer.finalizeSDK();
+
+
         if (!frameworks.containsKey(language)) {
             throw new CEIException("[BuildSDK] The framework does not exist");
         }
@@ -56,7 +64,7 @@ public class BuildSDK {
         IFramework framework = frameworks.get2(language);
         GlobalContext.setWorkingFolder(CEIPath.appendPath(buildFolder, frameworks.get1(language).getWorkingName()));
 
-        sdks.forEach((sdk) -> sdk.doBuild(() -> {
+        finalSDKs.forEach((sdk) -> sdk.doBuild(() -> {
             GlobalContext.setCurrentExchange(sdk.name);
             GlobalContext.setCurrentLanguage(frameworks.get1(language));
             GlobalContext.setCurrentFramework(framework);

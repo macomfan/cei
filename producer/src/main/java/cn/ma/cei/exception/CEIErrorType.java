@@ -10,6 +10,9 @@ package cn.ma.cei.exception;
  * @author u0151316
  */
 public enum CEIErrorType {
+    CODE("Code"),
+    CONFIG("Config"),
+    XML("XML"),
     PARSE("Parse"),
     RUNTIME("Runtime"),
     UNKNOWN("Unknown");

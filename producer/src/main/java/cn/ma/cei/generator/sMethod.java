@@ -12,9 +12,11 @@ public class sMethod {
     private UniquetList<String, Variable> variableList = new UniquetList<>();
     private UniquetList<String, sMethod> nestedMethodList = new UniquetList<>();
     private VariableType returnType;
+    private int temporaryId = 0;
 
     public sMethod createNestedMethod(String name) {
         sMethod method = new sMethod(name);
+        method.temporaryId = temporaryId;
         nestedMethodList.put(name, method);
         return method;
     }
@@ -69,11 +71,8 @@ public class sMethod {
     }
 
     public Variable createTempVariable(VariableType type, String variableName) {
-        if (variableList.containsKey(variableName)) {
-            throw new CEIException("[Method] ");
-        }
-        Variable variable = VariableCreator.createLocalVariable(type, variableName);
-        variableList.put(variableName, variable);
+        Variable variable = VariableCreator.createLocalVariable(type, temporaryVariableName(variableName));
+        variableList.put(variable.getName(), variable);
         return variable;
     }
 
@@ -83,6 +82,14 @@ public class sMethod {
             return GlobalContext.createStringConstant(name);
         }
         return variableList.get(variableName);
+    }
+
+    private String temporaryVariableName(String variableName) {
+        String name = "variableName";
+        while (variableList.containsKey(name)) {
+            name += temporaryId++;
+        }
+        return name;
     }
 
 }
