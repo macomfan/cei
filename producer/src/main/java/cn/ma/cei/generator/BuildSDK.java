@@ -5,6 +5,8 @@
  */
 package cn.ma.cei.generator;
 
+import cn.ma.cei.exception.CEIErrorType;
+import cn.ma.cei.exception.CEIErrors;
 import cn.ma.cei.exception.CEIException;
 import cn.ma.cei.finalizer.Finalizer;
 import cn.ma.cei.generator.builder.IFramework;
@@ -12,6 +14,8 @@ import cn.ma.cei.model.xSDK;
 import cn.ma.cei.utils.MapWithValue2;
 import cn.ma.cei.xml.JAXBWrapper;
 
+import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -43,10 +47,18 @@ public class BuildSDK {
         finalizer.addSDK(sdks);
         List<xSDK> finalSDKs = finalizer.finalizeSDK();
 
-
-        if (!frameworks.containsKey(language)) {
-            throw new CEIException("[BuildSDK] The framework does not exist");
+        List<String> languages;
+        if (language.trim().equals("*")) {
+            languages = new LinkedList<>(frameworks.keySet());
+        } else {
+            languages = Arrays.asList(language.split("\\|"));
+            languages.forEach(item -> {
+                if (!frameworks.containsKey(item)) {
+                    CEIErrors.showFailure(CEIErrorType.CONFIG, "The language: %s is not supported.", item);
+                }
+            });
         }
+
 
 //        CEIPath folder = new CEIPath(CEIPath.Type.FOLDER, outputFolder);
 //        if (!folder.exists()) {
@@ -63,14 +75,17 @@ public class BuildSDK {
         CEIPath buildFolder = new CEIPath(CEIPath.Type.FOLDER, "C:\\dev\\cei\\framework");
         buildFolder.mkdirs();
 
-        IFramework framework = frameworks.get2(language);
-        GlobalContext.setWorkingFolder(CEIPath.appendPath(buildFolder, frameworks.get1(language).getWorkingName()));
+        languages.forEach(item -> {
+            IFramework framework = frameworks.get2(item);
+            GlobalContext.setWorkingFolder(CEIPath.appendPath(buildFolder, frameworks.get1(item).getWorkingName()));
 
-        finalSDKs.forEach((sdk) -> sdk.doBuild(() -> {
-            GlobalContext.setCurrentExchange(sdk.name);
-            GlobalContext.setCurrentLanguage(frameworks.get1(language));
-            GlobalContext.setCurrentFramework(framework);
-            BuildExchange.build(sdk, framework.createExchangeBuilder());
-        }));
+            finalSDKs.forEach((sdk) -> sdk.doBuild(() -> {
+                GlobalContext.setCurrentExchange(sdk.name);
+                GlobalContext.setCurrentLanguage(frameworks.get1(item));
+                GlobalContext.setCurrentFramework(framework);
+                BuildExchange.build(sdk, framework.createExchangeBuilder());
+            }));
+        });
+
     }
 }

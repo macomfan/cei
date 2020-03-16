@@ -5,6 +5,8 @@
  */
 package cn.ma.cei.utils;
 
+import cn.ma.cei.exception.CEIErrorType;
+import cn.ma.cei.exception.CEIErrors;
 import cn.ma.cei.exception.CEIException;
 
 import java.lang.reflect.ParameterizedType;
@@ -22,7 +24,7 @@ public class Checker {
 
     public static void isNull(Object obj, Class<?> currentCls, String objectName) {
         if (obj == null) {
-            throw new CEIException("[" + currentCls.getSimpleName() + "] " + objectName + " is null.");
+            CEIErrors.showFailure(CEIErrorType.CODE, "[" + currentCls.getSimpleName() + "] " + objectName + " is null.");
         }
     }
 

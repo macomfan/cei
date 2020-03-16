@@ -9,6 +9,7 @@ import cn.ma.cei.model.restful.xConnection;
 import cn.ma.cei.model.restful.xInterface;
 import cn.ma.cei.model.restful.xRestful;
 import cn.ma.cei.model.signature.xSignature;
+import cn.ma.cei.model.websocket.xAction;
 import cn.ma.cei.model.websocket.xWSConnection;
 import cn.ma.cei.model.websocket.xWSInterface;
 import cn.ma.cei.model.websocket.xWebSocket;
@@ -28,6 +29,7 @@ import java.util.Set;
 
 public class XMLDatabase {
 
+    private static SecondLevelMap<String, String, UniquetList<String, xAction>> webSocketActionMap = new SecondLevelMap<>();
     private static SecondLevelMap<String, String, UniquetList<String, xWSInterface>> webSocketInterfaceMap = new SecondLevelMap<>();
     private static SecondLevelMap<String, String, UniquetList<String, xInterface>> restfulInterfaceMap = new SecondLevelMap<>();
     private static SecondLevelMap<String, String, xConnection> restfulClientMap = new SecondLevelMap<>();
@@ -68,6 +70,7 @@ public class XMLDatabase {
     }
 
     public static void reset() {
+        webSocketActionMap.clear();
         webSocketInterfaceMap.clear();
         restfulInterfaceMap.clear();
         restfulClientMap.clear();
@@ -118,6 +121,9 @@ public class XMLDatabase {
                     webSocket.name = entry.getKey();
                     if (webSocketInterfaceMap.containsKey(sdk.name, webSocket.name)) {
                         webSocket.interfaces = new LinkedList<>(webSocketInterfaceMap.get(sdk.name, webSocket.name).values());
+                    }
+                    if (webSocketActionMap.containsKey(sdk.name, webSocket.name)) {
+                        webSocket.actions = new LinkedList<>(webSocketActionMap.get(sdk.name, webSocket.name).values());
                     }
                     sdk.clients.webSocketList.add(webSocket);
                 });
@@ -217,6 +223,11 @@ public class XMLDatabase {
             CEIErrors.showFailure(CEIErrorType.XML, duplicateInfo("Client", clientName, connection, existed));
         }
         innerRegisterClient(restfulClientMap, exchange, clientName, connection, "Restful");
+    }
+
+    public static void registerWebSocketAction(String exchange, String clientName, String interfaceName, xAction action) {
+        checkClientExist(exchange, clientName, webSocketClientMap, action);
+        innerRegisterInterface(webSocketActionMap, exchange, clientName, interfaceName, action, "WebSocket action");
     }
 
     public static void registerRestfulInterface(String exchange, String clientName, String interfaceName, xInterface intf) {

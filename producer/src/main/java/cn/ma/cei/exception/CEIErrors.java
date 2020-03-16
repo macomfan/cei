@@ -1,5 +1,6 @@
 package cn.ma.cei.exception;
 
+import cn.ma.cei.generator.BuilderContext;
 import org.apache.log4j.Logger;
 
 public class CEIErrors {
@@ -7,7 +8,8 @@ public class CEIErrors {
 
     public static void showFailure(CEIErrorType errorType, String message, Object... args) throws CEIException {
         String res = String.format(message, args);
-        logger.fatal(res);
+        if (errorType == CEIErrorType.CODE)
+        logger.fatal(BuilderContext.getCurrentLanguage().getName() + ": " + res);
         throw new CEIException(res);
     }
 

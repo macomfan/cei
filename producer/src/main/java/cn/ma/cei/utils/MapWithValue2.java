@@ -2,8 +2,14 @@ package cn.ma.cei.utils;
 
 import javafx.util.Pair;
 
+import java.util.Set;
+
 public class MapWithValue2<Key, Value1, Value2> {
     private final NormalMap<Key, Pair<Value1, Value2>> valueMap = new NormalMap<>();
+
+    public Set<Key> keySet() {
+        return valueMap.keySet();
+    }
 
     public boolean containsKey(Key key) {
         return valueMap.containsKey(key);

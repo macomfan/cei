@@ -85,7 +85,7 @@ public class sMethod {
     }
 
     private String temporaryVariableName(String variableName) {
-        String name = "var";
+        String name = variableName;
         while (variableList.containsKey(name)) {
             name += temporaryId++;
         }

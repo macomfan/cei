@@ -8,6 +8,10 @@ public class BuilderContext {
         GlobalContext.setExchangeFolder(folder);
     }
 
+    public static Language getCurrentLanguage() {
+        return GlobalContext.getCurrentLanguage();
+    }
+
     public static CEIPath getExchangeFolder() {
         return GlobalContext.getExchangeFolder();
     }

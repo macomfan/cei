@@ -40,7 +40,7 @@ public class JavaClass {
     private Set<String> importList = new HashSet<>();
     private List<JavaMethod> methodList = new LinkedList<>();
 
-    private Map<String, JavaClass> innerClasses = new HashMap<>();
+    private UniquetList<String, JavaClass> innerClasses = new UniquetList<>();
 
     JavaCode code = new JavaCode();
 

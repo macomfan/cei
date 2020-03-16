@@ -70,6 +70,11 @@ public class Finalizer {
                             XMLDatabase.registerWebSocketInterface(sdk.name, client.name, intf.name, intf);
                         });
                     }
+                    if (client.actions != null) {
+                        client.actions.forEach(action -> {
+                            XMLDatabase.registerWebSocketAction(sdk.name, client.name, action.name, action);
+                        });
+                    }
                 });
             }
         });

@@ -17,7 +17,7 @@ import java.util.List;
 @XmlRootElement(name = "model")
 public class xModel extends xElement implements IDependenceNode {
 
-    @XmlAttribute(name = "name")
+    @XmlAttribute(name = "name", required = true)
     public String name;
 
     @XmlAnyElement(lax = true)
@@ -37,12 +37,4 @@ public class xModel extends xElement implements IDependenceNode {
     public String getIdentifier() {
         return name;
     }
-
-    @Override
-    public void customCheck() {
-        super.customCheck();
-        checkMemberNotNull(name, "name");
-        checkMemberNotNull(memberList, "member");
-    }
-
 }
