@@ -36,7 +36,9 @@ public class BuildSDK {
     }
 
     public static void build(String inputFolder, String language, String outputFolder) {
+        System.out.println("-- Load start");
         List<xSDK> sdks = (new JAXBWrapper()).loadFromFolder("C:\\dev\\cei\\exchanges");
+        System.out.println("-- Load done");
         Finalizer finalizer = new Finalizer();
         finalizer.addSDK(sdks);
         List<xSDK> finalSDKs = finalizer.finalizeSDK();

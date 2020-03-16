@@ -39,5 +39,4 @@ public class UniquetList<IndexType, ValueType> {
         List<ValueType> res = new LinkedList<>(indexedList);
         return res;
     }
-
 }

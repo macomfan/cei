@@ -26,8 +26,8 @@
                     <response model="CandlestickDataList">
                         <json_parser>
                             <json_object_array value="{data}" model="CandlestickData">
-                                <json_value key="\[0]" value="{price}"/>
-                                <json_value key="\[1]" value="{amount}"/>
+                                <json_value key="\[0]" value="{open}"/>
+                                <json_value key="\[1]" value="{high}"/>
                             </json_object_array>
                         </json_parser>
                     </response>

@@ -1,8 +1,13 @@
 package cn.ma.cei.exception;
 
+import org.apache.log4j.Logger;
+
 public class CEIErrors {
+    private static Logger logger = Logger.getLogger(CEIErrors.class);
+
     public static void showFailure(CEIErrorType errorType, String message, Object... args) throws CEIException {
         String res = String.format(message, args);
+        logger.fatal(res);
         throw new CEIException(res);
     }
 
@@ -10,11 +15,11 @@ public class CEIErrors {
 
     }
 
-    public static void showInfo(CEIErrorType errorType, String message, Object... args) {
-
+    public static void showInfo(String message, Object... args) {
+        logger.info(String.format(message, args));
     }
 
-    public static void showDebug(CEIErrorType errorType, String message, Object... args) {
-
+    public static void showDebug(String message, Object... args) {
+        logger.debug(String.format(message, args));
     }
 }

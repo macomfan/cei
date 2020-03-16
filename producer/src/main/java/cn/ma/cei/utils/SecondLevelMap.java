@@ -10,6 +10,10 @@ public class SecondLevelMap<Level1, Level2, Value> {
         return map2.tryGet(key2);
     }
 
+    public void clear() {
+        map.clear();
+    }
+
     public boolean containsKey1(Level1 key1) {
         return map.containsKey(key1);
     }
@@ -35,6 +39,16 @@ public class SecondLevelMap<Level1, Level2, Value> {
             return null;
         }
         return map2.tryGet(key2);
+    }
+
+    /***
+     * Get the value by key1
+     *
+     * @param key1
+     * @return The value by key1, key2, return null if the cannot find the value.
+     */
+    public NormalMap<Level2, Value> getByKey1(Level1 key1) {
+        return map.get(key1);
     }
 
     private NormalMap<Level2, Value> getOrCreateByLevel1(Level1 key1) {

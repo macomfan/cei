@@ -2,15 +2,21 @@ package cn.ma.cei.utils;
 
 import cn.ma.cei.exception.CEIInnerException;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public class NormalMap<Key, Value> {
     private final Map<Key, Value> map = new HashMap<>();
 
     public Set<Key> keySet() {
         return map.keySet();
+    }
+
+    public Collection<Value> values() {
+        return map.values();
+    }
+
+    public Set<Map.Entry<Key, Value>> entrySet() {
+        return map.entrySet();
     }
 
     public Value get(Key key) {
@@ -34,6 +40,10 @@ public class NormalMap<Key, Value> {
             throw new CEIInnerException("Has existed in Map: " + key);
         }
         map.put(key, value);
+    }
+
+    public void clear() {
+        map.clear();
     }
 
     public boolean containsKey(Key key) {

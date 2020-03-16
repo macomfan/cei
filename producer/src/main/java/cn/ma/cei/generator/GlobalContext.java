@@ -5,6 +5,8 @@
  */
 package cn.ma.cei.generator;
 
+import cn.ma.cei.exception.CEIErrorType;
+import cn.ma.cei.exception.CEIErrors;
 import cn.ma.cei.exception.CEIException;
 import cn.ma.cei.generator.builder.IFramework;
 import cn.ma.cei.generator.naming.IDescriptionConverter;
@@ -134,7 +136,7 @@ class GlobalContext {
             return variableTypes.get(finalName);
         }
         if (!variableTypeInfo.containsKey(typeName)) {
-            throw new CEIException("[Context] VariableType: " + typeName + " has not been setup");
+            CEIErrors.showFailure(CEIErrorType.XML, "Cannot find model: %s, it has not been defined or setup.", typeName);
         }
         if (argsTypes != null && argsTypes.length != 0 && isGenericType) {
             List<String> references = new LinkedList<>(variableTypeInfo.get(typeName).get2());

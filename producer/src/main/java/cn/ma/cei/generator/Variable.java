@@ -1,5 +1,7 @@
 package cn.ma.cei.generator;
 
+import cn.ma.cei.exception.CEIErrorType;
+import cn.ma.cei.exception.CEIErrors;
 import cn.ma.cei.exception.CEIException;
 
 public class Variable {
@@ -87,7 +89,7 @@ public class Variable {
     public Variable getMember(String name) {
         Variable member = type.getMember(name);
         if (member == null) {
-            throw new CEIException("Cannot find the member " + name);
+            CEIErrors.showFailure(CEIErrorType.XML, "Cannot find member: \"%s\" in model: \"%s\"", name, this.getType().getName());
         }
         return VariableCreator.createVariable(member.getType(), name, Variable.Position.REFER, this);
     }

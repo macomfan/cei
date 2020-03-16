@@ -38,8 +38,8 @@ public class ExchangeInfoProcessor extends ProcessorBase<ExchangeInfoMessage> {
         clients.forEach((clientName) -> {
             ExchangeInfo.Client clientInfo = new ExchangeInfo.Client();
             clientInfo.name = clientName;
-            xRestful client = XMLDatabase.getClient(msg.param.exchangeName, clientName);
-            clientInfo.interfaces.addAll(client.getInterfaceSet());
+//            xRestful client = XMLDatabase.getClient(msg.param.exchangeName, clientName);
+//            clientInfo.interfaces.addAll(client.getInterfaceSet());
             exchangeInfo.clients.add(clientInfo);
         });
         context.response(exchangeInfo);
