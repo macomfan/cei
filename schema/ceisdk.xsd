@@ -8,7 +8,7 @@
     <xs:complexType name="xSDK">
         <xs:choice maxOccurs="unbounded">
             <xs:element name="definition" type="xSDKDefinition"/>
-            <xs:element name="signature" type="xSignature" maxOccurs="unbounded"/>
+            <xs:element name="authentication" type="xSignature" maxOccurs="unbounded"/>
             <xs:element name="model" type="xModel" maxOccurs="unbounded"/>
             <xs:element name="restful" type="xRestful" maxOccurs="unbounded"/>
         </xs:choice>

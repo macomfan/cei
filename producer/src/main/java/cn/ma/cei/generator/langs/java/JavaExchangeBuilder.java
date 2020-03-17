@@ -13,7 +13,7 @@ import cn.ma.cei.model.types.xString;
 public class JavaExchangeBuilder implements IExchangeBuilder {
 
     private JavaClass mainClass;
-    private JavaClass signatureClass;
+    private JavaClass authenticationClass;
 
     @Override
     public void startExchange(String exchangeName) {
@@ -21,14 +21,14 @@ public class JavaExchangeBuilder implements IExchangeBuilder {
         Constant.requestMethod().tryPut(RestfulRequest.RequestMethod.GET, "RestfulRequest.Method.GET");
         Constant.requestMethod().tryPut(RestfulRequest.RequestMethod.POST, "RestfulRequest.Method.POST");
 
-        Constant.signatureMethod().tryPut(SignatureTool.Constant.ASC, "SignatureTool.Constant.ASC");
-        Constant.signatureMethod().tryPut(SignatureTool.Constant.DSC, "SignatureTool.Constant.DSC");
-        Constant.signatureMethod().tryPut(SignatureTool.Constant.HOST, "SignatureTool.Constant.HOST");
-        Constant.signatureMethod().tryPut(SignatureTool.Constant.METHOD, "SignatureTool.Constant.METHOD");
-        Constant.signatureMethod().tryPut(SignatureTool.Constant.TARGET, "SignatureTool.Constant.TARGET");
-        Constant.signatureMethod().tryPut(SignatureTool.Constant.UPPERCASE, "SignatureTool.Constant.UPPERCASE");
-        Constant.signatureMethod().tryPut(SignatureTool.Constant.LOWERCASE, "SignatureTool.Constant.LOWERCASE");
-        Constant.signatureMethod().tryPut(SignatureTool.Constant.NONE, "SignatureTool.Constant.NONE");
+        Constant.authenticationMethod().tryPut(AuthenticationTool.Constant.ASC, "AuthenticationTool.Constant.ASC");
+        Constant.authenticationMethod().tryPut(AuthenticationTool.Constant.DSC, "AuthenticationTool.Constant.DSC");
+        Constant.authenticationMethod().tryPut(AuthenticationTool.Constant.HOST, "AuthenticationTool.Constant.HOST");
+        Constant.authenticationMethod().tryPut(AuthenticationTool.Constant.METHOD, "AuthenticationTool.Constant.METHOD");
+        Constant.authenticationMethod().tryPut(AuthenticationTool.Constant.TARGET, "AuthenticationTool.Constant.TARGET");
+        Constant.authenticationMethod().tryPut(AuthenticationTool.Constant.UPPERCASE, "AuthenticationTool.Constant.UPPERCASE");
+        Constant.authenticationMethod().tryPut(AuthenticationTool.Constant.LOWERCASE, "AuthenticationTool.Constant.LOWERCASE");
+        Constant.authenticationMethod().tryPut(AuthenticationTool.Constant.NONE, "AuthenticationTool.Constant.NONE");
 
         BuilderContext.setupBuildInVariableType(xString.typeName, "String", BuilderContext.NO_REF);
         BuilderContext.setupBuildInVariableType(xBoolean.typeName, "Boolean", BuilderContext.NO_REF);
@@ -41,7 +41,7 @@ public class JavaExchangeBuilder implements IExchangeBuilder {
         BuilderContext.setupBuildInVariableType(RestfulConnection.typeName, "RestfulConnection", "cn.ma.cei.impl.RestfulConnection");
         BuilderContext.setupBuildInVariableType(RestfulOptions.typeName, "RestfulOptions", "cn.ma.cei.impl.RestfulOptions");
         BuilderContext.setupBuildInVariableType(JsonWrapper.typeName, "JsonWrapper", "cn.ma.cei.impl.JsonWrapper");
-        BuilderContext.setupBuildInVariableType(SignatureTool.typeName, "SignatureTool", "cn.ma.cei.impl.SignatureTool");
+        BuilderContext.setupBuildInVariableType(AuthenticationTool.typeName, "AuthenticationTool", "cn.ma.cei.impl.AuthenticationTool");
         BuilderContext.setupBuildInVariableType(TheStream.typeName, "byte[]", BuilderContext.NO_REF);
         BuilderContext.setupBuildInVariableType(JsonChecker.typeName, "JsonChecker", "cn.ma.cei.impl.JsonChecker");
 
@@ -57,7 +57,7 @@ public class JavaExchangeBuilder implements IExchangeBuilder {
         BuilderContext.setExchangeFolder(exchangeFolder);
 
         mainClass = new JavaClass(exchangeName, "cn.ma.cei.exchanges");
-        signatureClass = new JavaClass("Signature");
+        authenticationClass = new JavaClass("Authentication");
     }
 
     @Override
@@ -76,14 +76,14 @@ public class JavaExchangeBuilder implements IExchangeBuilder {
     }
 
     @Override
-    public ISignatureBuilder createSignatureBuilder() {
-        return new JavaSignatureBuilder(signatureClass);
+    public IAuthenticationBuilder createAuthenticationBuilder() {
+        return new JavaAuthenticationBuilder(authenticationClass);
     }
 
     @Override
     public void endExchange() {
-        if (signatureClass != null) {
-            mainClass.addInnerClass(signatureClass);
+        if (authenticationClass != null) {
+            mainClass.addInnerClass(authenticationClass);
         }
         mainClass.build(BuilderContext.getExchangeFolder());
     }

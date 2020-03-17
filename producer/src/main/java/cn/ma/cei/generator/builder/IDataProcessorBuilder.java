@@ -10,6 +10,8 @@ public interface IDataProcessorBuilder {
 
     IJsonParserBuilder createJsonParserBuilder();
 
+    void getNow(Variable output, Variable format);
+
     /***
      * Return the statement of converting the json builder to string;
      * e.g.

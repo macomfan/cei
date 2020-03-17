@@ -1,7 +1,5 @@
 package cn.ma.cei.generator.builder;
 
-import cn.ma.cei.generator.VariableType;
-
 public interface IExchangeBuilder {
     /***
      * 
@@ -20,7 +18,7 @@ public interface IExchangeBuilder {
 
     IWebSocketClientBuilder createWebSocketClientBuilder();
     
-    ISignatureBuilder createSignatureBuilder();
+    IAuthenticationBuilder createAuthenticationBuilder();
     
     /***
      * To create the ModelBuilder for each model.

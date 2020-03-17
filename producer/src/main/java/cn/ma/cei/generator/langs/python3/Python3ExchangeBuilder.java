@@ -22,7 +22,7 @@ import cn.ma.cei.model.types.xString;
 public class Python3ExchangeBuilder implements IExchangeBuilder {
 
     private Python3File mainFile;
-    private Python3Class signatureClass;
+    private Python3Class authenticationClass;
     
 
     @Override
@@ -30,14 +30,14 @@ public class Python3ExchangeBuilder implements IExchangeBuilder {
         Constant.requestMethod().tryPut(RestfulRequest.RequestMethod.GET, "RestfulRequest.Method.GET");
         Constant.requestMethod().tryPut(RestfulRequest.RequestMethod.POST, "RestfulRequest.Method.POST");
 
-        Constant.signatureMethod().tryPut(SignatureTool.Constant.ASC, "SignatureTool.Constant.ASC");
-        Constant.signatureMethod().tryPut(SignatureTool.Constant.DSC, "SignatureTool.Constant.DSC");
-        Constant.signatureMethod().tryPut(SignatureTool.Constant.HOST, "SignatureTool.Constant.HOST");
-        Constant.signatureMethod().tryPut(SignatureTool.Constant.METHOD, "SignatureTool.Constant.METHOD");
-        Constant.signatureMethod().tryPut(SignatureTool.Constant.TARGET, "SignatureTool.Constant.TARGET");
-        Constant.signatureMethod().tryPut(SignatureTool.Constant.UPPERCASE, "SignatureTool.Constant.UPPERCASE");
-        Constant.signatureMethod().tryPut(SignatureTool.Constant.LOWERCASE, "SignatureTool.Constant.LOWERCASE");
-        Constant.signatureMethod().tryPut(SignatureTool.Constant.NONE, "SignatureTool.Constant.NONE");
+        Constant.authenticationMethod().tryPut(AuthenticationTool.Constant.ASC, "AuthenticationTool.Constant.ASC");
+        Constant.authenticationMethod().tryPut(AuthenticationTool.Constant.DSC, "AuthenticationTool.Constant.DSC");
+        Constant.authenticationMethod().tryPut(AuthenticationTool.Constant.HOST, "AuthenticationTool.Constant.HOST");
+        Constant.authenticationMethod().tryPut(AuthenticationTool.Constant.METHOD, "AuthenticationTool.Constant.METHOD");
+        Constant.authenticationMethod().tryPut(AuthenticationTool.Constant.TARGET, "AuthenticationTool.Constant.TARGET");
+        Constant.authenticationMethod().tryPut(AuthenticationTool.Constant.UPPERCASE, "AuthenticationTool.Constant.UPPERCASE");
+        Constant.authenticationMethod().tryPut(AuthenticationTool.Constant.LOWERCASE, "AuthenticationTool.Constant.LOWERCASE");
+        Constant.authenticationMethod().tryPut(AuthenticationTool.Constant.NONE, "AuthenticationTool.Constant.NONE");
 
         BuilderContext.setupBuildInVariableType(xString.typeName, "String", BuilderContext.NO_REF);
         BuilderContext.setupBuildInVariableType(xBoolean.typeName, "Boolean", BuilderContext.NO_REF);
@@ -49,7 +49,7 @@ public class Python3ExchangeBuilder implements IExchangeBuilder {
         BuilderContext.setupBuildInVariableType(RestfulConnection.typeName, "RestfulConnection", "from impl.restfulconnection import RestfulConnection");
         BuilderContext.setupBuildInVariableType(RestfulOptions.typeName, "RestfulOptions", "from impl.restfuloptions import RestfulOptions");
         BuilderContext.setupBuildInVariableType(JsonWrapper.typeName, "JsonWrapper", "from impl.jsonwrapper import JsonWrapper");
-        BuilderContext.setupBuildInVariableType(SignatureTool.typeName, "SignatureTool", "from impl.signaturetool import SignatureTool");
+        BuilderContext.setupBuildInVariableType(AuthenticationTool.typeName, "AuthenticationTool", "from impl.authenticationtool import AuthenticationTool");
         BuilderContext.setupBuildInVariableType(TheStream.typeName, "byte[]", BuilderContext.NO_REF);
         BuilderContext.setupBuildInVariableType(JsonChecker.typeName, "JsonChecker", "from impl.jsonchecker import JsonChecker");
 
@@ -59,7 +59,7 @@ public class Python3ExchangeBuilder implements IExchangeBuilder {
         BuilderContext.setExchangeFolder(exchangeFolder);
 
         mainFile = new Python3File(exchangeName);
-        signatureClass = new Python3Class("Signature");
+        authenticationClass = new Python3Class("Authentication");
     }
 
     @Override
@@ -79,14 +79,14 @@ public class Python3ExchangeBuilder implements IExchangeBuilder {
 
     @Override
     public void endExchange() {
-        mainFile.addInnerClass(signatureClass);
+        mainFile.addInnerClass(authenticationClass);
         mainFile.build(BuilderContext.getExchangeFolder());
         
     }
 
     @Override
-    public ISignatureBuilder createSignatureBuilder() {
-        return new Python3SignatureBuilder(signatureClass);
+    public IAuthenticationBuilder createAuthenticationBuilder() {
+        return new Python3AuthenticationBuilder(authenticationClass);
     }
 
 }

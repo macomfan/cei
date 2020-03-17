@@ -29,7 +29,7 @@ public class Finalizer {
         // Register Database
         //  - Model
         //  - Restful
-        //  - Signature
+        //  - Authentication
         sdk.doCheck();
         if (sdk.definition != null) {
             XMLDatabase.registerSDK(sdk);

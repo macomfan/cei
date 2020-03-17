@@ -16,7 +16,7 @@ public interface IRestfulInterfaceBuilder extends IMethodBuilder {
 
     void invokeQuery(Variable response, Variable request);
     
-    void invokeSignature(Variable request, String methodName);
+    void invokeAuthentication(Variable request, String methodName);
 
     void setRequestMethod(Variable request, Variable requestMethod);
 

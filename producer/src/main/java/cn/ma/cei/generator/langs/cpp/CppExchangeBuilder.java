@@ -1,6 +1,5 @@
 package cn.ma.cei.generator.langs.cpp;
 
-import cn.ma.cei.generator.VariableType;
 import cn.ma.cei.generator.builder.*;
 
 public class CppExchangeBuilder implements IExchangeBuilder {
@@ -46,7 +45,7 @@ public class CppExchangeBuilder implements IExchangeBuilder {
     }
 
     @Override
-    public ISignatureBuilder createSignatureBuilder() {
+    public IAuthenticationBuilder createAuthenticationBuilder() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

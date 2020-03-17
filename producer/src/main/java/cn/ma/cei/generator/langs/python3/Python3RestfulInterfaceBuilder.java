@@ -96,9 +96,9 @@ public class Python3RestfulInterfaceBuilder implements IRestfulInterfaceBuilder 
     }
 
     @Override
-    public void invokeSignature(Variable request, String methodName) {
+    public void invokeAuthentication(Variable request, String methodName) {
         Variable option = BuilderContext.createStatement("self.__options");
-        method.addInvoke("Signature." + methodName, request, option);
+        method.addInvoke("Authentication." + methodName, request, option);
     }
 
 }

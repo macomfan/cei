@@ -1,7 +1,6 @@
 package cn.ma.cei.model;
 
 import cn.ma.cei.model.base.xElement;
-import cn.ma.cei.model.signature.xSignature;
 
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
@@ -22,9 +21,8 @@ public class xSDK extends xElement {
     @XmlElement(name = "model")
     public List<xModel> modelList;
 
-    @XmlElementWrapper(name = "signatures")
-    @XmlElement(name = "signature")
-    public List<xSignature> signatureList;
+    @XmlElement(name = "authentications")
+    public xSDKAuthentications authentications;
 
     @XmlElement(name = "clients")
     public xSDKClients clients;
@@ -34,6 +32,5 @@ public class xSDK extends xElement {
         super.customCheck();
         checkMemberNotNull(name, "exchange");
         checkMember(modelList);
-        checkMember(signatureList);
     }
 }

@@ -41,4 +41,9 @@ public class JavaDataProcessorBuilder implements IDataProcessorBuilder {
     public Variable stringReplacement(Variable... items) {
         return BuilderContext.createStatement(method.invoke("StringBuilder.replace", items));
     }
+
+    @Override
+    public void getNow(Variable output, Variable format) {
+        method.addAssign(method.defineVariable(output), method.invoke("AuthenticationTool.getNow", format));
+    }
 }

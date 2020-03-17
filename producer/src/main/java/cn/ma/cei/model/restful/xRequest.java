@@ -17,8 +17,8 @@ public class xRequest extends xAttributeExtension {
     @XmlAttribute(name = "target")
     public String target;
 
-    @XmlAttribute(name = "signature")
-    public String signature;
+    @XmlAttribute(name = "authentication")
+    public String authentication;
 
     @XmlElementWrapper(name = "headers")
     @XmlElement(name = "header")

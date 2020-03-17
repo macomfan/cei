@@ -3,7 +3,7 @@ package cn.ma.cei.generator;
 import cn.ma.cei.exception.CEIException;
 import cn.ma.cei.generator.builder.IExchangeBuilder;
 import cn.ma.cei.generator.buildin.RestfulOptions;
-import cn.ma.cei.generator.buildin.SignatureTool;
+import cn.ma.cei.generator.buildin.AuthenticationTool;
 import cn.ma.cei.model.xSDK;
 
 public class BuildExchange {
@@ -46,15 +46,26 @@ public class BuildExchange {
             // No clients here
         }
 
-        VariableType signatureType = GlobalContext.variableType(SignatureTool.typeName);
-        if (sdk.signatureList != null) {
-            GlobalContext.setCurrentModel(signatureType);
-            sdk.signatureList.forEach(signature -> signature.doBuild(() -> {
-                sMethod signatureMethod = signatureType.createMethod(signature.name);
-                GlobalContext.setCurrentMethod(signatureMethod);
-                BuildSignature.build(signature, builder.createSignatureBuilder());
-                GlobalContext.setCurrentMethod(null);
-            }));
+        VariableType authenticationType = GlobalContext.variableType(AuthenticationTool.typeName);
+        if (sdk.authentications != null) {
+            GlobalContext.setCurrentModel(authenticationType);
+            if (sdk.authentications.restfulList != null) {
+                sdk.authentications.restfulList.forEach(authentication -> authentication.doBuild(() -> {
+                    sMethod authenticationMethod = authenticationType.createMethod(authentication.name);
+                    GlobalContext.setCurrentMethod(authenticationMethod);
+                    BuildAuthentication.build(authentication, builder.createAuthenticationBuilder());
+                    GlobalContext.setCurrentMethod(null);
+                }));
+            }
+            if (sdk.authentications.webSocketList != null) {
+                sdk.authentications.webSocketList.forEach(authentication -> authentication.doBuild(() -> {
+                    sMethod authenticationMethod = authenticationType.createMethod(authentication.name);
+                    GlobalContext.setCurrentMethod(authenticationMethod);
+                    // BuildAuthentication.build(authentication, builder.createAuthenticationBuilder());
+                    GlobalContext.setCurrentMethod(null);
+                }));
+            }
+
             GlobalContext.setCurrentModel(null);
         }
         builder.endExchange();

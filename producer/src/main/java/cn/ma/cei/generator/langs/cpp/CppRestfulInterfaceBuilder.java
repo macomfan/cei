@@ -104,7 +104,7 @@ public class CppRestfulInterfaceBuilder implements IRestfulInterfaceBuilder {
 //    }
 
     @Override
-    public void invokeSignature(Variable request, String methodName) {
+    public void invokeAuthentication(Variable request, String methodName) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

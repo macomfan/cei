@@ -11,11 +11,9 @@ import cn.ma.cei.generator.Variable;
  *
  * @author U0151316
  */
-public interface ISignatureBuilder extends IMethodBuilder {
-    
-    void newStringArray(Variable stringArray);
+public interface IAuthenticationBuilder extends IMethodBuilder {
 
-    void getNow(Variable output, Variable format);
+    void newStringArray(Variable stringArray);
 
     void addQueryString(Variable requestVariable, Variable key, Variable value);
     

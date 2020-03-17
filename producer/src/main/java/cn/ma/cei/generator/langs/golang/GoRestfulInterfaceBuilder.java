@@ -65,7 +65,7 @@ public class GoRestfulInterfaceBuilder implements IRestfulInterfaceBuilder {
     }
 
     @Override
-    public void invokeSignature(Variable request, String methodName) {
+    public void invokeAuthentication(Variable request, String methodName) {
         Variable option = BuilderContext.createStatement("inst.options");
         method.addInvoke(WordSplitter.getLowerCamelCase(methodName), new GoVar(request), new GoVar(option));
     }

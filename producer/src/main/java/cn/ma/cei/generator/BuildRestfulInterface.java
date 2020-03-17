@@ -51,7 +51,7 @@ public class BuildRestfulInterface {
             makeQueryString(restIf.request.queryStrings, builder);
             makePostBody(restIf.request.postBody, request, builder);
 
-            restIf.request.doBuild(() -> makeSignature(restIf.request.signature, request, builder));
+            restIf.request.doBuild(() -> makeAuthentication(restIf.request.authentication, request, builder));
 
             builder.onAddReference(RestfulConnection.getType());
             VariableType finalReturnType = returnType.get();
@@ -109,9 +109,9 @@ public class BuildRestfulInterface {
         });
     }
 
-    private static void makeSignature(String signatureName, Variable request, IRestfulInterfaceBuilder builder) {
-        if (signatureName != null && !signatureName.equals("")) {
-            builder.invokeSignature(request, GlobalContext.getCurrentDescriptionConverter().getMethodDescriptor(signatureName));
+    private static void makeAuthentication(String authenticationName, Variable request, IRestfulInterfaceBuilder builder) {
+        if (authenticationName != null && !authenticationName.equals("")) {
+            builder.invokeAuthentication(request, GlobalContext.getCurrentDescriptionConverter().getMethodDescriptor(authenticationName));
         }
     }
 }

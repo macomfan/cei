@@ -103,8 +103,8 @@ public class JavaRestfulInterfaceBuilder implements IRestfulInterfaceBuilder {
     }
 
     @Override
-    public void invokeSignature(Variable request, String methodName) {
+    public void invokeAuthentication(Variable request, String methodName) {
         Variable option = BuilderContext.createStatement("this.options");
-        method.addInvoke("Signature." + methodName, request, option);
+        method.addInvoke("Authentication." + methodName, request, option);
     }
 }
