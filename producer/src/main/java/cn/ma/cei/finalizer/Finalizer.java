@@ -1,5 +1,6 @@
 package cn.ma.cei.finalizer;
 
+import cn.ma.cei.exception.CEIErrors;
 import cn.ma.cei.model.base.xReferable;
 import cn.ma.cei.model.base.xType;
 import cn.ma.cei.model.xModel;
@@ -81,19 +82,9 @@ public class Finalizer {
     }
 
     public List<xSDK> finalizeSDK() {
-        System.out.println("-- Start finalize");
+        CEIErrors.showDebug("==== %s ====", "Start finalize");
         registerSDK();
-        System.out.println("-- Reg done finalize");
         XMLDatabase.ready();
-//        // Merge SDK
-//        orgSDKList.forEach(sdk -> {
-//            if (sdkMap.containsKey(sdk.name)) {
-//                xSDK orgSdk = sdkMap.get(sdk.name);
-//                orgSdk.merge(sdk);
-//            } else {
-//                sdkMap.put(sdk.name, sdk);
-//            }
-//        });
 
         // Check model dependency
         XMLDatabase.getSDKs().forEach(sdk -> {
@@ -119,9 +110,7 @@ public class Finalizer {
             });
             sdk.modelList = dependence.decision();
         });
-        // Check error
-        System.out.println("-- Start end");
-
+        CEIErrors.showDebug("==== %s ====", "End finalize");
         return new LinkedList<>(XMLDatabase.getSDKs());
     }
 }

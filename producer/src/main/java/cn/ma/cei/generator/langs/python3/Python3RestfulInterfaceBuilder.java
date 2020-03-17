@@ -64,17 +64,6 @@ public class Python3RestfulInterfaceBuilder implements IRestfulInterfaceBuilder 
         clientClass.addReference(variableType);
     }
 
-
-//    @Override
-//    public IStringBuilderBuilder createStringBuilderBuilder() {
-//        return null;
-//    }
-//
-//    @Override
-//    public IJsonParserBuilder createJsonParserBuilder() {
-//        return new Python3JsonParserBuilder(method);
-//    }
-
     @Override
     public void startMethod(VariableType returnType, String methodDescriptor, List<Variable> params) {
         method.startMethod(returnType, methodDescriptor, params);
@@ -82,7 +71,7 @@ public class Python3RestfulInterfaceBuilder implements IRestfulInterfaceBuilder 
 
     @Override
     public IDataProcessorBuilder createDataProcessorBuilder() {
-        return null;
+        return new Python3DataProcessorBuilder(method);
     }
 
     @Override
@@ -105,11 +94,6 @@ public class Python3RestfulInterfaceBuilder implements IRestfulInterfaceBuilder 
     public void setPostBody(Variable request, Variable postBody) {
         method.addInvoke(request.getDescriptor() + ".set_post_body", postBody);
     }
-
-//    @Override
-//    public IJsonBuilderBuilder createJsonBuilderBuilder() {
-//        return new Python3JsonBuilderBuilder(method);
-//    }
 
     @Override
     public void invokeSignature(Variable request, String methodName) {

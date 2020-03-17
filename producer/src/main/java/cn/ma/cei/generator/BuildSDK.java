@@ -40,9 +40,9 @@ public class BuildSDK {
     }
 
     public static void build(String inputFolder, String language, String outputFolder) {
-        System.out.println("-- Load start");
+        CEIErrors.showDebug("==== %s ====", "Start load");
         List<xSDK> sdks = (new JAXBWrapper()).loadFromFolder("C:\\dev\\cei\\exchanges");
-        System.out.println("-- Load done");
+        CEIErrors.showDebug("==== %s ====", "End load");
         Finalizer finalizer = new Finalizer();
         finalizer.addSDK(sdks);
         List<xSDK> finalSDKs = finalizer.finalizeSDK();
@@ -76,15 +76,16 @@ public class BuildSDK {
         buildFolder.mkdirs();
 
         languages.forEach(item -> {
+            CEIErrors.showInfo("Building %s ...", item);
             IFramework framework = frameworks.get2(item);
             GlobalContext.setWorkingFolder(CEIPath.appendPath(buildFolder, frameworks.get1(item).getWorkingName()));
-
             finalSDKs.forEach((sdk) -> sdk.doBuild(() -> {
                 GlobalContext.setCurrentExchange(sdk.name);
                 GlobalContext.setCurrentLanguage(frameworks.get1(item));
                 GlobalContext.setCurrentFramework(framework);
                 BuildExchange.build(sdk, framework.createExchangeBuilder());
             }));
+            CEIErrors.showInfo("Build %s complete", item);
         });
 
     }

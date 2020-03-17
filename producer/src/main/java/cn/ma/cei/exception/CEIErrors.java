@@ -1,10 +1,16 @@
 package cn.ma.cei.exception;
 
 import cn.ma.cei.generator.BuilderContext;
+import cn.ma.cei.model.base.xElement;
 import org.apache.log4j.Logger;
 
 public class CEIErrors {
     private static Logger logger = Logger.getLogger(CEIErrors.class);
+
+    public static void showFailure(xElement element, String message, Object... args) throws CEIException {
+        String res = String.format(message, args);
+        throw new CEIException(res);
+    }
 
     public static void showFailure(CEIErrorType errorType, String message, Object... args) throws CEIException {
         String res = String.format(message, args);

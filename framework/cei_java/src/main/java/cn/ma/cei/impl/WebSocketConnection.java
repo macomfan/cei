@@ -29,7 +29,7 @@ public class WebSocketConnection extends WebSocketListener {
 
     @FunctionalInterface
     public interface OnConnect {
-        void onConnect();
+        void onConnect(WebSocketConnection connection);
     }
 
     @FunctionalInterface
@@ -46,7 +46,7 @@ public class WebSocketConnection extends WebSocketListener {
 
     }
 
-    public void connectWebSocket(String url, WebSocketOption option) {
+    public void connectWebSocket(String url, WebSocketOptions option) {
         //this.onConnect = onConnect;
         Request okhttpRequest = new Request.Builder().url(url).build();
         webSocket = client.newWebSocket(okhttpRequest, this);
@@ -58,7 +58,7 @@ public class WebSocketConnection extends WebSocketListener {
         super.onOpen(webSocket, response);
         System.err.println("onOpen");
         if (onConnect != null) {
-            onConnect.onConnect();
+            onConnect.onConnect(this);
         }
     }
 

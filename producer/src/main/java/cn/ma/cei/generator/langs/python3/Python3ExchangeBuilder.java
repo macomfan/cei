@@ -69,7 +69,7 @@ public class Python3ExchangeBuilder implements IExchangeBuilder {
 
     @Override
     public IWebSocketClientBuilder createWebSocketClientBuilder() {
-        return null;
+        return new Python3WebSocketClientBuilder(mainFile);
     }
 
     @Override

@@ -65,7 +65,7 @@ public class JAXBWrapper {
             xSDK sdk = rootClass.cast(unmarshaller.unmarshal(file));
             sdk.filename = file.getPath();
             sdk.doCheck();
-            CEIErrors.showDebug("Load file %s done.", sdk.filename);
+            // CEIErrors.showDebug("Load file %s done.", sdk.filename);
             return sdk;
         } catch (JAXBException e) {
             CEIErrors.showFailure(CEIErrorType.XML, "Load XML file error: %s \n %s", file.getPath(), e.getMessage());

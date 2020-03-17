@@ -7,7 +7,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import java.util.List;
 
 @XmlRootElement(name = "")
-public class  xAttributeExtension extends xElement {
+public class xAttributeExtension extends xElement {
 
     @XmlElement(name = "attribute")
     public List<xAttribute> attributes;

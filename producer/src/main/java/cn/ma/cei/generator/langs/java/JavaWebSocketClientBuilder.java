@@ -1,15 +1,13 @@
 package cn.ma.cei.generator.langs.java;
 
-import cn.ma.cei.generator.BuilderContext;
 import cn.ma.cei.generator.VariableType;
-import cn.ma.cei.generator.builder.IWebSocketActionBuilder;
 import cn.ma.cei.generator.builder.IWebSocketClientBuilder;
 import cn.ma.cei.generator.builder.IWebSocketInterfaceBuilder;
+import cn.ma.cei.generator.buildin.RestfulOptions;
 import cn.ma.cei.generator.buildin.WebSocketConnection;
 import cn.ma.cei.generator.buildin.WebSocketOptions;
 import cn.ma.cei.generator.langs.java.tools.JavaClass;
 import cn.ma.cei.generator.langs.java.tools.JavaMethod;
-import cn.ma.cei.generator.sMethod;
 
 public class JavaWebSocketClientBuilder implements IWebSocketClientBuilder {
 
@@ -24,6 +22,8 @@ public class JavaWebSocketClientBuilder implements IWebSocketClientBuilder {
     @Override
     public void startClient(VariableType client, WebSocketOptions options) {
         clientClass = new JavaClass(client.getDescriptor(), WebSocketConnection.getType());
+        clientClass.addMemberVariable(JavaClass.AccessType.PRIVATE, client.addMember(WebSocketOptions.getType(), "option"));
+
         JavaMethod defaultConstructor = new JavaMethod(clientClass);
         defaultConstructor.startConstructor("");
         {
@@ -33,11 +33,12 @@ public class JavaWebSocketClientBuilder implements IWebSocketClientBuilder {
         clientClass.addMethod(defaultConstructor);
 
         JavaMethod optionConstructor = new JavaMethod(clientClass);
-        optionConstructor.startConstructor("");
+        optionConstructor.startConstructor(WebSocketOptions.getType().getDescriptor() + " options");
         {
 
         }
         optionConstructor.endMethod();
+        clientClass.addReference(WebSocketOptions.getType());
         clientClass.addMethod(optionConstructor);
     }
 
@@ -45,11 +46,6 @@ public class JavaWebSocketClientBuilder implements IWebSocketClientBuilder {
     public IWebSocketInterfaceBuilder createWebSocketInterfaceBuilder() {
         return new JavaWebSocketInterfaceBuilder(clientClass);
     }
-
-//    @Override
-//    public IWebSocketConnectionBuilder createWebSocketConnectionBuilder() {
-//        return new JavaWebSocketConnectionBuilder(clientClass);
-//    }
 
     @Override
     public void endClient() {

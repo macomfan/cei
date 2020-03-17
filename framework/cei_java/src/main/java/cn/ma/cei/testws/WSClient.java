@@ -12,7 +12,7 @@ public class WSClient extends WebSocketConnection {
             send(new JsonWrapper());
         });
 
-        WebSocketOption option = new WebSocketOption();
+        WebSocketOptions option = new WebSocketOptions();
         connect(option, () -> {
             send(new JsonWrapper());
         });
