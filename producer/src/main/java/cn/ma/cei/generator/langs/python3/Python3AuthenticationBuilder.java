@@ -34,10 +34,7 @@ public class Python3AuthenticationBuilder implements IAuthenticationBuilder {
         //method.getCode().appendStatementWordsln("List<String>", stringArray.getNameDescriptor(), "=", "new", "LinkedList<>()");
     }
 
-//    @Override
-//    public void getNow(Variable output, Variable format) {
-//        method.addAssign(method.defineVariable(output), method.invoke("AuthenticationTool.get_now", format));
-//    }
+
 
     @Override
     public void addQueryString(Variable requestVariable, Variable key, Variable value) {
@@ -71,16 +68,6 @@ public class Python3AuthenticationBuilder implements IAuthenticationBuilder {
     @Override
     public void combineStringArray(Variable output, Variable input, Variable separator) {
         method.addAssign(method.defineVariable(output), method.invoke("AuthenticationTool.combine_string_array", input, separator));
-    }
-
-    @Override
-    public void base64(Variable output, Variable input) {
-        method.addAssign(method.defineVariable(output), method.invoke("AuthenticationTool.base64", input));
-    }
-
-    @Override
-    public void hmacsha265(Variable output, Variable input, Variable key) {
-        method.addAssign(method.defineVariable(output), method.invoke("AuthenticationTool.hmacsha256", input, key));
     }
 
     @Override

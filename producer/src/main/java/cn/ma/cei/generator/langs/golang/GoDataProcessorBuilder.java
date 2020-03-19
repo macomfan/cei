@@ -1,23 +1,24 @@
-package cn.ma.cei.generator.langs.python3;
+package cn.ma.cei.generator.langs.golang;
 
-import cn.ma.cei.generator.BuilderContext;
 import cn.ma.cei.generator.Variable;
 import cn.ma.cei.generator.builder.IDataProcessorBuilder;
 import cn.ma.cei.generator.builder.IJsonBuilderBuilder;
 import cn.ma.cei.generator.builder.IJsonParserBuilder;
 import cn.ma.cei.generator.builder.IStringBuilderBuilder;
-import cn.ma.cei.generator.langs.python3.tools.Python3Method;
+import cn.ma.cei.generator.langs.golang.tools.GoMethod;
+import cn.ma.cei.generator.langs.golang.tools.GoVar;
 
-public class Python3DataProcessorBuilder implements IDataProcessorBuilder {
-    Python3Method method;
+public class GoDataProcessorBuilder implements IDataProcessorBuilder {
 
-    public Python3DataProcessorBuilder(Python3Method method) {
+    GoMethod method;
+
+    public GoDataProcessorBuilder(GoMethod method) {
         this.method = method;
     }
 
     @Override
     public IJsonBuilderBuilder createJsonBuilderBuilder() {
-        return new Python3JsonBuilderBuilder(method);
+        return null;
     }
 
     @Override
@@ -27,31 +28,31 @@ public class Python3DataProcessorBuilder implements IDataProcessorBuilder {
 
     @Override
     public IJsonParserBuilder createJsonParserBuilder() {
-        return new Python3JsonParserBuilder(method);
+        return null;
     }
 
     @Override
     public void getNow(Variable output, Variable format) {
-        method.addAssign(method.defineVariable(output), method.invoke("AuthenticationTool.get_now", format));
+        method.addAssignAndDeclare(method.useVariable(new GoVar(output)), method.invoke("authentication.GetNow", new GoVar(format)));
     }
 
     @Override
     public Variable jsonBuilderToString(Variable jsonBuilder) {
-        return BuilderContext.createStatement(jsonBuilder.getDescriptor() + ".to_json_string()");
+        return null;
     }
 
     @Override
     public Variable stringReplacement(Variable... items) {
-        return BuilderContext.createStatement(method.invoke("StringBuilder.replace", items));
+        return null;
     }
 
     @Override
     public void base64(Variable output, Variable input) {
-        method.addAssign(method.defineVariable(output), method.invoke("AuthenticationTool.base64", input));
+        method.addAssignAndDeclare(method.useVariable(new GoVar(output)), method.invoke("authentication.Base64", new GoVar(input)));
     }
 
     @Override
     public void hmacsha265(Variable output, Variable input, Variable key) {
-        method.addAssign(method.defineVariable(output), method.invoke("AuthenticationTool.hmacsha256", input, key));
+        method.addAssignAndDeclare(method.useVariable(new GoVar(output)), method.invoke("authentication,hmacsha256", new GoVar(input), new GoVar(key)));
     }
 }

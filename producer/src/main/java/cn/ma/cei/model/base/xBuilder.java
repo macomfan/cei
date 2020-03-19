@@ -1,6 +1,6 @@
 package cn.ma.cei.model.base;
 
 
-public abstract class xBuilder extends xElement {
+public abstract class xBuilder extends xDataProcessorItem {
 
 }

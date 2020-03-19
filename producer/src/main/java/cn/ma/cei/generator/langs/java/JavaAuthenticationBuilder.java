@@ -88,16 +88,6 @@ public class JavaAuthenticationBuilder implements IAuthenticationBuilder {
     }
 
     @Override
-    public void base64(Variable output, Variable input) {
-        method.addAssign(method.defineVariable(output), method.invoke("AuthenticationTool.base64", input));
-    }
-
-    @Override
-    public void hmacsha265(Variable output, Variable input, Variable key) {
-        method.addAssign(method.defineVariable(output), method.invoke("AuthenticationTool.hmacsha256", input, key));
-    }
-
-    @Override
     public void appendToString(boolean needDefineNewOutput, Variable output, Variable input) {
         if (needDefineNewOutput) {
             method.addAssign(method.defineVariable(output), method.useVariable(input));

@@ -53,7 +53,7 @@ public class BuildExchange {
                 sdk.authentications.restfulList.forEach(authentication -> authentication.doBuild(() -> {
                     sMethod authenticationMethod = authenticationType.createMethod(authentication.name);
                     GlobalContext.setCurrentMethod(authenticationMethod);
-                    BuildAuthentication.build(authentication, builder.createAuthenticationBuilder());
+                    BuildAuthentication.buildRestful(authentication, builder.createAuthenticationBuilder());
                     GlobalContext.setCurrentMethod(null);
                 }));
             }
@@ -61,7 +61,7 @@ public class BuildExchange {
                 sdk.authentications.webSocketList.forEach(authentication -> authentication.doBuild(() -> {
                     sMethod authenticationMethod = authenticationType.createMethod(authentication.name);
                     GlobalContext.setCurrentMethod(authenticationMethod);
-                    // BuildAuthentication.build(authentication, builder.createAuthenticationBuilder());
+                    BuildAuthentication.buildWebSocket(authentication, builder.createAuthenticationBuilder());
                     GlobalContext.setCurrentMethod(null);
                 }));
             }

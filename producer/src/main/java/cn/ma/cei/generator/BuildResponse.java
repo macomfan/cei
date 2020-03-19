@@ -23,13 +23,14 @@ public class BuildResponse {
 
     public static Variable build(xResponse response,
                                  Variable responseVariable, VariableType returnType, IDataProcessorBuilder dataProcessorBuilder) {
-        if (response.jsonParser != null) {
-            return response.jsonParser.doBuildWithReturn(() -> BuildJsonParser.build(
-                    response.jsonParser,
-                    responseVariable,
-                    returnType,
-                    dataProcessorBuilder,
-                    IJsonCheckerBuilder.UsedFor.REPORT_ERROR));
+        if (response.items != null) {
+            return BuildDataProcessor.build(response.items, responseVariable, dataProcessorBuilder, null);
+//            return response.jsonParser.doBuildWithReturn(() -> BuildJsonParser.build(
+//                    response.jsonParser,
+//                    responseVariable,
+//                    returnType,
+//                    dataProcessorBuilder,
+//                    IJsonCheckerBuilder.UsedFor.REPORT_ERROR));
         }
         return null;
     }

@@ -7,66 +7,70 @@ package cn.ma.cei.generator;
 
 import cn.ma.cei.exception.CEIException;
 import cn.ma.cei.generator.builder.IAuthenticationBuilder;
+import cn.ma.cei.generator.buildin.AuthenticationTool;
 import cn.ma.cei.generator.buildin.RestfulOptions;
 import cn.ma.cei.generator.buildin.RestfulRequest;
-import cn.ma.cei.generator.buildin.AuthenticationTool;
-import cn.ma.cei.generator.buildin.TheStream;
-import cn.ma.cei.model.authentication.xAddQueryString;
-import cn.ma.cei.model.authentication.xAddStringArray;
-import cn.ma.cei.model.authentication.xAppendToString;
-import cn.ma.cei.model.authentication.xBase64;
-import cn.ma.cei.model.authentication.xCombineQueryString;
-import cn.ma.cei.model.authentication.xCombineStringArray;
-import cn.ma.cei.model.authentication.xGetRequestInfo;
-import cn.ma.cei.model.authentication.xGetNow;
-import cn.ma.cei.model.authentication.xHmacsha256;
+import cn.ma.cei.model.authentication.*;
 import cn.ma.cei.model.restful.xAuthentication;
 import cn.ma.cei.model.types.xString;
 import cn.ma.cei.model.types.xStringArray;
+import cn.ma.cei.model.websocket.xWSAuthentication;
 import cn.ma.cei.utils.Checker;
 import cn.ma.cei.utils.RegexHelper;
 
 /**
- *
  * @author U0151316
  */
 public class BuildAuthentication {
 
-    public static void build(xAuthentication authentication, IAuthenticationBuilder builder) {
-        if (builder == null) {
-            throw new CEIException("[BuildSignature] SignatureBuilder is null");
-        }
-        if (Checker.isEmpty(authentication.name)) {
-            throw new CEIException("[BuildSignature] name is null");
-        }
+    public static void buildRestful(xAuthentication authentication, IAuthenticationBuilder builder) {
+        Checker.isNull(builder, BuildAuthentication.class, "AuthenticationBuilder");
+
+
         Variable request = GlobalContext.getCurrentMethod().createInputVariable(RestfulRequest.getType(), "request");
         Variable options = GlobalContext.getCurrentMethod().createInputVariable(RestfulOptions.getType(), "options");
 
         builder.startMethod(null,
                 GlobalContext.getCurrentMethod().getDescriptor(),
                 GlobalContext.getCurrentMethod().getInputVariableList());
-        authentication.items.forEach(item -> item.doBuild(() ->{
-            if (item instanceof xGetNow) {
-                processGetNow((xGetNow) item, builder);
-            } else if (item instanceof xAddQueryString) {
-                processAddQueryString((xAddQueryString) item, request, builder);
+
+        BuildDataProcessor.build(authentication.items, builder.createDataProcessorBuilder(), item -> {
+            if (item instanceof xGetRequestInfo) {
+                processGetRequestInfo((xGetRequestInfo) item, request, builder);
             } else if (item instanceof xCombineQueryString) {
                 processCombineQueryString((xCombineQueryString) item, request, builder);
-            } else if (item instanceof xGetRequestInfo) {
-                processGetRequestInfo((xGetRequestInfo) item, request, builder);
-            } else if (item instanceof xAddStringArray) {
-                processAppendStringArray((xAddStringArray) item, request, builder);
-            } else if (item instanceof xCombineStringArray) {
-                processCombineStringArray((xCombineStringArray) item, builder);
-            } else if (item instanceof xBase64) {
-                processBase64((xBase64) item, builder);
-            } else if (item instanceof xHmacsha256) {
-                processHmacsha256((xHmacsha256) item, builder);
-            } else if (item instanceof xAppendToString) {
-                processAppendToString((xAppendToString) item, builder);
+            } else if (item instanceof xAddQueryString) {
+                processAddQueryString((xAddQueryString) item, request, builder);
             }
-        }));
+        });
+
+
+//        authentication.items.forEach(item -> item.doBuild(() -> {
+//            if (item instanceof xGetNow) {
+//                processGetNow((xGetNow) item, builder);
+//            } else if (item instanceof xAddQueryString) {
+//
+//            } else if (item instanceof xCombineQueryString) {
+//
+//            } else if (item instanceof xGetRequestInfo) {
+//
+//            } else if (item instanceof xAddStringArray) {
+//                processAppendStringArray((xAddStringArray) item, request, builder);
+//            } else if (item instanceof xCombineStringArray) {
+//                processCombineStringArray((xCombineStringArray) item, builder);
+//            } else if (item instanceof xBase64) {
+//                processBase64((xBase64) item, builder);
+//            } else if (item instanceof xHmacsha256) {
+//                processHmacsha256((xHmacsha256) item, builder);
+//            } else if (item instanceof xAppendToString) {
+//                processAppendToString((xAppendToString) item, builder);
+//            }
+//        }));
         builder.endMethod();
+    }
+
+    public static void buildWebSocket(xWSAuthentication authentication, IAuthenticationBuilder builder) {
+
     }
 
     private static Variable queryVariable(String name) {
@@ -83,15 +87,6 @@ public class BuildAuthentication {
             }
         }
         return variable;
-    }
-
-    public static void processGetNow(xGetNow getNow, IAuthenticationBuilder builder) {
-        if (Checker.isEmpty(getNow.output)) {
-            throw new CEIException("[BuildSignature] output must be defined for get_now");
-        }
-        Variable output = GlobalContext.getCurrentMethod().createLocalVariable(xString.inst.getType(), RegexHelper.isReference(getNow.output));
-        Variable format = queryVariable(getNow.format);
-        builder.getNow(output, format);
     }
 
     public static void processAddQueryString(xAddQueryString appendQueryString, Variable requestVariable, IAuthenticationBuilder builder) {
@@ -193,38 +188,12 @@ public class BuildAuthentication {
         Variable input = queryVariable(appendToString.input);
         Variable output = GlobalContext.getCurrentMethod().getVariable(outputName);
         if (output == null) {
-            output =  GlobalContext.getCurrentMethod().createLocalVariable(xString.inst.getType(), RegexHelper.isReference(appendToString.output));
+            output = GlobalContext.getCurrentMethod().createLocalVariable(xString.inst.getType(), RegexHelper.isReference(appendToString.output));
             builder.appendToString(true, output, input);
         } else {
             builder.appendToString(false, output, input);
         }
     }
 
-    public static void processBase64(xBase64 base64, IAuthenticationBuilder builder) {
-        if (Checker.isEmpty(base64.output)) {
-            throw new CEIException("[BuildSignature] output must be defined for base64");
-        }
-        if (Checker.isEmpty(base64.input)) {
-            throw new CEIException("[BuildSignature] input must be defined for base64");
-        }
-        Variable input = queryVariable(base64.input);
-        Variable output = GlobalContext.getCurrentMethod().createLocalVariable(xString.inst.getType(), RegexHelper.isReference(base64.output));
-        builder.base64(output, input);
-    }
 
-    public static void processHmacsha256(xHmacsha256 hmacsha256, IAuthenticationBuilder builder) {
-        if (Checker.isEmpty(hmacsha256.output)) {
-            throw new CEIException("[BuildSignature] output must be defined for hmacsha256");
-        }
-        if (Checker.isEmpty(hmacsha256.input)) {
-            throw new CEIException("[BuildSignature] input must be defined for hmacsha256");
-        }
-        if (Checker.isEmpty(hmacsha256.key)) {
-            throw new CEIException("[BuildSignature] key must be defined for hmacsha256");
-        }
-        Variable input = queryVariable(hmacsha256.input);
-        Variable key = queryVariable(hmacsha256.key);
-        Variable output =  GlobalContext.getCurrentMethod().createLocalVariable(TheStream.getType(), RegexHelper.isReference(hmacsha256.output));
-        builder.hmacsha265(output, input, key);
-    }
 }

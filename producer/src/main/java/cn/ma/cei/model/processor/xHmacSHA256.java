@@ -3,9 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package cn.ma.cei.model.authentication;
+package cn.ma.cei.model.processor;
 
-import cn.ma.cei.model.base.xAuthenticationItem;
+import cn.ma.cei.model.base.xDataProcessorItem;
 
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -15,7 +15,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author u0151316
  */
 @XmlRootElement(name = "hmacsha256")
-public class xHmacsha256 extends xAuthenticationItem {
+public class xHmacSHA256 extends xDataProcessorItem {
 
     @XmlAttribute(name = "output")
     public String output;

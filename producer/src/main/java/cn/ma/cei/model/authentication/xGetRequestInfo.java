@@ -5,7 +5,7 @@
  */
 package cn.ma.cei.model.authentication;
 
-import cn.ma.cei.model.base.xAuthenticationItem;
+import cn.ma.cei.model.base.xDataProcessorItem;
 
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -15,7 +15,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author u0151316
  */
 @XmlRootElement(name = "get_request_info")
-public class xGetRequestInfo extends xAuthenticationItem {
+public class xGetRequestInfo extends xDataProcessorItem {
     @XmlAttribute(name = "info")
     public String info;
 

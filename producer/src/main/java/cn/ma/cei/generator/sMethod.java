@@ -1,5 +1,7 @@
 package cn.ma.cei.generator;
 
+import cn.ma.cei.exception.CEIErrorType;
+import cn.ma.cei.exception.CEIErrors;
 import cn.ma.cei.exception.CEIException;
 import cn.ma.cei.utils.RegexHelper;
 import cn.ma.cei.utils.UniquetList;
@@ -38,10 +40,6 @@ public class sMethod {
     }
 
 
-    public Variable getVariable(String variableName) {
-        return variableList.get(variableName);
-    }
-
     public List<Variable> getInputVariableList() {
         List<Variable> res = new LinkedList<>();
         variableList.values().forEach(item -> {
@@ -76,10 +74,41 @@ public class sMethod {
         return variable;
     }
 
+    /***
+     * Get the variable including input variable and local variable by variable name.
+     *
+     * @param variableName the variable name
+     * @return the variable object
+     */
+    public Variable getVariable(String variableName) {
+        return variableList.get(variableName);
+    }
+
+    /***
+     * Get the variable including input variable and local variable by user defined variable name.
+     * The user defined variable means the variable name defined in XML file.
+     * e.g.
+     * If the XML define "{timestamp}", the getVariableAsParam will query the variable named "timestamp".
+     * If the name is "{option.APIKey}", the getVariableAsParam will query "option" firstly, then query the member
+     * "APIKey" from "option".
+     *
+     * @param name the user defined variable name
+     * @return the variable object, if no specified variable or the name is not "{xxx}", return null
+     */
     public Variable getVariableAsParam(String name) {
         String variableName = RegexHelper.isReference(name);
         if (variableName == null) {
-            return GlobalContext.createStringConstant(name);
+            return null;
+        }
+        if (variableName.indexOf('.') != -1) {
+            String[] variables = variableName.split("\\.");
+            if (variables.length < 2) {
+                CEIErrors.showFailure(CEIErrorType.XML, "Variable name is invalid, expected is {xxx.xxx}, current is %s", name);
+            }
+            Variable base = getVariable(variables[0]);
+            if (base == null) {
+                CEIErrors.showFailure(CEIErrorType.XML, "Cannot query %s", name);
+            }
         }
         return variableList.get(variableName);
     }

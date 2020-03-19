@@ -5,7 +5,7 @@
  */
 package cn.ma.cei.model.authentication;
 
-import cn.ma.cei.model.base.xAuthenticationItem;
+import cn.ma.cei.model.base.xDataProcessorItem;
 
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -14,7 +14,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author u0151316
  */
 @XmlRootElement(name = "append_to_string")
-public class xAppendToString extends xAuthenticationItem {
+public class xAppendToString extends xDataProcessorItem {
 
     @XmlAttribute(name = "output")
     public String output;

@@ -5,7 +5,7 @@
  */
 package cn.ma.cei.model.authentication;
 
-import cn.ma.cei.model.base.xAuthenticationItem;
+import cn.ma.cei.model.base.xDataProcessorItem;
 
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -14,7 +14,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author U0151316
  */
 @XmlRootElement(name = "add_query_string")
-public class xAddQueryString extends xAuthenticationItem {
+public class xAddQueryString extends xDataProcessorItem {
     @XmlAttribute(name = "key")
     public String key;
 

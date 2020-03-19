@@ -12,6 +12,10 @@ public interface IDataProcessorBuilder {
 
     void getNow(Variable output, Variable format);
 
+    void base64(Variable output, Variable input);
+
+    void hmacsha265(Variable output, Variable input, Variable key);
+
     /***
      * Return the statement of converting the json builder to string;
      * e.g.

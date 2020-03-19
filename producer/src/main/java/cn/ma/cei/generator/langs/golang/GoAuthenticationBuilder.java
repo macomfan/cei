@@ -31,11 +31,6 @@ public class GoAuthenticationBuilder implements IAuthenticationBuilder {
         method.addAssignAndDeclare(method.useVariable(new GoVar(stringArray)), "make([]string, 10)");
     }
 
-//    @Override
-//    public void getNow(Variable output, Variable format) {
-//        method.addAssignAndDeclare(method.useVariable(new GoVar(output)), method.invoke("authentication.GetNow", new GoVar(format)));
-//    }
-
     @Override
     public void addQueryString(Variable requestVariable, Variable key, Variable value) {
         method.addInvoke(requestVariable.getDescriptor() + ".AddQueryString", new GoVar(key), new GoVar(value));
@@ -72,16 +67,6 @@ public class GoAuthenticationBuilder implements IAuthenticationBuilder {
     public void combineStringArray(Variable output, Variable input, Variable separator) {
         method.addAssignAndDeclare(method.useVariable(new GoVar(output)),
                 method.invoke("authentication.CombineStringArray", new GoVar(input), new GoVar(separator)));
-    }
-
-    @Override
-    public void base64(Variable output, Variable input) {
-        method.addAssignAndDeclare(method.useVariable(new GoVar(output)), method.invoke("authentication.Base64", new GoVar(input)));
-    }
-
-    @Override
-    public void hmacsha265(Variable output, Variable input, Variable key) {
-        method.addAssignAndDeclare(method.useVariable(new GoVar(output)), method.invoke("authentication,hmacsha256", new GoVar(input), new GoVar(key)));
     }
 
     @Override

@@ -26,9 +26,6 @@ public interface IAuthenticationBuilder extends IMethodBuilder {
     void addStringArray(Variable output, Variable input);
     
     void combineStringArray(Variable output, Variable input, Variable separator);
-    
-    void base64(Variable output, Variable input);
-    
-    void hmacsha265(Variable output, Variable input, Variable key);
+
 
 }

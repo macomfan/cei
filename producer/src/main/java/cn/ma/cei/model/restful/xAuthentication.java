@@ -1,8 +1,11 @@
 package cn.ma.cei.model.restful;
 
 import cn.ma.cei.model.authentication.*;
-import cn.ma.cei.model.base.xAuthenticationItem;
+import cn.ma.cei.model.base.xDataProcessorItem;
 import cn.ma.cei.model.base.xElement;
+import cn.ma.cei.model.processor.xBase64;
+import cn.ma.cei.model.processor.xGetNow;
+import cn.ma.cei.model.processor.xHmacSHA256;
 import cn.ma.cei.xml.CEIXmlAnyElementTypes;
 
 import javax.xml.bind.annotation.XmlAnyElement;
@@ -23,6 +26,6 @@ public class xAuthentication extends xElement {
             xAppendToString.class,
             xCombineStringArray.class,
             xBase64.class,
-            xHmacsha256.class})
-    public List<xAuthenticationItem> items;
+            xHmacSHA256.class})
+    public List<xDataProcessorItem> items;
 }

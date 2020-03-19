@@ -11,6 +11,6 @@ package cn.ma.cei.model.base;
  * @author U0151316
  */
 
-public abstract class xAuthenticationItem extends xElement {
+public abstract class xDataProcessorItem extends xElement {
     
 }
