@@ -31,10 +31,7 @@ public class GoAuthenticationBuilder implements IAuthenticationBuilder {
         method.addAssignAndDeclare(method.useVariable(new GoVar(stringArray)), "make([]string, 10)");
     }
 
-    @Override
-    public void addQueryString(Variable requestVariable, Variable key, Variable value) {
-        method.addInvoke(requestVariable.getDescriptor() + ".AddQueryString", new GoVar(key), new GoVar(value));
-    }
+
 
     @Override
     public void appendToString(boolean needDefineNewOutput, Variable output, Variable input) {
@@ -45,17 +42,7 @@ public class GoAuthenticationBuilder implements IAuthenticationBuilder {
         }
     }
 
-    @Override
-    public void combineQueryString(Variable requestVariable, Variable output, Variable sort, Variable separator) {
-        method.addAssignAndDeclare(method.useVariable(new GoVar(output)),
-                method.invoke("authentication.CombineQueryString", new GoVar(requestVariable), new GoVar(sort), new GoVar(separator)));
-    }
 
-    @Override
-    public void getRequestInfo(Variable requestVariable, Variable output, Variable info, Variable convert) {
-        method.addAssignAndDeclare(method.useVariable(new GoVar(output)),
-                method.invoke("authentication.GetRequestInfo", new GoVar(requestVariable), new GoVar(info), new GoVar(convert)));
-    }
 
     @Override
     public void addStringArray(Variable output, Variable input) {

@@ -15,13 +15,13 @@ public interface IAuthenticationBuilder extends IMethodBuilder {
 
     void newStringArray(Variable stringArray);
 
-    void addQueryString(Variable requestVariable, Variable key, Variable value);
+
     
     void appendToString(boolean needDefineNewOutput, Variable output, Variable input);
 
-    void combineQueryString(Variable requestVariable, Variable output, Variable sort, Variable separator);
 
-    void getRequestInfo(Variable requestVariable, Variable output, Variable info, Variable convert);
+
+
     
     void addStringArray(Variable output, Variable input);
     

@@ -12,7 +12,7 @@ import cn.ma.cei.utils.Checker;
 public class GetNow extends DataProcessorBase<xGetNow> {
 
     @Override
-    public void build(xGetNow item, IDataProcessorBuilder builder) {
+    public Variable build(xGetNow item, IDataProcessorBuilder builder) {
         if (Checker.isEmpty(item.name)) {
             throw new CEIException("[BuildSignature] output must be defined for get_now");
         }
@@ -20,13 +20,16 @@ public class GetNow extends DataProcessorBase<xGetNow> {
         // Variable output = sMethod.createLocalVariable(xString.inst.getType(), RegexHelper.isReference(item.name));
         Variable format = queryVariable(item.format);
         builder.getNow(output, format);
+        return output;
     }
 
     @Override
-    public VariableType returnType(xGetNow item, String resultVariableName) {
-        if (item.name.equals(resultVariableName)) {
-            return xString.inst.getType();
-        }
-        return null;
+    public VariableType returnType(xGetNow item) {
+        return xString.inst.getType();
+    }
+
+    @Override
+    public String resultVariableName(xGetNow item) {
+        return item.name;
     }
 }

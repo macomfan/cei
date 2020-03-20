@@ -41,17 +41,17 @@
         </model>
     </models>
 
-    <signatures>
+    <authentications>
         <restful name="restful">
-            <get_now output="{timestamp}" format=""/>
+            <get_now name="{timestamp}" format=""/>
             <add_query_string key="accessKeyId" value="{apiKey}"/>
             <add_query_string key="signatureMethod" value="HmacSHA256"/>
             <add_query_string key="signatureVersion" value="2"/>
             <add_query_string key="timestamp" value="{timestamp}"/>
-            <combine_query_string output="{queryString}" sort="asc" separator="&amp;"/>
-            <get_request_info output="{method}" info="method" convert="uppercase"/>
-            <get_request_info output="{host}" info="host"/>
-            <get_request_info output="{target}" info="target"/>
+            <combine_query_string name="{queryString}" sort="asc" separator="&amp;"/>
+            <get_request_info name="{method}" info="method" convert="uppercase"/>
+            <get_request_info name="{host}" info="host"/>
+            <get_request_info name="{target}" info="target"/>
             <string_builder name="{buffer}">
                 <add_string_array input="{method}"/>
                 <add_string_array input="{host}"/>
@@ -59,11 +59,11 @@
                 <add_string_array input="{queryString}"/>
                 <combine_string_array separator="\n"/>
             </string_builder>
-            <hmacsha256 output="{hmacsha256}" input="{buffer}" key="{secretKey}"/>
-            <base64 output="{result}" input="{hmacsha256}"/>
+            <hmacsha256 name="{hmacsha256}" input="{buffer}" key="{secretKey}"/>
+            <base64 name="{result}" input="{hmacsha256}"/>
             <add_query_string key="Signature" value="{result}"/>
         </restful>
-    </signatures>
+    </authentications>
 
     <clients>
         <restful name="MarketClient">
@@ -71,8 +71,8 @@
             <interfaces>
                 <interface name="getExchangeInfo">
                     <request method="get" target="/api/v1/exchangeInfo"/>
-                    <response model="ExchangeInfo">
-                        <json_parser>
+                    <response>
+                        <json_parser model="ExchangeInfo">
                             <json_value copy="ExchangeName"/>
                             <json_value copy="Timestamp"/>
                             <json_object_array copy="Symbols" model="Symbols">
@@ -94,8 +94,8 @@
                             <query key="symbol" value="{symbol}"/>
                         </query_strings>
                     </request>
-                    <response model="LastTrade">
-                        <json_parser>
+                    <response>
+                        <json_parser model="LastTrade">
                             <json_value copy="Price"/>
                             <json_value copy="Volume"/>
                             <json_value copy="Timestamp"/>
@@ -119,8 +119,8 @@
                             </attribute>
                         </post_body>
                     </request>
-                    <response model="Order">
-                        <json_parser>
+                    <response>
+                        <json_parser model="Order">
                             <json_value key="\[0]" value="{OrderId}"/>
                         </json_parser>
                     </response>
@@ -130,14 +130,14 @@
 
         <websocket name="WSClient">
             <connection>
+                <inputs>
+                    <string name="symbol"/>
+                </inputs>
                 <url target="ws"/>
-				<inputs>
-                        <string name="symbol"/>
-                    </inputs>
                 <on_connect>
-				    <send>
+                    <send>
                         <attribute for="value" result="{jsonResult}">
-                            <get_now output="{ts}" format=""/>
+                            <get_now name="{ts}" format=""/>
                             <json_builder name="{jsonResult}">
                                 <json_value key="op" value="{pong}"/>
                                 <json_value key="ts" value="{ts}"/>
@@ -155,7 +155,7 @@
                     </trigger>
                     <send>
                         <attribute for="value" result="{jsonResult}">
-                            <get_now output="{ts}" format=""/>
+                            <get_now name="{ts}" format=""/>
                             <json_builder name="{jsonResult}">
                                 <json_value key="op" value="{pong}"/>
                                 <json_value key="ts" value="{ts}"/>
@@ -169,7 +169,7 @@
                     <inputs>
                         <string name="symbol"/>
                     </inputs>
-				    <send value="aaaa">
+                    <send value="aaaa">
 
                     </send>
                     <callback name="onkline" type="disposable">
@@ -178,8 +178,8 @@
                                 <json_equal key="ch" value="{symbol}"/>
                             </json_checker>
                         </trigger>
-                        <response model="TradeEntity">
-                            <json_parser>
+                        <response>
+                            <json_parser model="TradeEntity">
                                 <json_value key="price" value="{price}"/>
                             </json_parser>
                         </response>

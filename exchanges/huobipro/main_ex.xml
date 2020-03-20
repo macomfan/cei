@@ -6,17 +6,17 @@
 
     <definition document="https://huobiapi.github.io/docs/spot/v1/en/"/>
 
-    <signatures>
+    <authentications>
         <restful name="restful">
-            <get_now output="{timestamp}" format=""/>
+            <get_now name="{timestamp}" format=""/>
             <add_query_string key="AccessKeyId" value="{apiKey}"/>
             <add_query_string key="SignatureMethod" value="HmacSHA256"/>
             <add_query_string key="SignatureVersion" value="2"/>
             <add_query_string key="Timestamp" value="{timestamp}"/>
-            <combine_query_string output="{queryString}" sort="asc" separator="&amp;"/>
-            <get_request_info output="{method}" info="method" convert="uppercase"/>
-            <get_request_info output="{host}" info="host"/>
-            <get_request_info output="{target}" info="target"/>
+            <combine_query_string name="{queryString}" sort="asc" separator="&amp;"/>
+            <get_request_info name="{method}" info="method" convert="uppercase"/>
+            <get_request_info name="{host}" info="host"/>
+            <get_request_info name="{target}" info="target"/>
             <string_builder name="{buffer}">
                 <add_string_array input="{method}"/>
                 <add_string_array input="{host}"/>
@@ -24,21 +24,19 @@
                 <add_string_array input="{queryString}"/>
                 <combine_string_array separator="\n"/>
             </string_builder>
-            <hmacsha256 output="{hmacsha256}" input="{newbuffer}" key="{secretKey}"/>
-            <base64 output="{result}" input="{hmacsha256}"/>
+            <hmacsha256 name="{hmacsha256}" input="{newbuffer}" key="{secretKey}"/>
+            <base64 name="{result}" input="{hmacsha256}"/>
             <add_query_string key="Signature" value="{result}"/>
         </restful>
-    </signatures>
-
-
+    </authentications>
     <clients>
         <restful name="MarketClient">
             <connection url="https://api.huobi.so"/>
             <interfaces>
                 <interface name="getTimestamp">
                     <request method="get" target="/v1/common/timestamp"/>
-                    <response model="Timestamp">
-                        <json_parser>
+                    <response>
+                        <json_parser model="Timestamp">
                             <json_checker>
                                 <json_not_equal key="stauts" value="ok"/>
                             </json_checker>
@@ -49,8 +47,8 @@
 
                 <interface name="getSymbol">
                     <request method="get" target="/v1/common/symbols"/>
-                    <response model="Symbols">
-                        <json_parser>
+                    <response>
+                        <json_parser model="Symbols">
                             <json_checker>
                                 <json_not_equal key="stauts" value="ok"/>
                             </json_checker>
@@ -75,8 +73,8 @@
 
                 <interface name="getCurrencies">
                     <request method="get" target="/v1/common/currencys"/>
-                    <response model="Currencies">
-                        <json_parser>
+                    <response>
+                        <json_parser model="Currencies">
                             <json_value key="status" value="{status}"/>
                             <json_value key="data" value="{data}"/>
                         </json_parser>
@@ -96,8 +94,8 @@
                             <query key="size" value="{size}"/>
                         </query_strings>
                     </request>
-                    <response model="Candlestick">
-                        <json_parser>
+                    <response>
+                        <json_parser model="Candlestick">
                             <json_value copy="status"/>
                             <json_object_array copy="data" model="CandlestickData">
                                 <json_value copy="id"/>
@@ -122,8 +120,8 @@
                             <query key="symbol" value="{symbol}"/>
                         </query_strings>
                     </request>
-                    <response model="LastTrade">
-                        <json_parser>
+                    <response>
+                        <json_parser model="LastTrade">
                             <json_value copy="status"/>
                             <json_value copy="ts"/>
                             <json_value copy="ch"/>
@@ -156,8 +154,8 @@
                             <query key="type" value="{mergeType}"/>
                         </query_strings>
                     </request>
-                    <response model="Depth">
-                        <json_parser>
+                    <response>
+                        <json_parser model="Depth">
                             <json_value copy="status"/>
                             <json_value copy="ts"/>
                             <json_value copy="ch"/>
@@ -186,8 +184,8 @@
                             <query key="type" value="step0"/>
                         </query_strings>
                     </request>
-                    <response model="BestQuote">
-                        <json_parser>
+                    <response>
+                        <json_parser model="BestQuote">
                             <json_value copy="status"/>
                             <json_value copy="ts"/>
                             <json_value copy="ch"/>
@@ -226,8 +224,8 @@
                             </attribute>
                         </post_body>
                     </request>
-                    <response model="OrderID">
-                        <json_parser>
+                    <response>
+                        <json_parser model="OrderID">
                             <json_value copy="status"/>
                             <json_value copy="data"/>
                         </json_parser>
@@ -239,8 +237,8 @@
                         <int name="orderId"/>
                     </inputs>
                     <request method="post" target="/v1/order/orders/{orderId}/submitcancel" signature="restful"/>
-                    <response model="OrderID">
-                        <json_parser>
+                    <response>
+                        <json_parser model="OrderID">
                             <json_value copy="status"/>
                             <json_value copy="data"/>
                         </json_parser>
@@ -255,8 +253,8 @@
             <interfaces>
                 <interface name="getAccounts">
                     <request method="get" target="/v1/account/accounts" signature="restful"/>
-                    <response model="Account">
-                        <json_parser>
+                    <response>
+                        <json_parser model="Account">
                             <json_value copy="status"/>
                             <json_object key="data" model="AccountData">
                                 <json_value copy="id"/>

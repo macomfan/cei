@@ -21,7 +21,7 @@ public class BuildWebSocketImplementation {
                 xJsonParser jsonParser = new xJsonParser();
                 jsonParser.itemList = null;
                 jsonParser.jsonChecker = trigger.jsonChecker;
-                BuildJsonParser.build(jsonParser, msg, null, dataProcessorBuilder, IJsonCheckerBuilder.UsedFor.RETURN_RESULT);
+                BuildJsonParser.build(jsonParser, msg, dataProcessorBuilder, IJsonCheckerBuilder.UsedFor.RETURN_RESULT);
             }
         }
         builder.endTrigger();

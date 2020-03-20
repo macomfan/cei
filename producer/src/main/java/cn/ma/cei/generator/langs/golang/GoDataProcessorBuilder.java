@@ -55,4 +55,21 @@ public class GoDataProcessorBuilder implements IDataProcessorBuilder {
     public void hmacsha265(Variable output, Variable input, Variable key) {
         method.addAssignAndDeclare(method.useVariable(new GoVar(output)), method.invoke("authentication,hmacsha256", new GoVar(input), new GoVar(key)));
     }
+
+    @Override
+    public void combineQueryString(Variable requestVariable, Variable output, Variable sort, Variable separator) {
+        method.addAssignAndDeclare(method.useVariable(new GoVar(output)),
+                method.invoke("authentication.CombineQueryString", new GoVar(requestVariable), new GoVar(sort), new GoVar(separator)));
+    }
+
+    @Override
+    public void getRequestInfo(Variable requestVariable, Variable output, Variable info, Variable convert) {
+        method.addAssignAndDeclare(method.useVariable(new GoVar(output)),
+                method.invoke("authentication.GetRequestInfo", new GoVar(requestVariable), new GoVar(info), new GoVar(convert)));
+    }
+
+    @Override
+    public void addQueryString(Variable requestVariable, Variable key, Variable value) {
+        method.addInvoke(requestVariable.getDescriptor() + ".AddQueryString", new GoVar(key), new GoVar(value));
+    }
 }

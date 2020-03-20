@@ -8,8 +8,8 @@
 			<interfaces>
 				<interface name="getExchangeInfo">
 					<request method="get" target="/api/v3/exchangeInfo"/>
-					<response model="ExchangeInfo">
-						<json_parser>
+					<response>
+						<json_parser model="ExchangeInfo">
 							<json_value copy="timezone"/>
 							<json_value copy="serverTime"/>
 							<json_object_array copy="rateLimits" model="RateLimits">

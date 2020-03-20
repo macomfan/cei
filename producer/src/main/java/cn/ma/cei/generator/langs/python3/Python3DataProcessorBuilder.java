@@ -54,4 +54,19 @@ public class Python3DataProcessorBuilder implements IDataProcessorBuilder {
     public void hmacsha265(Variable output, Variable input, Variable key) {
         method.addAssign(method.defineVariable(output), method.invoke("AuthenticationTool.hmacsha256", input, key));
     }
+
+    @Override
+    public void addQueryString(Variable requestVariable, Variable key, Variable value) {
+        method.addInvoke(requestVariable.getDescriptor() + ".add_query_string", key, value);
+    }
+
+    @Override
+    public void combineQueryString(Variable requestVariable, Variable output, Variable sort, Variable separator) {
+        method.addAssign(method.defineVariable(output), method.invoke("AuthenticationTool.combine_query_string", requestVariable, sort, separator));
+    }
+
+    @Override
+    public void getRequestInfo(Variable requestVariable, Variable output, Variable info, Variable convert) {
+        method.addAssign(method.defineVariable(output), method.invoke("AuthenticationTool.get_request_info", requestVariable, info, convert));
+    }
 }

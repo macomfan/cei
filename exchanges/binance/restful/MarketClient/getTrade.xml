@@ -17,8 +17,8 @@
 							<query key="limit" value="{limit}"/>
 						</query_strings>
 					</request>
-					<response model="TradeList">
-						<json_parser>
+					<response>
+						<json_parser model="TradeList">
 							<json_object_array value="{data}" model="Trade">
 								<json_value copy="id"/>
 								<json_value copy="price"/>

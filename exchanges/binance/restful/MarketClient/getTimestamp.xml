@@ -8,8 +8,8 @@
 			<interfaces>
 				<interface name="getTimestamp">
 					<request method="get" target="/api/v3/time"/>
-					<response model="Timestamp">
-						<json_parser>
+					<response>
+						<json_parser model="Timestamp">
 							<json_value copy="serverTime"/>
 						</json_parser>
 					</response>

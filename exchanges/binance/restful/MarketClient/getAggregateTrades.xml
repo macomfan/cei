@@ -23,8 +23,8 @@
                             <query key="limit" value="{limit}"/>
                         </query_strings>
                     </request>
-                    <response model="AggregateTradeList">
-                        <json_parser>
+                    <response>
+                        <json_parser model="AggregateTradeList">
                             <json_object_array value="{data}" model="AggregateTrade">
                                 <json_value key="a" value="{id}"/>
                                 <json_value key="p" value="{price}"/>

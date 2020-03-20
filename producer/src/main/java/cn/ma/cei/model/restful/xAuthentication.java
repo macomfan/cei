@@ -10,8 +10,10 @@ import cn.ma.cei.xml.CEIXmlAnyElementTypes;
 
 import javax.xml.bind.annotation.XmlAnyElement;
 import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlRootElement;
 import java.util.List;
 
+@XmlRootElement(name = "authentication")
 public class xAuthentication extends xElement {
     @XmlAttribute(name = "name")
     public String name;

@@ -34,15 +34,7 @@ public class BuildAuthentication {
                 GlobalContext.getCurrentMethod().getDescriptor(),
                 GlobalContext.getCurrentMethod().getInputVariableList());
 
-        BuildDataProcessor.build(authentication.items, builder.createDataProcessorBuilder(), item -> {
-            if (item instanceof xGetRequestInfo) {
-                processGetRequestInfo((xGetRequestInfo) item, request, builder);
-            } else if (item instanceof xCombineQueryString) {
-                processCombineQueryString((xCombineQueryString) item, request, builder);
-            } else if (item instanceof xAddQueryString) {
-                processAddQueryString((xAddQueryString) item, request, builder);
-            }
-        });
+        BuildDataProcessor.build(authentication.items, null, null, builder.createDataProcessorBuilder());
 
 
 //        authentication.items.forEach(item -> item.doBuild(() -> {
@@ -89,54 +81,8 @@ public class BuildAuthentication {
         return variable;
     }
 
-    public static void processAddQueryString(xAddQueryString appendQueryString, Variable requestVariable, IAuthenticationBuilder builder) {
-        if (Checker.isEmpty(appendQueryString.key) || Checker.isEmpty(appendQueryString.value)) {
-            throw new CEIException("[BuildSignature] key and value must be defined for append_query_string");
-        }
-        Variable variable = queryVariable(appendQueryString.value);
-        Variable key = queryVariable(appendQueryString.key);
-        builder.addQueryString(requestVariable, key, variable);
-    }
 
-    public static void processCombineQueryString(xCombineQueryString combineQueryString, Variable requestVariable, IAuthenticationBuilder builder) {
-        if (Checker.isEmpty(combineQueryString.output)) {
-            throw new CEIException("[BuildSignature] output must be defined for CombineQueryString");
-        }
-        Variable output = GlobalContext.getCurrentMethod().createLocalVariable(xString.inst.getType(), RegexHelper.isReference(combineQueryString.output));
 
-        Variable sort;
-        if (!Checker.isEmpty(combineQueryString.sort)) {
-            sort = GlobalContext.createStatement(Constant.authenticationMethod().tryGet(combineQueryString.sort));
-        } else {
-            sort = GlobalContext.createStatement(Constant.authenticationMethod().tryGet(AuthenticationTool.Constant.NONE));
-        }
-        Variable separator = queryVariable(combineQueryString.separator);
-        builder.combineQueryString(requestVariable, output, sort, separator);
-    }
-
-    public static void processGetRequestInfo(xGetRequestInfo getRequestInfo, Variable requestVariable, IAuthenticationBuilder builder) {
-        if (Checker.isEmpty(getRequestInfo.output)) {
-            throw new CEIException("[BuildSignature] output must be defined for GetRequestInfo");
-        }
-        if (Checker.isEmpty(getRequestInfo.info)) {
-            throw new CEIException("[BuildSignature] info must be defined for GetRequestInfo");
-        }
-        Variable output = GlobalContext.getCurrentMethod().createLocalVariable(xString.inst.getType(), RegexHelper.isReference(getRequestInfo.output));
-
-        Variable info;
-        if (!Checker.isEmpty(getRequestInfo.info)) {
-            info = GlobalContext.createStatement(Constant.authenticationMethod().tryGet(getRequestInfo.info));
-        } else {
-            info = GlobalContext.createStatement(Constant.authenticationMethod().tryGet(AuthenticationTool.Constant.NONE));
-        }
-        Variable convert;
-        if (!Checker.isEmpty(getRequestInfo.convert)) {
-            convert = GlobalContext.createStatement(Constant.authenticationMethod().tryGet(getRequestInfo.convert));
-        } else {
-            convert = GlobalContext.createStatement(Constant.authenticationMethod().tryGet(AuthenticationTool.Constant.NONE));
-        }
-        builder.getRequestInfo(requestVariable, output, info, convert);
-    }
 
     public static void processAppendStringArray(xAddStringArray appendStringArray, Variable requestVariable, IAuthenticationBuilder builder) {
         if (Checker.isEmpty(appendStringArray.output)) {

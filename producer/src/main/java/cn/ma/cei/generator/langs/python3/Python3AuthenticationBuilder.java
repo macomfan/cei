@@ -36,10 +36,6 @@ public class Python3AuthenticationBuilder implements IAuthenticationBuilder {
 
 
 
-    @Override
-    public void addQueryString(Variable requestVariable, Variable key, Variable value) {
-        method.addInvoke(requestVariable.getDescriptor() + ".add_query_string", key, value);
-    }
 
     @Override
     public void appendToString(boolean needDefineNewOutput, Variable output, Variable input) {
@@ -50,15 +46,6 @@ public class Python3AuthenticationBuilder implements IAuthenticationBuilder {
         }
     }
 
-    @Override
-    public void combineQueryString(Variable requestVariable, Variable output, Variable sort, Variable separator) {
-        method.addAssign(method.defineVariable(output), method.invoke("AuthenticationTool.combine_query_string", requestVariable, sort, separator));
-    }
-
-    @Override
-    public void getRequestInfo(Variable requestVariable, Variable output, Variable info, Variable convert) {
-        method.addAssign(method.defineVariable(output), method.invoke("AuthenticationTool.get_request_info", requestVariable, info, convert));
-    }
 
     @Override
     public void addStringArray(Variable output, Variable input) {

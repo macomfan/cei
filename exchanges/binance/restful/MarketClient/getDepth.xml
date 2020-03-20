@@ -17,8 +17,8 @@
 							<query key="limit" value="{limit}"/>
 						</query_strings>
 					</request>
-					<response model="Depth">
-						<json_parser>
+					<response>
+						<json_parser model="Depth">
 							<json_value copy="lastUpdateId"/>
 							<json_object_array copy="bids" model="DepthEntity">
 								<json_value key="\[0]" value="{price}"/>

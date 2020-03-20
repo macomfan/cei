@@ -16,6 +16,12 @@ public interface IDataProcessorBuilder {
 
     void hmacsha265(Variable output, Variable input, Variable key);
 
+    void addQueryString(Variable requestVariable, Variable key, Variable value);
+
+    void combineQueryString(Variable requestVariable, Variable output, Variable sort, Variable separator);
+
+    void getRequestInfo(Variable requestVariable, Variable output, Variable info, Variable convert);
+
     /***
      * Return the statement of converting the json builder to string;
      * e.g.

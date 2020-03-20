@@ -13,8 +13,10 @@ import java.util.List;
 @XmlRootElement(name = "response")
 public class xResponse extends xElement {
 
-    @XmlAttribute(name = "model")
-    public String model;
+    @XmlAttribute(name = "type")
+    public String type;
+
+    public String result;
 
     @XmlAnyElement(lax = true)
     @CEIXmlAnyElementTypes({
@@ -24,6 +26,5 @@ public class xResponse extends xElement {
     @Override
     public void customCheck() {
         super.customCheck();
-        checkMemberNotNull(model, "model");
     }
 }

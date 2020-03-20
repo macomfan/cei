@@ -24,7 +24,6 @@ public class BuildJsonParser {
 
     public static Variable build(xJsonParser jsonParser,
                                  Variable inputVariable,
-                                 VariableType outputModelType,
                                  IDataProcessorBuilder dataProcessorBuilder,
                                  IJsonCheckerBuilder.UsedFor usedFor) {
         Checker.isNull(dataProcessorBuilder, BuildJsonParser.class, "IDataProcessorBuilder");
@@ -33,6 +32,7 @@ public class BuildJsonParser {
         if (jsonParser == null) {
             throw new CEIException("[BuildJsonParser] The root is not json parser");
         }
+        VariableType outputModelType = GlobalContext.variableType(jsonParser.model);
         Variable rootJsonObject = defineRootJsonObject();
         jsonParserBuilder.defineRootJsonObject(rootJsonObject, inputVariable);
 

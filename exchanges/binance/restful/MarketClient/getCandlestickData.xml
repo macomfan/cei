@@ -23,8 +23,8 @@
                             <query key="limit" value="{limit}"/>
                         </query_strings>
                     </request>
-                    <response model="CandlestickDataList">
-                        <json_parser>
+                    <response>
+                        <json_parser model="CandlestickDataList">
                             <json_object_array value="{data}" model="CandlestickData">
                                 <json_value key="\[0]" value="{open}"/>
                                 <json_value key="\[1]" value="{high}"/>

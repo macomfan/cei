@@ -31,20 +31,9 @@ public class JavaAuthenticationBuilder implements IAuthenticationBuilder {
 
 
 
-    @Override
-    public void addQueryString(Variable requestVariable, Variable key, Variable value) {
-        method.addInvoke(requestVariable.getDescriptor() + ".addQueryString", key, value);
-    }
 
-    @Override
-    public void combineQueryString(Variable requestVariable, Variable output, Variable sort, Variable separator) {
-        method.addAssign(method.defineVariable(output), method.invoke("AuthenticationTool.combineQueryString", requestVariable, sort, separator));
-    }
 
-    @Override
-    public void getRequestInfo(Variable requestVariable, Variable output, Variable info, Variable convert) {
-        method.addAssign(method.defineVariable(output), method.invoke("AuthenticationTool.getRequestInfo", requestVariable, info, convert));
-    }
+
 
     @Override
     public void onAddReference(VariableType variableType) {

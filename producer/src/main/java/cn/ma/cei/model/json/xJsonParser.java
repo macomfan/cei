@@ -2,10 +2,10 @@ package cn.ma.cei.model.json;
 
 import cn.ma.cei.generator.builder.IJsonCheckerBuilder;
 import cn.ma.cei.model.base.xDataProcessorItem;
-import cn.ma.cei.model.base.xElement;
 import cn.ma.cei.xml.CEIXmlAnyElementTypes;
 
 import javax.xml.bind.annotation.XmlAnyElement;
+import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.util.List;
@@ -15,8 +15,10 @@ public class xJsonParser extends xDataProcessorItem {
 
     public IJsonCheckerBuilder.UsedFor usedFor = IJsonCheckerBuilder.UsedFor.UNDEFINED;
 
+    @XmlAttribute(name = "model")
     public String model;
 
+    @XmlAttribute(name = "name")
     public String name;
 
     @XmlAnyElement(lax = true)
