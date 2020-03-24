@@ -6,9 +6,11 @@
 package cn.ma.cei.generator.langs.golang;
 
 import cn.ma.cei.generator.BuilderContext;
-import cn.ma.cei.generator.builder.*;
 import cn.ma.cei.generator.Variable;
 import cn.ma.cei.generator.VariableType;
+import cn.ma.cei.generator.builder.IDataProcessorBuilder;
+import cn.ma.cei.generator.builder.IRestfulInterfaceBuilder;
+import cn.ma.cei.generator.buildin.RestfulOptions;
 import cn.ma.cei.generator.langs.golang.tools.*;
 import cn.ma.cei.utils.WordSplitter;
 
@@ -66,7 +68,7 @@ public class GoRestfulInterfaceBuilder implements IRestfulInterfaceBuilder {
 
     @Override
     public void invokeAuthentication(Variable request, String methodName) {
-        Variable option = BuilderContext.createStatement("inst.options");
+        Variable option = BuilderContext.createStatement(RestfulOptions.getType(), "inst.options");
         method.addInvoke(WordSplitter.getLowerCamelCase(methodName), new GoVar(request), new GoVar(option));
     }
 

@@ -7,10 +7,8 @@ import cn.ma.cei.model.xModel;
 import cn.ma.cei.model.xSDK;
 import cn.ma.cei.utils.Checker;
 
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
 public class Finalizer {
     private List<xSDK> orgSDKList = new LinkedList<>();
@@ -32,59 +30,13 @@ public class Finalizer {
         //  - Authentication
         sdk.doCheck();
         if (sdk.definition != null) {
-            XMLDatabase.registerSDK(sdk);
+            XMLDatabase.registrySDK(sdk);
         }
         orgSDKList.add(sdk);
     }
 
-    private void registerSDK() {
-        orgSDKList.forEach(sdk -> {
-            if (sdk.modelList != null) {
-                sdk.modelList.forEach(model -> XMLDatabase.registerModel(sdk.name, model.name, model));
-            }
-            if (sdk.clients != null) {
-                if (sdk.clients.restfulList != null) {
-                    sdk.clients.restfulList.forEach(client -> {
-                        if (client.connection != null) {
-                            XMLDatabase.registerRestfulClient(sdk.name, client.name, client.connection);
-                        }
-                        if (client.interfaceList != null) {
-                            client.interfaceList.forEach(intf -> {
-                                XMLDatabase.registerRestfulInterface(sdk.name, client.name, intf.name, intf);
-                            });
-                        }
-                    });
-                }
-            }
-        });
-        orgSDKList.forEach(sdk -> {
-            if (sdk.clients == null) {
-                return;
-            }
-            if (sdk.clients.webSocketList != null) {
-                sdk.clients.webSocketList.forEach(client -> {
-                    if (client.connection != null) {
-                        XMLDatabase.registerWebSocketClient(sdk.name, client.name, client.connection);
-                    }
-                    if (client.interfaces != null) {
-                        client.interfaces.forEach(intf -> {
-                            XMLDatabase.registerWebSocketInterface(sdk.name, client.name, intf.name, intf);
-                        });
-                    }
-                    if (client.actions != null) {
-                        client.actions.forEach(action -> {
-                            XMLDatabase.registerWebSocketAction(sdk.name, client.name, action.name, action);
-                        });
-                    }
-                });
-            }
-        });
-    }
-
     public List<xSDK> finalizeSDK() {
         CEIErrors.showDebug("==== %s ====", "Start finalize");
-        registerSDK();
-        XMLDatabase.ready();
 
         // Check model dependency
         XMLDatabase.getSDKs().forEach(sdk -> {

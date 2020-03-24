@@ -8,7 +8,7 @@ package cn.ma.cei.generator.langs.golang.tools;
 import cn.ma.cei.exception.CEIException;
 import cn.ma.cei.generator.VariableType;
 import cn.ma.cei.generator.langs.golang.GoCode;
-import cn.ma.cei.utils.UniquetList;
+import cn.ma.cei.utils.UniqueList;
 import cn.ma.cei.utils.WordSplitter;
 
 import java.util.HashSet;
@@ -25,8 +25,8 @@ public class GoStruct {
     private GoCode code = new GoCode();
     private String structName;
 
-    private UniquetList<String, GoVar> publicMemberList = new UniquetList<>();
-    private UniquetList<String, GoVar> privateMemberList = new UniquetList<>();
+    private UniqueList<String, GoVar> publicMemberList = new UniqueList<>();
+    private UniqueList<String, GoVar> privateMemberList = new UniqueList<>();
     private Set<String> importList = new HashSet<>();
     private List<GoMethod> methodList = new LinkedList<>();
 

@@ -1,7 +1,6 @@
 package cn.ma.cei.service.processors;
 
 import cn.ma.cei.finalizer.XMLDatabase;
-import cn.ma.cei.model.restful.xRestful;
 import cn.ma.cei.service.ProcessContext;
 import cn.ma.cei.service.messages.ExchangeInfoMessage;
 import cn.ma.cei.service.response.ExchangeInfo;
@@ -27,21 +26,21 @@ public class ExchangeInfoProcessor extends ProcessorBase<ExchangeInfoMessage> {
 
     @Override
     public void process(ProcessContext context, ExchangeInfoMessage msg) {
-        if (!XMLDatabase.isExchangeExist(msg.param.exchangeName)) {
+        if (!XMLDatabase.containsExchange(msg.param.exchangeName)) {
             context.error("Cannot find exchange:" + msg.param.exchangeName);
             return;
         }
         ExchangeInfo exchangeInfo = new ExchangeInfo();
         exchangeInfo.name = msg.param.exchangeName;
         exchangeInfo.models.addAll(XMLDatabase.getModelSet(msg.param.exchangeName));
-        Set<String> clients = XMLDatabase.getClientSet(msg.param.exchangeName);
-        clients.forEach((clientName) -> {
-            ExchangeInfo.Client clientInfo = new ExchangeInfo.Client();
-            clientInfo.name = clientName;
-//            xRestful client = XMLDatabase.getClient(msg.param.exchangeName, clientName);
-//            clientInfo.interfaces.addAll(client.getInterfaceSet());
-            exchangeInfo.clients.add(clientInfo);
-        });
+//        Set<String> clients = XMLDatabase.getClientSet(msg.param.exchangeName);
+//        clients.forEach((clientName) -> {
+//            ExchangeInfo.Client clientInfo = new ExchangeInfo.Client();
+//            clientInfo.name = clientName;
+////            xRestful client = XMLDatabase.getClient(msg.param.exchangeName, clientName);
+////            clientInfo.interfaces.addAll(client.getInterfaceSet());
+//            exchangeInfo.clients.add(clientInfo);
+//        });
         context.response(exchangeInfo);
     }
 }

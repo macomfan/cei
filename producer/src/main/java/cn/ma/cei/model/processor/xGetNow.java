@@ -16,7 +16,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  */
 @XmlRootElement(name = "get_now")
 public class xGetNow extends xDataProcessorItem {
-    @XmlAttribute(name = "output")
+    @XmlAttribute(name = "name", required = true)
     public String name;
     
     @XmlAttribute(name = "format")

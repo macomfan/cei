@@ -8,29 +8,29 @@ import cn.ma.cei.model.authentication.xGetRequestInfo;
 import cn.ma.cei.model.types.xString;
 import cn.ma.cei.utils.Checker;
 
-public class GetRequestInfo extends DataProcessorBase<xGetRequestInfo> {
+public class BuildGetRequestInfo extends DataProcessorBase<xGetRequestInfo> {
     @Override
     public Variable build(xGetRequestInfo item, IDataProcessorBuilder builder) {
-        if (Checker.isEmpty(item.output)) {
+        if (Checker.isEmpty(item.name)) {
             throw new CEIException("[BuildSignature] output must be defined for GetRequestInfo");
         }
         if (Checker.isEmpty(item.info)) {
             throw new CEIException("[BuildSignature] info must be defined for GetRequestInfo");
         }
-        Variable output = createVariable(xString.inst.getType(), item.output);
+        Variable output = createLocalVariable(xString.inst.getType(), item.name);
         Variable requestVariable = queryVariable("{request}");
 
         Variable info;
         if (!Checker.isEmpty(item.info)) {
-            info = BuilderContext.createStatement(Constant.authenticationMethod().tryGet(item.info));
+            info = BuilderContext.createStatement(xString.inst.getType(), Constant.authenticationMethod().tryGet(item.info));
         } else {
-            info = BuilderContext.createStatement(Constant.authenticationMethod().tryGet(AuthenticationTool.Constant.NONE));
+            info = BuilderContext.createStatement(xString.inst.getType(), Constant.authenticationMethod().tryGet(AuthenticationTool.Constant.NONE));
         }
         Variable convert;
         if (!Checker.isEmpty(item.convert)) {
-            convert = BuilderContext.createStatement(Constant.authenticationMethod().tryGet(item.convert));
+            convert = BuilderContext.createStatement(xString.inst.getType(), Constant.authenticationMethod().tryGet(item.convert));
         } else {
-            convert = BuilderContext.createStatement(Constant.authenticationMethod().tryGet(AuthenticationTool.Constant.NONE));
+            convert = BuilderContext.createStatement(xString.inst.getType(), Constant.authenticationMethod().tryGet(AuthenticationTool.Constant.NONE));
         }
         builder.getRequestInfo(requestVariable, output, info, convert);
         return output;
@@ -43,6 +43,6 @@ public class GetRequestInfo extends DataProcessorBase<xGetRequestInfo> {
 
     @Override
     public String resultVariableName(xGetRequestInfo item) {
-        return item.output;
+        return item.name;
     }
 }

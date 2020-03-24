@@ -9,6 +9,7 @@ import cn.ma.cei.model.restful.xHeader;
 import cn.ma.cei.model.restful.xInterface;
 import cn.ma.cei.model.restful.xPostBody;
 import cn.ma.cei.model.restful.xQuery;
+import cn.ma.cei.model.types.xString;
 import cn.ma.cei.utils.RegexHelper;
 
 import java.util.LinkedList;
@@ -44,7 +45,7 @@ public class BuildRestfulInterface {
             restIf.request.doBuild(() -> {
                 builder.defineRequest(request);
                 builder.setRequestTarget(request, BuildAttributeExtension.createValueFromAttribute("target", restIf.request, builder));
-                Variable requestMethod = GlobalContext.createStatement(Constant.requestMethod().tryGet(restIf.request.method));
+                Variable requestMethod = GlobalContext.createStatement(xString.inst.getType(), Constant.requestMethod().tryGet(restIf.request.method));
                 builder.setRequestMethod(request, requestMethod);
             });
             makeHeaders(restIf.request.headers, builder);

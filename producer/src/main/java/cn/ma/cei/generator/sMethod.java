@@ -4,15 +4,15 @@ import cn.ma.cei.exception.CEIErrorType;
 import cn.ma.cei.exception.CEIErrors;
 import cn.ma.cei.exception.CEIException;
 import cn.ma.cei.utils.RegexHelper;
-import cn.ma.cei.utils.UniquetList;
+import cn.ma.cei.utils.UniqueList;
 
 import java.util.LinkedList;
 import java.util.List;
 
 public class sMethod {
     private String name;
-    private UniquetList<String, Variable> variableList = new UniquetList<>();
-    private UniquetList<String, sMethod> nestedMethodList = new UniquetList<>();
+    private UniqueList<String, Variable> variableList = new UniqueList<>();
+    private UniqueList<String, sMethod> nestedMethodList = new UniqueList<>();
     private VariableType returnType;
     private int temporaryId = 0;
 
@@ -82,6 +82,21 @@ public class sMethod {
      */
     public Variable getVariable(String variableName) {
         return variableList.get(variableName);
+    }
+
+    /***
+     * Get the variable including input variable and local variable by variable name.
+     * When cannot find the variable, this function will throw the exception.
+     *
+     * @param variableName the variable name
+     * @return the variable object
+     */
+    public Variable tryGetVariable(String variableName) {
+        Variable result = getVariable(variableName);
+        if (result == null) {
+            CEIErrors.showFailure(CEIErrorType.XML, "Cannot find variable: %s in method: %s", variableName, name);
+        }
+        return result;
     }
 
     /***

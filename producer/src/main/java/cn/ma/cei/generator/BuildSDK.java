@@ -41,7 +41,7 @@ public class BuildSDK {
 
     public static void build(String inputFolder, String language, String outputFolder) {
         CEIErrors.showDebug("==== %s ====", "Start load");
-        List<xSDK> sdks = (new JAXBWrapper()).loadFromFolder("C:\\dev\\cei\\exchanges");
+        List<xSDK> sdks = (new JAXBWrapper()).loadFromFolder(inputFolder);
         CEIErrors.showDebug("==== %s ====", "End load");
         Finalizer finalizer = new Finalizer();
         finalizer.addSDK(sdks);

@@ -8,7 +8,7 @@ package cn.ma.cei.generator.langs.python3.tools;
 import cn.ma.cei.generator.Variable;
 import cn.ma.cei.generator.VariableType;
 import cn.ma.cei.generator.langs.python3.Python3Code;
-import cn.ma.cei.utils.UniquetList;
+import cn.ma.cei.utils.UniqueList;
 
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -28,7 +28,7 @@ public class Python3Class {
 
     private final String className;
     private Python3Code code = new Python3Code();
-    private UniquetList<String, Variable> memberList = new UniquetList<>();
+    private UniqueList<String, Variable> memberList = new UniqueList<>();
     private Set<String> importList = new HashSet<>();
     private List<Python3Code> methodList = new LinkedList<>();
 

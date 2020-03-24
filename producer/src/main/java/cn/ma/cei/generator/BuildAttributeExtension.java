@@ -35,20 +35,21 @@ public class BuildAttributeExtension {
 
         }
         if (attrValue == null) {
-            // not define
+            // not define the attribute, should read <attribute> session
             xAttribute valueProcessor = various.getAttributeByName(attrName);
             if (valueProcessor == null) {
                 throw new CEIException("Attribute " + attrName + " do not have both value and value extension");
             }
-            if (valueProcessor.jsonBuilder != null) {
-                IJsonBuilderBuilder jsonBuilderBuilder = dataProcessorBuilder.createJsonBuilderBuilder();
-                Variable jsonBuilder = buildJsonBuilder(valueProcessor.jsonBuilder, jsonBuilderBuilder);
-                return dataProcessorBuilder.jsonBuilderToString(jsonBuilder);
-            } else if (valueProcessor.stringBuilder != null) {
-                return buildStringBuilder(valueProcessor, null);
-            } else {
-                return null;
-            }
+            return BuildDataProcessor.build(valueProcessor.items, null, valueProcessor.result, dataProcessorBuilder);
+//            if (valueProcessor.jsonBuilder != null) {
+//                IJsonBuilderBuilder jsonBuilderBuilder = dataProcessorBuilder.createJsonBuilderBuilder();
+//                Variable jsonBuilder = buildJsonBuilder(valueProcessor.jsonBuilder, jsonBuilderBuilder);
+//                return dataProcessorBuilder.jsonBuilderToString(jsonBuilder);
+//            } else if (valueProcessor.stringBuilder != null) {
+//                return buildStringBuilder(valueProcessor, null);
+//            } else {
+//                return null;
+//            }
 
         } else if (RegexHelper.isReference(attrValue) != null) {
                 Variable var = GlobalContext.getCurrentMethod().getVariable(RegexHelper.isReference(attrValue));
@@ -75,63 +76,5 @@ public class BuildAttributeExtension {
                 return dataProcessorBuilder.stringReplacement(params);
             }
         }
-    }
-
-    private static Variable buildJsonBuilder(xJsonBuilder jsonBuilder, IJsonBuilderBuilder jsonBuilderBuilder) {
-        if (jsonBuilderBuilder == null) {
-            throw new CEIException("JsonBuilderBuilder is null");
-        }
-        Variable jsonObject = GlobalContext.getCurrentMethod().createLocalVariable(JsonWrapper.getType(), "jsonBuilder");
-        jsonBuilderBuilder.defineRootJsonObject(jsonObject);
-        jsonBuilder.itemList.forEach(item -> item.doBuild(() ->{
-            if (item.copy == null) {
-                if (item.key == null || item.value == null) {
-                    throw new CEIException("[BuildJsonBuilder] from, to and copy cannot be null");
-                }
-            } else {
-                if (item.key != null && item.value != null) {
-                    throw new CEIException("[BuildJsonBuilder] from, to cannot exist with copy");
-                } else {
-                    item.key = "{" + item.copy + "}";
-                    item.value = item.copy;
-                    item.copy = null;
-                }
-            }
-            Variable from = getFromVariable(item);
-            if (from == null) {
-                throw new CEIException("[BuildJsonBuilder] cannot process from");
-            }
-            Variable to = GlobalContext.createStringConstant(item.value);
-
-            if (item instanceof xJsonValue) {
-                if (from.getType() == xString.inst.getType()) {
-                    jsonBuilderBuilder.addJsonString(from, jsonObject, to);
-                } else if (from.getType() == xInt.inst.getType()) {
-                    jsonBuilderBuilder.addJsonNumber(from, jsonObject, to);
-                }
-                // TODO
-            } else if (item instanceof xJsonString) {
-                jsonBuilderBuilder.addJsonString(from, jsonObject, to);
-            } else if (item instanceof xJsonInteger) {
-                jsonBuilderBuilder.addJsonNumber(from, jsonObject, to);
-            } else if (item instanceof xJsonBoolean) {
-                jsonBuilderBuilder.addJsonBoolean(from, jsonObject, to);
-            } else if (item instanceof xJsonDecimal) {
-                jsonBuilderBuilder.addJsonNumber(from, jsonObject, to);
-            }
-        }));
-
-        return jsonObject;
-    }
-
-    private static Variable buildStringBuilder(xAttribute valueProcessor, IStringBuilderBuilder builder) {
-            return null;
-    }
-
-    private static Variable getFromVariable(xJsonType jsonItem) {
-        if (jsonItem.key != null && !jsonItem.key.equals("")) {
-            return GlobalContext.getCurrentMethod().getVariableAsParam(jsonItem.key);
-        }
-        return null;
     }
 }

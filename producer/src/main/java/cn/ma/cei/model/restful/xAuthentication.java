@@ -6,6 +6,8 @@ import cn.ma.cei.model.base.xElement;
 import cn.ma.cei.model.processor.xBase64;
 import cn.ma.cei.model.processor.xGetNow;
 import cn.ma.cei.model.processor.xHmacSHA256;
+import cn.ma.cei.model.string.xAddStringItem;
+import cn.ma.cei.model.string.xCombineStringItems;
 import cn.ma.cei.xml.CEIXmlAnyElementTypes;
 
 import javax.xml.bind.annotation.XmlAnyElement;
@@ -24,9 +26,9 @@ public class xAuthentication extends xElement {
             xAddQueryString.class,
             xCombineQueryString.class,
             xGetRequestInfo.class,
-            xAddStringArray.class,
+            xAddStringItem.class,
             xAppendToString.class,
-            xCombineStringArray.class,
+            xCombineStringItems.class,
             xBase64.class,
             xHmacSHA256.class})
     public List<xDataProcessorItem> items;

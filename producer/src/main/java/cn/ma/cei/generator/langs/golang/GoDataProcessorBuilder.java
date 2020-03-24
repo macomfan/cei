@@ -37,7 +37,12 @@ public class GoDataProcessorBuilder implements IDataProcessorBuilder {
     }
 
     @Override
-    public Variable jsonBuilderToString(Variable jsonBuilder) {
+    public Variable jsonWrapperToString(Variable jsonWrapper) {
+        return null;
+    }
+
+    @Override
+    public Variable stringWrapperToString(Variable stringWrapper) {
         return null;
     }
 

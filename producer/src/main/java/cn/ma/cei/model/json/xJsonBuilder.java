@@ -6,9 +6,11 @@
 package cn.ma.cei.model.json;
 
 import cn.ma.cei.model.base.xBuilder;
+import cn.ma.cei.model.base.xDataProcessorItem;
 import cn.ma.cei.xml.CEIXmlAnyElementTypes;
 import java.util.List;
 import javax.xml.bind.annotation.XmlAnyElement;
+import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -16,7 +18,10 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author u0151316
  */
 @XmlRootElement(name = "json_builder")
-public class xJsonBuilder extends xBuilder {
+public class xJsonBuilder extends xDataProcessorItem {
+
+    @XmlAttribute(name = "name")
+    public String name;
 
     @XmlAnyElement(lax = true)
     @CEIXmlAnyElementTypes({

@@ -7,6 +7,7 @@ import cn.ma.cei.generator.builder.IJsonBuilderBuilder;
 import cn.ma.cei.generator.builder.IJsonParserBuilder;
 import cn.ma.cei.generator.builder.IStringBuilderBuilder;
 import cn.ma.cei.generator.langs.java.tools.JavaMethod;
+import cn.ma.cei.model.types.xString;
 
 import java.nio.Buffer;
 
@@ -33,13 +34,18 @@ public class JavaDataProcessorBuilder implements IDataProcessorBuilder {
     }
 
     @Override
-    public Variable jsonBuilderToString(Variable jsonBuilder) {
-        return BuilderContext.createStatement(jsonBuilder.getDescriptor() + ".toJsonString()");
+    public Variable jsonWrapperToString(Variable jsonWrapper) {
+        return BuilderContext.createStatement(xString.inst.getType(), jsonWrapper.getDescriptor() + ".toJsonString()");
+    }
+
+    @Override
+    public Variable stringWrapperToString(Variable stringWrapper) {
+        return BuilderContext.createStatement(xString.inst.getType(), stringWrapper.getDescriptor() + ".toNormalString()");
     }
 
     @Override
     public Variable stringReplacement(Variable... items) {
-        return BuilderContext.createStatement(method.invoke("StringBuilder.replace", items));
+        return BuilderContext.createStatement(xString.inst.getType(), method.invoke("StringBuilder.replace", items));
     }
 
     @Override

@@ -17,8 +17,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement(name = "hmacsha256")
 public class xHmacSHA256 extends xDataProcessorItem {
 
-    @XmlAttribute(name = "output")
-    public String output;
+    @XmlAttribute(name = "name")
+    public String name;
 
     @XmlAttribute(name = "input")
     public String input;
@@ -30,7 +30,7 @@ public class xHmacSHA256 extends xDataProcessorItem {
     public void customCheck() {
         super.customCheck();
         checkMemberNotNull(input, "input");
-        checkMemberNotNull(output, "output");
+        checkMemberNotNull(name, "output");
         checkMemberNotNull(key, "key");
     }
 }

@@ -4,13 +4,17 @@ import cn.ma.cei.exception.CEIErrorType;
 import cn.ma.cei.exception.CEIErrors;
 import cn.ma.cei.generator.builder.IDataProcessorBuilder;
 import cn.ma.cei.generator.dataprocessor.*;
+import cn.ma.cei.generator.dataprocessor.BuildJsonParser;
 import cn.ma.cei.model.authentication.xAddQueryString;
 import cn.ma.cei.model.authentication.xCombineQueryString;
+import cn.ma.cei.model.authentication.xGetRequestInfo;
 import cn.ma.cei.model.base.xDataProcessorItem;
+import cn.ma.cei.model.json.xJsonBuilder;
 import cn.ma.cei.model.json.xJsonParser;
 import cn.ma.cei.model.processor.xBase64;
 import cn.ma.cei.model.processor.xGetNow;
 import cn.ma.cei.model.processor.xHmacSHA256;
+import cn.ma.cei.model.string.xStringBuilder;
 import cn.ma.cei.utils.Checker;
 import cn.ma.cei.utils.NormalMap;
 
@@ -22,12 +26,15 @@ public class BuildDataProcessor {
     private static NormalMap<Class<?>, DataProcessorBase<?>> processorMap = new NormalMap<>();
 
     static {
-        processorMap.put(xGetNow.class, new GetNow());
-        processorMap.put(xBase64.class, new Base64());
-        processorMap.put(xHmacSHA256.class, new HmacSHA256());
-        processorMap.put(xAddQueryString.class, new AddQueryString());
-        processorMap.put(xCombineQueryString.class, new CombineQueryString());
-        processorMap.put(xJsonParser.class, new JsonParser());
+        processorMap.put(xGetNow.class, new BuildGetNow());
+        processorMap.put(xBase64.class, new BuildBase64());
+        processorMap.put(xHmacSHA256.class, new BuildHmacSHA256());
+        processorMap.put(xGetRequestInfo.class, new BuildGetRequestInfo());
+        processorMap.put(xAddQueryString.class, new BuildAddQueryString());
+        processorMap.put(xCombineQueryString.class, new BuildCombineQueryString());
+        processorMap.put(xJsonParser.class, new BuildJsonParser());
+        processorMap.put(xJsonBuilder.class, new BuildJsonBuilder());
+        processorMap.put(xStringBuilder.class, new BuildStringWrapper());
     }
 
 

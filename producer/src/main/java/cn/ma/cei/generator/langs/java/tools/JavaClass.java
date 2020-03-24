@@ -6,16 +6,13 @@ import cn.ma.cei.generator.CEIPath;
 import cn.ma.cei.generator.Variable;
 import cn.ma.cei.generator.VariableType;
 import cn.ma.cei.generator.langs.java.JavaCode;
-import cn.ma.cei.utils.Checker;
-import cn.ma.cei.utils.UniquetList;
+import cn.ma.cei.utils.UniqueList;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 public class JavaClass {
@@ -35,12 +32,12 @@ public class JavaClass {
     private VariableType superClass = null;
     private ClassType type = ClassType.STANDARD;
 
-    private UniquetList<String, Variable> privateMemberList = new UniquetList<>();
-    private UniquetList<String, Variable> publicMemberList = new UniquetList<>();
+    private UniqueList<String, Variable> privateMemberList = new UniqueList<>();
+    private UniqueList<String, Variable> publicMemberList = new UniqueList<>();
     private Set<String> importList = new HashSet<>();
     private List<JavaMethod> methodList = new LinkedList<>();
 
-    private UniquetList<String, JavaClass> innerClasses = new UniquetList<>();
+    private UniqueList<String, JavaClass> innerClasses = new UniqueList<>();
 
     JavaCode code = new JavaCode();
 

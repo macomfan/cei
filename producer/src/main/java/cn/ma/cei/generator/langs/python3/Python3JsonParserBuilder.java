@@ -8,9 +8,11 @@ package cn.ma.cei.generator.langs.python3;
 import cn.ma.cei.generator.BuilderContext;
 import cn.ma.cei.generator.builder.IJsonCheckerBuilder;
 import cn.ma.cei.generator.builder.IJsonParserBuilder;
+import cn.ma.cei.generator.buildin.JsonWrapper;
 import cn.ma.cei.generator.buildin.TheArray;
 import cn.ma.cei.generator.Variable;
 import cn.ma.cei.generator.langs.python3.tools.Python3Method;
+import io.vertx.core.parsetools.JsonParser;
 
 /**
  *
@@ -97,7 +99,7 @@ public class Python3JsonParserBuilder implements IJsonParserBuilder {
 
     @Override
     public void defineRootJsonObject(Variable jsonObject, Variable responseVariable) {
-        Variable value = BuilderContext.createStatement(responseVariable.getDescriptor() + ".get_json()");
+        Variable value = BuilderContext.createStatement(JsonWrapper.getType() ,responseVariable.getDescriptor() + ".get_json()");
         method.addAssign(method.defineVariable(jsonObject), method.useVariable(value));
     }
 

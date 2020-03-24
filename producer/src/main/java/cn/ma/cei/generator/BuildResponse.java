@@ -2,12 +2,9 @@ package cn.ma.cei.generator;
 
 import cn.ma.cei.exception.CEIErrorType;
 import cn.ma.cei.exception.CEIErrors;
-import cn.ma.cei.exception.CEIException;
 import cn.ma.cei.generator.builder.IDataProcessorBuilder;
 import cn.ma.cei.generator.builder.IJsonCheckerBuilder;
-import cn.ma.cei.generator.builder.IMethodBuilder;
 import cn.ma.cei.generator.buildin.RestfulResponse;
-import cn.ma.cei.generator.dataprocessor.JsonParser;
 import cn.ma.cei.model.json.xJsonParser;
 import cn.ma.cei.model.types.xString;
 import cn.ma.cei.model.xResponse;
@@ -24,8 +21,7 @@ public class BuildResponse {
                 CEIErrors.showFailure(CEIErrorType.CODE, "Response type is invalid");
                 return null;
             }
-        }
-        else {
+        } else {
             return BuildDataProcessor.getResultType(response.items, response.result);
         }
     }
@@ -35,7 +31,8 @@ public class BuildResponse {
         if (response.items != null) {
             response.items.forEach(item -> {
                 if (item instanceof xJsonParser) {
-                    ((xJsonParser) item).usedFor = IJsonCheckerBuilder.UsedFor.REPORT_ERROR;
+                    if (((xJsonParser) item).jsonChecker != null)
+                        ((xJsonParser) item).jsonChecker.usedFor = IJsonCheckerBuilder.UsedFor.REPORT_ERROR;
                 }
             });
             return BuildDataProcessor.build(response.items, responseVariable, "", dataProcessorBuilder);

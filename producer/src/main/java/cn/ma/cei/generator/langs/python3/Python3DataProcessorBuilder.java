@@ -7,6 +7,7 @@ import cn.ma.cei.generator.builder.IJsonBuilderBuilder;
 import cn.ma.cei.generator.builder.IJsonParserBuilder;
 import cn.ma.cei.generator.builder.IStringBuilderBuilder;
 import cn.ma.cei.generator.langs.python3.tools.Python3Method;
+import cn.ma.cei.model.types.xString;
 
 public class Python3DataProcessorBuilder implements IDataProcessorBuilder {
     Python3Method method;
@@ -36,13 +37,18 @@ public class Python3DataProcessorBuilder implements IDataProcessorBuilder {
     }
 
     @Override
-    public Variable jsonBuilderToString(Variable jsonBuilder) {
-        return BuilderContext.createStatement(jsonBuilder.getDescriptor() + ".to_json_string()");
+    public Variable jsonWrapperToString(Variable jsonWrapper) {
+        return BuilderContext.createStatement(xString.inst.getType(), jsonWrapper.getDescriptor() + ".to_json_string()");
+    }
+
+    @Override
+    public Variable stringWrapperToString(Variable stringWrapper) {
+        return BuilderContext.createStatement(xString.inst.getType(), stringWrapper.getDescriptor() + ".to_string()");
     }
 
     @Override
     public Variable stringReplacement(Variable... items) {
-        return BuilderContext.createStatement(method.invoke("StringBuilder.replace", items));
+        return BuilderContext.createStatement(xString.inst.getType(), method.invoke("StringBuilder.replace", items));
     }
 
     @Override

@@ -17,8 +17,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement(name = "combine_query_string")
 public class xCombineQueryString extends xDataProcessorItem {
 
-    @XmlAttribute(name = "output")
-    public String output;
+    @XmlAttribute(name = "name", required = true)
+    public String name;
     
     @XmlAttribute(name = "sort")
     public String sort;
@@ -29,6 +29,5 @@ public class xCombineQueryString extends xDataProcessorItem {
     @Override
     public void customCheck() {
         super.customCheck();
-        checkMemberNotNull(output, "output");
     }
 }

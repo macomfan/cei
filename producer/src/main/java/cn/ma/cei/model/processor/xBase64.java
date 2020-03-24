@@ -17,10 +17,10 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement(name = "base64")
 public class xBase64 extends xDataProcessorItem {
 
-    @XmlAttribute(name = "output")
+    @XmlAttribute(name = "output", required = true)
     public String name;
 
-    @XmlAttribute(name = "input")
+    @XmlAttribute(name = "input", required = true)
     public String input;
 
     @Override

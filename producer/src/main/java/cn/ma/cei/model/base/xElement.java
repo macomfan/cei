@@ -27,6 +27,14 @@ public abstract class xElement {
         T doBuild();
     }
 
+    public void startBuilding() {
+        BuildTracer.startBuilding(this);
+    }
+
+    public void endBuilding() {
+        BuildTracer.endBuilding();
+    }
+
     public <T> T doBuildWithReturn(BuildingWithReturn<T> building) {
         BuildTracer.startBuilding(this);
         T res = building.doBuild();
@@ -41,6 +49,7 @@ public abstract class xElement {
     }
 
     public void doCheck() {
+        // TODO need check ElementNSImpl
         if (!this.getClass().isAnnotationPresent(XmlRootElement.class)) {
             CEIErrors.showFailure(CEIErrorType.CODE, this.getClass().getName() + " must define XmlRootElement annotation.");
         }

@@ -23,14 +23,24 @@ public interface IDataProcessorBuilder {
     void getRequestInfo(Variable requestVariable, Variable output, Variable info, Variable convert);
 
     /***
-     * Return the statement of converting the json builder to string;
+     * Return the statement of converting the json wrapper to string;
      * e.g.
-     * return BuilderContext.createStatement(jsonBuilder.getDescriptor() + ".toJsonString()");
+     * return BuilderContext.createStatement(xString.inst.getType(), jsonWrapper.getDescriptor() + ".toJsonString()");
      *
-     * @param jsonBuilder the json builder variable
+     * @param jsonWrapper the json builder variable
      * @return the statement variable
      */
-    Variable jsonBuilderToString(Variable jsonBuilder);
+    Variable jsonWrapperToString(Variable jsonWrapper);
+
+    /***
+     * Return the statement of converting the string wrapper to string;
+     * e.g.
+     * return BuilderContext.createStatement(xString.inst.getType(), stringWrapper.getDescriptor() + ".toNormalString()");
+     *
+     * @param stringWrapper the json builder variable
+     * @return the statement variable
+     */
+    Variable stringWrapperToString(Variable stringWrapper);
 
 
     /***

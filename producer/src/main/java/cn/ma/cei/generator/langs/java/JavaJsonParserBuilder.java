@@ -4,6 +4,7 @@ import cn.ma.cei.generator.BuilderContext;
 import cn.ma.cei.generator.builder.IJsonCheckerBuilder;
 import cn.ma.cei.generator.Variable;
 import cn.ma.cei.generator.builder.IJsonParserBuilder;
+import cn.ma.cei.generator.buildin.JsonWrapper;
 import cn.ma.cei.generator.langs.java.tools.JavaMethod;
 import cn.ma.cei.generator.langs.java.buildin.TheLinkedList;
 
@@ -78,7 +79,7 @@ public class JavaJsonParserBuilder implements IJsonParserBuilder {
 
     @Override
     public void defineRootJsonObject(Variable jsonObject, Variable responseVariable) {
-        Variable value = BuilderContext.createStatement(responseVariable.getDescriptor() + ".getJson()");
+        Variable value = BuilderContext.createStatement(JsonWrapper.getType(), responseVariable.getDescriptor() + ".getJson()");
         method.addAssign(method.defineVariable(jsonObject), method.useVariable(value));
     }
 

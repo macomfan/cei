@@ -115,8 +115,8 @@ class GlobalContext {
         return VariableCreator.createVariable(xString.inst.getType(), value, Variable.Position.STRING, null);
     }
 
-    public static Variable createStatement(String statement) {
-        return VariableCreator.createVariable(xString.inst.getType(), statement, Variable.Position.CONSTANT, null);
+    public static Variable createStatement(VariableType type, String statement) {
+        return VariableCreator.createVariable(type, statement, Variable.Position.CONSTANT, null);
     }
 
     public static VariableType variableType(String typeName, VariableType... argsTypes) {

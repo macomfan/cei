@@ -44,6 +44,7 @@ public class JavaExchangeBuilder implements IExchangeBuilder {
         BuilderContext.setupBuildInVariableType(AuthenticationTool.typeName, "AuthenticationTool", "cn.ma.cei.impl.AuthenticationTool");
         BuilderContext.setupBuildInVariableType(TheStream.typeName, "byte[]", BuilderContext.NO_REF);
         BuilderContext.setupBuildInVariableType(JsonChecker.typeName, "JsonChecker", "cn.ma.cei.impl.JsonChecker");
+        BuilderContext.setupBuildInVariableType(StringWrapper.typeName, "StringWrapper", "cn.ma.cei.impl.StringWrapper");
 
         BuilderContext.setupBuildInVariableType(WebSocketConnection.typeName, "WebSocketConnection", "cn.ma.cei.impl.WebSocketConnection");
         BuilderContext.setupBuildInVariableType(WebSocketAction.typeName, "WebSocketAction", "cn.ma.cei.impl.WebSocketAction");

@@ -2,7 +2,10 @@ package cn.ma.cei.utils;
 
 import cn.ma.cei.exception.CEIInnerException;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 
 public class NormalMap<Key, Value> {
     private final Map<Key, Value> map = new HashMap<>();
@@ -21,6 +24,10 @@ public class NormalMap<Key, Value> {
 
     public Value get(Key key) {
         return map.get(key);
+    }
+
+    public int size() {
+        return map.size();
     }
 
     public Value tryGet(Key key) {

@@ -44,7 +44,7 @@
     <authentications>
         <restful name="restful">
             <get_now name="{timestamp}" format=""/>
-            <add_query_string key="accessKeyId" value="{apiKey}"/>
+            <add_query_string key="accessKeyId" value="{option.apiKey}"/>
             <add_query_string key="signatureMethod" value="HmacSHA256"/>
             <add_query_string key="signatureVersion" value="2"/>
             <add_query_string key="timestamp" value="{timestamp}"/>
@@ -53,11 +53,11 @@
             <get_request_info name="{host}" info="host"/>
             <get_request_info name="{target}" info="target"/>
             <string_builder name="{buffer}">
-                <add_string_array input="{method}"/>
-                <add_string_array input="{host}"/>
-                <add_string_array input="{target}"/>
-                <add_string_array input="{queryString}"/>
-                <combine_string_array separator="\n"/>
+                <add_string_item input="{method}"/>
+                <add_string_item input="{host}"/>
+                <add_string_item input="{target}"/>
+                <add_string_item input="{queryString}"/>
+                <combine_string_items separator="\n"/>
             </string_builder>
             <hmacsha256 name="{hmacsha256}" input="{buffer}" key="{secretKey}"/>
             <base64 name="{result}" input="{hmacsha256}"/>
@@ -139,7 +139,7 @@
                         <attribute for="value" result="{jsonResult}">
                             <get_now name="{ts}" format=""/>
                             <json_builder name="{jsonResult}">
-                                <json_value key="op" value="{pong}"/>
+                                <json_value key="op" value="pong"/>
                                 <json_value key="ts" value="{ts}"/>
                             </json_builder>
                         </attribute>
@@ -157,7 +157,7 @@
                         <attribute for="value" result="{jsonResult}">
                             <get_now name="{ts}" format=""/>
                             <json_builder name="{jsonResult}">
-                                <json_value key="op" value="{pong}"/>
+                                <json_value key="op" value="pong"/>
                                 <json_value key="ts" value="{ts}"/>
                             </json_builder>
                         </attribute>

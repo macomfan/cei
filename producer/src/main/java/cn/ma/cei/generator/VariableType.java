@@ -1,8 +1,10 @@
 package cn.ma.cei.generator;
 
+import cn.ma.cei.exception.CEIErrorType;
+import cn.ma.cei.exception.CEIErrors;
 import cn.ma.cei.exception.CEIException;
 import cn.ma.cei.utils.TwoTuple;
-import cn.ma.cei.utils.UniquetList;
+import cn.ma.cei.utils.UniqueList;
 
 import java.util.Collections;
 import java.util.LinkedList;
@@ -11,11 +13,17 @@ import java.util.Objects;
 
 public class VariableType {
 
-    private UniquetList<String, sMethod> methods = new UniquetList<>();
-    private UniquetList<String, Variable> members = new UniquetList<>();
+    public static VariableType VOID = new VariableType();
+
+    private UniqueList<String, sMethod> methods = new UniqueList<>();
+    private UniqueList<String, Variable> members = new UniqueList<>();
 
     private final String typeName;
     private final List<VariableType> genericList = new LinkedList<>();
+
+    private VariableType() {
+        this.typeName = "CEI_VOID_TYPE";
+    }
 
     public VariableType(String typeName, VariableType... subTypes) {
         if (subTypes != null && subTypes.length != 0) {
@@ -44,6 +52,14 @@ public class VariableType {
 
     public Variable getMember(String memberName) {
         return members.get(memberName);
+    }
+
+    public Variable tryGetMember(String memberName) {
+        Variable result = members.get(memberName);
+        if (result == null) {
+            CEIErrors.showFailure(CEIErrorType.XML, "Cannot get the member: %s in model: %s", memberName, typeName);
+        }
+        return result;
     }
 
 //    public boolean isGeneric() {

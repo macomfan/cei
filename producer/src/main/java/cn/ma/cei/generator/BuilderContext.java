@@ -32,8 +32,8 @@ public class BuilderContext {
         return GlobalContext.createStringConstant(value);
     }
 
-    public static Variable createStatement(String value) {
-        return GlobalContext.createStatement(value);
+    public static Variable createStatement(VariableType type, String value) {
+        return GlobalContext.createStatement(type, value);
     }
 
     public static VariableType variableType(String typeName, VariableType... argsTypes) {

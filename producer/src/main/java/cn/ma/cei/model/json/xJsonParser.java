@@ -1,6 +1,5 @@
 package cn.ma.cei.model.json;
 
-import cn.ma.cei.generator.builder.IJsonCheckerBuilder;
 import cn.ma.cei.model.base.xDataProcessorItem;
 import cn.ma.cei.xml.CEIXmlAnyElementTypes;
 
@@ -13,13 +12,14 @@ import java.util.List;
 @XmlRootElement(name = "json_parser")
 public class xJsonParser extends xDataProcessorItem {
 
-    public IJsonCheckerBuilder.UsedFor usedFor = IJsonCheckerBuilder.UsedFor.UNDEFINED;
-
     @XmlAttribute(name = "model")
     public String model;
 
     @XmlAttribute(name = "name")
     public String name;
+
+    @XmlAttribute(name = "input")
+    public String input;
 
     @XmlAnyElement(lax = true)
     @CEIXmlAnyElementTypes({

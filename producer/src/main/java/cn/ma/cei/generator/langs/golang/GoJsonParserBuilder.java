@@ -9,6 +9,7 @@ import cn.ma.cei.generator.BuilderContext;
 import cn.ma.cei.generator.builder.IJsonCheckerBuilder;
 import cn.ma.cei.generator.builder.IJsonParserBuilder;
 import cn.ma.cei.generator.Variable;
+import cn.ma.cei.generator.buildin.JsonWrapper;
 import cn.ma.cei.generator.langs.golang.tools.GoGetValueVar;
 import cn.ma.cei.generator.langs.golang.tools.GoMethod;
 import cn.ma.cei.generator.langs.golang.tools.GoType;
@@ -96,7 +97,7 @@ public class GoJsonParserBuilder implements IJsonParserBuilder {
 
     @Override
     public void defineRootJsonObject(Variable jsonObject, Variable responseVariable) {
-        Variable value = BuilderContext.createStatement(responseVariable.getDescriptor() + ".GetJson()");
+        Variable value = BuilderContext.createStatement(JsonWrapper.getType(),responseVariable.getDescriptor() + ".GetJson()");
         method.addAssignAndDeclare(method.useVariable(new GoVar(jsonObject)), method.useVariable(new GoVar(value)));
     }
 

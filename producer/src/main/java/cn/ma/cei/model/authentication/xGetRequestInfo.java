@@ -19,8 +19,8 @@ public class xGetRequestInfo extends xDataProcessorItem {
     @XmlAttribute(name = "info")
     public String info;
 
-    @XmlAttribute(name = "output")
-    public String output;
+    @XmlAttribute(name = "name")
+    public String name;
     
     @XmlAttribute(name = "convert")
     public String convert;
@@ -29,6 +29,6 @@ public class xGetRequestInfo extends xDataProcessorItem {
     public void customCheck() {
         super.customCheck();
         checkMemberNotNull(info, "info");
-        checkMemberNotNull(output, "output");
+        checkMemberNotNull(name, "output");
     }
 }

@@ -4,6 +4,7 @@ import cn.ma.cei.generator.BuilderContext;
 import cn.ma.cei.generator.builder.*;
 import cn.ma.cei.generator.Variable;
 import cn.ma.cei.generator.VariableType;
+import cn.ma.cei.generator.buildin.RestfulOptions;
 import cn.ma.cei.generator.langs.java.tools.JavaClass;
 import cn.ma.cei.generator.langs.java.tools.JavaMethod;
 import java.util.List;
@@ -26,7 +27,7 @@ public class JavaRestfulInterfaceBuilder implements IRestfulInterfaceBuilder {
 
     @Override
     public void defineRequest(Variable request) {
-        Variable options = BuilderContext.createStatement("this.options");
+        Variable options = BuilderContext.createStatement(RestfulOptions.getType(),"this.options");
         method.addAssign(method.defineVariable(request), method.newInstance(request.getType(), options));
     }
 
@@ -104,7 +105,7 @@ public class JavaRestfulInterfaceBuilder implements IRestfulInterfaceBuilder {
 
     @Override
     public void invokeAuthentication(Variable request, String methodName) {
-        Variable option = BuilderContext.createStatement("this.options");
+        Variable option = BuilderContext.createStatement(RestfulOptions.getType(),"this.options");
         method.addInvoke("Authentication." + methodName, request, option);
     }
 }

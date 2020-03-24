@@ -4,12 +4,16 @@ import cn.ma.cei.exception.CEIException;
 import cn.ma.cei.generator.builder.IJsonCheckerBuilder;
 import cn.ma.cei.generator.builder.IDataProcessorBuilder;
 import cn.ma.cei.generator.builder.IWebSocketImplementationBuilder;
-import cn.ma.cei.generator.buildin.JsonBuilder;
+import cn.ma.cei.generator.dataprocessor.BuildJsonParser;
+import cn.ma.cei.model.base.xDataProcessorItem;
 import cn.ma.cei.model.json.xJsonParser;
 import cn.ma.cei.model.websocket.xSend;
 import cn.ma.cei.model.websocket.xTrigger;
 import cn.ma.cei.model.xResponse;
 import cn.ma.cei.utils.Checker;
+
+import java.util.LinkedList;
+import java.util.List;
 
 public class BuildWebSocketImplementation {
     public static void buildTrigger(xTrigger trigger, Variable msg, IWebSocketImplementationBuilder builder) {
@@ -21,7 +25,10 @@ public class BuildWebSocketImplementation {
                 xJsonParser jsonParser = new xJsonParser();
                 jsonParser.itemList = null;
                 jsonParser.jsonChecker = trigger.jsonChecker;
-                BuildJsonParser.build(jsonParser, msg, dataProcessorBuilder, IJsonCheckerBuilder.UsedFor.RETURN_RESULT);
+                jsonParser.jsonChecker.usedFor = IJsonCheckerBuilder.UsedFor.RETURN_RESULT;
+                List<xDataProcessorItem> items = new LinkedList<>();
+                items.add(jsonParser);
+                BuildDataProcessor.build(items, msg, "", dataProcessorBuilder);
             }
         }
         builder.endTrigger();

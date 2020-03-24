@@ -4,7 +4,7 @@ import cn.ma.cei.generator.Variable;
 import cn.ma.cei.generator.VariableType;
 import cn.ma.cei.generator.langs.cpp.CodeForCpp;
 import cn.ma.cei.generator.langs.cpp.CodeForHpp;
-import cn.ma.cei.utils.UniquetList;
+import cn.ma.cei.utils.UniqueList;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -19,8 +19,8 @@ public class CppClass {
     private final CodeForCpp codeCpp = new CodeForCpp();
     private final CodeForHpp codeH = new CodeForHpp();
 
-    private final UniquetList<String, Variable> privateMemberList = new UniquetList();
-    private final UniquetList<String, Variable> publicMemberList = new UniquetList();
+    private final UniqueList<String, Variable> privateMemberList = new UniqueList();
+    private final UniqueList<String, Variable> publicMemberList = new UniqueList();
     private final Set<VariableType> importList = new HashSet<>();
     private final List<CppMethod> methodList = new LinkedList<>();
 
