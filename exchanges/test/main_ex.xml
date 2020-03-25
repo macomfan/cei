@@ -59,7 +59,7 @@
                 <add_string_item input="{queryString}"/>
                 <combine_string_items separator="\n"/>
             </string_builder>
-            <hmacsha256 name="{hmacsha256}" input="{buffer}" key="{secretKey}"/>
+            <hmacsha256 name="{hmacsha256}" input="{buffer}" key="{option.secretKey}"/>
             <base64 name="{result}" input="{hmacsha256}"/>
             <add_query_string key="Signature" value="{result}"/>
         </restful>

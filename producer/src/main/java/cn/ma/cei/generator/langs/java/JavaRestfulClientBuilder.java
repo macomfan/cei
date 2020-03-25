@@ -38,15 +38,9 @@ public class JavaRestfulClientBuilder implements IRestfulClientBuilder {
         clientClass.addMethod(defaultConstructor);
 
         JavaMethod optionConstructor = new JavaMethod(clientClass);
-        //BuilderContext.
         optionConstructor.startConstructor(RestfulOptions.getType().getDescriptor() + " options");
         {
-            optionConstructor.getCode().appendJavaLine("this.options", "=", "new", RestfulOptions.getType().getDescriptor() + "()");
-            Variable url = BuilderContext.createStringConstant(options.url);
-            optionConstructor.getCode().appendJavaLine("this.options.url", "=", url.getDescriptor());
-            if (options.connectionTimeout != null) {
-                optionConstructor.getCode().appendJavaLine("this.options.connectionTimeout", "=", options.connectionTimeout.toString());
-            }
+            optionConstructor.getCode().appendJavaLine("this()");
             optionConstructor.getCode().appendJavaLine("this.options.setFrom(options)");
         }
         optionConstructor.endMethod();

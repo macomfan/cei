@@ -25,7 +25,7 @@ public class JavaDataProcessorBuilder implements IDataProcessorBuilder {
 
     @Override
     public IStringBuilderBuilder createStringBuilderBuilder() {
-        return null;
+        return new JavaStringBuilderBuilder(method);
     }
 
     @Override

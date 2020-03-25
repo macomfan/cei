@@ -5,11 +5,13 @@ import cn.ma.cei.exception.*;
 import cn.ma.cei.utils.Checker;
 import cn.ma.cei.utils.ReflectionHelper;
 
+import javax.xml.bind.annotation.XmlAnyElement;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.lang.reflect.Field;
 import java.util.List;
 
 @XmlRootElement(name = "")
@@ -36,9 +38,9 @@ public abstract class xElement {
     }
 
     public <T> T doBuildWithReturn(BuildingWithReturn<T> building) {
-        BuildTracer.startBuilding(this);
+        startBuilding();
         T res = building.doBuild();
-        BuildTracer.endBuilding();
+        endBuilding();
         return res;
     }
 
@@ -53,9 +55,15 @@ public abstract class xElement {
         if (!this.getClass().isAnnotationPresent(XmlRootElement.class)) {
             CEIErrors.showFailure(CEIErrorType.CODE, this.getClass().getName() + " must define XmlRootElement annotation.");
         }
+        System.out.println("Checking: " + this.getClass().getName());
+        customCheck();
+        if (this.getClass().getName().equals("cn.ma.cei.model.restful.xAuthentication")) {
+            int a = 0;
+        }
+        List<Field> fff = ReflectionHelper.getAllFields(this);
         ReflectionHelper.getAllFields(this).forEach(field -> {
-            if (field.isAnnotationPresent(XmlElement.class)) {
-                if (field.getType() == List.class) {
+            if (field.isAnnotationPresent(XmlElement.class) || field.isAnnotationPresent(XmlAnyElement.class)) {
+                if (field.getType().getName().equals(List.class.getName())) {
                     List<?> list = ReflectionHelper.getFieldValue(field, this, List.class);
                     if (list != null) {
                         list.forEach(item -> {
@@ -101,19 +109,6 @@ public abstract class xElement {
         if (member != null) {
             member.doCheck();
         }
-    }
-
-    public <V extends xElement, T extends List<V>> void checkMember(T member) {
-        if (member != null) {
-            member.forEach(xElement::doCheck);
-        }
-    }
-
-    public <V extends xElement, T extends List<V>> void checkMemberNotNull(T member, String memberName) {
-        if (member == null || member.isEmpty()) {
-            throw new CEIXmlException(this.getClass(), memberName + " is null");
-        }
-        checkMember(member);
     }
 
     public void checkMemberNotNull(String member, String memberName) {

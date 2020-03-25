@@ -20,6 +20,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class BuildAttributeExtension {
+
     public static Variable createValueFromAttribute(String attrName, xAttributeExtension various, IMethodBuilder methodBuilder) {
         Checker.isNull(methodBuilder, BuildAttributeExtension.class, "IMethodBuilder");
         IDataProcessorBuilder dataProcessorBuilder = methodBuilder.createDataProcessorBuilder();

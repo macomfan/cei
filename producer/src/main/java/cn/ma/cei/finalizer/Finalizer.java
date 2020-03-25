@@ -28,7 +28,6 @@ public class Finalizer {
         //  - Model
         //  - Restful
         //  - Authentication
-        sdk.doCheck();
         if (sdk.definition != null) {
             XMLDatabase.registrySDK(sdk);
         }

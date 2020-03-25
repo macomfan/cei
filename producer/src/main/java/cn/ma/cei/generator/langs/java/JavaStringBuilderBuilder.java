@@ -13,4 +13,18 @@ public class JavaStringBuilderBuilder implements IStringBuilderBuilder {
     }
 
 
+    @Override
+    public void defineStringBuilderObject(Variable stringBuilderObject) {
+        method.addAssign(method.defineVariable(stringBuilderObject), method.newInstance(stringBuilderObject.getType()));
+    }
+
+    @Override
+    public void appendStringItem(Variable stringBuilderObject, Variable variable) {
+        method.addInvoke(stringBuilderObject.getDescriptor() + ".appendStringItem", variable);
+    }
+
+    @Override
+    public void combineStringItems(Variable stringBuilderObject, Variable separator) {
+        method.addInvoke(stringBuilderObject.getDescriptor() + ".combineStringItems", separator);
+    }
 }

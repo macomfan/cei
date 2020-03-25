@@ -35,7 +35,6 @@ public class xInterface extends xElement {
     public void customCheck() {
         super.customCheck();
         checkMemberNotNull(name, "name");
-        checkMember(inputList);
         checkMemberNotNull(request, "request");
         checkMemberNotNull(response, "response");
     }

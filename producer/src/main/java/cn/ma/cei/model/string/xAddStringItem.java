@@ -17,7 +17,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement(name = "add_string_item")
 public class xAddStringItem extends xDataProcessorItem {
 
-    @XmlAttribute(name = "input")
+    @XmlAttribute(name = "input", required = true)
     public String input;
 
     @Override

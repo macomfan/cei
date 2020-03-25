@@ -147,7 +147,7 @@ public abstract class DataProcessorBase<T extends xDataProcessorItem> {
         }
         Variable result = GlobalContext.getCurrentMethod().tryGetVariable(variableNames[0]);
         for (int i = 1; i < variableNames.length; i++) {
-            result = result.getType().tryGetMember(variableNames[i]);
+            result = result.getMember(variableNames[i]);
         }
         return result;
     }

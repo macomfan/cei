@@ -25,8 +25,12 @@ public class TypeConverter {
             } else {
                 CEIErrors.showFailure(CEIErrorType.XML, "Cannot convert StringWrapper to %s", objectType.getDescriptor());
             }
-        } else {
-            CEIErrors.showFailure(CEIErrorType.XML, "Not support converter");
+        } else if (input.getType() == xString.inst.getType()){
+            //if (objectType == xS)
+
+
+        } else{
+            CEIErrors.showFailure(CEIErrorType.XML, "Not support converter, from: %s, to %s", input.getType().getName(), objectType.getName());
         }
         return null;
     }

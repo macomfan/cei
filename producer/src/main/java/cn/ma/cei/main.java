@@ -91,22 +91,22 @@ public class main {
 //            System.err.println(BuildTracer.getTraceString());
 //        }
         System.out.println("==============");
-        List<xSDK> sdks = (new JAXBWrapper()).loadFromFolder("C:\\dev\\cei\\exchanges");
-        Finalizer finalizer = new Finalizer();
-        finalizer.addSDK(sdks);
-        List<xSDK> finalSDKs = finalizer.finalizeSDK();
-
-        XmlToJson xmlToJson = new XmlToJson();
-        Convert.doConvert(xmlToJson, finalSDKs.get(0));
-        System.out.println(xmlToJson.toJsonString());
-        JSONObject jsonObject = JSONObject.parseObject(xmlToJson.toJsonString());
-        JsonToXml jsonToXml = new JsonToXml(jsonObject);
-        xSDK newSdk = new xSDK();
-        Convert.doConvert(jsonToXml, newSdk);
-
-        XmlToJson xmlToJson2 = new XmlToJson();
-        Convert.doConvert(xmlToJson2, newSdk);
-        System.out.println(xmlToJson2.toJsonString());
+//        List<xSDK> sdks = (new JAXBWrapper()).loadFromFolder("C:\\dev\\cei\\exchanges");
+//        Finalizer finalizer = new Finalizer();
+//        finalizer.addSDK(sdks);
+//        List<xSDK> finalSDKs = finalizer.finalizeSDK();
+//
+//        XmlToJson xmlToJson = new XmlToJson();
+//        Convert.doConvert(xmlToJson, finalSDKs.get(0));
+//        System.out.println(xmlToJson.toJsonString());
+//        JSONObject jsonObject = JSONObject.parseObject(xmlToJson.toJsonString());
+//        JsonToXml jsonToXml = new JsonToXml(jsonObject);
+//        xSDK newSdk = new xSDK();
+//        Convert.doConvert(jsonToXml, newSdk);
+//
+//        XmlToJson xmlToJson2 = new XmlToJson();
+//        Convert.doConvert(xmlToJson2, newSdk);
+//        System.out.println(xmlToJson2.toJsonString());
         System.out.println("==============");
 //        
 //        

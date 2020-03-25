@@ -17,7 +17,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement(name = "base64")
 public class xBase64 extends xDataProcessorItem {
 
-    @XmlAttribute(name = "output", required = true)
+    @XmlAttribute(name = "name", required = true)
     public String name;
 
     @XmlAttribute(name = "input", required = true)

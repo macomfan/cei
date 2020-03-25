@@ -31,6 +31,5 @@ public class xSDK extends xElement {
     public void customCheck() {
         super.customCheck();
         checkMemberNotNull(name, "exchange");
-        checkMember(modelList);
     }
 }
