@@ -1,6 +1,5 @@
 package cn.ma.cei.finalizer;
 
-
 import cn.ma.cei.exception.CEIErrorType;
 import cn.ma.cei.exception.CEIErrors;
 import cn.ma.cei.exception.CEIException;
@@ -50,7 +49,6 @@ public class XMLDatabase {
             models.add(model.name);
         });
         return models;
-
     }
 
     public static boolean containsExchange(String exchangeName) {

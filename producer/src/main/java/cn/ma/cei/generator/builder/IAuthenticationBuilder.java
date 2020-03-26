@@ -13,19 +13,4 @@ import cn.ma.cei.generator.Variable;
  */
 public interface IAuthenticationBuilder extends IMethodBuilder {
 
-    void newStringArray(Variable stringArray);
-
-
-    
-    void appendToString(boolean needDefineNewOutput, Variable output, Variable input);
-
-
-
-
-    
-    void addStringArray(Variable output, Variable input);
-    
-    void combineStringArray(Variable output, Variable input, Variable separator);
-
-
 }

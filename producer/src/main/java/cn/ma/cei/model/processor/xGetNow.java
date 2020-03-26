@@ -19,7 +19,7 @@ public class xGetNow extends xDataProcessorItem {
     @XmlAttribute(name = "name", required = true)
     public String name;
     
-    @XmlAttribute(name = "format")
+    @XmlAttribute(name = "format", required = true)
     public String format;
 
     @Override

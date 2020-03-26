@@ -11,6 +11,7 @@ import cn.ma.cei.generator.buildin.JsonWrapper;
 import cn.ma.cei.model.json.*;
 import cn.ma.cei.model.types.xInt;
 import cn.ma.cei.model.types.xString;
+import cn.ma.cei.utils.Checker;
 
 public class BuildJsonBuilder extends DataProcessorBase<xJsonBuilder> {
     @Override
@@ -19,7 +20,13 @@ public class BuildJsonBuilder extends DataProcessorBase<xJsonBuilder> {
         if (jsonBuilderBuilder == null) {
             throw new CEIException("JsonBuilderBuilder is null");
         }
-        Variable jsonObject = createTempVariable(JsonWrapper.getType(), "jsonBuilder");
+        Variable jsonObject;
+        if (Checker.isEmpty(jsonBuilder.name)) {
+            jsonObject = createLocalVariable(JsonWrapper.getType(), "jsonBuilder");
+        } else {
+            jsonObject = createLocalVariable(JsonWrapper.getType(), jsonBuilder.name);
+        }
+
         jsonBuilderBuilder.defineRootJsonObject(jsonObject);
         jsonBuilder.itemList.forEach(item -> item.doBuild(() -> {
             if (item.copy == null) {

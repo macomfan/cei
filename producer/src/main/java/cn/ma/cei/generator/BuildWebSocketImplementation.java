@@ -1,10 +1,8 @@
 package cn.ma.cei.generator;
 
-import cn.ma.cei.exception.CEIException;
 import cn.ma.cei.generator.builder.IJsonCheckerBuilder;
 import cn.ma.cei.generator.builder.IDataProcessorBuilder;
 import cn.ma.cei.generator.builder.IWebSocketImplementationBuilder;
-import cn.ma.cei.generator.dataprocessor.BuildJsonParser;
 import cn.ma.cei.model.base.xDataProcessorItem;
 import cn.ma.cei.model.json.xJsonParser;
 import cn.ma.cei.model.websocket.xSend;
@@ -36,7 +34,7 @@ public class BuildWebSocketImplementation {
 
     public static void buildSendInAction(xSend send, Variable msg, IWebSocketImplementationBuilder builder) {
         Checker.isNull(builder, BuildWebSocketImplementation.class, "WebSocketImplementationBuilder");
-        Variable sendVariable = BuildAttributeExtension.createValueFromAttribute("value", send, builder);
+        Variable sendVariable = BuildUserDefinedValue.createValueFromAttribute("value", send, builder);
         builder.send(sendVariable);
     }
 

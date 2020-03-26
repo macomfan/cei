@@ -44,7 +44,7 @@ public class BuildRestfulInterface {
         {
             restIf.request.doBuild(() -> {
                 builder.defineRequest(request);
-                builder.setRequestTarget(request, BuildAttributeExtension.createValueFromAttribute("target", restIf.request, builder));
+                builder.setRequestTarget(request, BuildUserDefinedValue.createValueFromAttribute("target", restIf.request, builder));
                 Variable requestMethod = GlobalContext.createStatement(xString.inst.getType(), Constant.requestMethod().tryGet(restIf.request.method));
                 builder.setRequestMethod(request, requestMethod);
             });
@@ -92,8 +92,8 @@ public class BuildRestfulInterface {
         }
         Variable request = GlobalContext.getCurrentMethod().getVariable("request");
         queryStrings.forEach((queryString) -> queryString.doBuild(() -> {
-            Variable var = BuildAttributeExtension.createValueFromAttribute("value", queryString, builder);
-            Variable key = BuildAttributeExtension.createValueFromAttribute("key", queryString, builder);
+            Variable var = BuildUserDefinedValue.createValueFromAttribute("value", queryString, builder);
+            Variable key = BuildUserDefinedValue.createValueFromAttribute("key", queryString, builder);
             builder.addToQueryString(request, key, var);
         }));
     }
@@ -103,7 +103,7 @@ public class BuildRestfulInterface {
             return;
         }
         postBody.doBuild(() -> {
-            Variable result = BuildAttributeExtension.createValueFromAttribute("value", postBody, builder);
+            Variable result = BuildUserDefinedValue.createValueFromAttribute("value", postBody, builder);
             if (result != null) {
                 builder.setPostBody(request, result);
             }

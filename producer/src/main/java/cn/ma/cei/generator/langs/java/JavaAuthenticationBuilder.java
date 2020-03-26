@@ -59,29 +59,29 @@ public class JavaAuthenticationBuilder implements IAuthenticationBuilder {
         parent.addMethod(method);
     }
 
-    @Override
-    public void addStringArray(Variable output, Variable input) {
-        method.addAssign(method.useVariable(output), method.invoke("AuthenticationTool.addStringArray", output, input));
-    }
-
-    @Override
-    public void newStringArray(Variable stringArray) {
-        parent.addReference(xStringArray.inst.getType());
-        parent.addReference(TheLinkedList.getType());
-        method.addAssign("List<String> " + stringArray.getDescriptor(), "new LinkedList<>()");
-    }
-
-    @Override
-    public void combineStringArray(Variable output, Variable input, Variable separator) {
-        method.addAssign(method.defineVariable(output), method.invoke("AuthenticationTool.combineStringArray", input, separator));
-    }
-
-    @Override
-    public void appendToString(boolean needDefineNewOutput, Variable output, Variable input) {
-        if (needDefineNewOutput) {
-            method.addAssign(method.defineVariable(output), method.useVariable(input));
-        } else {
-            method.addAssign(method.useVariable(output), method.invoke("AuthenticationTool.appendToString", output, input));
-        }
-    }
+//    @Override
+//    public void addStringArray(Variable output, Variable input) {
+//        method.addAssign(method.useVariable(output), method.invoke("AuthenticationTool.addStringArray", output, input));
+//    }
+//
+//    @Override
+//    public void newStringArray(Variable stringArray) {
+//        parent.addReference(xStringArray.inst.getType());
+//        parent.addReference(TheLinkedList.getType());
+//        method.addAssign("List<String> " + stringArray.getDescriptor(), "new LinkedList<>()");
+//    }
+//
+//    @Override
+//    public void combineStringArray(Variable output, Variable input, Variable separator) {
+//        method.addAssign(method.defineVariable(output), method.invoke("AuthenticationTool.combineStringArray", input, separator));
+//    }
+//
+//    @Override
+//    public void appendToString(boolean needDefineNewOutput, Variable output, Variable input) {
+//        if (needDefineNewOutput) {
+//            method.addAssign(method.defineVariable(output), method.useVariable(input));
+//        } else {
+//            method.addAssign(method.useVariable(output), method.invoke("AuthenticationTool.appendToString", output, input));
+//        }
+//    }
 }

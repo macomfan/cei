@@ -17,6 +17,8 @@ import cn.ma.cei.model.processor.xHmacSHA256;
 import cn.ma.cei.model.string.xStringBuilder;
 import cn.ma.cei.utils.Checker;
 import cn.ma.cei.utils.NormalMap;
+import cn.ma.cei.utils.ReflectionHelper;
+import cn.ma.cei.utils.RegexHelper;
 
 
 import java.util.List;
@@ -68,25 +70,41 @@ public class BuildDataProcessor {
         return null;
     }
 
+    public static void build(List<xDataProcessorItem> items, Variable defaultInput, IDataProcessorBuilder builder) {
+        items.forEach(item -> {
+            processSingleItem(item, defaultInput, builder);
+        });
+    }
+
     public static Variable build(List<xDataProcessorItem> items, Variable defaultInput, String resultVariableName, IDataProcessorBuilder builder) {
-        if (items.size() == 1 && Checker.isEmpty(resultVariableName)) {
-            // Only one item in the processor list, return the only item. Do not define output name in this item.
-            if (processorMap.containsKey(items.get(0).getClass())) {
-                return processorMap.get(items.get(0).getClass()).callBuild(items.get(0), defaultInput, builder);
+        if (Checker.isEmpty(resultVariableName)){
+            if (items.size() == 1) {
+                // Only one item in the processor list, return the only item. Do not define output name in this item.
+                return processSingleItem(items.get(0), defaultInput, builder);
             } else {
-                // TODO
-                CEIErrors.showFailure(CEIErrorType.CODE, "not supported");
+                CEIErrors.showFailure(CEIErrorType.XML, "Must define result, there are multi-processor items.");
+                return null;
             }
         }
-
         items.forEach(item -> {
-            if (processorMap.containsKey(item.getClass())) {
-                Variable result = processorMap.get(item.getClass()).callBuild(item, defaultInput, builder);
-            } else {
-                // TODO
-                CEIErrors.showFailure(CEIErrorType.CODE, "not supported");
-            }
+            processSingleItem(item, defaultInput, builder);
         });
-        return null;
+
+        Variable result = GlobalContext.getCurrentMethod().getVariable(RegexHelper.isReference(resultVariableName));
+        if (result == null) {
+            CEIErrors.showFailure(CEIErrorType.XML, "Cannot find the result variable: %s", RegexHelper.isReference(resultVariableName));
+            return null;
+        }
+        return result;
+    }
+
+    private static Variable processSingleItem(xDataProcessorItem item, Variable defaultInput, IDataProcessorBuilder builder) {
+        if (processorMap.containsKey(item.getClass())) {
+            return processorMap.get(item.getClass()).callBuild(item, defaultInput, builder);
+        } else {
+            // TODO
+            CEIErrors.showFailure(CEIErrorType.CODE, "not supported");
+            return null;
+        }
     }
 }

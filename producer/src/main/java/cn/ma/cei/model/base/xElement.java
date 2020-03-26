@@ -55,7 +55,6 @@ public abstract class xElement {
         if (!this.getClass().isAnnotationPresent(XmlRootElement.class)) {
             CEIErrors.showFailure(CEIErrorType.CODE, this.getClass().getName() + " must define XmlRootElement annotation.");
         }
-        System.out.println("Checking: " + this.getClass().getName());
         customCheck();
         if (this.getClass().getName().equals("cn.ma.cei.model.restful.xAuthentication")) {
             int a = 0;

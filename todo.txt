@@ -1,14 +1,11 @@
-StringBuilder(name)
-  add_string_array(input)
-  combine_string_array(separator)
 
 SystemUtil
-  GetNow
-  hmacsha256
-  base64
-  gzip
+  GetNow - Done
+  hmacsha256 - Done
+  base64 - Done
+  gzip - M
 
-
+Check the variable if it is not used - L
 
 Models
     Check unreference model - L
@@ -25,21 +22,21 @@ JsonChecker
     Suppot JsonPath - H
 
 StringBuilder
-    XML define -M
-    Builder implementation - M
+    XML define -Done
+    Builder implementation - Done
 
 Restful
     Copy in query string - H
     Input required - H
 	Input limitation - M
     Host mapping - L
-    Response remove model - H
+    Response remove model - Done
     Response support UTF8 and binary - H
     Response support gzip - M
 
 Websocket
-    XML define -M
-    Builder implementation - M
+    XML define -Done
+    Builder implementation - Done
     Special input timestamp can be used for RequestID - L
 
 Common

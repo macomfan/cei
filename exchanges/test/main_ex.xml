@@ -111,7 +111,8 @@
                     </inputs>
                     <request method="post" target="/api/v1/placeOrder">
                         <post_body>
-                            <attribute for="value" result="{jsonResult}">
+                            <attribute for="value" result="{ts}">
+								<get_now name="{ts}" format=""/>
                                 <json_builder name="{jsonResult}">
                                     <json_string key="account-id" value="{account_id}"/>
                                     <json_decimal copy="price"/>
@@ -135,8 +136,8 @@
                 </inputs>
                 <url target="ws"/>
                 <on_connect>
-                    <send>
-                        <attribute for="value" result="{jsonResult}">
+                    <send value="{ts}">
+                        <attribute for="value" result="{ts}">
                             <get_now name="{ts}" format=""/>
                             <json_builder name="{jsonResult}">
                                 <json_value key="op" value="pong"/>
@@ -169,8 +170,10 @@
                     <inputs>
                         <string name="symbol"/>
                     </inputs>
-                    <send value="aaaa">
-
+                    <send>
+                        <attribute for="value" result="{abc}">
+                            <get_now name="{abc}" format=""/>
+                        </attribute>
                     </send>
                     <callback name="onkline" type="disposable">
                         <trigger>
