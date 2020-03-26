@@ -81,7 +81,7 @@ public abstract class xElement {
                         element.doCheck();
                     }
                 } else {
-                    CEIErrors.showFailure(CEIErrorType.CODE, this.getClass().getName() + " must inherit from xElement.");
+                    CEIErrors.showFailure(CEIErrorType.CODE, field.getType().getName() + " must inherit from xElement.");
                 }
             } else if (field.isAnnotationPresent(XmlAttribute.class)) {
                 XmlAttribute attribute = field.getAnnotation(XmlAttribute.class);

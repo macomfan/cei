@@ -43,7 +43,7 @@ public class BuildWebSocketInterface {
         }
         // Build send
         if (intf.send != null) {
-            Variable sendVariable = BuildUserDefinedValue.createValueFromAttribute("value", intf.send, builder);
+            Variable sendVariable = BuildUserProcedure.createValueFromProcedure(intf.send.value, intf.send, builder);
             builder.send(sendVariable);
         }
         builder.endMethod();

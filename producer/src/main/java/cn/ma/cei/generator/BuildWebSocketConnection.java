@@ -48,7 +48,7 @@ public class BuildWebSocketConnection {
             }
 
             // Connect
-            Variable url = BuildUserDefinedValue.createValueFromAttribute("target", connection.url, builder);
+            Variable url = BuildUserProcedure.createValueFromProcedure(connection.url.target, connection.url, builder);
             // TODO
             // if url is not string, convert to string
             builder.connect(url, option);

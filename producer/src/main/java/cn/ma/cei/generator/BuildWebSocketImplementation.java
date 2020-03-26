@@ -34,7 +34,8 @@ public class BuildWebSocketImplementation {
 
     public static void buildSendInAction(xSend send, Variable msg, IWebSocketImplementationBuilder builder) {
         Checker.isNull(builder, BuildWebSocketImplementation.class, "WebSocketImplementationBuilder");
-        Variable sendVariable = BuildUserDefinedValue.createValueFromAttribute("value", send, builder);
+        // Variable sendVariable = BuildUserProcedure.createValueFromAttribute("value", send, builder);
+        Variable sendVariable = BuildUserProcedure.createValueFromProcedure(send.value, send, builder);
         builder.send(sendVariable);
     }
 

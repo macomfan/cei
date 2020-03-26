@@ -110,14 +110,14 @@
                         <decimal name="price"/>
                     </inputs>
                     <request method="post" target="/api/v1/placeOrder">
-                        <post_body>
-                            <attribute for="value" result="{ts}">
+                        <post_body value="{ts}">
+                            <procedure>
 								<get_now name="{ts}" format=""/>
                                 <json_builder name="{jsonResult}">
                                     <json_string key="account-id" value="{account_id}"/>
                                     <json_decimal copy="price"/>
                                 </json_builder>
-                            </attribute>
+                            </procedure>
                         </post_body>
                     </request>
                     <response>
@@ -137,13 +137,13 @@
                 <url target="ws"/>
                 <on_connect>
                     <send value="{ts}">
-                        <attribute for="value" result="{ts}">
+                        <procedure>
                             <get_now name="{ts}" format=""/>
                             <json_builder name="{jsonResult}">
                                 <json_value key="op" value="pong"/>
                                 <json_value key="ts" value="{ts}"/>
                             </json_builder>
-                        </attribute>
+                        </procedure>
                     </send>
                 </on_connect>
             </connection>
@@ -154,14 +154,14 @@
                             <json_equal key="type" value="ping"/>
                         </json_checker>
                     </trigger>
-                    <send>
-                        <attribute for="value" result="{jsonResult}">
+                    <send value="{jsonResult}">
+                        <procedure>
                             <get_now name="{ts}" format=""/>
                             <json_builder name="{jsonResult}">
                                 <json_value key="op" value="pong"/>
                                 <json_value key="ts" value="{ts}"/>
                             </json_builder>
-                        </attribute>
+                        </procedure>
                     </send>
                 </action>
             </actions>
@@ -170,10 +170,10 @@
                     <inputs>
                         <string name="symbol"/>
                     </inputs>
-                    <send>
-                        <attribute for="value" result="{abc}">
+                    <send value="{abc}">
+                        <procedure>
                             <get_now name="{abc}" format=""/>
-                        </attribute>
+                        </procedure>
                     </send>
                     <callback name="onkline" type="disposable">
                         <trigger>
