@@ -45,6 +45,7 @@ public class GoStruct {
         publicMemberList.put(memberVariable.getName(), memberVariable);
     }
 
+    // TODO to be removed, use Variable.PRIVATE instead of
     public void addPrivateMember(GoVar memberVariable) {
         if (publicMemberList.containsKey(memberVariable.getName())) {
             throw new CEIException("Duplicate member in GoStruct");

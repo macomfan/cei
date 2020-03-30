@@ -8,11 +8,13 @@ public interface IWebSocketActionBuilder {
 
     IWebSocketImplementationBuilder createImplementationBuilderForTrigger();
 
-    IWebSocketImplementationBuilder createImplementationBuilderForSend();
+    IWebSocketImplementationBuilder createImplementationBuilderForResponse();
 
     void newAction(Variable action);
 
-    void registerAction(Variable action);
+    void registerPersistentAction(Variable action);
+
+    void registerDisposableAction(Variable action);
 
     void setTriggerToAction(Variable action, sMethod triggerMethod);
 

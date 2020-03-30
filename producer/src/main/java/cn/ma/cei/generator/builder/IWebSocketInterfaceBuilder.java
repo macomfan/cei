@@ -10,17 +10,11 @@ public interface IWebSocketInterfaceBuilder extends IMethodBuilder {
 
     IWebSocketImplementationBuilder createImplementationBuilderForResponse();
 
-//    void setTriggerToAction(Variable action, sMethod trigger);
-//
-//    void setSendToAction(Variable action, sMethod send);
-
-    void setupCallback(Variable callback);
+    IWebSocketImplementationBuilder createOnConnectBuilder();
 
     void send(Variable send);
 
     IWebSocketActionBuilder createWebSocketActionBuilder();
-
-    IWebSocketImplementationBuilder createOnConnectBuilder();
 
     void setupOnConnect(sMethod onConnect);
 

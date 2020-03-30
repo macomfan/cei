@@ -7,6 +7,7 @@ import cn.ma.cei.generator.VariableType;
 import cn.ma.cei.generator.builder.IDataProcessorBuilder;
 import cn.ma.cei.generator.buildin.JsonWrapper;
 import cn.ma.cei.generator.buildin.StringWrapper;
+import cn.ma.cei.model.types.xInt;
 import cn.ma.cei.model.types.xString;
 
 public class TypeConverter {
@@ -29,7 +30,13 @@ public class TypeConverter {
             //if (objectType == xS)
 
 
-        } else{
+        } else if (input.getType() == xInt.inst.getType()) {
+            if (objectType == xString.inst.getType()) {
+                return builder.convertIntToString(input);
+            }
+        }
+
+        else{
             CEIErrors.showFailure(CEIErrorType.XML, "Not support converter, from: %s, to %s", input.getType().getName(), objectType.getName());
         }
         return null;

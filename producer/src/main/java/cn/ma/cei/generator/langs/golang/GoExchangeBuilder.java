@@ -27,14 +27,14 @@ public class GoExchangeBuilder implements IExchangeBuilder {
         Constant.requestMethod().tryPut(RestfulRequest.RequestMethod.GET, "ceiimpl.GET");
         Constant.requestMethod().tryPut(RestfulRequest.RequestMethod.POST, "ceiimpl.POST");
 
-        Constant.authenticationMethod().tryPut(AuthenticationTool.Constant.ASC, "authentication.ASC");
-        Constant.authenticationMethod().tryPut(AuthenticationTool.Constant.DSC, "authentication.DSC");
-        Constant.authenticationMethod().tryPut(AuthenticationTool.Constant.HOST, "authentication.HOST");
-        Constant.authenticationMethod().tryPut(AuthenticationTool.Constant.METHOD, "authentication.METHOD");
-        Constant.authenticationMethod().tryPut(AuthenticationTool.Constant.TARGET, "authentication.TARGET");
-        Constant.authenticationMethod().tryPut(AuthenticationTool.Constant.UPPERCASE, "authentication.UPPERCASE");
-        Constant.authenticationMethod().tryPut(AuthenticationTool.Constant.LOWERCASE, "authentication.LOWERCASE");
-        Constant.authenticationMethod().tryPut(AuthenticationTool.Constant.NONE, "authentication.NONE");
+        Constant.authenticationMethod().tryPut(CEIUtils.Constant.ASC, "authentication.ASC");
+        Constant.authenticationMethod().tryPut(CEIUtils.Constant.DSC, "authentication.DSC");
+        Constant.authenticationMethod().tryPut(CEIUtils.Constant.HOST, "authentication.HOST");
+        Constant.authenticationMethod().tryPut(CEIUtils.Constant.METHOD, "authentication.METHOD");
+        Constant.authenticationMethod().tryPut(CEIUtils.Constant.TARGET, "authentication.TARGET");
+        Constant.authenticationMethod().tryPut(CEIUtils.Constant.UPPERCASE, "authentication.UPPERCASE");
+        Constant.authenticationMethod().tryPut(CEIUtils.Constant.LOWERCASE, "authentication.LOWERCASE");
+        Constant.authenticationMethod().tryPut(CEIUtils.Constant.NONE, "authentication.NONE");
 
         BuilderContext.setupBuildInVariableType(xString.typeName, "string", BuilderContext.NO_REF);
         BuilderContext.setupBuildInVariableType(xBoolean.typeName, "bool", BuilderContext.NO_REF);
@@ -47,7 +47,7 @@ public class GoExchangeBuilder implements IExchangeBuilder {
         BuilderContext.setupBuildInVariableType(RestfulConnection.typeName, "ceiimpl", "ceiimpl");
         BuilderContext.setupBuildInVariableType(RestfulOptions.typeName, "ceiimpl.RestfulOptions", "ceiimpl");
         BuilderContext.setupBuildInVariableType(JsonWrapper.typeName, "ceiimpl.JsonWrapper", "ceiimpl");
-        BuilderContext.setupBuildInVariableType(AuthenticationTool.typeName, "authentication", "ceiimpl");
+        BuilderContext.setupBuildInVariableType(CEIUtils.typeName, "authentication", "ceiimpl");
         BuilderContext.setupBuildInVariableType(JsonChecker.typeName, "ceiimpl.JsonChecker", "ceiimpl");
 
         CEIPath workingFolder = BuilderContext.getWorkingFolder();

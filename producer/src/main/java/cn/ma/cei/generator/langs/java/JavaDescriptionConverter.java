@@ -70,6 +70,12 @@ public class JavaDescriptionConverter implements IDescriptionConverter {
     }
 
     @Override
+    public String getPrivateMemberDescriptor(String name) {
+        checkInput(name);
+        return checkKeyword(WordSplitter.getLowerCamelCase(name));
+    }
+
+    @Override
     public String getMethodDescriptor(String name) {
         checkInput(name);
         return checkKeyword(WordSplitter.getLowerCamelCase(name));
@@ -84,6 +90,11 @@ public class JavaDescriptionConverter implements IDescriptionConverter {
         else {
             throw new CEIException("Name is null in NameConverter");
         }
+    }
+
+    @Override
+    public String getSelfDescriptor() {
+        return "this";
     }
 
     @Override

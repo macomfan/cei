@@ -17,6 +17,8 @@ public class TheLinkedList {
     public final static String typeName = "linkedlist";
 
     public static VariableType getType() {
-        return BuilderContext.variableType(typeName, (VariableType)null);
+        VariableType ttt =  BuilderContext.variableType(typeName, (VariableType)null);
+        String t = ttt.getDescriptor();
+        return ttt;
     }
 }

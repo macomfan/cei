@@ -12,7 +12,7 @@ import cn.ma.cei.generator.VariableType;
  *
  * @author u0151316
  */
-public class AuthenticationTool {
+public class CEIUtils {
 
     static public class Constant {
 
@@ -26,7 +26,7 @@ public class AuthenticationTool {
         public final static String NONE = "none";
     }
 
-    public final static String typeName = "AuthenticationTool";
+    public final static String typeName = "CEIUtils";
 
     public static VariableType getType() {
         return BuilderContext.variableType(typeName);

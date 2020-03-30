@@ -79,7 +79,7 @@ public class JavaJsonParserBuilder implements IJsonParserBuilder {
 
     @Override
     public void defineRootJsonObject(Variable jsonObject, Variable responseVariable) {
-        Variable value = BuilderContext.createStatement(JsonWrapper.getType(), responseVariable.getDescriptor() + ".getJson()");
+        Variable value = BuilderContext.createStatement(responseVariable.getDescriptor() + ".getJson()");
         method.addAssign(method.defineVariable(jsonObject), method.useVariable(value));
     }
 

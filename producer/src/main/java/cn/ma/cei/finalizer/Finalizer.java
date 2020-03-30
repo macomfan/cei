@@ -18,9 +18,7 @@ public class Finalizer {
     }
 
     public void addSDK(List<xSDK> sdks) {
-        for (xSDK sdk : sdks) {
-            addSDK(sdk);
-        }
+        sdks.forEach(this::addSDK);
     }
 
     public void addSDK(xSDK sdk) {
@@ -28,9 +26,7 @@ public class Finalizer {
         //  - Model
         //  - Restful
         //  - Authentication
-        if (sdk.definition != null) {
-            XMLDatabase.registrySDK(sdk);
-        }
+        XMLDatabase.registrySDK(sdk);
         orgSDKList.add(sdk);
     }
 

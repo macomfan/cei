@@ -99,7 +99,7 @@ public class Python3JsonParserBuilder implements IJsonParserBuilder {
 
     @Override
     public void defineRootJsonObject(Variable jsonObject, Variable responseVariable) {
-        Variable value = BuilderContext.createStatement(JsonWrapper.getType() ,responseVariable.getDescriptor() + ".get_json()");
+        Variable value = BuilderContext.createStatement(responseVariable.getDescriptor() + ".get_json()");
         method.addAssign(method.defineVariable(jsonObject), method.useVariable(value));
     }
 

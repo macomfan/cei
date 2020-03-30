@@ -35,25 +35,6 @@ public class JavaWebSocketInterfaceBuilder implements IWebSocketInterfaceBuilder
         return responseBuilder;
     }
 
-//    @Override
-//    public void setTriggerToAction(Variable action, sMethod trigger) {
-//        method.addLambda(action, "setTrigger", trigger.getInputVariableList());
-//        method.addCode(triggerBuilder.method.getCode());
-//        method.endLambda();
-//    }
-//
-//    @Override
-//    public void setSendToAction(Variable action, sMethod send) {
-//        method.addLambda(action, "setAction", send.getInputVariableList());
-//        method.addCode(sendBuilder.method.getCode());
-//        method.endLambda();
-//    }
-
-    @Override
-    public void setupCallback(Variable callback) {
-        method.addInvoke("registerCallback", callback);
-    }
-
     @Override
     public void onAddReference(VariableType variableType) {
 
@@ -77,7 +58,7 @@ public class JavaWebSocketInterfaceBuilder implements IWebSocketInterfaceBuilder
 
     @Override
     public void send(Variable send) {
-        method.addInvoke("send", send);
+        method.addInvoke("sendWS", send);
     }
 
     @Override
@@ -100,6 +81,6 @@ public class JavaWebSocketInterfaceBuilder implements IWebSocketInterfaceBuilder
 
     @Override
     public void connect(Variable url, Variable option) {
-        method.addInvoke("connectWebSocket", url, option);
+        method.addInvoke("connectWS", url, option);
     }
 }

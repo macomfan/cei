@@ -46,10 +46,14 @@ public class WebSocketConnection extends WebSocketListener {
 
     }
 
-    public void connectWebSocket(String url, WebSocketOptions option) {
+    public void connectWS(String url, WebSocketOptions option) {
         //this.onConnect = onConnect;
         Request okhttpRequest = new Request.Builder().url(url).build();
         webSocket = client.newWebSocket(okhttpRequest, this);
+    }
+
+    public void closeWebSocket(String url, WebSocketOptions option) {
+
     }
 
 

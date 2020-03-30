@@ -22,7 +22,7 @@ public class JavaRestfulClientBuilder implements IRestfulClientBuilder {
     @Override
     public void startClient(VariableType clientType, RestfulOptions options) {
         clientClass = new JavaClass(clientType.getDescriptor());
-        clientClass.addMemberVariable(JavaClass.AccessType.PRIVATE, clientType.addMember(RestfulOptions.getType(), "options"));
+        clientClass.addMemberVariable(JavaClass.AccessType.PRIVATE, clientType.addPrivateMember(RestfulOptions.getType(), "options"));
 
         JavaMethod defaultConstructor = new JavaMethod(clientClass);
         defaultConstructor.startConstructor("");

@@ -2,7 +2,7 @@ package cn.ma.cei.generator.dataprocessor;
 
 import cn.ma.cei.generator.*;
 import cn.ma.cei.generator.builder.IDataProcessorBuilder;
-import cn.ma.cei.generator.buildin.AuthenticationTool;
+import cn.ma.cei.generator.buildin.CEIUtils;
 import cn.ma.cei.model.authentication.xCombineQueryString;
 import cn.ma.cei.model.types.xString;
 import cn.ma.cei.utils.Checker;
@@ -15,9 +15,9 @@ public class BuildCombineQueryString extends DataProcessorBase<xCombineQueryStri
 
         Variable sort;
         if (!Checker.isEmpty(item.sort)) {
-            sort = BuilderContext.createStatement(xString.inst.getType(), Constant.authenticationMethod().tryGet(item.sort));
+            sort = BuilderContext.createStatement(Constant.authenticationMethod().tryGet(item.sort));
         } else {
-            sort = BuilderContext.createStatement(xString.inst.getType(), Constant.authenticationMethod().tryGet(AuthenticationTool.Constant.NONE));
+            sort = BuilderContext.createStatement(Constant.authenticationMethod().tryGet(CEIUtils.Constant.NONE));
         }
         Variable separator = BuilderContext.createStringConstant(item.separator);
         builder.combineQueryString(requestVariable, output, sort, separator);

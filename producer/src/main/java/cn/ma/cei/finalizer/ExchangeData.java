@@ -114,13 +114,12 @@ public class ExchangeData {
     }
 
     public void setDefinition(xSDKDefinition definition) {
+        if (definition == null) return;
         if (this.definition != null) {
             CEIErrors.showFailure(CEIErrorType.XML, "Dup");
             return;
         }
-        if (definition != null) {
-            this.definition = definition;
-        }
+        this.definition = definition;
     }
 
     public xModel getModel(String modelName) {

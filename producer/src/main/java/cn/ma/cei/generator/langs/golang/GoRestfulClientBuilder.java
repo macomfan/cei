@@ -30,7 +30,7 @@ public class GoRestfulClientBuilder implements IRestfulClientBuilder {
     @Override
     public void startClient(VariableType clientType, RestfulOptions options) {
         clientStruct = new GoStruct(clientType.getDescriptor());
-        clientStruct.addPrivateMember(new GoPtrVar(clientType.addMember(RestfulOptions.getType(), "options")));
+        clientStruct.addPrivateMember(new GoPtrVar(clientType.addPrivateMember(RestfulOptions.getType(), "options")));
         GoMethod constructor = new GoMethod(null);
         constructor.getCode().appendWordsln("func", "New" + clientType.getDescriptor() + "(options *" + RestfulOptions.getType().getDescriptor() + ")", "*" + clientType.getDescriptor(), "{");
         constructor.getCode().newBlock(() -> {

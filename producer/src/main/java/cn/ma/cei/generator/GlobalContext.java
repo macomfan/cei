@@ -115,8 +115,8 @@ class GlobalContext {
         return VariableCreator.createVariable(xString.inst.getType(), value, Variable.Position.STRING, null);
     }
 
-    public static Variable createStatement(VariableType type, String statement) {
-        return VariableCreator.createVariable(type, statement, Variable.Position.CONSTANT, null);
+    public static Variable createStatement(String statement) {
+        return VariableCreator.createVariable(xString.inst.getType(), statement, Variable.Position.CONSTANT, null);
     }
 
     public static VariableType variableType(String typeName, VariableType... argsTypes) {
@@ -124,10 +124,12 @@ class GlobalContext {
         boolean isGenericType = false;
         if (argsTypes != null && argsTypes.length != 0) {
             ArrayList<String> tmp = new ArrayList<>();
+            isGenericType = true;
             for (VariableType oneType : argsTypes) {
                 if (oneType != null) {
-                    isGenericType = true;
                     tmp.add(oneType.getName());
+                } else {
+                    tmp.add("");
                 }
             }
             finalName = genericTypeName(typeName, tmp.toArray(new String[0]));

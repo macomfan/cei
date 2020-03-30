@@ -49,7 +49,6 @@ public class Python3File {
             item.build();
             code.appendCode(item.getCode());
             code.endln();
-            code.endln();
         });
 
         CEIPath file = CEIPath.appendFile(

@@ -32,21 +32,21 @@ public class Python3RestfulClientBuilder implements IRestfulClientBuilder {
     @Override
     public void startClient(VariableType clientType, RestfulOptions options) {
         clientClass = new Python3Class(clientType.getDescriptor());
-
         Python3Method defaultConstructor = new Python3Method(clientClass);
+
         defaultConstructor.getCode().appendln("def __init__(self, options=None):");
         defaultConstructor.getCode().newBlock(() -> {
+            clientClass.attachDefaultConstructor(defaultConstructor);
             defaultConstructor.getCode().appendWordsln("self.__options", "=", RestfulOptions.getType().getDescriptor() + "()");
             Variable url = BuilderContext.createStringConstant(options.url);
             defaultConstructor.getCode().appendWordsln("self.__options.url", "=", url.getDescriptor());
             if (options.connectionTimeout != null) {
-                defaultConstructor.getCode().appendWordsln("self__.options.connectionTimeout", "=", options.connectionTimeout.toString());
+                defaultConstructor.getCode().appendWordsln("self.__options.connectionTimeout", "=", options.connectionTimeout.toString());
             }
             defaultConstructor.getCode().appendln("if options is not None:");
             defaultConstructor.getCode().newBlock(() -> defaultConstructor.getCode().appendln("self.__options.set_from(options)"));
         });
         clientClass.addReference(RestfulOptions.getType());
-        clientClass.addMethod(defaultConstructor);
     }
 
     @Override

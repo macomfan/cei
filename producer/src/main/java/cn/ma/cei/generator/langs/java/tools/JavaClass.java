@@ -73,6 +73,7 @@ public class JavaClass {
         innerClasses.put(innerClass.className, innerClass);
     }
 
+    // TODO accessType to be removed, use Variable.PRIVATE instead of
     public void addMemberVariable(AccessType accessType, Variable memberVariable) {
         if (accessType == AccessType.PUBLIC) {
             publicMemberList.put(memberVariable.getName(), memberVariable);
@@ -89,7 +90,6 @@ public class JavaClass {
     public void build(CEIPath folder) {
         if (type == ClassType.INNER) {
             defineClass(className, superClass, () -> {
-                code.endln();
                 writeMemberVariable(code);
                 writeMethods(code);
             });
@@ -118,8 +118,8 @@ public class JavaClass {
 
     private void writeMethods(JavaCode code) {
         methodList.forEach(method -> {
-            code.appendCode(method.getCode());
             code.endln();
+            code.appendCode(method.getCode());
         });
     }
 
@@ -151,7 +151,6 @@ public class JavaClass {
         privateMemberList.values().forEach(variable -> {
             code.appendJavaLine("private", variable.getTypeDescriptor(), variable.getDescriptor());
         });
-        code.endln();
     }
 
     @FunctionalInterface

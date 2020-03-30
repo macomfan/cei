@@ -30,7 +30,7 @@ public class JavaWebSocketActionBuilder implements IWebSocketActionBuilder {
     }
 
     @Override
-    public IWebSocketImplementationBuilder createImplementationBuilderForSend() {
+    public IWebSocketImplementationBuilder createImplementationBuilderForResponse() {
         sendBuilder = new JavaWebSocketImplementationBuilder(clientClass);
         return sendBuilder;
     }
@@ -41,8 +41,13 @@ public class JavaWebSocketActionBuilder implements IWebSocketActionBuilder {
     }
 
     @Override
-    public void registerAction(Variable action) {
-        method.addInvoke("registerAction", action);
+    public void registerPersistentAction(Variable action) {
+        method.addInvoke("registerPersistentAction", action);
+    }
+
+    @Override
+    public void registerDisposableAction(Variable action) {
+        method.addInvoke("registerDisposableAction", action);
     }
 
     @Override

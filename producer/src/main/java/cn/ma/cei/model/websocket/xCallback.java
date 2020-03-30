@@ -12,6 +12,9 @@ public class xCallback extends xElement {
     @XmlAttribute(name = "name")
     public String name;
 
+    @XmlAttribute(name = "persistent")
+    public boolean persistent;
+
     @XmlElement(name = "trigger")
     public xTrigger trigger;
 

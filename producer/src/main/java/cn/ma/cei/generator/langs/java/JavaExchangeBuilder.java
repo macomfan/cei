@@ -21,14 +21,14 @@ public class JavaExchangeBuilder implements IExchangeBuilder {
         Constant.requestMethod().tryPut(RestfulRequest.RequestMethod.GET, "RestfulRequest.Method.GET");
         Constant.requestMethod().tryPut(RestfulRequest.RequestMethod.POST, "RestfulRequest.Method.POST");
 
-        Constant.authenticationMethod().tryPut(AuthenticationTool.Constant.ASC, "AuthenticationTool.Constant.ASC");
-        Constant.authenticationMethod().tryPut(AuthenticationTool.Constant.DSC, "AuthenticationTool.Constant.DSC");
-        Constant.authenticationMethod().tryPut(AuthenticationTool.Constant.HOST, "AuthenticationTool.Constant.HOST");
-        Constant.authenticationMethod().tryPut(AuthenticationTool.Constant.METHOD, "AuthenticationTool.Constant.METHOD");
-        Constant.authenticationMethod().tryPut(AuthenticationTool.Constant.TARGET, "AuthenticationTool.Constant.TARGET");
-        Constant.authenticationMethod().tryPut(AuthenticationTool.Constant.UPPERCASE, "AuthenticationTool.Constant.UPPERCASE");
-        Constant.authenticationMethod().tryPut(AuthenticationTool.Constant.LOWERCASE, "AuthenticationTool.Constant.LOWERCASE");
-        Constant.authenticationMethod().tryPut(AuthenticationTool.Constant.NONE, "AuthenticationTool.Constant.NONE");
+        Constant.authenticationMethod().tryPut(CEIUtils.Constant.ASC, "CEIUtils.Constant.ASC");
+        Constant.authenticationMethod().tryPut(CEIUtils.Constant.DSC, "CEIUtils.Constant.DSC");
+        Constant.authenticationMethod().tryPut(CEIUtils.Constant.HOST, "CEIUtils.Constant.HOST");
+        Constant.authenticationMethod().tryPut(CEIUtils.Constant.METHOD, "CEIUtils.Constant.METHOD");
+        Constant.authenticationMethod().tryPut(CEIUtils.Constant.TARGET, "CEIUtils.Constant.TARGET");
+        Constant.authenticationMethod().tryPut(CEIUtils.Constant.UPPERCASE, "CEIUtils.Constant.UPPERCASE");
+        Constant.authenticationMethod().tryPut(CEIUtils.Constant.LOWERCASE, "CEIUtils.Constant.LOWERCASE");
+        Constant.authenticationMethod().tryPut(CEIUtils.Constant.NONE, "CEIUtils.Constant.NONE");
 
         BuilderContext.setupBuildInVariableType(xString.typeName, "String", BuilderContext.NO_REF);
         BuilderContext.setupBuildInVariableType(xBoolean.typeName, "Boolean", BuilderContext.NO_REF);
@@ -41,7 +41,7 @@ public class JavaExchangeBuilder implements IExchangeBuilder {
         BuilderContext.setupBuildInVariableType(RestfulConnection.typeName, "RestfulConnection", "cn.ma.cei.impl.RestfulConnection");
         BuilderContext.setupBuildInVariableType(RestfulOptions.typeName, "RestfulOptions", "cn.ma.cei.impl.RestfulOptions");
         BuilderContext.setupBuildInVariableType(JsonWrapper.typeName, "JsonWrapper", "cn.ma.cei.impl.JsonWrapper");
-        BuilderContext.setupBuildInVariableType(AuthenticationTool.typeName, "AuthenticationTool", "cn.ma.cei.impl.AuthenticationTool");
+        BuilderContext.setupBuildInVariableType(CEIUtils.typeName, "CEIUtils", "cn.ma.cei.impl.CEIUtils");
         BuilderContext.setupBuildInVariableType(TheStream.typeName, "byte[]", BuilderContext.NO_REF);
         BuilderContext.setupBuildInVariableType(JsonChecker.typeName, "JsonChecker", "cn.ma.cei.impl.JsonChecker");
         BuilderContext.setupBuildInVariableType(StringWrapper.typeName, "StringWrapper", "cn.ma.cei.impl.StringWrapper");

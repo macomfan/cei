@@ -3,7 +3,7 @@ package cn.ma.cei.generator.dataprocessor;
 import cn.ma.cei.exception.CEIException;
 import cn.ma.cei.generator.*;
 import cn.ma.cei.generator.builder.IDataProcessorBuilder;
-import cn.ma.cei.generator.buildin.AuthenticationTool;
+import cn.ma.cei.generator.buildin.CEIUtils;
 import cn.ma.cei.model.authentication.xGetRequestInfo;
 import cn.ma.cei.model.types.xString;
 import cn.ma.cei.utils.Checker;
@@ -22,15 +22,15 @@ public class BuildGetRequestInfo extends DataProcessorBase<xGetRequestInfo> {
 
         Variable info;
         if (!Checker.isEmpty(item.info)) {
-            info = BuilderContext.createStatement(xString.inst.getType(), Constant.authenticationMethod().tryGet(item.info));
+            info = BuilderContext.createStatement(Constant.authenticationMethod().tryGet(item.info));
         } else {
-            info = BuilderContext.createStatement(xString.inst.getType(), Constant.authenticationMethod().tryGet(AuthenticationTool.Constant.NONE));
+            info = BuilderContext.createStatement(Constant.authenticationMethod().tryGet(CEIUtils.Constant.NONE));
         }
         Variable convert;
         if (!Checker.isEmpty(item.convert)) {
-            convert = BuilderContext.createStatement(xString.inst.getType(), Constant.authenticationMethod().tryGet(item.convert));
+            convert = BuilderContext.createStatement(Constant.authenticationMethod().tryGet(item.convert));
         } else {
-            convert = BuilderContext.createStatement(xString.inst.getType(), Constant.authenticationMethod().tryGet(AuthenticationTool.Constant.NONE));
+            convert = BuilderContext.createStatement(Constant.authenticationMethod().tryGet(CEIUtils.Constant.NONE));
         }
         builder.getRequestInfo(requestVariable, output, info, convert);
         return output;

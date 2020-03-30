@@ -39,13 +39,12 @@ public class BuildRestfulInterface {
             });
         }
 
-
         builder.startMethod(returnType.get(), GlobalContext.getCurrentDescriptionConverter().getMethodDescriptor(restIf.name), inputVariableList);
         {
             restIf.request.doBuild(() -> {
                 builder.defineRequest(request);
                 builder.setRequestTarget(request, BuildUserProcedure.createValueFromProcedure(restIf.request.target, restIf.request, builder));
-                Variable requestMethod = GlobalContext.createStatement(xString.inst.getType(), Constant.requestMethod().tryGet(restIf.request.method));
+                Variable requestMethod = GlobalContext.createStatement(Constant.requestMethod().tryGet(restIf.request.method));
                 builder.setRequestMethod(request, requestMethod);
             });
             makeHeaders(restIf.request.headers, builder);
@@ -103,7 +102,7 @@ public class BuildRestfulInterface {
             return;
         }
         postBody.doBuild(() -> {
-            Variable result = BuildUserProcedure.createValueFromProcedure(postBody.value, postBody, builder);
+            Variable result = BuildUserProcedure.createValueFromProcedure(xString.inst.getType(), postBody.value, postBody, builder);
             if (result != null) {
                 builder.setPostBody(request, result);
             }

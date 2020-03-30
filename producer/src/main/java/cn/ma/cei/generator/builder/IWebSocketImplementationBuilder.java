@@ -11,12 +11,6 @@ public interface IWebSocketImplementationBuilder extends IMethodBuilder {
 
     default void endMethod() {}
 
-    void onAddReference(VariableType variableType);
-
-    void startTrigger();
-
-    void endTrigger();
-
     /**
      * Send the variable to WebSocket.
      * e.g.

@@ -4,7 +4,9 @@ import cn.ma.cei.exception.CEIErrors;
 import cn.ma.cei.exception.CEIException;
 import cn.ma.cei.generator.builder.IDataProcessorBuilder;
 import cn.ma.cei.generator.builder.IMethodBuilder;
+import cn.ma.cei.generator.dataprocessor.TypeConverter;
 import cn.ma.cei.model.base.xItemWithProcedure;
+import cn.ma.cei.model.types.xString;
 import cn.ma.cei.utils.Checker;
 import cn.ma.cei.utils.RegexHelper;
 
@@ -13,19 +15,31 @@ import java.util.List;
 
 public class BuildUserProcedure {
 
+    public static Variable createValueFromProcedure(VariableType objType, String value, xItemWithProcedure parent, IMethodBuilder methodBuilder) {
+        Checker.isNull(methodBuilder, BuildUserProcedure.class, "IMethodBuilder");
+        Checker.isNull(parent, BuildUserProcedure.class, "xItemWithProcedure");
+        IDataProcessorBuilder dataProcessorBuilder = methodBuilder.createDataProcessorBuilder();
+        Checker.isNull(dataProcessorBuilder, BuildUserProcedure.class, "IDataProcessorBuilder");
+        Variable result = innerCreateValueFromProcedure(value, parent, dataProcessorBuilder);
+        return TypeConverter.convertType(result, objType, dataProcessorBuilder);
+    }
+
     public static Variable createValueFromProcedure(String value, xItemWithProcedure parent, IMethodBuilder methodBuilder) {
         Checker.isNull(methodBuilder, BuildUserProcedure.class, "IMethodBuilder");
         Checker.isNull(parent, BuildUserProcedure.class, "xItemWithProcedure");
         IDataProcessorBuilder dataProcessorBuilder = methodBuilder.createDataProcessorBuilder();
         Checker.isNull(dataProcessorBuilder, BuildUserProcedure.class, "IDataProcessorBuilder");
+        return innerCreateValueFromProcedure(value, parent, dataProcessorBuilder);
+    }
 
+    public static Variable innerCreateValueFromProcedure(String value, xItemWithProcedure parent, IDataProcessorBuilder dataProcessorBuilder) {
         if (Checker.isEmpty(value)) {
             CEIErrors.showCodeFailure(BuildUserProcedure.class, "Value is null.");
         }
 
         if (parent.procedure != null) {
             // Build processor firstly.
-            return BuildDataProcessor.build(parent.procedure.items, null, value, dataProcessorBuilder);
+            BuildDataProcessor.build(parent.procedure.items, null, value, dataProcessorBuilder);
         }
         return createUserDefinedValue(value, dataProcessorBuilder);
 
@@ -54,7 +68,7 @@ public class BuildUserProcedure {
                     if (param == null) {
                         throw new CEIException("Cannot find variable in target");
                     }
-                    variables.add(param);
+                    variables.add(TypeConverter.convertType(param, xString.inst.getType(), builder));
                 });
                 Variable[] params = new Variable[variables.size()];
                 variables.toArray(params);

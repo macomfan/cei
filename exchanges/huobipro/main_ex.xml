@@ -9,7 +9,7 @@
     <authentications>
         <restful name="restful">
             <get_now name="{timestamp}" format=""/>
-            <add_query_string key="AccessKeyId" value="{apiKey}"/>
+            <add_query_string key="AccessKeyId" value="{option.apiKey}"/>
             <add_query_string key="SignatureMethod" value="HmacSHA256"/>
             <add_query_string key="SignatureVersion" value="2"/>
             <add_query_string key="Timestamp" value="{timestamp}"/>
@@ -18,13 +18,13 @@
             <get_request_info name="{host}" info="host"/>
             <get_request_info name="{target}" info="target"/>
             <string_builder name="{buffer}">
-                <add_string_array input="{method}"/>
-                <add_string_array input="{host}"/>
-                <add_string_array input="{target}"/>
-                <add_string_array input="{queryString}"/>
-                <combine_string_array separator="\n"/>
+                <add_string_item input="{method}"/>
+                <add_string_item input="{host}"/>
+                <add_string_item input="{target}"/>
+                <add_string_item input="{queryString}"/>
+                <combine_string_items separator="\n"/>
             </string_builder>
-            <hmacsha256 name="{hmacsha256}" input="{newbuffer}" key="{secretKey}"/>
+            <hmacsha256 name="{hmacsha256}" input="{buffer}" key="{option.secretKey}"/>
             <base64 name="{result}" input="{hmacsha256}"/>
             <add_query_string key="Signature" value="{result}"/>
         </restful>
@@ -212,16 +212,16 @@
                         <string name="price"/>
                     </inputs>
                     <request method="post" target="/v1/order/orders/place" signature="restful">
-                        <post_body>
-                            <attribute for="value">
-                                <json_builder>
+                        <post_body value="{result}">
+                            <procedure>
+                                <json_builder name="{result}">
                                     <json_value key="account-Id" value="{accountId}"/>
                                     <json_value copy="symbol"/>
-                                    <json_value key="orderType" value="{type}"/>
+                                    <json_value key="orderType" value="{orderType}"/>
                                     <json_value copy="amount"/>
                                     <json_value copy="price"/>
                                 </json_builder>
-                            </attribute>
+                            </procedure>
                         </post_body>
                     </request>
                     <response>

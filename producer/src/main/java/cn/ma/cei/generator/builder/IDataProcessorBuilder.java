@@ -52,4 +52,14 @@ public interface IDataProcessorBuilder {
      * @return the statement variable
      */
     Variable stringReplacement(Variable... items);
+
+    /***
+     * Convert the int value to string.
+     * e.g.
+     * return BuilderContext.createStatement("Int.toString(intVariable)");
+     *
+     * @param intVariable
+     * @return
+     */
+    Variable convertIntToString(Variable intVariable);
 }

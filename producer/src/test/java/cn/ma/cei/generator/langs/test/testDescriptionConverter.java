@@ -32,6 +32,11 @@ public class testDescriptionConverter implements IDescriptionConverter {
     }
 
     @Override
+    public String getPrivateMemberDescriptor(String name) {
+        return name;
+    }
+
+    @Override
     public String getMethodDescriptor(String name) {
         return name;
     }
@@ -39,6 +44,11 @@ public class testDescriptionConverter implements IDescriptionConverter {
     @Override
     public String toStringDescriptor(String name) {
         return name;
+    }
+
+    @Override
+    public String getSelfDescriptor() {
+        return "this";
     }
 
     @Override

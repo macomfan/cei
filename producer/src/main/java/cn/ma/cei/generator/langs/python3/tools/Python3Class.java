@@ -8,6 +8,7 @@ package cn.ma.cei.generator.langs.python3.tools;
 import cn.ma.cei.generator.Variable;
 import cn.ma.cei.generator.VariableType;
 import cn.ma.cei.generator.langs.python3.Python3Code;
+import cn.ma.cei.utils.Checker;
 import cn.ma.cei.utils.UniqueList;
 
 import java.util.HashSet;
@@ -31,6 +32,14 @@ public class Python3Class {
     private UniqueList<String, Variable> memberList = new UniqueList<>();
     private Set<String> importList = new HashSet<>();
     private List<Python3Code> methodList = new LinkedList<>();
+    private VariableType superClass = null;
+    private Python3Method defaultConstructor = null;
+
+    public Python3Class(String className, VariableType superClass) {
+        this(className);
+        this.superClass = superClass;
+        addReference(superClass);
+    }
 
     public Python3Class(String className) {
         this.className = className;
@@ -38,6 +47,11 @@ public class Python3Class {
 
     public String getClassName() {
         return className;
+    }
+
+    public void attachDefaultConstructor(Python3Method defaultConstructor) {
+        this.defaultConstructor = defaultConstructor;
+        writeMemberVariable();
     }
 
     public void addMemberVariable(Variable memberVariable) {
@@ -70,15 +84,42 @@ public class Python3Class {
 
     public void build() {
         defineClass(className, () -> {
-            writeMemberVariable(code);
+            if (defaultConstructor == null) {
+                writeMemberVariable();
+            }
+            code.appendCode(defaultConstructor.getCode());
+            code.endln();
             writeMethods(code);
         });
     }
 
-    private void writeMemberVariable(Python3Code code) {
-        memberList.values().forEach(item -> {
-            code.appendWordsln(item.getDescriptor(), "=", "None");
-        });
+    private void writeMemberVariable() {
+        if (defaultConstructor == null) {
+            defaultConstructor = new Python3Method(this);
+            defaultConstructor.getCode().appendWordsln("def __init__(self):");
+            defaultConstructor.getCode().startBlock();
+            if (superClass != null) {
+                defaultConstructor.getCode().appendWordsln("super().__init__()");
+            }
+            if (memberList.values().size() == 0) {
+                defaultConstructor.getCode().appendWordsln("pass");
+            } else {
+                memberList.values().forEach(item -> {
+                    defaultConstructor.getCode().appendWordsln("self." + item.getDescriptor(), "=", "None");
+                });
+            }
+            defaultConstructor.getCode().endBlock();
+        }
+        else {
+            if (superClass != null) {
+                defaultConstructor.getCode().appendWordsln("super().__init__()");
+            }
+            memberList.values().forEach(item -> {
+                defaultConstructor.getCode().appendWordsln("self." + item.getDescriptor(), "=", "None");
+            });
+        }
+
+
     }
 
     @FunctionalInterface
@@ -87,9 +128,11 @@ public class Python3Class {
     }
 
     private void defineClass(String clsName, ClassContent classContent) {
-        code.appendWordsln("class", clsName + ":");
-        code.newBlock(() -> {
-            classContent.inClass();
-        });
+        String postClsString = ":";
+        if (superClass != null) {
+            postClsString = "(" + superClass.getDescriptor() + "):";
+        }
+        code.appendWordsln("class", clsName + postClsString);
+        code.newBlock(classContent::inClass);
     }
 }

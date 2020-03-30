@@ -84,7 +84,7 @@ public class main {
 //        BuildSDK.build(finalSDKs, Environment.Language.java, "C:\\dev\\cei\\output");
 //        BuildSDK.build(finalSDKs, Environment.Language.python3, "C:\\dev\\cei\\output");
 //        try {
-            BuildSDK.build("C:\\dev\\cei\\exchanges\\test", "java", "C:\\dev\\cei\\output");
+            BuildSDK.build("C:\\dev\\cei\\exchanges", "python3", "C:\\dev\\cei\\output");
 //            BuildSDK.build(finalSDKs, "golang", "C:\\dev\\cei\\output");
 //            BuildSDK.build(finalSDKs, "python3", "C:\\dev\\cei\\output");
 //        } catch (Exception e) {

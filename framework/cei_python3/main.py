@@ -4,9 +4,11 @@ from impl.signaturetool import SignatureTool
 from exchanges.cei import *
 
 from exchanges.huobipro import *
-from exchanges.TestWS import *
+from exchanges.test import *
 
 if __name__ == '__main__':
+
+
 
     ws = TestWSClient()
 

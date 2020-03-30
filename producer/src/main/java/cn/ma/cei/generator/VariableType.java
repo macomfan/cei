@@ -36,9 +36,18 @@ public class VariableType {
         if (methods.containsKey(methodName)) {
             throw new CEIException("[VariableType] Duplicate method: " + methodName);
         }
-        sMethod method = new sMethod(methodName);
+        sMethod method = new sMethod(this, methodName);
         methods.put(methodName, method);
         return method;
+    }
+
+    public Variable addPrivateMember(VariableType type, String memberName) {
+        if (members.containsKey(memberName)) {
+            throw new CEIException("[VariableType] Duplicate member: " + memberName);
+        }
+        Variable member = VariableCreator.createPrivateMemberVariable(type, memberName);
+        members.put(memberName, member);
+        return member;
     }
 
     public Variable addMember(VariableType type, String memberName) {

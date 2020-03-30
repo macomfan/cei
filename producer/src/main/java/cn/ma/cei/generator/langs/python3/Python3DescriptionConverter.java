@@ -70,6 +70,12 @@ public class Python3DescriptionConverter implements IDescriptionConverter {
     }
 
     @Override
+    public String getPrivateMemberDescriptor(String name) {
+        checkInput(name);
+        return "__" + checkKeyword(WordSplitter.getLowercase(name, "_"));
+    }
+
+    @Override
     public String getMethodDescriptor(String name) {
         checkInput(name);
         return checkKeyword(WordSplitter.getLowercase(name, "_"));
@@ -83,6 +89,11 @@ public class Python3DescriptionConverter implements IDescriptionConverter {
         } else {
             throw new CEIException("Name is null in NameConverter");
         }
+    }
+
+    @Override
+    public String getSelfDescriptor() {
+        return "self";
     }
 
     @Override

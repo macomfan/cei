@@ -27,7 +27,7 @@ public class JavaRestfulInterfaceBuilder implements IRestfulInterfaceBuilder {
 
     @Override
     public void defineRequest(Variable request) {
-        Variable options = BuilderContext.createStatement(RestfulOptions.getType(),"this.options");
+        Variable options = BuilderContext.createStatement("this.options");
         method.addAssign(method.defineVariable(request), method.newInstance(request.getType(), options));
     }
 
@@ -105,7 +105,7 @@ public class JavaRestfulInterfaceBuilder implements IRestfulInterfaceBuilder {
 
     @Override
     public void invokeAuthentication(Variable request, String methodName) {
-        Variable option = BuilderContext.createStatement(RestfulOptions.getType(),"this.options");
+        Variable option = BuilderContext.createStatement("this.options");
         method.addInvoke("Authentication." + methodName, request, option);
     }
 }

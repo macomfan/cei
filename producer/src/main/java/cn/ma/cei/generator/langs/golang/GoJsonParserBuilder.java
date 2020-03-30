@@ -97,7 +97,7 @@ public class GoJsonParserBuilder implements IJsonParserBuilder {
 
     @Override
     public void defineRootJsonObject(Variable jsonObject, Variable responseVariable) {
-        Variable value = BuilderContext.createStatement(JsonWrapper.getType(),responseVariable.getDescriptor() + ".GetJson()");
+        Variable value = BuilderContext.createStatement(responseVariable.getDescriptor() + ".GetJson()");
         method.addAssignAndDeclare(method.useVariable(new GoVar(jsonObject)), method.useVariable(new GoVar(value)));
     }
 

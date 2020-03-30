@@ -37,6 +37,12 @@ public class DescriptionConverterDefault implements IDescriptionConverter {
     }
 
     @Override
+    public String getPrivateMemberDescriptor(String name) {
+        checkInput(name);
+        return WordSplitter.getLowerCamelCase(name);
+    }
+
+    @Override
     public String getMethodDescriptor(String name) {
         checkInput(name);
         return WordSplitter.getUpperCamelCase(name);
@@ -52,6 +58,11 @@ public class DescriptionConverterDefault implements IDescriptionConverter {
     public String toStringDescriptor(String name) {
         checkInput(name);
         return "\"" + name + "\"";
+    }
+
+    @Override
+    public String getSelfDescriptor() {
+        return "this";
     }
 
     @Override

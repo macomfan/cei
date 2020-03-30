@@ -23,7 +23,7 @@ public class Python3DataProcessorBuilder implements IDataProcessorBuilder {
 
     @Override
     public IStringBuilderBuilder createStringBuilderBuilder() {
-        return null;
+        return new Python3StringBuilderBuilder(method);
     }
 
     @Override
@@ -33,32 +33,37 @@ public class Python3DataProcessorBuilder implements IDataProcessorBuilder {
 
     @Override
     public void getNow(Variable output, Variable format) {
-        method.addAssign(method.defineVariable(output), method.invoke("AuthenticationTool.get_now", format));
+        method.addAssign(method.defineVariable(output), method.invoke("CEIUtils.get_now", format));
     }
 
     @Override
     public Variable jsonWrapperToString(Variable jsonWrapper) {
-        return BuilderContext.createStatement(xString.inst.getType(), jsonWrapper.getDescriptor() + ".to_json_string()");
+        return BuilderContext.createStatement(jsonWrapper.getDescriptor() + ".to_json_string()");
     }
 
     @Override
     public Variable stringWrapperToString(Variable stringWrapper) {
-        return BuilderContext.createStatement(xString.inst.getType(), stringWrapper.getDescriptor() + ".to_string()");
+        return BuilderContext.createStatement(stringWrapper.getDescriptor() + ".to_string()");
     }
 
     @Override
     public Variable stringReplacement(Variable... items) {
-        return BuilderContext.createStatement(xString.inst.getType(), method.invoke("StringBuilder.replace", items));
+        return BuilderContext.createStatement(method.invoke("StringBuilder.replace", items));
+    }
+
+    @Override
+    public Variable convertIntToString(Variable intVariable) {
+        return null;
     }
 
     @Override
     public void base64(Variable output, Variable input) {
-        method.addAssign(method.defineVariable(output), method.invoke("AuthenticationTool.base64", input));
+        method.addAssign(method.defineVariable(output), method.invoke("CEIUtils.base64", input));
     }
 
     @Override
     public void hmacsha265(Variable output, Variable input, Variable key) {
-        method.addAssign(method.defineVariable(output), method.invoke("AuthenticationTool.hmacsha256", input, key));
+        method.addAssign(method.defineVariable(output), method.invoke("CEIUtils.hmacsha256", input, key));
     }
 
     @Override
@@ -68,11 +73,11 @@ public class Python3DataProcessorBuilder implements IDataProcessorBuilder {
 
     @Override
     public void combineQueryString(Variable requestVariable, Variable output, Variable sort, Variable separator) {
-        method.addAssign(method.defineVariable(output), method.invoke("AuthenticationTool.combine_query_string", requestVariable, sort, separator));
+        method.addAssign(method.defineVariable(output), method.invoke("CEIUtils.combine_query_string", requestVariable, sort, separator));
     }
 
     @Override
     public void getRequestInfo(Variable requestVariable, Variable output, Variable info, Variable convert) {
-        method.addAssign(method.defineVariable(output), method.invoke("AuthenticationTool.get_request_info", requestVariable, info, convert));
+        method.addAssign(method.defineVariable(output), method.invoke("CEIUtils.get_request_info", requestVariable, info, convert));
     }
 }

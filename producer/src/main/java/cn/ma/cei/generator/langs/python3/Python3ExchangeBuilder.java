@@ -30,14 +30,14 @@ public class Python3ExchangeBuilder implements IExchangeBuilder {
         Constant.requestMethod().tryPut(RestfulRequest.RequestMethod.GET, "RestfulRequest.Method.GET");
         Constant.requestMethod().tryPut(RestfulRequest.RequestMethod.POST, "RestfulRequest.Method.POST");
 
-        Constant.authenticationMethod().tryPut(AuthenticationTool.Constant.ASC, "AuthenticationTool.Constant.ASC");
-        Constant.authenticationMethod().tryPut(AuthenticationTool.Constant.DSC, "AuthenticationTool.Constant.DSC");
-        Constant.authenticationMethod().tryPut(AuthenticationTool.Constant.HOST, "AuthenticationTool.Constant.HOST");
-        Constant.authenticationMethod().tryPut(AuthenticationTool.Constant.METHOD, "AuthenticationTool.Constant.METHOD");
-        Constant.authenticationMethod().tryPut(AuthenticationTool.Constant.TARGET, "AuthenticationTool.Constant.TARGET");
-        Constant.authenticationMethod().tryPut(AuthenticationTool.Constant.UPPERCASE, "AuthenticationTool.Constant.UPPERCASE");
-        Constant.authenticationMethod().tryPut(AuthenticationTool.Constant.LOWERCASE, "AuthenticationTool.Constant.LOWERCASE");
-        Constant.authenticationMethod().tryPut(AuthenticationTool.Constant.NONE, "AuthenticationTool.Constant.NONE");
+        Constant.authenticationMethod().tryPut(CEIUtils.Constant.ASC, "CEIUtils.Constant.ASC");
+        Constant.authenticationMethod().tryPut(CEIUtils.Constant.DSC, "CEIUtils.Constant.DSC");
+        Constant.authenticationMethod().tryPut(CEIUtils.Constant.HOST, "CEIUtils.Constant.HOST");
+        Constant.authenticationMethod().tryPut(CEIUtils.Constant.METHOD, "CEIUtils.Constant.METHOD");
+        Constant.authenticationMethod().tryPut(CEIUtils.Constant.TARGET, "CEIUtils.Constant.TARGET");
+        Constant.authenticationMethod().tryPut(CEIUtils.Constant.UPPERCASE, "CEIUtils.Constant.UPPERCASE");
+        Constant.authenticationMethod().tryPut(CEIUtils.Constant.LOWERCASE, "CEIUtils.Constant.LOWERCASE");
+        Constant.authenticationMethod().tryPut(CEIUtils.Constant.NONE, "CEIUtils.Constant.NONE");
 
         BuilderContext.setupBuildInVariableType(xString.typeName, "String", BuilderContext.NO_REF);
         BuilderContext.setupBuildInVariableType(xBoolean.typeName, "Boolean", BuilderContext.NO_REF);
@@ -49,9 +49,16 @@ public class Python3ExchangeBuilder implements IExchangeBuilder {
         BuilderContext.setupBuildInVariableType(RestfulConnection.typeName, "RestfulConnection", "from impl.restfulconnection import RestfulConnection");
         BuilderContext.setupBuildInVariableType(RestfulOptions.typeName, "RestfulOptions", "from impl.restfuloptions import RestfulOptions");
         BuilderContext.setupBuildInVariableType(JsonWrapper.typeName, "JsonWrapper", "from impl.jsonwrapper import JsonWrapper");
-        BuilderContext.setupBuildInVariableType(AuthenticationTool.typeName, "AuthenticationTool", "from impl.authenticationtool import AuthenticationTool");
+        BuilderContext.setupBuildInVariableType(CEIUtils.typeName, "CEIUtils", "from impl.ceiutils import CEIUtils");
         BuilderContext.setupBuildInVariableType(TheStream.typeName, "byte[]", BuilderContext.NO_REF);
         BuilderContext.setupBuildInVariableType(JsonChecker.typeName, "JsonChecker", "from impl.jsonchecker import JsonChecker");
+        BuilderContext.setupBuildInVariableType(StringWrapper.typeName, "StringWrapper", "from impl.stringwrapper import StringWrapper");
+
+        BuilderContext.setupBuildInVariableType(WebSocketConnection.typeName, "WebSocketConnection", "from impl.websocketconnection import WebSocketConnection");
+        BuilderContext.setupBuildInVariableType(WebSocketAction.typeName, "WebSocketAction", "from impl.websocketaction import WebSocketAction");
+        BuilderContext.setupBuildInVariableType(WebSocketMessage.typeName, "WebSocketMessage", "from impl.websocketmessage import WebSocketMessage");
+        BuilderContext.setupBuildInVariableType(WebSocketCallback.typeName, "IWebSocketCallback", "from impl.websocketcallback import IWebSocketCallback");
+        BuilderContext.setupBuildInVariableType(WebSocketOptions.typeName, "WebSocketOptions", "from impl.websocketoptions import WebSocketOptions");
 
         CEIPath workingFolder = BuilderContext.getWorkingFolder();
         CEIPath exchangeFolder = CEIPath.appendPath(workingFolder, "exchanges");

@@ -10,6 +10,7 @@ public class Variable {
         INPUT,
         LOCAL,
         MEMBER,
+        PRIVATE,
         REFER,
         THIS,
         CONSTANT,
@@ -58,6 +59,9 @@ public class Variable {
         switch (position) {
             case MEMBER:
                 this.nameDescriptor = GlobalContext.getCurrentDescriptionConverter().getMemberVariableDescriptor(name);
+                break;
+            case PRIVATE:
+                this.nameDescriptor = GlobalContext.getCurrentDescriptionConverter().getPrivateMemberDescriptor(name);
                 break;
             case REFER:
                 // TODO

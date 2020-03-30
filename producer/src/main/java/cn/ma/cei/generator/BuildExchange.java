@@ -3,7 +3,7 @@ package cn.ma.cei.generator;
 import cn.ma.cei.exception.CEIException;
 import cn.ma.cei.generator.builder.IExchangeBuilder;
 import cn.ma.cei.generator.buildin.RestfulOptions;
-import cn.ma.cei.generator.buildin.AuthenticationTool;
+import cn.ma.cei.generator.buildin.CEIUtils;
 import cn.ma.cei.model.xSDK;
 
 public class BuildExchange {
@@ -46,7 +46,7 @@ public class BuildExchange {
             // No clients here
         }
 
-        VariableType authenticationType = GlobalContext.variableType(AuthenticationTool.typeName);
+        VariableType authenticationType = GlobalContext.variableType(CEIUtils.typeName);
         if (sdk.authentications != null) {
             GlobalContext.setCurrentModel(authenticationType);
             if (sdk.authentications.restfulList != null) {

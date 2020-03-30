@@ -14,6 +14,10 @@ class VariableCreator {
         return createVariable(type, name, Variable.Position.INPUT, null);
     }
 
+    public static Variable createPrivateMemberVariable(VariableType memberType, String memberName) {
+        return createVariable(memberType, memberName, Variable.Position.PRIVATE, null);
+    }
+
     public static Variable createMemberVariable(VariableType memberType, String memberName) {
         return createVariable(memberType, memberName, Variable.Position.MEMBER, null);
     }

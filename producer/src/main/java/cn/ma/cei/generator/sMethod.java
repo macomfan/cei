@@ -15,9 +15,11 @@ public class sMethod {
     private UniqueList<String, sMethod> nestedMethodList = new UniqueList<>();
     private VariableType returnType;
     private int temporaryId = 0;
+    private VariableType parent = null;
+    private Variable self = null;
 
     public sMethod createNestedMethod(String name) {
-        sMethod method = new sMethod(name);
+        sMethod method = new sMethod(parent, name);
         method.temporaryId = temporaryId;
         nestedMethodList.put(name, method);
         return method;
@@ -31,14 +33,15 @@ public class sMethod {
         return this.returnType;
     }
 
-    public sMethod(String name) {
+    public sMethod(VariableType parent, String name) {
+        this.parent = parent;
         this.name = name;
+        self = createLocalVariable(parent, GlobalContext.getCurrentDescriptionConverter().getSelfDescriptor());
     }
 
     public String getDescriptor() {
         return GlobalContext.getCurrentDescriptionConverter().getMethodDescriptor(this.name);
     }
-
 
     public List<Variable> getInputVariableList() {
         List<Variable> res = new LinkedList<>();
@@ -81,7 +84,11 @@ public class sMethod {
      * @return the variable object
      */
     public Variable getVariable(String variableName) {
-        return variableList.get(variableName);
+        if (variableList.containsKey(variableName)) {
+            return variableList.get(variableName);
+        } else {
+            return self.getMember(variableName);
+        }
     }
 
     /***

@@ -35,7 +35,7 @@ public class Python3RestfulInterfaceBuilder implements IRestfulInterfaceBuilder 
 
     @Override
     public void defineRequest(Variable request) {
-        Variable options = BuilderContext.createStatement(RestfulOptions.getType(),"self.__options");
+        Variable options = BuilderContext.createStatement("self.__options");
         method.addAssign(method.defineVariable(request), method.newInstance(request.getType(), options));
     }
 
@@ -98,7 +98,7 @@ public class Python3RestfulInterfaceBuilder implements IRestfulInterfaceBuilder 
 
     @Override
     public void invokeAuthentication(Variable request, String methodName) {
-        Variable option = BuilderContext.createStatement(RestfulOptions.getType(), "self.__options");
+        Variable option = BuilderContext.createStatement("self.__options");
         method.addInvoke("Authentication." + methodName, request, option);
     }
 

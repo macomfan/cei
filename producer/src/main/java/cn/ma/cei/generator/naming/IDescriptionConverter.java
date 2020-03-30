@@ -21,9 +21,13 @@ public interface IDescriptionConverter {
 
     String getMemberVariableDescriptor(String name);
 
+    String getPrivateMemberDescriptor(String name);
+
     String getMethodDescriptor(String name);
     
     String toStringDescriptor(String name);
+
+    String getSelfDescriptor();
     
     String getGenericTypeDescriptor(String baseName, List<String> subNames);
 

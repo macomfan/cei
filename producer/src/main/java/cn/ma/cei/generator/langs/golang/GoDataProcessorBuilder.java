@@ -52,6 +52,11 @@ public class GoDataProcessorBuilder implements IDataProcessorBuilder {
     }
 
     @Override
+    public Variable convertIntToString(Variable intVariable) {
+        return null;
+    }
+
+    @Override
     public void base64(Variable output, Variable input) {
         method.addAssignAndDeclare(method.useVariable(new GoVar(output)), method.invoke("authentication.Base64", new GoVar(input)));
     }

@@ -8,23 +8,23 @@ class WebSocketConnection:
         self.__event_list = list()
         pass
 
-    def connect(self):
-        def inner_func(str):
-            pass
-        i = inner_func
-        i("aaa")
+    def connect_ws(self, url, option):
+        print(option.a)
 
     def on_connect(self):
         pass
 
-    def register_persistent_event(self, event):
+    def register_persistent_action(self, event):
         self.__event_list.append(event)
 
-    def register_disposable_event(self, event):
+    def register_disposable_action(self, event):
         self.__event_list.append(event)
 
     def on_message(self, msg):
         for event in self.__event_list:
             if event.check(msg):
                 event.invoke(msg)
+        pass
+
+    def send_ws(self, what):
         pass

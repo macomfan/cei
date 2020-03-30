@@ -83,6 +83,16 @@ public class Python3Method {
         code.startBlock();
     }
 
+    public void startNestedMethod(VariableType returnType, String methodName, List<Variable> params) {
+        String paramString = defineParamString(params);
+        if (paramString.isEmpty()) {
+            code.appendWordsln("def", methodName + "():");
+        } else {
+            code.appendWordsln("def", methodName + "(" + defineParamString(params) + "):");
+        }
+        code.startBlock();
+    }
+
     public void startStaticMethod(VariableType returnType, String methodName, List<Variable> params) {
         code.appendln("@staticmethod");
         String paramString = defineParamString(params);

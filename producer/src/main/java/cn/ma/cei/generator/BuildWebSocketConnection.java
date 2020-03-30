@@ -17,7 +17,8 @@ public class BuildWebSocketConnection {
         }
 
         sMethod connectMethod = GlobalContext.getCurrentMethod();
-        Variable option = connectMethod.createInputVariable(WebSocketOptions.getType(), "option");
+        //Variable ooo = connectMethod.getVariable("option");
+        Variable option = connectMethod.getVariable("option");
 
         // Build input
         List<Variable> inputVariableList = new LinkedList<>();

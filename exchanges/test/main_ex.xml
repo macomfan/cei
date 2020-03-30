@@ -175,7 +175,7 @@
                             <get_now name="{abc}" format=""/>
                         </procedure>
                     </send>
-                    <callback name="onkline" type="disposable">
+                    <callback name="onkline" persistent="false">
                         <trigger>
                             <json_checker>
                                 <json_equal key="ch" value="{symbol}"/>

@@ -35,32 +35,37 @@ public class JavaDataProcessorBuilder implements IDataProcessorBuilder {
 
     @Override
     public Variable jsonWrapperToString(Variable jsonWrapper) {
-        return BuilderContext.createStatement(xString.inst.getType(), jsonWrapper.getDescriptor() + ".toJsonString()");
+        return BuilderContext.createStatement(jsonWrapper.getDescriptor() + ".toJsonString()");
     }
 
     @Override
     public Variable stringWrapperToString(Variable stringWrapper) {
-        return BuilderContext.createStatement(xString.inst.getType(), stringWrapper.getDescriptor() + ".toNormalString()");
+        return BuilderContext.createStatement(stringWrapper.getDescriptor() + ".toNormalString()");
     }
 
     @Override
     public Variable stringReplacement(Variable... items) {
-        return BuilderContext.createStatement(xString.inst.getType(), method.invoke("StringBuilder.replace", items));
+        return BuilderContext.createStatement(method.invoke("CEIUtils.stringReplace", items));
+    }
+
+    @Override
+    public Variable convertIntToString(Variable intVariable) {
+        return BuilderContext.createStatement(method.invoke("Long.toString", intVariable));
     }
 
     @Override
     public void getNow(Variable output, Variable format) {
-        method.addAssign(method.defineVariable(output), method.invoke("AuthenticationTool.getNow", format));
+        method.addAssign(method.defineVariable(output), method.invoke("CEIUtils.getNow", format));
     }
 
     @Override
     public void base64(Variable output, Variable input) {
-        method.addAssign(method.defineVariable(output), method.invoke("AuthenticationTool.base64", input));
+        method.addAssign(method.defineVariable(output), method.invoke("CEIUtils.base64", input));
     }
 
     @Override
     public void hmacsha265(Variable output, Variable input, Variable key) {
-        method.addAssign(method.defineVariable(output), method.invoke("AuthenticationTool.hmacsha256", input, key));
+        method.addAssign(method.defineVariable(output), method.invoke("CEIUtils.hmacsha256", input, key));
     }
 
     @Override
@@ -70,11 +75,11 @@ public class JavaDataProcessorBuilder implements IDataProcessorBuilder {
 
     @Override
     public void combineQueryString(Variable requestVariable, Variable output, Variable sort, Variable separator) {
-        method.addAssign(method.defineVariable(output), method.invoke("AuthenticationTool.combineQueryString", requestVariable, sort, separator));
+        method.addAssign(method.defineVariable(output), method.invoke("CEIUtils.combineQueryString", requestVariable, sort, separator));
     }
 
     @Override
     public void getRequestInfo(Variable requestVariable, Variable output, Variable info, Variable convert) {
-        method.addAssign(method.defineVariable(output), method.invoke("AuthenticationTool.getRequestInfo", requestVariable, info, convert));
+        method.addAssign(method.defineVariable(output), method.invoke("CEIUtils.getRequestInfo", requestVariable, info, convert));
     }
 }

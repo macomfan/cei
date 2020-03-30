@@ -2,7 +2,6 @@ package cn.ma.cei.generator;
 
 import cn.ma.cei.generator.builder.IWebSocketActionBuilder;
 import cn.ma.cei.generator.buildin.WebSocketAction;
-import cn.ma.cei.generator.buildin.WebSocketConnection;
 import cn.ma.cei.generator.buildin.WebSocketMessage;
 import cn.ma.cei.model.websocket.xAction;
 import cn.ma.cei.model.websocket.xCallback;
@@ -11,9 +10,6 @@ import cn.ma.cei.model.websocket.xTrigger;
 import cn.ma.cei.model.xResponse;
 import cn.ma.cei.utils.Checker;
 
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlElement;
-
 public class BuildWebSocketAction {
     private static class ActionContext {
         public String name = null;
@@ -21,6 +17,7 @@ public class BuildWebSocketAction {
         public xResponse response = null;
         public xSend send = null;
         public VariableType callbackMessageType = null;
+        public boolean persistent = false;
     }
 
     public static void build(xCallback callback, VariableType callbackMessageType, IWebSocketActionBuilder actionBuilder) {
@@ -29,6 +26,7 @@ public class BuildWebSocketAction {
         context.response = callback.response;
         context.callbackMessageType = callbackMessageType;
         context.trigger = callback.trigger;
+        context.persistent = callback.persistent;
         BuildWebSocketAction.build(context, actionBuilder);
     }
 
@@ -38,6 +36,7 @@ public class BuildWebSocketAction {
         context.name = action.name;
         context.send = action.send;
         context.trigger = action.trigger;
+        context.persistent = true;
         BuildWebSocketAction.build(context, actionBuilder);
     }
 
@@ -69,7 +68,7 @@ public class BuildWebSocketAction {
             GlobalContext.setCurrentMethod(send);
             // Build send
             Variable msg = send.createInputVariable(WebSocketMessage.getType(), "msg");
-            BuildWebSocketImplementation.buildSendInAction(context.send, msg, actionBuilder.createImplementationBuilderForSend());
+            BuildWebSocketImplementation.buildSendInAction(context.send, msg, actionBuilder.createImplementationBuilderForResponse());
             actionBuilder.setActionToAction(actionVariable, send);
             GlobalContext.setCurrentMethod(interfaceMethod);
         }
@@ -80,12 +79,17 @@ public class BuildWebSocketAction {
             GlobalContext.setCurrentMethod(response);
             // Build response
             Variable msg = response.createInputVariable(WebSocketMessage.getType(), "msg");
-            BuildWebSocketImplementation.buildResponse(context.response, msg, context.callbackMessageType, callbackVariable, actionBuilder.createImplementationBuilderForSend());
+            BuildWebSocketImplementation.buildResponse(context.response, msg, context.callbackMessageType, callbackVariable, actionBuilder.createImplementationBuilderForResponse());
             actionBuilder.setActionToAction(actionVariable, response);
             GlobalContext.setCurrentMethod(interfaceMethod);
         }
 
-        actionBuilder.registerAction(actionVariable);
+        if (context.persistent) {
+            actionBuilder.registerPersistentAction(actionVariable);
+        } else {
+            actionBuilder.registerDisposableAction(actionVariable);
+        }
+
         // End action
         actionBuilder.endAction();
     }
