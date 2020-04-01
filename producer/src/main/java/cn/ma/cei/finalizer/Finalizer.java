@@ -31,8 +31,6 @@ public class Finalizer {
     }
 
     public List<xSDK> finalizeSDK() {
-        CEIErrors.showDebug("==== %s ====", "Start finalize");
-
         // Check model dependency
         XMLDatabase.getSDKs().forEach(sdk -> {
             if (Checker.isNull(sdk.modelList)) {
@@ -57,7 +55,7 @@ public class Finalizer {
             });
             sdk.modelList = dependence.decision();
         });
-        CEIErrors.showDebug("==== %s ====", "End finalize");
+        CEIErrors.showInfo("Reconcile XML configuration done");
         return new LinkedList<>(XMLDatabase.getSDKs());
     }
 }
