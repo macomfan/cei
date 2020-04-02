@@ -5,18 +5,14 @@
  */
 package cn.ma.cei.impl;
 
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
-import okhttp3.WebSocket;
-import okhttp3.WebSocketListener;
+import okhttp3.*;
 import okio.ByteString;
 
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
 /**
- *
  * @author u0151316
  */
 public class WebSocketConnection extends WebSocketListener {
@@ -25,37 +21,29 @@ public class WebSocketConnection extends WebSocketListener {
     private WebSocket webSocket = null;
     private OnConnect onConnect = null;
 
-    private List<WebSocketAction> events = new LinkedList<>();
-
-    @FunctionalInterface
-    public interface OnConnect {
-        void onConnect(WebSocketConnection connection);
-    }
-
-    @FunctionalInterface
-    public interface Function<T> {
-        public void onEvent(T t);
-    }
-
+    private List<WebSocketAction> actions = new LinkedList<>();
 
     public void registerAction(WebSocketAction action) {
-
+        actions.add(action);
     }
 
     public void setOnConnect(OnConnect onConnect) {
-
+        this.onConnect = onConnect;
     }
 
-    public void connectWS(String url, WebSocketOptions option) {
+    public boolean isConnected() {
+        return true;
+    }
+
+    public void connectWS(String target, WebSocketOptions option) {
         //this.onConnect = onConnect;
-        Request okhttpRequest = new Request.Builder().url(url).build();
+        Request okhttpRequest = new Request.Builder().url(target).build();
         webSocket = client.newWebSocket(okhttpRequest, this);
     }
 
-    public void closeWebSocket(String url, WebSocketOptions option) {
+    public void closeWS(WebSocketOptions option) {
 
     }
-
 
     @Override
     public void onOpen(WebSocket webSocket, Response response) {
@@ -70,24 +58,44 @@ public class WebSocketConnection extends WebSocketListener {
     public void onMessage(WebSocket webSocket, ByteString bytes) {
         super.onMessage(webSocket, bytes);
         System.err.println("onMessage byte");
+        WebSocketMessage msg = new WebSocketMessage(bytes);
+        Iterator<WebSocketAction> it = actions.iterator();
+        while (it.hasNext()) {
+            WebSocketAction cur = it.next();
+            if (cur.check(msg)) {
+                cur.invoke(msg);
+                if (!cur.isPersistence()) {
+                    actions.remove(it);
+                }
+            }
+        }
     }
 
     @Override
     public void onMessage(WebSocket webSocket, String text) {
         super.onMessage(webSocket, text);
-        WebSocketMessage msg = new WebSocketMessage();
-        events.forEach(item->{
-            if (item.check(msg)) {
-                item.invoke(msg);
+        WebSocketMessage msg = new WebSocketMessage(text);
+        Iterator<WebSocketAction> it = actions.iterator();
+        while (it.hasNext()) {
+            WebSocketAction cur = it.next();
+            if (cur.check(msg)) {
+                cur.invoke(msg);
+                if (!cur.isPersistence()) {
+                    actions.remove(it);
+                }
             }
-        });
+        }
     }
-    
-    public void send(String msg) {
+
+    public void sendWS(String msg) {
         if (msg != null || !msg.isEmpty()) {
             System.out.println(msg);
             webSocket.send(msg);
         }
     }
 
+    @FunctionalInterface
+    public interface OnConnect {
+        void onConnect(WebSocketConnection connection);
+    }
 }

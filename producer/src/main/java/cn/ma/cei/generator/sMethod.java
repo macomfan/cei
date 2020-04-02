@@ -2,7 +2,6 @@ package cn.ma.cei.generator;
 
 import cn.ma.cei.exception.CEIErrorType;
 import cn.ma.cei.exception.CEIErrors;
-import cn.ma.cei.utils.RegexHelper;
 import cn.ma.cei.utils.UniqueList;
 
 import java.util.LinkedList;

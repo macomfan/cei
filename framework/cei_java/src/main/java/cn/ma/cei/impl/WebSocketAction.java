@@ -6,41 +6,23 @@
 package cn.ma.cei.impl;
 
 /**
- *
  * @author u0151316
  */
 public class WebSocketAction {
-    private IChecker checker;
-    private IUserCallback callback;
+    private ITrigger checker;
+    private ICallback callback;
+    private boolean persistence = false;
 
-    @FunctionalInterface
-    public interface IChecker {
-        boolean check(WebSocketMessage msg);
+    public void setTrigger(ITrigger checker) {
+        this.checker = checker;
     }
 
-    @FunctionalInterface
-    public interface IUserCallback {
-        void onReceive(WebSocketMessage msg);
+    public void setAction(ICallback callback) {
+        this.callback = callback;
     }
 
-    @FunctionalInterface
-    public interface ISystemCallback {
-        void onReceive(WebSocketMessage msg);
-    }
-
-    public void setTrigger(IChecker checker) {
-
-    }
-    public void setAction(ISystemCallback callback) {
-
-    }
-
-    public void registerUser(IChecker when, IUserCallback callback) {
-
-    }
-
-    public void registerSystem(IChecker when, ISystemCallback callback) {
-
+    public boolean isPersistence() {
+        return persistence;
     }
 
     public boolean check(WebSocketMessage msg) {
@@ -48,6 +30,16 @@ public class WebSocketAction {
     }
 
     public void invoke(WebSocketMessage msg) {
-        callback.onReceive(msg);
+        callback.onAction(msg);
+    }
+
+    @FunctionalInterface
+    public interface ITrigger {
+        boolean check(WebSocketMessage msg);
+    }
+
+    @FunctionalInterface
+    public interface ICallback {
+        void onAction(WebSocketMessage msg);
     }
 }

@@ -9,12 +9,12 @@ import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
-import java.util.Base64;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 public class CEIUtils {
     public enum Constant {
@@ -28,26 +28,111 @@ public class CEIUtils {
         NONE
     }
 
+
+    private static String processSingleTimeFormatSyntax(String input) {
+        if (input == null || input.isEmpty() || input.charAt(0) != '%') {
+            return null;
+        }
+        StringBuilder res = new StringBuilder();
+        String commandString = "%";
+        for (int i = 1; i < input.length(); i++) {
+            if (!commandString.isEmpty()) {
+                commandString += input.charAt(i);
+                switch (commandString) {
+                    case "%Y":
+                        res.append("yyyy");
+                        commandString = "";
+                        res.append('\'');
+                        break;
+                    case "%M":
+                        res.append("MM");
+                        commandString = "";
+                        res.append('\'');
+                        break;
+                    case "%D":
+                        res.append("dd");
+                        commandString = "";
+                        res.append('\'');
+                        break;
+                    case "%h":
+                        res.append("HH");
+                        commandString = "";
+                        res.append('\'');
+                        break;
+                    case "%m":
+                        res.append("mm");
+                        commandString = "";
+                        res.append('\'');
+                        break;
+                    case "%s":
+                        res.append("ss");
+                        commandString = "";
+                        res.append('\'');
+                        break;
+                    case "%ms":
+                        res.append("SSS");
+                        commandString = "";
+                        res.append('\'');
+                }
+            } else {
+                res.append(input.charAt(i));
+            }
+        }
+        if (!commandString.isEmpty()) {
+            // TODO
+            // Cannot process
+            System.err.println("Cannot support " + commandString);
+        }
+        else {
+            res.append('\'');
+        }
+        return res.toString();
+    }
+
     /**
      * *
-     * Convert current date/time to string
+     * Convert current date/time in UTC to string
      *
-     * @param format The format of the output string, following below rules: %y
-     * The 2 characters year code. 2019 is 19. %Y The 4 characters year code.
-     * link 2019. %m The 2 characters month in year. range is 01 - 12. %d The 2
-     * characters day in month. range is 01 - 31. %H The 2 characters hour (24H)
-     * in day. range is 00 - 23 %M The 2 characters minute in hour. range is 00
-     * - 59 %S %s %US %Us
-     * @param gmtOffset
-     * @return
+     * @param format The format of the output string, following below rules:
+     * %Y The 4 characters year code. like 2019.
+     * %M The 2 characters month in year. range is 01 - 12.
+     * %D The 2 characters day in month. range is 01 - 31.
+     * %h The 2 characters hour (24H) in day. range is 00 - 23.
+     * %m The 2 characters minute in hour. range is 00- 59.
+     * %s The 2 characters second in minute. range is 00 - 59.
+     * %ms The 3 characters millisecond. range is 000 - 999.
+     * Unix_s The unix format timestamp based on second.
+     * Unix_ms The unix format timestamp based on millisecond. (default)
+     *
+     * @return The time string.
      */
-    private static final DateTimeFormatter DT_FORMAT = DateTimeFormatter
-            .ofPattern("uuuu-MM-dd'T'HH:mm:ss");
-    private static final ZoneId ZONE_GMT = ZoneId.of("Z");
-
     public static String getNow(String format) {
-        //return "2019-12-31T02%3A23%3A25";
-        return Instant.ofEpochSecond(Instant.now().getEpochSecond()).atZone(ZONE_GMT).format(DT_FORMAT);
+        if (format == null || format.isEmpty()) {
+            return Long.toString(System.currentTimeMillis() / 1000);
+        }
+        if (format.equals("Unix_s")) {
+            return Long.toString(System.currentTimeMillis());
+        } else if (format.equals("Unix_ms")) {
+            return Long.toString(System.currentTimeMillis() / 1000);
+        } else {
+            StringBuilder javaTimeFormatSting = new StringBuilder();
+            String[] items = format.split("\\%");
+            for (int i = 0; i<items.length; i++) {
+                if (i == 0) {
+                    javaTimeFormatSting.append('\'');
+                    javaTimeFormatSting.append(items[i]);
+                    javaTimeFormatSting.append('\'');
+                }
+                else {
+                    javaTimeFormatSting.append(CEIUtils.processSingleTimeFormatSyntax("%" + items[i]));
+                }
+            }
+            String res = javaTimeFormatSting.toString();
+            Date now=new Date();
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat(javaTimeFormatSting.toString());
+            simpleDateFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
+            return simpleDateFormat.format(now);
+        }
     }
 
     public static String combineQueryString(RestfulRequest request, Constant sort, String separator) {
