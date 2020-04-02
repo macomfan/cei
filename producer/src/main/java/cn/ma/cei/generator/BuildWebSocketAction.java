@@ -41,7 +41,6 @@ public class BuildWebSocketAction {
     }
 
 
-
     public static void build(ActionContext context,
                              IWebSocketActionBuilder actionBuilder) {
         Checker.isNull(actionBuilder, BuildWebSocketAction.class, "WebSocketActionBuilder");
@@ -51,8 +50,11 @@ public class BuildWebSocketAction {
         actionBuilder.startAction();
 
         Variable actionVariable = interfaceMethod.createTempVariable(WebSocketAction.getType(), context.name + "Action");
+        actionBuilder.newAction(actionVariable);
+        if (context.persistent) {
+            actionBuilder.setAsPersistentAction(actionVariable);
+        }
         if (context.trigger != null) {
-            actionBuilder.newAction(actionVariable);
             sMethod trigger = interfaceMethod.createNestedMethod(context.name + "Trigger");
             GlobalContext.setCurrentMethod(trigger);
             Variable msg = trigger.createInputVariable(WebSocketMessage.getType(), "msg");
@@ -83,13 +85,7 @@ public class BuildWebSocketAction {
             actionBuilder.setActionToAction(actionVariable, response);
             GlobalContext.setCurrentMethod(interfaceMethod);
         }
-
-        if (context.persistent) {
-            actionBuilder.registerPersistentAction(actionVariable);
-        } else {
-            actionBuilder.registerDisposableAction(actionVariable);
-        }
-
+        actionBuilder.registerAction(actionVariable);
         // End action
         actionBuilder.endAction();
     }

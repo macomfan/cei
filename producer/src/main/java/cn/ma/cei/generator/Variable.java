@@ -9,6 +9,7 @@ public class Variable {
     public enum Position {
         INPUT,
         LOCAL,
+        USER,
         MEMBER,
         PRIVATE,
         REFER,
@@ -71,14 +72,14 @@ public class Variable {
             //TODO
             //this.nameDescriptor = "self";
             //break;
+            case USER:
             case INPUT:
             case LOCAL:
-                if (name.equals("###SELF###")) {
+                if (name.equals(sMethod.SELF)) {
                     this.nameDescriptor = GlobalContext.getCurrentDescriptionConverter().getSelfDescriptor();
                 } else {
                     this.nameDescriptor = GlobalContext.getCurrentDescriptionConverter().getVariableDescriptor(name);
                 }
-
                 break;
             case CONSTANT:
                 this.nameDescriptor = name;
@@ -95,7 +96,7 @@ public class Variable {
         this.position = position;
     }
 
-    public Variable getMember(String name) {
+    public Variable queryMember(String name) {
         Variable member = type.getMember(name);
         if (member == null) {
             CEIErrors.showFailure(CEIErrorType.XML, "Cannot find member: \"%s\" in model: \"%s\"", name, this.getType().getName());

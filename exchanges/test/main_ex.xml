@@ -43,7 +43,9 @@
 
     <authentications>
         <restful name="restful">
-            <get_now name="{timestamp}" format=""/>
+            <procedure>
+                <get_now name="{timestamp}" format=""/>
+            </procedure>
             <add_query_string key="accessKeyId" value="{option.apiKey}"/>
             <add_query_string key="signatureMethod" value="HmacSHA256"/>
             <add_query_string key="signatureVersion" value="2"/>
@@ -52,15 +54,17 @@
             <get_request_info name="{method}" info="method" convert="uppercase"/>
             <get_request_info name="{host}" info="host"/>
             <get_request_info name="{target}" info="target"/>
-            <string_builder name="{buffer}">
-                <add_string_item input="{method}"/>
-                <add_string_item input="{host}"/>
-                <add_string_item input="{target}"/>
-                <add_string_item input="{queryString}"/>
-                <combine_string_items separator="\n"/>
-            </string_builder>
-            <hmacsha256 name="{hmacsha256}" input="{buffer}" key="{option.secretKey}"/>
-            <base64 name="{result}" input="{hmacsha256}"/>
+            <procedure>
+                <string_builder name="{buffer}">
+                    <add_string_item input="{method}"/>
+                    <add_string_item input="{host}"/>
+                    <add_string_item input="{target}"/>
+                    <add_string_item input="{queryString}"/>
+                    <combine_string_items separator="\n"/>
+                </string_builder>
+                <hmacsha256 name="{hmacsha256}" input="{buffer}" key="{option.secretKey}"/>
+                <base64 name="{result}" input="{hmacsha256}"/>
+            </procedure>
             <add_query_string key="Signature" value="{result}"/>
         </restful>
     </authentications>

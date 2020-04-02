@@ -17,7 +17,7 @@ public class BuildGetRequestInfo extends DataProcessorBase<xGetRequestInfo> {
         if (Checker.isEmpty(item.info)) {
             throw new CEIException("[BuildSignature] info must be defined for GetRequestInfo");
         }
-        Variable output = createLocalVariable(xString.inst.getType(), item.name);
+        Variable output = createUserVariable(xString.inst.getType(), item.name);
         Variable requestVariable = queryVariable("{request}");
 
         Variable info;

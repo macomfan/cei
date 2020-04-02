@@ -6,6 +6,10 @@ import java.lang.reflect.Constructor;
 
 class VariableCreator {
 
+    public static Variable createUserVariable(VariableType type, String name) {
+        return createVariable(type, name, Variable.Position.LOCAL, null);
+    }
+
     public static Variable createLocalVariable(VariableType type, String name) {
         return createVariable(type, name, Variable.Position.LOCAL, null);
     }

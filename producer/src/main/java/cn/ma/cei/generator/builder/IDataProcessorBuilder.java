@@ -22,6 +22,8 @@ public interface IDataProcessorBuilder {
 
     void getRequestInfo(Variable requestVariable, Variable output, Variable info, Variable convert);
 
+    void URLEscape(Variable output, Variable input);
+
     /***
      * Return the statement of converting the json wrapper to string;
      * e.g.

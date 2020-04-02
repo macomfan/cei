@@ -4,26 +4,25 @@ import cn.ma.cei.generator.DataProcessorBase;
 import cn.ma.cei.generator.Variable;
 import cn.ma.cei.generator.VariableType;
 import cn.ma.cei.generator.builder.IDataProcessorBuilder;
-import cn.ma.cei.model.processor.xGetNow;
+import cn.ma.cei.model.processor.xURLEscape;
 import cn.ma.cei.model.types.xString;
 
-public class BuildGetNow extends DataProcessorBase<xGetNow> {
-
+public class BuildURLEscape extends DataProcessorBase<xURLEscape> {
     @Override
-    public Variable build(xGetNow item, IDataProcessorBuilder builder) {
+    public Variable build(xURLEscape item, IDataProcessorBuilder builder) {
         Variable output = createUserVariable(xString.inst.getType(), item.name);
-        Variable format = queryVariableOrConstant(item.format, xString.inst.getType());
-        builder.getNow(output, format);
+        Variable input = queryVariableOrConstant(item.input, xString.inst.getType());
+        builder.URLEscape(output, input);
         return output;
     }
 
     @Override
-    public VariableType returnType(xGetNow item) {
+    public VariableType returnType(xURLEscape item) {
         return xString.inst.getType();
     }
 
     @Override
-    public String resultVariableName(xGetNow item) {
+    public String resultVariableName(xURLEscape item) {
         return item.name;
     }
 }

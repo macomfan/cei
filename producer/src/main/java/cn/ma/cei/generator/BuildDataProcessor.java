@@ -14,7 +14,9 @@ import cn.ma.cei.model.json.xJsonParser;
 import cn.ma.cei.model.processor.xBase64;
 import cn.ma.cei.model.processor.xGetNow;
 import cn.ma.cei.model.processor.xHmacSHA256;
+import cn.ma.cei.model.processor.xURLEscape;
 import cn.ma.cei.model.string.xStringBuilder;
+import cn.ma.cei.model.xProcedure;
 import cn.ma.cei.utils.Checker;
 import cn.ma.cei.utils.NormalMap;
 import cn.ma.cei.utils.ReflectionHelper;
@@ -37,6 +39,7 @@ public class BuildDataProcessor {
         processorMap.put(xJsonParser.class, new BuildJsonParser());
         processorMap.put(xJsonBuilder.class, new BuildJsonBuilder());
         processorMap.put(xStringBuilder.class, new BuildStringWrapper());
+        processorMap.put(xURLEscape.class, new BuildURLEscape());
     }
 
 
@@ -70,9 +73,13 @@ public class BuildDataProcessor {
         return null;
     }
 
-    public static void build(List<xDataProcessorItem> items, Variable defaultInput, IDataProcessorBuilder builder) {
+    public static void build(List<xDataProcessorItem> items, IDataProcessorBuilder builder) {
         items.forEach(item -> {
-            processSingleItem(item, defaultInput, builder);
+            if (item instanceof xProcedure) {
+                build(((xProcedure)item).items, builder);
+            } else {
+                processSingleItem(item, null, builder);
+            }
         });
     }
 

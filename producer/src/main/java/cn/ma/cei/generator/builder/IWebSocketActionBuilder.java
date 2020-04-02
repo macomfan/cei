@@ -12,9 +12,9 @@ public interface IWebSocketActionBuilder {
 
     void newAction(Variable action);
 
-    void registerPersistentAction(Variable action);
+    void setAsPersistentAction(Variable action);
 
-    void registerDisposableAction(Variable action);
+    void registerAction(Variable action);
 
     void setTriggerToAction(Variable action, sMethod triggerMethod);
 

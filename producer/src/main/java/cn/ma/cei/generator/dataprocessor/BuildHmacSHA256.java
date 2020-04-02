@@ -24,7 +24,7 @@ public class BuildHmacSHA256 extends DataProcessorBase<xHmacSHA256> {
         }
         Variable input = queryVariableOrConstant(item.input, xString.inst.getType());
         Variable key = queryVariableOrConstant(item.key);
-        Variable output = createLocalVariable(TheStream.getType(), item.name);
+        Variable output = createUserVariable(TheStream.getType(), item.name);
         builder.hmacsha265(output, input, key);
         return output;
     }

@@ -22,9 +22,9 @@ public class BuildJsonBuilder extends DataProcessorBase<xJsonBuilder> {
         }
         Variable jsonObject;
         if (Checker.isEmpty(jsonBuilder.name)) {
-            jsonObject = createLocalVariable(JsonWrapper.getType(), "jsonBuilder");
+            jsonObject = createUserVariable(JsonWrapper.getType(), "jsonBuilder");
         } else {
-            jsonObject = createLocalVariable(JsonWrapper.getType(), jsonBuilder.name);
+            jsonObject = createUserVariable(JsonWrapper.getType(), jsonBuilder.name);
         }
 
         jsonBuilderBuilder.defineRootJsonObject(jsonObject);

@@ -10,7 +10,7 @@ import cn.ma.cei.utils.Checker;
 public class BuildCombineQueryString extends DataProcessorBase<xCombineQueryString> {
     @Override
     public Variable build(xCombineQueryString item, IDataProcessorBuilder builder) {
-        Variable output = createLocalVariable(xString.inst.getType(), item.name);
+        Variable output = createUserVariable(xString.inst.getType(), item.name);
         Variable requestVariable = queryVariable("{request}");
 
         Variable sort;

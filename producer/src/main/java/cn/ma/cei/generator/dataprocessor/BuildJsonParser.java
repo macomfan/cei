@@ -266,7 +266,7 @@ public class BuildJsonParser extends DataProcessorBase<xJsonParser> {
             if (variableName == null) {
                 throw new CEIException("[BuildJsonParser] To must be Variable");
             }
-            return parentModel.getMember(variableName);
+            return parentModel.queryMember(variableName);
         } else {
             return null;
         }

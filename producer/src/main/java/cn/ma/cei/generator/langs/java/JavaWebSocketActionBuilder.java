@@ -1,5 +1,6 @@
 package cn.ma.cei.generator.langs.java;
 
+import cn.ma.cei.generator.BuilderContext;
 import cn.ma.cei.generator.Variable;
 import cn.ma.cei.generator.builder.IWebSocketActionBuilder;
 import cn.ma.cei.generator.builder.IWebSocketImplementationBuilder;
@@ -41,13 +42,13 @@ public class JavaWebSocketActionBuilder implements IWebSocketActionBuilder {
     }
 
     @Override
-    public void registerPersistentAction(Variable action) {
-        method.addInvoke("registerPersistentAction", action);
+    public void setAsPersistentAction(Variable action) {
+        method.addInvoke(action.getDescriptor() + ".setPersistent", BuilderContext.createStatement("true"));
     }
 
     @Override
-    public void registerDisposableAction(Variable action) {
-        method.addInvoke("registerDisposableAction", action);
+    public void registerAction(Variable action) {
+        method.addInvoke("registerAction", action);
     }
 
     @Override

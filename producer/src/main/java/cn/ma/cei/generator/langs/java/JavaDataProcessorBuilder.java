@@ -82,4 +82,9 @@ public class JavaDataProcessorBuilder implements IDataProcessorBuilder {
     public void getRequestInfo(Variable requestVariable, Variable output, Variable info, Variable convert) {
         method.addAssign(method.defineVariable(output), method.invoke("CEIUtils.getRequestInfo", requestVariable, info, convert));
     }
+
+    @Override
+    public void URLEscape(Variable output, Variable input) {
+        method.addAssign(method.defineVariable(output), method.invoke("CEIUtils.urlEscape", input));
+    }
 }

@@ -6,7 +6,6 @@ import cn.ma.cei.exception.CEIException;
 import cn.ma.cei.generator.builder.IDataProcessorBuilder;
 import cn.ma.cei.generator.dataprocessor.TypeConverter;
 import cn.ma.cei.model.base.xDataProcessorItem;
-import cn.ma.cei.model.types.xInt;
 import cn.ma.cei.utils.Checker;
 import cn.ma.cei.utils.RegexHelper;
 
@@ -52,18 +51,26 @@ public abstract class DataProcessorBase<T extends xDataProcessorItem> {
         return GlobalContext.getCurrentMethod().createTempVariable(type, name);
     }
 
-    public Variable createLocalVariable(VariableType type, String name) {
+    public Variable createUserVariable(VariableType type, String name) {
         String variableName = RegexHelper.isReference(name);
         if (variableName == null) {
-            CEIErrors.showFailure(CEIErrorType.XML, "%s should be {xxx}", name);
+            CEIErrors.showFailure(CEIErrorType.XML, "Variable name %s is not valid, should be {xxx}", name);
         }
-        return GlobalContext.getCurrentMethod().createLocalVariable(type, variableName);
+        return GlobalContext.getCurrentMethod().createUserVariable(type, variableName);
     }
 
     public Variable getDefaultInput() {
         return defaultInput;
     }
 
+    /***
+     * See {@link DataProcessorBase#queryVariableOrConstant(String)}.
+     * Not only query the variable, and also convert to the specified type.
+     *
+     * @param name
+     * @param specType
+     * @return
+     */
     public Variable queryVariableOrConstant(String name, VariableType specType) {
         return TypeConverter.convertType(queryVariableOrConstant(name), specType, builder);
     }
@@ -101,7 +108,7 @@ public abstract class DataProcessorBase<T extends xDataProcessorItem> {
             variableNames.forEach(item -> {
                 Variable param = GlobalContext.getCurrentMethod().getVariable(item);
                 if (param == null) {
-                    throw new CEIException("Cannot find variable in target");
+                    CEIErrors.showFailure(CEIErrorType.XML, "Cannot find %s in the method %s", item, GlobalContext.getCurrentMethod().getName());
                 }
                 variables.add(param);
             });
@@ -125,19 +132,18 @@ public abstract class DataProcessorBase<T extends xDataProcessorItem> {
             CEIErrors.showFailure(CEIErrorType.XML, "No a variable name");
         }
         return GlobalContext.getCurrentMethod().tryGetVariable(variableName);
-//        if (variable == null) {
-//            CEIErrors.showFailure(CEIErrorType.XML, "C");
-////            Variable options = GlobalContext.getCurrentMethod().getVariable("options");
-////            if (options == null) {
-////                throw new CEIException("[BuildSignature] Cannot query option");
-////            }
-////            String variableName = RegexHelper.isReference(name);
-////            variable = options.getMember(variableName);
-////            if (variable == null) {
-////                throw new CEIException("[BuildSignature] cannot query variable: " + name);
-////            }
-//        }
-//        return variable;
+    }
+
+    /***
+     * Query the variable from the current method. the name should only be the variable name format, like {xxxx}.
+     * If the name is not like {xxx}, report the error.
+     *
+     * @param name the variable name, can be {xxx} or normal string.
+     * @return the variable object
+     */
+    public Variable queryVariable(String name, VariableType specType) {
+        Variable res = queryVariable(name);
+        return TypeConverter.convertType(res, specType, builder);
     }
 
     private Variable innerQueryVariable(String name) {
@@ -147,7 +153,7 @@ public abstract class DataProcessorBase<T extends xDataProcessorItem> {
         }
         Variable result = GlobalContext.getCurrentMethod().tryGetVariable(variableNames[0]);
         for (int i = 1; i < variableNames.length; i++) {
-            result = result.getMember(variableNames[i]);
+            result = result.queryMember(variableNames[i]);
         }
         return result;
     }

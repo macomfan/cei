@@ -10,7 +10,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 @Alias(name = "IntegerArray")
 @XmlRootElement(name = "int_array")
-public class xIntArray extends xType {
+public class  xIntArray extends xType {
     public final static String typeName = BuilderContext.genericTypeName(TheArray.typeName, xInt.typeName);
 
     public final static xIntArray inst = new xIntArray();

@@ -44,37 +44,38 @@ public class Python3WebSocketActionBuilder implements IWebSocketActionBuilder {
     }
 
     @Override
-    public void registerPersistentAction(Variable action) {
-        method.addInvoke("self.register_persistent_action", action);
+    public void setAsPersistentAction(Variable action) {
+        method.addInvoke(action.getDescriptor() + "set_persistent", BuilderContext.createStatement("true"));
     }
 
     @Override
-    public void registerDisposableAction(Variable action) {
-        method.addInvoke("self.register_disposable_action", action);
+    public void registerAction(Variable action) {
+        method.addInvoke("self.register_action", action);
     }
+
 
     @Override
     public void setTriggerToAction(Variable action, sMethod triggerMethod) {
         Python3Method nestedMethod = new Python3Method(clientClass);
         method.getCode().endln();
-        nestedMethod.startNestedMethod(null, action.getDescriptor()+ "_trigger", triggerMethod.getInputVariableList());
+        nestedMethod.startNestedMethod(null, action.getDescriptor() + "_trigger", triggerMethod.getInputVariableList());
         nestedMethod.getCode().appendCode(triggerBuilder.method.getCode());
         nestedMethod.endMethod();
         method.getCode().appendCode(nestedMethod.getCode());
         method.addInvoke(action.getDescriptor() + ".set_trigger",
-                BuilderContext.createStatement(action.getDescriptor()+ "_trigger"));
+                BuilderContext.createStatement(action.getDescriptor() + "_trigger"));
     }
 
     @Override
     public void setActionToAction(Variable action, sMethod actionMethod) {
         Python3Method nestedMethod = new Python3Method(clientClass);
         method.getCode().endln();
-        nestedMethod.startNestedMethod(null, action.getDescriptor()+ "_action", actionMethod.getInputVariableList());
+        nestedMethod.startNestedMethod(null, action.getDescriptor() + "_action", actionMethod.getInputVariableList());
         nestedMethod.getCode().appendCode(sendBuilder.method.getCode());
         nestedMethod.endMethod();
         method.getCode().appendCode(nestedMethod.getCode());
         method.addInvoke(action.getDescriptor() + ".set_action",
-                BuilderContext.createStatement(action.getDescriptor()+ "_action"));
+                BuilderContext.createStatement(action.getDescriptor() + "_action"));
     }
 
     @Override

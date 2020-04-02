@@ -79,6 +79,12 @@ public class GoDataProcessorBuilder implements IDataProcessorBuilder {
     }
 
     @Override
+    public void URLEscape(Variable output, Variable input) {
+        method.addAssignAndDeclare(method.useVariable(new GoVar(output)), method.invoke("ceiutils.url_escape", new GoVar(input)));
+
+    }
+
+    @Override
     public void addQueryString(Variable requestVariable, Variable key, Variable value) {
         method.addInvoke(requestVariable.getDescriptor() + ".AddQueryString", new GoVar(key), new GoVar(value));
     }

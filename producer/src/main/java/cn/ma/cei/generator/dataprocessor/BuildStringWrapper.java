@@ -1,12 +1,9 @@
 package cn.ma.cei.generator.dataprocessor;
 
-import cn.ma.cei.generator.BuilderContext;
 import cn.ma.cei.generator.DataProcessorBase;
 import cn.ma.cei.generator.Variable;
 import cn.ma.cei.generator.VariableType;
 import cn.ma.cei.generator.builder.IDataProcessorBuilder;
-import cn.ma.cei.generator.builder.IJsonBuilderBuilder;
-import cn.ma.cei.generator.builder.IJsonParserBuilder;
 import cn.ma.cei.generator.builder.IStringBuilderBuilder;
 import cn.ma.cei.generator.buildin.StringWrapper;
 import cn.ma.cei.model.string.xAddStringItem;
@@ -25,7 +22,7 @@ public class BuildStringWrapper extends DataProcessorBase<xStringBuilder> {
         Checker.isNull(builder, BuildJsonParser.class, "IDataProcessorBuilder");
         IStringBuilderBuilder stringBuilderBuilder = builder.createStringBuilderBuilder();
         Checker.isNull(stringBuilderBuilder, BuildJsonParser.class, "IStringBuilderBuilder");
-        Variable rootStringBuilder = createLocalVariable(StringWrapper.getType(), stringBuilder.name);
+        Variable rootStringBuilder = createUserVariable(StringWrapper.getType(), stringBuilder.name);
         stringBuilderBuilder.defineStringBuilderObject(rootStringBuilder);
 
         stringBuilder.items.forEach(item -> {

@@ -80,4 +80,10 @@ public class Python3DataProcessorBuilder implements IDataProcessorBuilder {
     public void getRequestInfo(Variable requestVariable, Variable output, Variable info, Variable convert) {
         method.addAssign(method.defineVariable(output), method.invoke("CEIUtils.get_request_info", requestVariable, info, convert));
     }
+
+    @Override
+    public void URLEscape(Variable output, Variable input) {
+        method.addAssign(method.defineVariable(output), method.invoke("CEIUtils.url_escape", input));
+
+    }
 }
