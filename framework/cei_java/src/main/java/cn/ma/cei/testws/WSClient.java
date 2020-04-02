@@ -8,13 +8,13 @@ public class WSClient extends WebSocketConnection {
         event.setTrigger((msg) -> {
             return true;
         });
-        event.setEvent((msg)->{
-            send(new JsonWrapper());
-        });
+//        event.setEvent((msg)->{
+//            send(new JsonWrapper());
+//        });
 
         WebSocketOptions option = new WebSocketOptions();
-        connect(option, () -> {
-            send(new JsonWrapper());
-        });
+//        connect(option, () -> {
+////            send(new JsonWrapper());
+////        });
     }
 }

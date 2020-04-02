@@ -1,9 +1,6 @@
 
-import cn.ma.cei.exchanges.cei;
 import cn.ma.cei.exchanges.huobipro;
-import cn.ma.cei.impl.JsonWrapper;
-import cn.ma.cei.impl.RestfulOptions;
-import cn.ma.cei.impl.RestfulRequest;
+import cn.ma.cei.impl.*;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.annotation.JSONField;
@@ -33,6 +30,9 @@ public class main {
     }
 
     public static void main(String[] args) throws InterruptedException {
+        String ttt = CEIUtils.getNow("%z-%M");
+
+
         String jsonData = "[{\n" +
                 "\t\"price\": \"0.1\",\n" +
                 "\t\"qty\": \"0.1\"\n" +

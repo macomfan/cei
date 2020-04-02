@@ -15,8 +15,8 @@ public class sMethod {
     private UniqueList<String, sMethod> nestedMethodList = new UniqueList<>();
     private VariableType returnType;
     private int temporaryId = 0;
-    private VariableType parent = null;
-    private Variable self = null;
+    private VariableType parent;
+    private Variable self;
 
     public sMethod createNestedMethod(String name) {
         sMethod method = new sMethod(parent, name);
