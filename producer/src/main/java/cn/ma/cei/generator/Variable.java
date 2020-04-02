@@ -73,7 +73,12 @@ public class Variable {
             //break;
             case INPUT:
             case LOCAL:
-                this.nameDescriptor = GlobalContext.getCurrentDescriptionConverter().getVariableDescriptor(name);
+                if (name.equals("###SELF###")) {
+                    this.nameDescriptor = GlobalContext.getCurrentDescriptionConverter().getSelfDescriptor();
+                } else {
+                    this.nameDescriptor = GlobalContext.getCurrentDescriptionConverter().getVariableDescriptor(name);
+                }
+
                 break;
             case CONSTANT:
                 this.nameDescriptor = name;

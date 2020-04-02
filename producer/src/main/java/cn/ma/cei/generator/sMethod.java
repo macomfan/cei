@@ -36,7 +36,7 @@ public class sMethod {
     public sMethod(VariableType parent, String name) {
         this.parent = parent;
         this.name = name;
-        self = createLocalVariable(parent, GlobalContext.getCurrentDescriptionConverter().getSelfDescriptor());
+        self = createLocalVariable(parent, "###SELF###");
     }
 
     public String getDescriptor() {

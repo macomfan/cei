@@ -40,9 +40,9 @@ public class BuildSDK {
     }
 
     public static void build(String inputFolder, String language, String outputFolder) {
-        CEIErrors.showDebug("==== %s ====", "Start load");
+        CEIErrors.showInfo("Loading XML configuration files...");
         List<xSDK> sdks = (new JAXBWrapper()).loadFromFolder(inputFolder);
-        CEIErrors.showDebug("==== %s ====", "End load");
+        CEIErrors.showInfo("Load completed");
         Finalizer finalizer = new Finalizer();
         finalizer.addSDK(sdks);
         List<xSDK> finalSDKs = finalizer.finalizeSDK();
