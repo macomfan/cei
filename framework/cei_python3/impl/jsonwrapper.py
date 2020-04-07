@@ -25,23 +25,23 @@ class JsonWrapper:
         if not self.contains_key(key):
             raise CEIException()
 
-    def get_string(self, key: str):
+    def get_string(self, key):
         self.__check_mandatory_field(key)
         return str(self.__json_object[key])
 
-    def get_long(self, key: str):
+    def get_long(self, key):
         self.__check_mandatory_field(key)
         return int(self.__json_object[key])
 
-    def get_decimal(self, key: str):
+    def get_decimal(self, key):
         self.__check_mandatory_field(key)
         return float(self.__json_object[key])
 
-    def get_object(self, key: str):
+    def get_object(self, key):
         self.__check_mandatory_field(key)
         return JsonWrapper(self.__json_object[key])
 
-    def get_object_array(self, key: str):
+    def get_object_array(self, key):
         self.__check_mandatory_field(key)
         json_array = self.__json_object[key]
         if not isinstance(json_array, list):

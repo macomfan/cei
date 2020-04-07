@@ -10,7 +10,13 @@
   
 #### <json_object>
 ```xml
+<json>
 <json_object key="xxx" value="xxx" model="xxxModel"/>
+<json_object_array/>
+<json_array/>
+<json_for_each/>
+
+</json>
 ```
 * Attributes  
 > key:  

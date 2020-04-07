@@ -13,16 +13,16 @@ public class Python3StringBuilderBuilder implements IStringBuilderBuilder {
 
     @Override
     public void defineStringBuilderObject(Variable stringBuilderObject) {
-
+        method.addAssign(method.defineVariable(stringBuilderObject), method.newInstance(stringBuilderObject.getType()));
     }
 
     @Override
     public void appendStringItem(Variable stringBuilderObject, Variable variable) {
-
+        method.addInvoke(stringBuilderObject.getDescriptor() + ".append_string_item", variable);
     }
 
     @Override
     public void combineStringItems(Variable stringBuilderObject, Variable separator) {
-
+        method.addInvoke(stringBuilderObject.getDescriptor() + ".combine_string_items", separator);
     }
 }

@@ -13,6 +13,11 @@ public class CEIErrors {
         throw new CEIException(String.format("[%s] %s", cls.getName(), res));
     }
 
+    public static void showInputFailure(String message, Object... args) throws CEIException {
+        String res = String.format(message, args);
+        logger.fatal(res);
+    }
+
     public static void showFailure(xElement element, String message, Object... args) throws CEIException {
         String res = String.format(message, args);
         throw new CEIException(res);

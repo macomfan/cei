@@ -45,7 +45,7 @@ public class Python3WebSocketActionBuilder implements IWebSocketActionBuilder {
 
     @Override
     public void setAsPersistentAction(Variable action) {
-        method.addInvoke(action.getDescriptor() + "set_persistent", BuilderContext.createStatement("true"));
+        method.addInvoke(action.getDescriptor() + ".set_persistent", BuilderContext.createStatement("True"));
     }
 
     @Override

@@ -11,7 +11,6 @@ import cn.ma.cei.exception.CEIException;
 import cn.ma.cei.generator.builder.IFramework;
 import cn.ma.cei.generator.naming.IDescriptionConverter;
 import cn.ma.cei.model.types.xString;
-import cn.ma.cei.utils.MapWithValue2;
 import cn.ma.cei.utils.TwoTuple;
 
 import java.lang.reflect.Constructor;
@@ -32,8 +31,8 @@ class GlobalContext {
     private static VariableType currentModel = null;
     private static sMethod currentMethod = null;
 
-    private static final EnvironmentData_new<String, VariableType> variableTypes = new EnvironmentData_new<>();
-    private static final EnvironmentData_new<String, TwoTuple<String, List<String>>> variableTypeInfo = new EnvironmentData_new<>();
+    private static final EnvironmentData<String, VariableType> variableTypes = new EnvironmentData<>();
+    private static final EnvironmentData<String, TwoTuple<String, List<String>>> variableTypeInfo = new EnvironmentData<>();
 
     public static VariableType getCurrentModel() {
         return currentModel;
@@ -104,7 +103,7 @@ class GlobalContext {
         List<String> references = new LinkedList<>();
         references.add(reference);
         TwoTuple<String, List<String>> value = new TwoTuple<>(typeDescriptor, references);
-        variableTypeInfo.put(typeName, value);
+        variableTypeInfo.tryPut(typeName, value);
     }
 
     public static void setupRunTimeVariableType(String typeName, String reference) {
@@ -152,13 +151,13 @@ class GlobalContext {
             }
             typeDescriptor = GlobalContext.getCurrentDescriptionConverter().getGenericTypeDescriptor(typeDescriptor, subTypeNames);
             TwoTuple<String, List<String>> value = new TwoTuple<>(typeDescriptor, references);
-            variableTypeInfo.put(finalName, value);
+            variableTypeInfo.tryPut(finalName, value);
         }
         try {
             Constructor<?> cons = VariableType.class.getDeclaredConstructor(String.class, VariableType[].class);
             cons.setAccessible(true);
             VariableType type = (VariableType) cons.newInstance(finalName, argsTypes);
-            variableTypes.put(finalName, type);
+            variableTypes.tryPut(finalName, type);
             return type;
         } catch (Exception e) {
             throw new CEIException("[Context] cannot create VariableType: " + finalName);

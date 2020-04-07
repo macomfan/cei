@@ -44,7 +44,7 @@ public class BuildRestfulInterface {
             restIf.request.doBuild(() -> {
                 builder.defineRequest(request);
                 builder.setRequestTarget(request, BuildUserProcedure.createValueFromProcedure(restIf.request.target, restIf.request, builder));
-                Variable requestMethod = GlobalContext.createStatement(Constant.requestMethod().tryGet(restIf.request.method));
+                Variable requestMethod = GlobalContext.createStatement(Constant.requestMethod().get(restIf.request.method));
                 builder.setRequestMethod(request, requestMethod);
             });
             makeHeaders(restIf.request.headers, builder);

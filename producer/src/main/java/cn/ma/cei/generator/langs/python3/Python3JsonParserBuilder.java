@@ -105,7 +105,7 @@ public class Python3JsonParserBuilder implements IJsonParserBuilder {
 
     @Override
     public IJsonCheckerBuilder createJsonCheckerBuilder() {
-        return new Python3JsonCheckerBuilder();
+        return new Python3JsonCheckerBuilder(method);
     }
 
 }

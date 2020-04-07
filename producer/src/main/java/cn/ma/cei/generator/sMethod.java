@@ -28,6 +28,11 @@ public class sMethod {
         sMethod method = new sMethod(parent, name);
         method.temporaryId = temporaryId;
         nestedMethodList.put(name, method);
+        variableList.values().forEach(item -> {
+            if (!item.getName().equals(SELF)) {
+                method.createLocalVariable(item.getType(), item.getName());
+            }
+        });
         return method;
     }
 

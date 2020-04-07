@@ -97,7 +97,6 @@ public class BuildJsonParser extends DataProcessorBase<xJsonParser> {
         if (jsonCheckerBuilder == null) {
             throw new CEIException("[BuildJsonParser] JsonChecker build is null");
         }
-        //BuildJsonChecker.build(jsonChecker, rootJsonObject, jsonCheckerBuilder);
 
         Variable jsonCheckerVar = createTempVariable(JsonChecker.getType(), "jsonChecker");
         jsonCheckerBuilder.defineJsonChecker(jsonCheckerVar, rootJsonObject);
@@ -107,9 +106,9 @@ public class BuildJsonParser extends DataProcessorBase<xJsonParser> {
             context.jsonCheckerBuilder = jsonCheckerBuilder;
 
             if (item instanceof xJsonEqual) {
-                ProcessEqual((xJsonEqual) item, jsonCheckerBuilder);
+                ProcessEqual(jsonCheckerVar, (xJsonEqual) item, jsonCheckerBuilder);
             } else if (item instanceof xJsonNotEqual) {
-                ProcessNotEqual((xJsonNotEqual) item);
+                ProcessNotEqual(jsonCheckerVar, (xJsonNotEqual) item, jsonCheckerBuilder);
             }
         });
         if (jsonChecker.usedFor == IJsonCheckerBuilder.UsedFor.REPORT_ERROR) {
@@ -311,12 +310,15 @@ public class BuildJsonParser extends DataProcessorBase<xJsonParser> {
         context.jsonParserBuilder.getJsonIntArray(value, context.parentJsonObject, getKeyVariable(context.jsonItem.key));
     }
 
-    private void ProcessEqual(xJsonEqual jsonEqual, IJsonCheckerBuilder builder) {
-//        Variable key = VariableFactory.createHardcodeStringVariable(jsonEqual.key);
-//        builder.setEqual();
+    private void ProcessEqual(Variable jsonChecker, xJsonEqual jsonEqual, IJsonCheckerBuilder builder) {
+        Variable key = queryVariableOrConstant(jsonEqual.key, xString.inst.getType());
+        Variable value = queryVariableOrConstant(jsonEqual.value, xString.inst.getType());
+        builder.setEqual(jsonChecker, key, value);
     }
 
-    private void ProcessNotEqual(xJsonNotEqual jsonNotEqual) {
-
+    private void ProcessNotEqual(Variable jsonChecker, xJsonNotEqual jsonNotEqual, IJsonCheckerBuilder builder) {
+        Variable key = queryVariableOrConstant(jsonNotEqual.key, xString.inst.getType());
+        Variable value = queryVariableOrConstant(jsonNotEqual.value, xString.inst.getType());
+        builder.setNotEqual(jsonChecker, key, value);
     }
 }
