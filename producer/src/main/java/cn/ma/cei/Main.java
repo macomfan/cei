@@ -2,10 +2,10 @@ package cn.ma.cei;
 
 import cn.ma.cei.exception.CEIErrors;
 import cn.ma.cei.generator.BuildSDK;
-import cn.ma.cei.generator.langs.cpp.CppFramework;
-import cn.ma.cei.generator.langs.golang.GoFramework;
-import cn.ma.cei.generator.langs.java.JavaFramework;
-import cn.ma.cei.generator.langs.python3.Python3Framework;
+import cn.ma.cei.langs.cpp.CppFramework;
+import cn.ma.cei.langs.golang.GoFramework;
+import cn.ma.cei.langs.java.JavaFramework;
+import cn.ma.cei.langs.python3.Python3Framework;
 import cn.ma.cei.utils.Checker;
 import io.vertx.core.cli.CLI;
 import io.vertx.core.cli.CommandLine;

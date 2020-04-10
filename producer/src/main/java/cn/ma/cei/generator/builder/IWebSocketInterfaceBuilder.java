@@ -1,7 +1,6 @@
 package cn.ma.cei.generator.builder;
 
 import cn.ma.cei.generator.Variable;
-import cn.ma.cei.generator.langs.java.JavaWebSocketImplementationBuilder;
 import cn.ma.cei.generator.sMethod;
 
 public interface IWebSocketInterfaceBuilder extends IMethodBuilder {
