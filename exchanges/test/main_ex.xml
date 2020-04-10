@@ -155,7 +155,7 @@
                 <action name="onPing">
                     <trigger>
                         <json_checker>
-                            <json_equal key="type" value="ping"/>
+                            <json_checker_equal key="type" value="ping"/>
                         </json_checker>
                     </trigger>
                     <send value="{jsonResult}">
@@ -182,7 +182,7 @@
                     <callback name="onkline" persistent="false">
                         <trigger>
                             <json_checker>
-                                <json_equal key="ch" value="{symbol}"/>
+                                <json_checker_equal key="ch" value="{symbol}"/>
                             </json_checker>
                         </trigger>
                         <response>

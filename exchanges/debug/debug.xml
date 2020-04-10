@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sdk xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+     xsi:schemaLocation="https://github.com/macomfan/cei https://github.com/macomfan/cei/ceisdk.xsd"
+     xmlns="https://github.com/macomfan/cei"
+     name="debug">
+
+    <definition document="debug"/>
+
+    <models>
+        <model name="BestQuote">
+            <string name="status"/>
+            <string name="ch"/>
+            <int name="ts"/>
+            <decimal name="bestBidPrice"/>
+            <decimal name="bestBidAmount"/>
+            <decimal name="bestAskPrice"/>
+            <decimal name="bestAskAmount"/>
+        </model>
+    </models>
+
+    <clients>
+        <restful name="MarketClient">
+            <connection url="https://debug"/>
+            <interfaces>
+                <interface name="getBestQuote">
+                    <inputs>
+                        <string name="symbol"/>
+                    </inputs>
+                    <request method="get" target="/market/depth">
+                        <query_strings>
+                            <query key="symbol" value="{symbol}"/>
+                            <query key="depth" value="5"/>
+                            <query key="type" value="step0"/>
+                        </query_strings>
+                    </request>
+                    <response>
+                        <json_parser model="BestQuote">
+                            <json_value copy="status"/>
+                            <json_value copy="ts"/>
+                            <json_object key="tick">
+                                <json_array key="bids">
+                                    <json_array key="[0]">
+                                        <json_value key="[0]" value="{bestBidPrice}"/>
+                                        <json_value key="[1]" value="{bestBidAmount}"/>
+                                    </json_array>
+                                </json_array>
+                                <json_array key="asks">
+                                    <json_array key="[0]">
+                                        <json_value key="[0]" value="{bestAskPrice}"/>
+                                        <json_value key="[1]" value="{bestAskAmount}"/>
+                                    </json_array>
+                                </json_array>
+                            </json_object>
+                            <json_value copy="ch"/>
+                        </json_parser>
+                    </response>
+                </interface>
+            </interfaces>
+        </restful>
+    </clients>
+
+</sdk>

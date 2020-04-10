@@ -9,13 +9,6 @@ import javax.xml.bind.annotation.XmlRootElement;
 import java.util.List;
 
 @XmlRootElement(name = "json_checker")
-public class xJsonChecker extends xDataProcessorItem {
-
+public class xJsonChecker extends xJsonWithModel {
     public IJsonCheckerBuilder.UsedFor usedFor = IJsonCheckerBuilder.UsedFor.UNDEFINED;
-
-    @XmlAnyElement(lax = true)
-    @CEIXmlAnyElementTypes({
-            xJsonEqual.class,
-            xJsonNotEqual.class})
-    public List<xJsonCheckerItem> items;
 }

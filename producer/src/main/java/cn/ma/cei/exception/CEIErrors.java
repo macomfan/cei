@@ -18,9 +18,14 @@ public class CEIErrors {
         logger.fatal(res);
     }
 
-    public static void showFailure(xElement element, String message, Object... args) throws CEIException {
+    public static void showXMLFailure(xElement element, String message, Object... args) throws CEIException {
         String res = String.format(message, args);
         throw new CEIException(res);
+    }
+
+    public static void showXMLWarning(xElement element, String message, Object... args) throws CEIException {
+        String res = String.format(message, args);
+        logger.warn(res);
     }
 
     public static void showFailure(CEIErrorType errorType, String message, Object... args) throws CEIException {

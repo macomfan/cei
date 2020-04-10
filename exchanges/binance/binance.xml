@@ -11,4 +11,4 @@
 			<connection url="https://api.binance.com"/>
 		</restful>
 	</clients>
-</sdk> 
+</sdk>

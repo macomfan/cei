@@ -27,23 +27,28 @@ public class JavaJsonParserBuilder implements IJsonParserBuilder {
     }
 
     @Override
-    public void getJsonStringArray(Variable to, Variable jsonObject, Variable itemName) {
+    public void assignJsonStringArray(Variable to, Variable jsonObject, Variable itemName) {
         method.addAssign(method.useVariable(to), method.invoke(jsonObject.getDescriptor() + ".getStringArray", itemName));
     }
 
     @Override
-    public void getJsonDecimalArray(Variable to, Variable jsonObject, Variable itemName) {
+    public void assignJsonDecimalArray(Variable to, Variable jsonObject, Variable itemName) {
         method.addAssign(method.useVariable(to), method.invoke(jsonObject.getDescriptor() + ".getDecimalArray", itemName));
     }
 
     @Override
-    public void getJsonBooleanArray(Variable to, Variable jsonObject, Variable itemName) {
+    public void assignJsonBooleanArray(Variable to, Variable jsonObject, Variable itemName) {
         method.addAssign(method.useVariable(to), method.invoke(jsonObject.getDescriptor() + ".getBooleanArray", itemName));
     }
 
     @Override
-    public void getJsonIntArray(Variable to, Variable jsonObject, Variable itemName) {
+    public void assignJsonIntArray(Variable to, Variable jsonObject, Variable itemName) {
         method.addAssign(method.useVariable(to), method.invoke(jsonObject.getDescriptor() + ".getIntArray", itemName));
+    }
+
+    @Override
+    public void getJsonArray(Variable jsonWrapperObject, Variable jsonObject, Variable itemName) {
+        method.addAssign(method.defineVariable(jsonWrapperObject), method.invoke(jsonObject.getDescriptor() + ".getArray", itemName));
     }
 
     @Override

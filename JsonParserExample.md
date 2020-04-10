@@ -1,4 +1,4 @@
-#### <json_value>
+#### Json Value
 ```xml
 <json_value key="xxx" value="xxx" />
 ```
@@ -7,21 +7,45 @@
  value  
  copy  
   
-  
-#### <json_object>
+
+#### Json Object
 ```xml
 <json>
 <json_object key="xxx" value="xxx" model="xxxModel"/>
-<json_object_array/>
-<json_array/>
-<json_for_each/>
-
+<json_object_array key="xxx" value="xxx" model="xxxModel"/>
+<json_array key="xxx" value="xxx"/>
+<json_for_each key="xxx"/>
 </json>
 ```
 * Attributes  
-> key:  
-> value  
-> copy  
+  > key:  
+    value:  
+    copy:  
+
+#### Json Array
+```xml
+<json_array key="xxx" value="xxx" copy="xxx"/>
+```
+Get the json array by key.
+If value is defined, copy the json array to the value. The value must be below types:  
+StringArray  
+IntArray  
+...  
+
+
+
+
+#### Json For Each
+```xml
+<json_for_each key="xxx"/>
+```
+Return the json array and for each
+* Attributes  
+  > key:   
+
+* Content
+
+
 
 
 ### Examples

@@ -43,7 +43,7 @@
                     <response>
                         <json_parser model="Timestamp">
                             <json_checker>
-                                <json_not_equal key="stauts" value="ok"/>
+                                <json_checker_not_equal key="stauts" value="ok"/>
                             </json_checker>
                             <json_value key="data" value="{timestamp}"/>
                         </json_parser>
@@ -55,7 +55,7 @@
                     <response>
                         <json_parser model="Symbols">
                             <json_checker>
-                                <json_not_equal key="stauts" value="ok"/>
+                                <json_checker_not_equal key="stauts" value="ok"/>
                             </json_checker>
                             <json_value copy="status"/>
                             <json_object_array copy="data" model="SymbolsData">
@@ -166,12 +166,12 @@
                             <json_value copy="ch"/>
                             <json_object key="tick">
                                 <json_object_array copy="bids" model="Quote">
-                                    <json_value key="\[0]" value="{price}"/>
-                                    <json_value key="\[1]" value="{amount}"/>
+                                    <json_value key="[0]" value="{price}"/>
+                                    <json_value key="[1]" value="{amount}"/>
                                 </json_object_array>
                                 <json_object_array copy="asks" model="Quote">
-                                    <json_value key="\[0]" value="{price}"/>
-                                    <json_value key="\[1]" value="{amount}"/>
+                                    <json_value key="[0]" value="{price}"/>
+                                    <json_value key="[1]" value="{amount}"/>
                                 </json_object_array>
                             </json_object>
                         </json_parser>
@@ -193,11 +193,21 @@
                         <json_parser model="BestQuote">
                             <json_value copy="status"/>
                             <json_value copy="ts"/>
+                            <json_object key="tick">
+                                <json_array key="bids">
+                                    <json_array key="[0]">
+                                        <json_value key="[0]" value="{bestBidPrice}"/>
+                                        <json_value key="[1]" value="{bestBidAmount}"/>
+                                    </json_array>
+                                </json_array>
+                                <json_array key="asks">
+                                    <json_array key="[0]">
+                                        <json_value key="[0]" value="{bestAskPrice}"/>
+                                        <json_value key="[1]" value="{bestAskAmount}"/>
+                                    </json_array>
+                                </json_array>
+                            </json_object>
                             <json_value copy="ch"/>
-                            <json_value key="\tick\bids\[0]\[0]" value="{bestBidPrice}"/>
-                            <json_value key="\tick\bids\[0]\[1]" value="{bestBidAmount}"/>
-                            <json_value key="\tick\asks\[1]\[0]" value="{bestAskPrice}"/>
-                            <json_value key="\tick\asks\[1]\[1]" value="{bestAskAmount}"/>
                         </json_parser>
                     </response>
                 </interface>

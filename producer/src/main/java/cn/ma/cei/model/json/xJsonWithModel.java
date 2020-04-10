@@ -12,12 +12,20 @@ public abstract class xJsonWithModel extends xJsonType {
 
     @XmlAnyElement(lax = true)
     @CEIXmlAnyElementTypes({
-        xJsonString.class,
-        xJsonInteger.class,
-        xJsonBoolean.class,
-        xJsonDecimal.class,
-        xJsonObjectArray.class,
-        xJsonObject.class,
-        xJsonStringArray.class})
+            xJsonString.class,
+            xJsonInteger.class,
+            xJsonBoolean.class,
+            xJsonDecimal.class,
+            xJsonObjectArray.class,
+            xJsonObject.class,
+            xJsonStringArray.class,
+            xJsonIntArray.class,
+            xJsonDecimalArray.class,
+            xJsonBooleanArray.class,
+            xJsonArray.class,
+            xJsonForEach.class,
+            xJsonValue.class,
+            xJsonCheckerEqual.class,
+            xJsonCheckerNotEqual.class})
     public List<xJsonType> itemList;
 }

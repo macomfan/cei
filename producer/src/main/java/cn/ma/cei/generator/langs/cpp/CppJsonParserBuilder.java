@@ -41,22 +41,27 @@ public class CppJsonParserBuilder implements IJsonParserBuilder {
     }
 
     @Override
-    public void getJsonStringArray(Variable to, Variable jsonObject, Variable itemName) {
+    public void assignJsonStringArray(Variable to, Variable jsonObject, Variable itemName) {
         //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void getJsonDecimalArray(Variable to, Variable jsonObject, Variable itemName) {
+    public void assignJsonDecimalArray(Variable to, Variable jsonObject, Variable itemName) {
 
     }
 
     @Override
-    public void getJsonBooleanArray(Variable to, Variable jsonObject, Variable itemName) {
+    public void assignJsonBooleanArray(Variable to, Variable jsonObject, Variable itemName) {
 
     }
 
     @Override
-    public void getJsonIntArray(Variable to, Variable jsonObject, Variable itemName) {
+    public void assignJsonIntArray(Variable to, Variable jsonObject, Variable itemName) {
+
+    }
+
+    @Override
+    public void getJsonArray(Variable jsonWrapperObject, Variable jsonObject, Variable itemName) {
 
     }
 
