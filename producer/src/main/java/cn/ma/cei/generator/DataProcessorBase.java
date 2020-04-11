@@ -18,11 +18,13 @@ public abstract class DataProcessorBase<T extends xDataProcessorItem> {
 
     public Variable callBuild(xDataProcessorItem item, Variable defaultInput, IDataProcessorBuilder builder) {
         if (item != null) {
+            item.startBuilding();
             this.defaultInput = defaultInput;
             this.builder = builder;
             Variable result = build(convertTo(item), builder);
             this.defaultInput = null;
             this.builder = null;
+            item.endBuilding();
             return result;
         }
         return null;

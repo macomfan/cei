@@ -48,7 +48,7 @@ public class JavaWebSocketActionBuilder implements IWebSocketActionBuilder {
 
     @Override
     public void registerAction(Variable action) {
-        method.addInvoke("registerAction", action);
+        method.addInvoke("this.connection.registerAction", action);
     }
 
     @Override

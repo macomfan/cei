@@ -5,10 +5,6 @@ import cn.ma.cei.generator.sMethod;
 
 public interface IWebSocketInterfaceBuilder extends IMethodBuilder {
 
-    IWebSocketImplementationBuilder createImplementationBuilderForTrigger();
-
-    IWebSocketImplementationBuilder createImplementationBuilderForResponse();
-
     IWebSocketImplementationBuilder createOnConnectBuilder();
 
     void send(Variable send);

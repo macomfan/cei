@@ -14,17 +14,17 @@ public class Python3JsonCheckerBuilder implements IJsonCheckerBuilder {
 
 
     @Override
-    public void defineJsonChecker(Variable jsonChecker, Variable jsonParser) {
-        method.addAssign(method.defineVariable(jsonChecker), method.newInstance(jsonChecker.getType(), jsonParser));
+    public void defineJsonChecker(Variable jsonChecker) {
+        method.addAssign(method.defineVariable(jsonChecker), method.newInstance(jsonChecker.getType()));
     }
 
     @Override
-    public void setNotEqual(Variable jsonChecker, Variable key, Variable value) {
+    public void setNotEqual(Variable jsonChecker, Variable key, Variable value, Variable jsonWrapperObject) {
         method.addInvoke(jsonChecker.getDescriptor() + ".not_equal",  key, value);
     }
 
     @Override
-    public void setEqual(Variable jsonChecker, Variable key, Variable value) {
+    public void setEqual(Variable jsonChecker, Variable key, Variable value, Variable jsonWrapperObject) {
         method.addInvoke(jsonChecker.getDescriptor() + ".equal",  key, value);
     }
 

@@ -13,18 +13,18 @@ public class JavaJsonCheckerBuilder implements IJsonCheckerBuilder {
     }
 
     @Override
-    public void defineJsonChecker(Variable jsonChecker, Variable jsonParser) {
-        method.addAssign(method.defineVariable(jsonChecker), method.newInstance(jsonChecker.getType(), jsonParser));
+    public void defineJsonChecker(Variable jsonChecker) {
+        method.addAssign(method.defineVariable(jsonChecker), method.newInstance(jsonChecker.getType()));
     }
 
     @Override
-    public void setNotEqual(Variable jsonChecker, Variable key, Variable value) {
-        method.addInvoke(jsonChecker.getDescriptor() + ".notEqual",  key, value);
+    public void setNotEqual(Variable jsonChecker, Variable key, Variable value, Variable jsonWrapperObject) {
+        method.addInvoke(jsonChecker.getDescriptor() + ".checkNotEqual",  key, value, jsonWrapperObject);
     }
 
     @Override
-    public void setEqual(Variable jsonChecker, Variable key, Variable value) {
-        method.addInvoke(jsonChecker.getDescriptor() + ".equal",  key, value);
+    public void setEqual(Variable jsonChecker, Variable key, Variable value, Variable jsonWrapperObject) {
+        method.addInvoke(jsonChecker.getDescriptor() + ".checkEqual",  key, value, jsonWrapperObject);
     }
 
     @Override

@@ -20,8 +20,9 @@ public class JavaWebSocketClientBuilder implements IWebSocketClientBuilder {
 
     @Override
     public void startClient(VariableType client, WebSocketOptions options) {
-        clientClass = new JavaClass(client.getDescriptor(), WebSocketConnection.getType());
-        clientClass.addMemberVariable(JavaClass.AccessType.PRIVATE, client.addPrivateMember(WebSocketOptions.getType(), "option"));
+        clientClass = new JavaClass(client.getDescriptor());
+        clientClass.addMemberVariable(JavaClass.AccessType.PRIVATE, client.getMember("option"));
+        clientClass.addMemberVariable(JavaClass.AccessType.PRIVATE, client.getMember("connection"));
 
         JavaMethod defaultConstructor = new JavaMethod(clientClass);
         defaultConstructor.startConstructor("");

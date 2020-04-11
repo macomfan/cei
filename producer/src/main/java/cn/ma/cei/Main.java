@@ -92,7 +92,7 @@ public class Main {
         BuildSDK.registerFramework(new CppFramework());
         BuildSDK.registerFramework(new Python3Framework());
         BuildSDK.registerFramework(new GoFramework());
-        BuildSDK.build("C:\\dev\\cei\\exchanges\\huobipro", "java", "C:\\dev\\cei\\output");
+        BuildSDK.build("C:\\dev\\cei\\exchanges", "java", "C:\\dev\\cei\\output");
     }
 
     public void showHelp() {

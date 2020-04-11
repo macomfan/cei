@@ -30,7 +30,8 @@ public class BuildAuthentication {
                 GlobalContext.getCurrentMethod().getDescriptor(),
                 GlobalContext.getCurrentMethod().getInputVariableList());
 
-        BuildDataProcessor.build(authentication.items, builder.createDataProcessorBuilder());
+        BuildDataProcessor.build(authentication.items,
+                Checker.checkBuilder(builder.createDataProcessorBuilder(), builder.getClass(), "DataProcessorBuilder"));
         builder.endMethod();
     }
 

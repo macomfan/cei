@@ -16,13 +16,10 @@ import cn.ma.cei.utils.Checker;
 public class BuildJsonBuilder extends DataProcessorBase<xJsonBuilder> {
     @Override
     public Variable build(xJsonBuilder jsonBuilder, IDataProcessorBuilder builder) {
-        IJsonBuilderBuilder jsonBuilderBuilder = builder.createJsonBuilderBuilder();
-        if (jsonBuilderBuilder == null) {
-            throw new CEIException("JsonBuilderBuilder is null");
-        }
+        IJsonBuilderBuilder jsonBuilderBuilder = Checker.checkBuilder(builder.createJsonBuilderBuilder(), builder.getClass(), "JsonBuilderBuilder");
         Variable jsonObject;
         if (Checker.isEmpty(jsonBuilder.name)) {
-            jsonObject = createUserVariable(JsonWrapper.getType(), "jsonBuilder");
+            jsonObject = createTempVariable(JsonWrapper.getType(), "jsonBuilder");
         } else {
             jsonObject = createUserVariable(JsonWrapper.getType(), jsonBuilder.name);
         }

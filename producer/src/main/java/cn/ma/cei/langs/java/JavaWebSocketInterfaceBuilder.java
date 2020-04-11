@@ -14,25 +14,11 @@ public class JavaWebSocketInterfaceBuilder implements IWebSocketInterfaceBuilder
     JavaClass clientClass;
     JavaMethod method;
 
-    JavaWebSocketImplementationBuilder triggerBuilder = null;
-    JavaWebSocketImplementationBuilder responseBuilder = null;
     JavaWebSocketImplementationBuilder onConnectBuilder = null;
 
     public JavaWebSocketInterfaceBuilder(JavaClass clientClass) {
         this.clientClass = clientClass;
         this.method = new JavaMethod(clientClass);
-    }
-
-    @Override
-    public IWebSocketImplementationBuilder createImplementationBuilderForTrigger() {
-        triggerBuilder = new JavaWebSocketImplementationBuilder(clientClass);
-        return triggerBuilder;
-    }
-
-    @Override
-    public IWebSocketImplementationBuilder createImplementationBuilderForResponse() {
-        responseBuilder = new JavaWebSocketImplementationBuilder(clientClass);
-        return responseBuilder;
     }
 
     @Override
@@ -58,7 +44,7 @@ public class JavaWebSocketInterfaceBuilder implements IWebSocketInterfaceBuilder
 
     @Override
     public void send(Variable send) {
-        method.addInvoke("sendWS", send);
+        method.addInvoke("this.connection.send", send);
     }
 
     @Override
@@ -74,13 +60,13 @@ public class JavaWebSocketInterfaceBuilder implements IWebSocketInterfaceBuilder
 
     @Override
     public void setupOnConnect(sMethod onConnect) {
-        method.addLambda("setOnConnect", onConnect.getInputVariableList());
+        method.addLambda("this.connection.setOnConnect", onConnect.getInputVariableList());
         method.addCode(onConnectBuilder.method.getCode());
         method.endLambda();
     }
 
     @Override
     public void connect(Variable url, Variable option) {
-        method.addInvoke("connectWS", url, option);
+        method.addInvoke("this.connection.connect", url, option);
     }
 }

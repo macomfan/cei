@@ -5,17 +5,17 @@ import cn.ma.cei.generator.Variable;
 
 public class GoJsonCheckerBuilder implements IJsonCheckerBuilder {
     @Override
-    public void defineJsonChecker(Variable jsonChecker, Variable jsonParser) {
+    public void defineJsonChecker(Variable jsonChecker) {
 
     }
 
     @Override
-    public void setNotEqual(Variable jsonChecker, Variable key, Variable value) {
+    public void setNotEqual(Variable jsonChecker, Variable key, Variable value, Variable jsonWrapperObject) {
 
     }
 
     @Override
-    public void setEqual(Variable jsonChecker, Variable key, Variable value) {
+    public void setEqual(Variable jsonChecker, Variable key, Variable value, Variable jsonWrapperObject) {
 
     }
 

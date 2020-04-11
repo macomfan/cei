@@ -11,6 +11,7 @@ import cn.ma.cei.exception.CEIException;
 import cn.ma.cei.generator.builder.IFramework;
 import cn.ma.cei.generator.naming.IDescriptionConverter;
 import cn.ma.cei.model.types.xString;
+import cn.ma.cei.utils.Checker;
 import cn.ma.cei.utils.TwoTuple;
 
 import java.lang.reflect.Constructor;
@@ -93,7 +94,7 @@ class GlobalContext {
     }
 
     public static IDescriptionConverter getCurrentDescriptionConverter() {
-        return currentFramework.getDescriptionConverter();
+        return Checker.checkBuilder(currentFramework.getDescriptionConverter(), currentFramework.getClass(), "DescriptionConverter");
     }
 
     public static void setupBuildInVariableType(String typeName, String typeDescriptor, String reference) {

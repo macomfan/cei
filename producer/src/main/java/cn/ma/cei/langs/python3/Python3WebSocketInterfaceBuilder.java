@@ -17,25 +17,11 @@ public class Python3WebSocketInterfaceBuilder implements IWebSocketInterfaceBuil
     Python3Class clientClass;
     Python3Method method;
 
-    Python3WebSocketImplementationBuilder triggerBuilder = null;
-    Python3WebSocketImplementationBuilder responseBuilder = null;
     Python3WebSocketImplementationBuilder onConnectBuilder = null;
 
     public Python3WebSocketInterfaceBuilder(Python3Class clientClass) {
         this.clientClass = clientClass;
         this.method = new Python3Method(clientClass);
-    }
-
-    @Override
-    public IWebSocketImplementationBuilder createImplementationBuilderForTrigger() {
-        triggerBuilder = new Python3WebSocketImplementationBuilder(clientClass);
-        return triggerBuilder;
-    }
-
-    @Override
-    public IWebSocketImplementationBuilder createImplementationBuilderForResponse() {
-        responseBuilder = new Python3WebSocketImplementationBuilder(clientClass);
-        return responseBuilder;
     }
 
     @Override

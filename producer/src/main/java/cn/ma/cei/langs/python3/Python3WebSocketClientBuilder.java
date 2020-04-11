@@ -19,7 +19,7 @@ public class Python3WebSocketClientBuilder implements IWebSocketClientBuilder {
     @Override
     public void startClient(VariableType client, WebSocketOptions options) {
         clientClass = new Python3Class(client.getDescriptor(), WebSocketConnection.getType());
-        clientClass.addMemberVariable(client.addPrivateMember(WebSocketOptions.getType(), "option"));
+        clientClass.addMemberVariable(client.getMember("option"));
 
 //        JavaMethod defaultConstructor = new JavaMethod(clientClass);
 //        defaultConstructor.startConstructor("");

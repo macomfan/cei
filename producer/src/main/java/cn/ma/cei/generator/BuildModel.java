@@ -7,9 +7,6 @@ import cn.ma.cei.model.xModel;
 public class BuildModel {
 
     public static void build(xModel model, IModelBuilder builder) {
-        if (builder == null) {
-            throw new CEIException("[BuildModel] ModelBuilder is null");
-        }
         String reference = builder.getReference(
                 GlobalContext.getCurrentDescriptionConverter().getMethodDescriptor(model.name));
         GlobalContext.setupRunTimeVariableType(model.name, reference);

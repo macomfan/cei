@@ -1,6 +1,7 @@
 package cn.ma.cei.generator;
 
 import cn.ma.cei.generator.builder.IWebSocketActionBuilder;
+import cn.ma.cei.generator.builder.IWebSocketImplementationBuilder;
 import cn.ma.cei.generator.buildin.WebSocketAction;
 import cn.ma.cei.generator.buildin.WebSocketMessage;
 import cn.ma.cei.model.websocket.xAction;
@@ -59,7 +60,9 @@ public class BuildWebSocketAction {
             GlobalContext.setCurrentMethod(trigger);
             Variable msg = trigger.createInputVariable(WebSocketMessage.getType(), "msg");
             // Build trigger
-            BuildWebSocketImplementation.buildTrigger(context.trigger, msg, actionBuilder.createImplementationBuilderForTrigger());
+            IWebSocketImplementationBuilder implementationBuilder =
+                    Checker.checkBuilder(actionBuilder.createImplementationBuilderForTrigger(), actionBuilder.getClass(), "ImplementationBuilderForTrigger");
+            BuildWebSocketImplementation.buildTrigger(context.trigger, msg, implementationBuilder);
             actionBuilder.setTriggerToAction(actionVariable, trigger);
         } else {
             // TODO
@@ -70,7 +73,9 @@ public class BuildWebSocketAction {
             GlobalContext.setCurrentMethod(send);
             // Build send
             Variable msg = send.createInputVariable(WebSocketMessage.getType(), "msg");
-            BuildWebSocketImplementation.buildSendInAction(context.send, msg, actionBuilder.createImplementationBuilderForResponse());
+            IWebSocketImplementationBuilder implementationBuilder =
+                    Checker.checkBuilder(actionBuilder.createImplementationBuilderForResponse(), actionBuilder.getClass(), "ImplementationBuilderForResponse");
+            BuildWebSocketImplementation.buildSendInAction(context.send, msg, implementationBuilder);
             actionBuilder.setActionToAction(actionVariable, send);
             GlobalContext.setCurrentMethod(interfaceMethod);
         }

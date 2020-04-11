@@ -31,8 +31,8 @@ public class BuildJsonParser extends DataProcessorBase<xJsonParser> {
     @Override
     public Variable build(xJsonParser jsonParser, IDataProcessorBuilder builder) {
         Checker.isNull(builder, BuildJsonParser.class, "IDataProcessorBuilder");
-        IJsonParserBuilder jsonParserBuilder = builder.createJsonParserBuilder();
-        Checker.isNull(jsonParserBuilder, BuildJsonParser.class, "IJsonParserBuilder");
+        IJsonParserBuilder jsonParserBuilder =
+                Checker.checkBuilder(builder.createJsonParserBuilder(), builder.getClass(), "JsonParserBuilder");
         Variable inputVariable = getInputVariable(jsonParser);
 
         // Define the root json object.
@@ -97,17 +97,16 @@ public class BuildJsonParser extends DataProcessorBase<xJsonParser> {
             xJsonChecker jsonChecker,
             IJsonParserBuilder jsonParserBuilder,
             Variable rootJsonObject) {
-        IJsonCheckerBuilder jsonCheckerBuilder = jsonParserBuilder.createJsonCheckerBuilder();
-        if (jsonCheckerBuilder == null) {
-            throw new CEIException("[BuildJsonParser] JsonChecker build is null");
-        }
+        IJsonCheckerBuilder jsonCheckerBuilder =
+                Checker.checkBuilder(jsonParserBuilder.createJsonCheckerBuilder(), jsonParserBuilder.getClass(), "JsonCheckerBuilder");
 
         Variable jsonCheckerVar = createTempVariable(JsonChecker.getType(), "jsonChecker");
-        jsonCheckerBuilder.defineJsonChecker(jsonCheckerVar, rootJsonObject);
+        jsonCheckerBuilder.defineJsonChecker(jsonCheckerVar);
 
         jsonChecker.itemList.forEach(item -> item.doBuild(() -> {
             JsonItemContext context = new JsonItemContext();
             context.currentItem = item;
+            context.parentJsonObject = rootJsonObject;
             context.jsonCheckerObject = jsonCheckerVar;
             context.jsonCheckerBuilder = jsonCheckerBuilder;
             processJsonItem(context);
@@ -368,13 +367,13 @@ public class BuildJsonParser extends DataProcessorBase<xJsonParser> {
         xJsonCheckerEqual jsonCheckerEqual = (xJsonCheckerEqual) context.currentItem;
         Variable key = queryVariableOrConstant(jsonCheckerEqual.key, xString.inst.getType());
         Variable value = queryVariableOrConstant(jsonCheckerEqual.value, xString.inst.getType());
-        context.jsonCheckerBuilder.setEqual(context.jsonCheckerObject, key, value);
+        context.jsonCheckerBuilder.setEqual(context.jsonCheckerObject, key, value, context.parentJsonObject);
     }
 
     private void processCheckerNotEqual(JsonItemContext context) {
         xJsonCheckerNotEqual jsonCheckerNotEqual = (xJsonCheckerNotEqual) context.currentItem;
         Variable key = queryVariableOrConstant(jsonCheckerNotEqual.key, xString.inst.getType());
         Variable value = queryVariableOrConstant(jsonCheckerNotEqual.value, xString.inst.getType());
-        context.jsonCheckerBuilder.setNotEqual(context.jsonCheckerObject, key, value);
+        context.jsonCheckerBuilder.setNotEqual(context.jsonCheckerObject, key, value, context.parentJsonObject);
     }
 }

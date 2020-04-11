@@ -44,7 +44,7 @@
     <authentications>
         <restful name="restful">
             <procedure>
-                <get_now name="{timestamp}" format=""/>
+                <get_now name="{timestamp}" format="%Y:%M:%DT%h:%m:%s"/>
             </procedure>
             <add_query_string key="accessKeyId" value="{option.apiKey}"/>
             <add_query_string key="signatureMethod" value="HmacSHA256"/>
@@ -114,9 +114,8 @@
                         <decimal name="price"/>
                     </inputs>
                     <request method="post" target="/api/v1/placeOrder">
-                        <post_body value="{ts}">
+                        <post_body value="{jsonResult}">
                             <procedure>
-								<get_now name="{ts}" format=""/>
                                 <json_builder name="{jsonResult}">
                                     <json_string key="account-id" value="{account_id}"/>
                                     <json_decimal copy="price"/>
@@ -142,7 +141,7 @@
                 <on_connect>
                     <send value="{ts}">
                         <procedure>
-                            <get_now name="{ts}" format=""/>
+                            <get_now name="{ts}" format="Unix_ms"/>
                             <json_builder name="{jsonResult}">
                                 <json_value key="op" value="pong"/>
                                 <json_value key="ts" value="{ts}"/>
@@ -160,7 +159,7 @@
                     </trigger>
                     <send value="{jsonResult}">
                         <procedure>
-                            <get_now name="{ts}" format=""/>
+                            <get_now name="{ts}" format="Unix_ms"/>
                             <json_builder name="{jsonResult}">
                                 <json_value key="op" value="pong"/>
                                 <json_value key="ts" value="{ts}"/>

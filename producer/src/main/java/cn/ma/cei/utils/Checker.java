@@ -18,6 +18,15 @@ import java.util.List;
  */
 public class Checker {
 
+    public static <T> T checkBuilder(T builder, Class<?> creator, String description) {
+        if (builder == null) {
+            CEIErrors.showCodeFailure(creator, "%s is null.", description);
+        } else {
+            return builder;
+        }
+        return null;
+    }
+
     public static boolean isEmpty(String value) {
         return (value == null || "".equals(value));
     }

@@ -1,21 +1,19 @@
 package cn.ma.cei.impl;
 
 public class JsonChecker {
-    private JsonWrapper jsonWrapper;
     private boolean result = true;
 
-    public JsonChecker(JsonWrapper jsonWrapper) {
-        this.jsonWrapper = jsonWrapper;
+    public JsonChecker() {
     }
 
-    public void checkEqual(String key, String value) {
+    public void checkEqual(String key, String value, JsonWrapper jsonWrapper) {
         String jsonValue = jsonWrapper.getString(key);
         if (!jsonValue.equals(value)) {
             result = false;
         }
     }
 
-    public void checkNotEqual(String key, String value) {
+    public void checkNotEqual(String key, String value, JsonWrapper jsonWrapper) {
         String jsonValue = jsonWrapper.getString(key);
         if (jsonValue.equals(value)) {
             result = false;

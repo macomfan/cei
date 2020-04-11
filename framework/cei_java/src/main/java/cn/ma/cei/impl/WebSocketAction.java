@@ -25,6 +25,10 @@ public class WebSocketAction {
         return persistence;
     }
 
+    public void setPersistent(boolean persistence) {
+        this.persistence = persistence;
+    }
+
     public boolean check(WebSocketMessage msg) {
         return checker.check(msg);
     }

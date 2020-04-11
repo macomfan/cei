@@ -1,6 +1,7 @@
 package cn.ma.cei.generator;
 
 import cn.ma.cei.exception.CEIException;
+import cn.ma.cei.generator.builder.IDataProcessorBuilder;
 import cn.ma.cei.generator.builder.IRestfulInterfaceBuilder;
 import cn.ma.cei.generator.buildin.RestfulConnection;
 import cn.ma.cei.generator.buildin.RestfulRequest;
@@ -10,6 +11,7 @@ import cn.ma.cei.model.restful.xInterface;
 import cn.ma.cei.model.restful.xPostBody;
 import cn.ma.cei.model.restful.xQuery;
 import cn.ma.cei.model.types.xString;
+import cn.ma.cei.utils.Checker;
 import cn.ma.cei.utils.RegexHelper;
 
 import java.util.LinkedList;
@@ -57,7 +59,8 @@ public class BuildRestfulInterface {
             VariableType finalReturnType = returnType.get();
             restIf.response.doBuild(() -> {
                 builder.invokeQuery(response, request);
-                Variable returnVariable = BuildResponse.build(restIf.response, response, finalReturnType, builder.createDataProcessorBuilder());
+                IDataProcessorBuilder dataProcessorBuilder = Checker.checkBuilder(builder.createDataProcessorBuilder(), builder.getClass(), "DataProcessorBuilder");
+                Variable returnVariable = BuildResponse.build(restIf.response, response, finalReturnType, dataProcessorBuilder);
                 builder.returnResult(returnVariable);
             });
         }
