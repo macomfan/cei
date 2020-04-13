@@ -129,7 +129,7 @@ public class CEIUtils {
             }
             String res = javaTimeFormatSting.toString();
             Date now=new Date();
-            SimpleDateFormat simpleDateFormat = new SimpleDateFormat(javaTimeFormatSting.toString());
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy':'MM':'dd'T'HH':'mm':'ss");
             simpleDateFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
             return simpleDateFormat.format(now);
         }

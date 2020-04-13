@@ -30,7 +30,7 @@ public class main {
     }
 
     public static void main(String[] args) throws InterruptedException {
-        String ttt = CEIUtils.getNow("%z-%M");
+        String ttt = CEIUtils.getNow("%Y-%M");
 
 
         String jsonData = "[{\n" +
