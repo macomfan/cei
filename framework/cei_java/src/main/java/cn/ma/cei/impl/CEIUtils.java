@@ -79,7 +79,7 @@ public class CEIUtils {
             }
             builder.append(item.getKey());
             builder.append("=");
-            builder.append(urlEncode(item.getValue()));
+            builder.append(urlEscape(item.getValue()));
         });
         return builder.toString();
     }
@@ -119,7 +119,7 @@ public class CEIUtils {
         return "";
     }
 
-    private static String urlEncode(String s) {
+    public static String urlEscape(String s) {
         try {
             return URLEncoder.encode(s, "UTF-8").replaceAll("\\+", "%20");
         } catch (UnsupportedEncodingException e) {

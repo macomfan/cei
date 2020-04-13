@@ -79,12 +79,12 @@
                         <json_parser model="ExchangeInfo">
                             <json_value copy="ExchangeName"/>
                             <json_value copy="Timestamp"/>
-                            <json_object_array copy="Symbols" model="Symbols">
+                            <json_object_for_each copy="Symbols" model="Symbols">
                                 <json_value copy="Name"/>
                                 <json_value copy="Status"/>
                                 <json_value copy="OCOAllowed"/>
                                 <json_value copy="Precision"/>
-                            </json_object_array>
+                            </json_object_for_each>
                         </json_parser>
                     </response>
                 </interface>

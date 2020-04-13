@@ -159,10 +159,8 @@ public class BuildJsonParser extends DataProcessorBase<xJsonParser> {
             processJsonValue(value, context);
         } else if (context.currentItem instanceof xJsonObject) {
             processJsonObject(value, context);
-        } else if (context.currentItem instanceof xJsonObjectArray) {
-            processJsonObjectArray(value, context);
-        } else if (context.currentItem instanceof xJsonArray) {
-            processJsonArray(value, context);
+        } else if (context.currentItem instanceof xJsonObjectForEach) {
+            processJsonObjectForEach(value, context);
         } else if (context.currentItem instanceof xJsonForEach) {
 
         } else {
@@ -237,40 +235,7 @@ public class BuildJsonParser extends DataProcessorBase<xJsonParser> {
         }
     }
 
-    private void processJsonArray(Variable value, JsonItemContext context) {
-        xJsonWithModel jsonWithModel = (xJsonWithModel) context.currentItem;
-        if (value != null) {
-            // copy to the value directly
-            if (value.getType().equalTo(xStringArray.typeName)) {
-                assignJsonStringArray(value, context);
-            } else if (value.getType().equalTo(xDecimalArray.typeName)) {
-                assignJsonDecimalArray(value, context);
-            } else if (value.getType().equalTo(xBooleanArray.typeName)) {
-                assignJsonBooleanArray(value, context);
-            } else if (value.getType().equalTo(xIntArray.typeName)) {
-                assignJsonIntArray(value, context);
-            } else {
-                CEIErrors.showXMLFailure(context.currentItem, "The value of json array can only support basic type.");
-            }
-            if (!Checker.isNull(jsonWithModel.itemList)) {
-                CEIErrors.showXMLWarning(context.currentItem, "Json array has both value and content, will not be processed");
-            }
-        } else {
-            Variable jsonArrayObject = createTempVariable(JsonWrapper.getType(), "array");
-            context.jsonParserBuilder.getJsonArray(jsonArrayObject, context.parentJsonObject, getKeyVariable(jsonWithModel.key));
-
-            jsonWithModel.itemList.forEach((item) -> item.doBuild(() -> {
-                JsonItemContext newContext = new JsonItemContext();
-                newContext.currentItem = item;
-                newContext.parentModel = context.parentModel;
-                newContext.parentJsonObject = jsonArrayObject;
-                newContext.jsonParserBuilder = context.jsonParserBuilder;
-                processJsonItem(newContext);
-            }));
-        }
-    }
-
-    private void processJsonObjectArray(Variable to, JsonItemContext context) {
+    private void processJsonObjectForEach(Variable to, JsonItemContext context) {
         xJsonWithModel jsonWithModel = (xJsonWithModel) context.currentItem;
         Variable newJsonObject = defineJsonObject(context);
         if (!Checker.isEmpty(jsonWithModel.key)) {

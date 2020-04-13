@@ -45,9 +45,6 @@ public class BuildExchange {
                     GlobalContext.setCurrentModel(null);
                 }));
             }
-        } else {
-            // TODO
-            // No clients here
         }
 
         VariableType authenticationType = GlobalContext.variableType(CEIUtils.typeName);
@@ -69,7 +66,6 @@ public class BuildExchange {
                     GlobalContext.setCurrentMethod(null);
                 }));
             }
-
             GlobalContext.setCurrentModel(null);
         }
         builder.endExchange();

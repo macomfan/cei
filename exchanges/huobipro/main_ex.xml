@@ -58,7 +58,7 @@
                                 <json_checker_not_equal key="stauts" value="ok"/>
                             </json_checker>
                             <json_value copy="status"/>
-                            <json_object_array copy="data" model="SymbolsData">
+                            <json_object_for_each copy="data" model="SymbolsData">
                                 <json_value key="base-currency" value="{baseCurrency}"/>
                                 <json_value key="quote-currency" value="{quoteCurrency}"/>
                                 <json_value key="price-precision" value="{pricePrecision}"/>
@@ -71,7 +71,7 @@
                                 <json_value key="max-order-amt" value="{maxOrderAmt}"/>
                                 <json_value key="min-order-value" value="{minOrderValue}"/>
                                 <json_value key="leverage-ratio" value="{leverageRatio}"/>
-                            </json_object_array>
+                            </json_object_for_each>
                         </json_parser>
                     </response>
                 </interface>
@@ -102,7 +102,7 @@
                     <response>
                         <json_parser model="Candlestick">
                             <json_value copy="status"/>
-                            <json_object_array copy="data" model="CandlestickData">
+                            <json_object_for_each copy="data" model="CandlestickData">
                                 <json_value copy="id"/>
                                 <json_value copy="amount"/>
                                 <json_value copy="count"/>
@@ -111,7 +111,7 @@
                                 <json_value copy="low"/>
                                 <json_value copy="high"/>
                                 <json_value copy="vol"/>
-                            </json_object_array>
+                            </json_object_for_each>
                         </json_parser>
                     </response>
                 </interface>
@@ -133,14 +133,14 @@
                             <json_object key="tick">
                                 <json_value key="ts" value="{tsInTick}"/>
                                 <json_value key="id" value="{idInTick}"/>
-                                <json_object_array copy="data" model="Trade">
+                                <json_object_for_each copy="data" model="Trade">
                                     <json_value copy="amount"/>
                                     <json_value copy="price"/>
                                     <json_value copy="ts"/>
                                     <json_value copy="id"/>
                                     <json_value copy="direction"/>
                                     <json_value key="trade-id" value="{tradeID}"/>
-                                </json_object_array>
+                                </json_object_for_each>
                             </json_object>
                         </json_parser>
                     </response>
@@ -165,14 +165,14 @@
                             <json_value copy="ts"/>
                             <json_value copy="ch"/>
                             <json_object key="tick">
-                                <json_object_array copy="bids" model="Quote">
+                                <json_object_for_each copy="bids" model="Quote">
                                     <json_value key="[0]" value="{price}"/>
                                     <json_value key="[1]" value="{amount}"/>
-                                </json_object_array>
-                                <json_object_array copy="asks" model="Quote">
+                                </json_object_for_each>
+                                <json_object_for_each copy="asks" model="Quote">
                                     <json_value key="[0]" value="{price}"/>
                                     <json_value key="[1]" value="{amount}"/>
-                                </json_object_array>
+                                </json_object_for_each>
                             </json_object>
                         </json_parser>
                     </response>
@@ -194,18 +194,18 @@
                             <json_value copy="status"/>
                             <json_value copy="ts"/>
                             <json_object key="tick">
-                                <json_array key="bids">
-                                    <json_array key="[0]">
+                                <json_object key="bids">
+                                    <json_object key="[0]">
                                         <json_value key="[0]" value="{bestBidPrice}"/>
                                         <json_value key="[1]" value="{bestBidAmount}"/>
-                                    </json_array>
-                                </json_array>
-                                <json_array key="asks">
-                                    <json_array key="[0]">
+                                    </json_object>
+                                </json_object>
+                                <json_object key="asks">
+                                    <json_object key="[0]">
                                         <json_value key="[0]" value="{bestAskPrice}"/>
                                         <json_value key="[1]" value="{bestAskAmount}"/>
-                                    </json_array>
-                                </json_array>
+                                    </json_object>
+                                </json_object>
                             </json_object>
                             <json_value copy="ch"/>
                         </json_parser>

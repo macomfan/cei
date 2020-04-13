@@ -25,10 +25,10 @@
                     </request>
                     <response>
                         <json_parser model="CandlestickDataList">
-                            <json_object_array value="{data}" model="CandlestickData">
+                            <json_object_for_each value="{data}" model="CandlestickData">
                                 <json_value key="\[0]" value="{open}"/>
                                 <json_value key="\[1]" value="{high}"/>
-                            </json_object_array>
+                            </json_object_for_each>
                         </json_parser>
                     </response>
                 </interface>

@@ -27,13 +27,12 @@ public class xJsonParser extends xDataProcessorItem {
             xJsonInteger.class,
             xJsonBoolean.class,
             xJsonDecimal.class,
-            xJsonObjectArray.class,
+            xJsonObjectForEach.class,
             xJsonObject.class,
             xJsonStringArray.class,
             xJsonIntArray.class,
             xJsonDecimalArray.class,
             xJsonBooleanArray.class,
-            xJsonArray.class,
             xJsonForEach.class,
             xJsonValue.class})
     public List<xJsonType> itemList;

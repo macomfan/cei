@@ -25,7 +25,7 @@
                     </request>
                     <response>
                         <json_parser model="AggregateTradeList">
-                            <json_object_array value="{data}" model="AggregateTrade">
+                            <json_object_for_each value="{data}" model="AggregateTrade">
                                 <json_value key="a" value="{id}"/>
                                 <json_value key="p" value="{price}"/>
                                 <json_value key="q" value="{qty}"/>
@@ -34,7 +34,7 @@
                                 <json_value key="T" value="{timestamp}"/>
                                 <json_value key="m" value="{isBuyerMaker}"/>
                                 <json_value key="M" value="{isBestMatch}"/>
-                            </json_object_array>
+                            </json_object_for_each>
                         </json_parser>
                     </response>
                 </interface>
