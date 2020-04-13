@@ -263,7 +263,7 @@ public class BuildJsonParser extends DataProcessorBase<xJsonParser> {
             // If key is null, use the parent json object
             return context.parentJsonObject;
         }
-        return createTempVariable(JsonWrapper.getType(), jsonWithModel.key + "Obj");
+        return createTempVariable(JsonWrapper.getType(), "obj");
     }
 
     private Variable defineModel(JsonItemContext context) {
