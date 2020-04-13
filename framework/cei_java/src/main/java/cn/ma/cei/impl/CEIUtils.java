@@ -41,26 +41,8 @@ public class CEIUtils {
         } else if (format.equals("Unix_ms")) {
             return Long.toString(System.currentTimeMillis() / 1000);
         } else {
-<<<<<<< HEAD
-            StringBuilder javaTimeFormatSting = new StringBuilder();
-            String[] items = format.split("\\%");
-            for (int i = 0; i<items.length; i++) {
-                if (i == 0) {
-                    javaTimeFormatSting.append('\'');
-                    javaTimeFormatSting.append(items[i]);
-                    javaTimeFormatSting.append('\'');
-                }
-                else {
-                    javaTimeFormatSting.append(CEIUtils.processSingleTimeFormatSyntax("%" + items[i]));
-                }
-            }
-            String res = javaTimeFormatSting.toString();
-            Date now=new Date();
-            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy':'MM':'dd'T'HH':'mm':'ss");
-=======
             Date now = new Date();
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat(format);
->>>>>>> ccdda234bf4280a41134893611ddcc13e219f16d
             simpleDateFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
             return simpleDateFormat.format(now);
         }

@@ -20,6 +20,7 @@ public class RestfulRequest {
 
     public RestfulRequest(RestfulOptions options) {
         this.options = options;
+        this.url = options.url;
     }
 
     public String getUrl() {

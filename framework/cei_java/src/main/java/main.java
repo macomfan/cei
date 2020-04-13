@@ -30,17 +30,11 @@ public class main {
     }
 
     public static void main(String[] args) throws InterruptedException {
-        String ttt = CEIUtils.getNow("%Y-%M");
+//        huobipro.MarketClient client = new huobipro.MarketClient();
+//        huobipro.BestQuote bq = client.getBestQuote("btcusdt");
+//        System.out.println(bq.toString());
 
 
-        String jsonData = "[{\n" +
-                "\t\"price\": \"0.1\",\n" +
-                "\t\"qty\": \"0.1\"\n" +
-                "}, {\n" +
-                "\t\"price\": \"0.2\",\n" +
-                "\t\"qty\": \"0.2\"\n" +
-                "}]";
-        JsonWrapper jsonParse = JsonWrapper.parseFromString(jsonData);
 
 
 //        TestWebsocket tws = new TestWebsocket();
@@ -92,6 +86,8 @@ public class main {
         JSONObject jsonObject = (JSONObject) JSON.parse(data);
         Object jjj = jsonObject.get("status");
         JsonWrapper currentJsonWrapper = JsonWrapper.parseFromString(data);
+        JsonWrapper arr = currentJsonWrapper.getObject("array");
+        String index0 = arr.getString("[0]");
         //JsonWrapper.JsonPath jsp = new JsonWrapper.JsonPath(currentJsonWrapper, "\\ch\\data\\[0]\\id");
         try {
             JsonWrapper a = currentJsonWrapper.getObject("\\data");

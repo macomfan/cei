@@ -14,6 +14,8 @@ import com.alibaba.fastjson.util.TypeUtils;
 import java.math.BigDecimal;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  *
@@ -21,82 +23,15 @@ import java.util.List;
  */
 public class JsonWrapper {
 
-//    static class JsonPathNode {
-//
-//        public String path = "";
-//        public JsonPathNode next = null;
-//        public int arrayIndex = -1;
-//    }
-//
-//    public static class JsonPath {
-//
-//        private JsonWrapper currentJsonWrapper;
-//        private JsonPathNode rootPathNode = null;
-//
-//        public JsonPath(JsonWrapper currentJsonWrapper, String path) {
-//            if (path == null || path.isEmpty()) {
-//                throw new CEIException("[JsonPath] Empty path");
-//            }
-//            try {
-//                String newPath = path;
-//                if (path.charAt(0) != '\\') {
-//                    newPath = "\\" + path;
-//                }
-//                String[] items = newPath.split("\\\\");
-//                JsonPathNode perJsonPathNode = null;
-//                for (int i = 1; i < items.length; i++) {
-//                    JsonPathNode newJsonPathNode = new JsonPathNode();
-//                    if (perJsonPathNode == null) {
-//                        rootPathNode = newJsonPathNode;
-//                    } else {
-//                        perJsonPathNode.next = newJsonPathNode;
-//                    }
-//                    if (items[i].indexOf('[') != -1) {
-//                        String index = items[i].replaceFirst("\\[", "");
-//                        index = index.replaceFirst("]", "");
-//                        newJsonPathNode.arrayIndex = Integer.parseInt(index);
-//                    } else {
-//                        newJsonPathNode.path = items[i];
-//                    }
-//                    perJsonPathNode = newJsonPathNode;
-//                }
-//                this.currentJsonWrapper = currentJsonWrapper;
-//            } catch (Exception e) {
-//                throw new CEIException("[JsonPath] Not invaild path: " + path);
-//            }
-//        }
-//
-//        public Object get() {
-//            JsonPathNode curr = rootPathNode;
-//            Object currObject = null;
-//            if (currentJsonWrapper.jsonObject != null) {
-//                currObject = currentJsonWrapper.jsonObject;
-//            } else if (currentJsonWrapper.jsonArray != null) {
-//                currObject = currentJsonWrapper.jsonArray;
-//            }
-//            while (curr != null) {
-//                if (curr.arrayIndex != -1) {
-//                    //Get as array currJson should be array
-//                    assert currObject instanceof JSONArray;
-//                    JSONArray jsonArray = (JSONArray) currObject;
-//                    if (jsonArray.size() <= curr.arrayIndex) {
-//                        return null;
-//                    }
-//                    currObject = jsonArray.get(curr.arrayIndex);
-//                } else {
-//                    // Get as object currJson should be object
-//                    assert currObject instanceof JSONObject;
-//                    JSONObject jsonObject = (JSONObject) currObject;
-//                    if (!jsonObject.containsKey(curr.path)) {
-//                        return null;
-//                    }
-//                    currObject = jsonObject.get(curr.path);
-//                }
-//                curr = curr.next;
-//            }
-//            return currObject;
-//        }
-//    }
+    private Integer getIndexKey(String key) {
+        String pattern = "^\\[[0-9]*\\]$";
+        Pattern r = Pattern.compile(pattern);
+        Matcher m = r.matcher(key);
+        if (m.find()) {
+            return Integer.parseInt(key.substring(m.start() + 1, m.end() - 1));
+        }
+        return null;
+    }
 
     private JSONObject jsonObject = null;
     private JSONArray jsonArray = null;
@@ -164,9 +99,19 @@ public class JsonWrapper {
     }
 
     private Object checkMandatoryField(String name) {
-        Object obj = this.jsonObject.get(name);
+        Object obj = null;
+        if (jsonObject != null) {
+            obj = this.jsonObject.get(name);
+        }
+        else if (jsonArray != null) {
+            Integer index = getIndexKey(name);
+            if (index == null) {
+                throw new CEIException("[Json] Cannot get: " + name + " from json array");
+            }
+            obj = jsonArray.get(index.intValue());
+        }
         if (obj == null) {
-            throw new CEIException("[Json] Get json item field: " + name + "does not exist");
+            throw new CEIException("[Json] Get json item field: " + name + " does not exist");
         }
         return obj;
     }
@@ -216,19 +161,6 @@ public class JsonWrapper {
                 return new JsonWrapper((JSONArray)obj);
             } else {
                 throw new CEIException("[Json] Get object: " + itemName + " error, it is neither object or array");
-            }
-        } catch (Exception e) {
-            throw new CEIException("[Json] Get object: " + itemName + " error");
-        }
-    }
-
-    public JsonWrapper getArray(String itemName) {
-        Object obj = checkMandatoryField(itemName);
-        try {
-            if (obj instanceof JSONArray) {
-                return new JsonWrapper((JSONArray)obj);
-            } else {
-                throw new CEIException("[Json] Get array: " + itemName + " error, it is not an array");
             }
         } catch (Exception e) {
             throw new CEIException("[Json] Get object: " + itemName + " error");
