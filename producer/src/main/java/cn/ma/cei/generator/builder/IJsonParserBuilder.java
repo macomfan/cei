@@ -19,13 +19,15 @@ public interface IJsonParserBuilder {
     
     void getJsonDecimal(Variable to, Variable jsonObject, Variable itemName);
     
-    void getJsonStringArray(Variable to, Variable jsonObject, Variable itemName);
+    void assignJsonStringArray(Variable to, Variable jsonObject, Variable itemName);
 
-    void getJsonDecimalArray(Variable to, Variable jsonObject, Variable itemName);
+    void assignJsonDecimalArray(Variable to, Variable jsonObject, Variable itemName);
 
-    void getJsonBooleanArray(Variable to, Variable jsonObject, Variable itemName);
+    void assignJsonBooleanArray(Variable to, Variable jsonObject, Variable itemName);
 
-    void getJsonIntArray(Variable to, Variable jsonObject, Variable itemName);
+    void assignJsonIntArray(Variable to, Variable jsonObject, Variable itemName);
+
+    void getJsonArray(Variable jsonWrapperObject, Variable jsonObject, Variable itemName);
 
     /***
      * jsonObject = parentJsonObject.getObject( itemName )

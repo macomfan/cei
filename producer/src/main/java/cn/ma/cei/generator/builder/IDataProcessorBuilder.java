@@ -10,7 +10,7 @@ public interface IDataProcessorBuilder {
 
     IJsonParserBuilder createJsonParserBuilder();
 
-    void getNow(Variable output, Variable format);
+    IGetNowBuilder createGetNowBuilder();
 
     void base64(Variable output, Variable input);
 

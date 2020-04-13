@@ -19,7 +19,7 @@
 					</request>
 					<response>
 						<json_parser model="TradeList">
-							<json_object_array value="{data}" model="Trade">
+							<json_object_for_each value="{data}" model="Trade">
 								<json_value copy="id"/>
 								<json_value copy="price"/>
 								<json_value copy="qty"/>
@@ -27,7 +27,7 @@
 								<json_value copy="time"/>
 								<json_value copy="isBuyerMaker"/>
 								<json_value copy="isBestMatch"/>
-							</json_object_array>
+							</json_object_for_each>
 						</json_parser>
 					</response>
 				</interface>

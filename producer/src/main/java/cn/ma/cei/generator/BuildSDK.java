@@ -5,12 +5,12 @@
  */
 package cn.ma.cei.generator;
 
-import cn.ma.cei.exception.CEIErrorType;
 import cn.ma.cei.exception.CEIErrors;
 import cn.ma.cei.exception.CEIException;
 import cn.ma.cei.finalizer.Finalizer;
 import cn.ma.cei.generator.builder.IFramework;
 import cn.ma.cei.model.xSDK;
+import cn.ma.cei.utils.Checker;
 import cn.ma.cei.utils.MapWithValue2;
 import cn.ma.cei.xml.JAXBWrapper;
 
@@ -49,12 +49,13 @@ public class BuildSDK {
 
         List<String> languages;
         if (language.trim().equals("*")) {
+            CEIErrors.showInfo("Start to build all supported language.");
             languages = new LinkedList<>(frameworks.keySet());
         } else {
             languages = Arrays.asList(language.split("\\|"));
             languages.forEach(item -> {
                 if (!frameworks.containsKey(item)) {
-                    CEIErrors.showFailure(CEIErrorType.CONFIG, "The language: %s is not supported.", item);
+                    CEIErrors.showInputFailure("The language: %s is not supported.", item);
                 }
             });
         }
@@ -83,7 +84,7 @@ public class BuildSDK {
                 GlobalContext.setCurrentExchange(sdk.name);
                 GlobalContext.setCurrentLanguage(frameworks.get1(item));
                 GlobalContext.setCurrentFramework(framework);
-                BuildExchange.build(sdk, framework.createExchangeBuilder());
+                BuildExchange.build(sdk, Checker.checkBuilder(framework.createExchangeBuilder(), framework.getClass(), "ExchangeBuilder"));
             }));
             CEIErrors.showInfo("Build %s complete", item);
         });

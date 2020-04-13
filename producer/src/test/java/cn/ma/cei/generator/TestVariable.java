@@ -1,6 +1,6 @@
 package cn.ma.cei.generator;
 
-import cn.ma.cei.generator.langs.test.testFramework;
+import cn.ma.cei.langs.test.testFramework;
 import cn.ma.cei.model.types.xString;
 import org.junit.Test;
 

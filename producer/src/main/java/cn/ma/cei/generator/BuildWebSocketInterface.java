@@ -12,9 +12,6 @@ import java.util.concurrent.atomic.AtomicReference;
 
 public class BuildWebSocketInterface {
     public static void build(xWSInterface intf, IWebSocketInterfaceBuilder builder) {
-        if (builder == null) {
-            throw new CEIException("WebSocketInterfaceBuilder is null");
-        }
         sMethod interfaceMethod = GlobalContext.getCurrentMethod();
         // Build input
         List<Variable> inputVariableList = new LinkedList<>();

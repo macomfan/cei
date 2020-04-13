@@ -5,22 +5,20 @@
  */
 package cn.ma.cei.generator;
 
-import cn.ma.cei.utils.NormalMap;
-
 /**
  *
  * @author u0151316
  */
 public class Constant {
 
-    private static final EnvironmentData<NormalMap<String, String>> requestMethod = new EnvironmentData<>(NormalMap::new);
-    private static final EnvironmentData<NormalMap<String, String>> authenticationMethod = new EnvironmentData<>(NormalMap::new);
+    private static final EnvironmentData<String, String> requestMethod = new EnvironmentData<>();
+    private static final EnvironmentData<String, String> authenticationMethod = new EnvironmentData<>();
 
-    public static NormalMap<String, String> requestMethod() {
-        return requestMethod.get();
+    public static EnvironmentData<String, String> requestMethod() {
+        return requestMethod;
     }
 
-    public static NormalMap<String, String> authenticationMethod() {
-        return authenticationMethod.get();
+    public static EnvironmentData<String, String> authenticationMethod() {
+        return authenticationMethod;
     }
 }

@@ -35,7 +35,7 @@ public class WebSocketConnection extends WebSocketListener {
         return true;
     }
 
-    public void connectWS(String target, WebSocketOptions option) {
+    public void connect(String target, WebSocketOptions option) {
         //this.onConnect = onConnect;
         Request okhttpRequest = new Request.Builder().url(target).build();
         webSocket = client.newWebSocket(okhttpRequest, this);
@@ -87,7 +87,7 @@ public class WebSocketConnection extends WebSocketListener {
         }
     }
 
-    public void sendWS(String msg) {
+    public void send(String msg) {
         if (msg != null || !msg.isEmpty()) {
             System.out.println(msg);
             webSocket.send(msg);

@@ -20,8 +20,8 @@ public class BuildStringWrapper extends DataProcessorBase<xStringBuilder> {
         }
 
         Checker.isNull(builder, BuildJsonParser.class, "IDataProcessorBuilder");
-        IStringBuilderBuilder stringBuilderBuilder = builder.createStringBuilderBuilder();
-        Checker.isNull(stringBuilderBuilder, BuildJsonParser.class, "IStringBuilderBuilder");
+        IStringBuilderBuilder stringBuilderBuilder =
+                Checker.checkBuilder(builder.createStringBuilderBuilder(), builder.getClass(), "StringBuilderBuilder");;
         Variable rootStringBuilder = createUserVariable(StringWrapper.getType(), stringBuilder.name);
         stringBuilderBuilder.defineStringBuilderObject(rootStringBuilder);
 

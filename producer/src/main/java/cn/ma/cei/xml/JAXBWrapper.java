@@ -21,10 +21,18 @@ public class JAXBWrapper {
 
     private Set<Class<?>> clsForLoadingJAXB = new HashSet<>();
     private Class<xSDK> rootClass = xSDK.class;
+    private Unmarshaller unmarshaller;
 
     public JAXBWrapper() {
         clsForLoadingJAXB.add(rootClass);
         checkCurrentClass(rootClass, new HashSet<>());
+        Class<?>[] tmp = clsForLoadingJAXB.toArray(new Class[0]);
+        try {
+            JAXBContext context = JAXBContext.newInstance(tmp, null);
+            unmarshaller = context.createUnmarshaller();
+        } catch (Exception ignore) {
+
+        }
     }
 
     private void checkCurrentClass(Class<?> cls, Set<Class<?>> checkedClasses) {
@@ -59,13 +67,11 @@ public class JAXBWrapper {
 
     public xSDK loadFromXML(File file) {
         try {
-            Class<?>[] tmp = clsForLoadingJAXB.toArray(new Class[0]);
-            JAXBContext context = JAXBContext.newInstance(tmp, null);
-            Unmarshaller unmarshaller = context.createUnmarshaller();
+            // CEIErrors.showInfo("%s Start", file.getName());
             xSDK sdk = rootClass.cast(unmarshaller.unmarshal(file));
             sdk.filename = file.getPath();
             sdk.doCheck();
-            // CEIErrors.showDebug("Load file %s done.", sdk.filename);
+            // CEIErrors.showInfo("%s End", file.getName());
             return sdk;
         } catch (JAXBException e) {
             CEIErrors.showFailure(CEIErrorType.XML, "Load XML file error: %s \n %s", file.getPath(), e.getMessage());

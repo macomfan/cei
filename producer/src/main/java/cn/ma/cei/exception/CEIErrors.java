@@ -10,12 +10,22 @@ public class CEIErrors {
 
     public static void showCodeFailure(Class<?> cls, String message, Object... args) throws CEIException {
         String res = String.format(message, args);
-        throw new CEIException(String.format("[%s] %s", cls.getName(), res));
+        throw new CEIException(String.format("In [%s] %s", cls.getSimpleName(), res));
     }
 
-    public static void showFailure(xElement element, String message, Object... args) throws CEIException {
+    public static void showInputFailure(String message, Object... args) throws CEIException {
+        String res = String.format(message, args);
+        logger.fatal(res);
+    }
+
+    public static void showXMLFailure(xElement element, String message, Object... args) throws CEIException {
         String res = String.format(message, args);
         throw new CEIException(res);
+    }
+
+    public static void showXMLWarning(xElement element, String message, Object... args) throws CEIException {
+        String res = String.format(message, args);
+        logger.warn(res);
     }
 
     public static void showFailure(CEIErrorType errorType, String message, Object... args) throws CEIException {
@@ -25,8 +35,8 @@ public class CEIErrors {
         throw new CEIException(res);
     }
 
-    public static void showWarning(CEIErrorType errorType, String message, Object... args) {
-
+    public static void showWarning(String message, Object... args) {
+        logger.warn(String.format(message, args));
     }
 
     public static void showInfo(String message, Object... args) {

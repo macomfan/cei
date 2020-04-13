@@ -1,47 +1,50 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package cn.ma.cei.generator;
 
-import cn.ma.cei.generator.GlobalContext;
-import cn.ma.cei.generator.Language;
+import cn.ma.cei.exception.CEIErrors;
+import cn.ma.cei.exception.CEIException;
+import cn.ma.cei.utils.NormalMap;
 import cn.ma.cei.utils.SecondLevelMap;
 
-/**
- *
- * @author u0151316
- */
-class EnvironmentData<T> {
-    
-    private SecondLevelMap<String, Language, T> data = new SecondLevelMap<>();
-    private Creation<T> creation = null;
+public class EnvironmentData<Key, Value> {
+    private SecondLevelMap<String, Language, NormalMap<Key, Value>> data = new SecondLevelMap<>();
 
-    public EnvironmentData(Creation<T> creation) {
-        this.creation = creation;
+    public boolean containsKey(Key key) {
+        NormalMap<Key, Value> map = getMap(GlobalContext.getCurrentExchange(), GlobalContext.getCurrentLanguage());
+        return map.containsKey(key);
     }
 
-    public EnvironmentData() {
-    }
-
-    @FunctionalInterface
-    public interface Creation<T> {
-        T create();
-    }
-    
-    public T get() {
-        if (isNull()) {
-            data.tryPut(GlobalContext.getCurrentExchange(), GlobalContext.getCurrentLanguage(), creation.create());
+    public Value tryGet(Key key) {
+        Value res = get(key);
+        if (res == null) {
+            CEIErrors.showCodeFailure(this.getClass(), "Cannot find key: %s", key);
         }
-        return data.get(GlobalContext.getCurrentExchange(), GlobalContext.getCurrentLanguage());
+        return res;
     }
 
-    public void trySet(T value) {
-        data.tryPut(GlobalContext.getCurrentExchange(), GlobalContext.getCurrentLanguage(), value);
+    public Value get(Key key) {
+        NormalMap<Key, Value> map = getMap(GlobalContext.getCurrentExchange(), GlobalContext.getCurrentLanguage());
+        if (!map.containsKey(key)) {
+            return null;
+        }
+        return map.get(key);
+    }
+
+    public void tryPut(Key key, Value value) {
+        NormalMap<Key, Value> map = getMap(GlobalContext.getCurrentExchange(), GlobalContext.getCurrentLanguage());
+        if (map.containsKey(key)) {
+            throw new CEIException("Cannot set duplicate value " + key);
+        }
+        map.put(key, value);
     }
 
     private boolean isNull() {
         return !data.containsKey(GlobalContext.getCurrentExchange(), GlobalContext.getCurrentLanguage());
+    }
+
+    private NormalMap<Key, Value> getMap(String exchange, Language language) {
+        if (!data.containsKey(exchange, language)) {
+            data.tryPut(exchange, language, new NormalMap<>());
+        }
+        return data.get(exchange, language);
     }
 }

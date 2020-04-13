@@ -14,13 +14,12 @@ public interface IJsonCheckerBuilder {
      * jsonChecker = new JsonChecker(jsonParser)
      *
      * @param jsonChecker
-     * @param jsonParser
      */
-    void defineJsonChecker(Variable jsonChecker, Variable jsonParser);
+    void defineJsonChecker(Variable jsonChecker);
 
-    void setNotEqual(Variable jsonChecker, Variable key, Variable value);
+    void setNotEqual(Variable jsonChecker, Variable key, Variable value, Variable jsonWrapperObject);
 
-    void setEqual(Variable jsonChecker, Variable key, Variable value);
+    void setEqual(Variable jsonChecker, Variable key, Variable value, Variable jsonWrapperObject);
 
     void returnResult(Variable jsonChecker);
 

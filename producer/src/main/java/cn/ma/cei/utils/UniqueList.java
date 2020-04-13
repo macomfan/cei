@@ -17,6 +17,12 @@ public class UniqueList<IndexType, ValueType> {
         return indexed.containsKey(key);
     }
 
+    public void addAll(UniqueList<IndexType, ValueType> value) {
+        valueList.addAll(value.valueList);
+        indexList.addAll(value.indexList);
+        indexed.putAll(value.indexed);
+    }
+
     public boolean isEmpty() {
         return valueList.isEmpty();
     }

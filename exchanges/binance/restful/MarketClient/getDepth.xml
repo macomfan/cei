@@ -20,14 +20,14 @@
 					<response>
 						<json_parser model="Depth">
 							<json_value copy="lastUpdateId"/>
-							<json_object_array copy="bids" model="DepthEntity">
-								<json_value key="\[0]" value="{price}"/>
-								<json_value key="\[1]" value="{qty}"/>
-							</json_object_array>
-							<json_object_array copy="asks" model="DepthEntity">
-								<json_value key="\[0]" value="{price}"/>
-								<json_value key="\[1]" value="{qty}"/>
-							</json_object_array>
+							<json_object_for_each copy="bids" model="DepthEntity">
+								<json_value key="[0]" value="{price}"/>
+								<json_value key="[1]" value="{qty}"/>
+							</json_object_for_each>
+							<json_object_for_each copy="asks" model="DepthEntity">
+								<json_value key="[0]" value="{price}"/>
+								<json_value key="[1]" value="{qty}"/>
+							</json_object_for_each>
 						</json_parser>
 					</response>
 				</interface>
