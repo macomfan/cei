@@ -136,21 +136,9 @@ public class BuildJsonParser extends DataProcessorBase<xJsonParser> {
     }
 
     private void processJsonItem(JsonItemContext context) {
-        if (context.currentItem == null) {
-            CEIErrors.showCodeFailure(this.getClass(), "Null json item");
-        }
-
         if (processJsonCheckerItem(context)) {
             // if it is json checker item, do not continue.
             return;
-        }
-
-        if (context.currentItem.copy != null && (context.currentItem.key != null || context.currentItem.value != null)) {
-            CEIErrors.showXMLFailure(context.currentItem, " key, value cannot exist with copy.");
-        } else if (context.currentItem.copy != null) {
-            context.currentItem.key = context.currentItem.copy;
-            context.currentItem.value = "{" + context.currentItem.copy + "}";
-            context.currentItem.copy = null;
         }
 
         Variable value = getValueVariable(context.parentModel, context.currentItem);

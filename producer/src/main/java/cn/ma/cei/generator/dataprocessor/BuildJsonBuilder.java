@@ -1,5 +1,6 @@
 package cn.ma.cei.generator.dataprocessor;
 
+import cn.ma.cei.exception.CEIErrors;
 import cn.ma.cei.exception.CEIException;
 import cn.ma.cei.generator.BuilderContext;
 import cn.ma.cei.generator.DataProcessorBase;
@@ -7,6 +8,8 @@ import cn.ma.cei.generator.Variable;
 import cn.ma.cei.generator.VariableType;
 import cn.ma.cei.generator.builder.IDataProcessorBuilder;
 import cn.ma.cei.generator.builder.IJsonBuilderBuilder;
+import cn.ma.cei.generator.builder.IJsonCheckerBuilder;
+import cn.ma.cei.generator.builder.IJsonParserBuilder;
 import cn.ma.cei.generator.buildin.JsonWrapper;
 import cn.ma.cei.model.json.*;
 import cn.ma.cei.model.types.xBoolean;
@@ -16,6 +19,13 @@ import cn.ma.cei.model.types.xString;
 import cn.ma.cei.utils.Checker;
 
 public class BuildJsonBuilder extends DataProcessorBase<xJsonBuilder> {
+    static class JsonItemContext {
+        xJsonType currentItem = null;
+        Variable currentJsonObject = null;
+        IJsonBuilderBuilder jsonBuilderBuilder = null;
+    }
+
+
     @Override
     public Variable build(xJsonBuilder jsonBuilder, IDataProcessorBuilder builder) {
         IJsonBuilderBuilder jsonBuilderBuilder = Checker.checkBuilder(builder.createJsonBuilderBuilder(), builder.getClass(), "JsonBuilderBuilder");
@@ -28,19 +38,12 @@ public class BuildJsonBuilder extends DataProcessorBase<xJsonBuilder> {
 
         jsonBuilderBuilder.defineRootJsonObject(jsonObject);
         jsonBuilder.itemList.forEach(item -> item.doBuild(() -> {
-            if (item.copy == null) {
-                if (item.key == null || item.value == null) {
-                    throw new CEIException("[BuildJsonBuilder] from, to and copy cannot be null");
-                }
-            } else {
-                if (item.key != null && item.value != null) {
-                    throw new CEIException("[BuildJsonBuilder] from, to cannot exist with copy");
-                } else {
-                    item.key = item.copy;
-                    item.value = "{" + item.copy + "}";
-                    item.copy = null;
-                }
-            }
+            JsonItemContext newContext = new JsonItemContext();
+            newContext.currentItem = item;
+            newContext.currentJsonObject = jsonObject;
+            newContext.jsonBuilderBuilder = jsonBuilderBuilder;
+            processJsonItem(newContext);
+
             Variable from = getFromVariable(item);
             if (from == null) {
                 throw new CEIException("[BuildJsonBuilder] cannot process from");
@@ -70,6 +73,16 @@ public class BuildJsonBuilder extends DataProcessorBase<xJsonBuilder> {
         }));
 
         return jsonObject;
+    }
+
+    private void processJsonItem(JsonItemContext context) {
+        if (context.currentItem.copy != null && (context.currentItem.key != null || context.currentItem.value != null)) {
+            CEIErrors.showXMLFailure(context.currentItem, " key, value cannot exist with copy.");
+        } else if (context.currentItem.copy != null) {
+            context.currentItem.key = context.currentItem.copy;
+            context.currentItem.value = "{" + context.currentItem.copy + "}";
+            context.currentItem.copy = null;
+        }
     }
 
     private Variable getFromVariable(xJsonType jsonItem) {
