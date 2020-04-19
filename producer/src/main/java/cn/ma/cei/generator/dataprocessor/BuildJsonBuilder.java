@@ -9,6 +9,8 @@ import cn.ma.cei.generator.builder.IDataProcessorBuilder;
 import cn.ma.cei.generator.builder.IJsonBuilderBuilder;
 import cn.ma.cei.generator.buildin.JsonWrapper;
 import cn.ma.cei.model.json.*;
+import cn.ma.cei.model.types.xBoolean;
+import cn.ma.cei.model.types.xDecimal;
 import cn.ma.cei.model.types.xInt;
 import cn.ma.cei.model.types.xString;
 import cn.ma.cei.utils.Checker;
@@ -48,18 +50,22 @@ public class BuildJsonBuilder extends DataProcessorBase<xJsonBuilder> {
             if (item instanceof xJsonValue) {
                 if (from.getType() == xString.inst.getType()) {
                     jsonBuilderBuilder.addJsonString(from, jsonObject, to);
+                } else if (from.getType() == xDecimal.inst.getType()) {
+                    jsonBuilderBuilder.addJsonDecimal(from, jsonObject, to);
+                } else if (from.getType() == xBoolean.inst.getType()) {
+                    jsonBuilderBuilder.addJsonBoolean(from, jsonObject, to);
                 } else if (from.getType() == xInt.inst.getType()) {
-                    jsonBuilderBuilder.addJsonNumber(from, jsonObject, to);
+                    jsonBuilderBuilder.addJsonInt(from, jsonObject, to);
                 }
                 // TODO
             } else if (item instanceof xJsonString) {
                 jsonBuilderBuilder.addJsonString(from, jsonObject, to);
             } else if (item instanceof xJsonInteger) {
-                jsonBuilderBuilder.addJsonNumber(from, jsonObject, to);
+                jsonBuilderBuilder.addJsonInt(from, jsonObject, to);
             } else if (item instanceof xJsonBoolean) {
                 jsonBuilderBuilder.addJsonBoolean(from, jsonObject, to);
             } else if (item instanceof xJsonDecimal) {
-                jsonBuilderBuilder.addJsonNumber(from, jsonObject, to);
+                jsonBuilderBuilder.addJsonDecimal(from, jsonObject, to);
             }
         }));
 

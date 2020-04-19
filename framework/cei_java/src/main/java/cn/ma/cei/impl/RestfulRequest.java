@@ -2,6 +2,7 @@ package cn.ma.cei.impl;
 
 import cn.ma.cei.exception.CEIException;
 import java.io.UnsupportedEncodingException;
+import java.math.BigDecimal;
 import java.net.URLEncoder;
 import javafx.util.Pair;
 
@@ -63,6 +64,13 @@ public class RestfulRequest {
             return;
         }
         queryString_.add(new Pair<>(name, value.toString()));
+    }
+
+    public void addQueryString(String name, BigDecimal value) {
+        if (value == null) {
+            return;
+        }
+        queryString_.add(new Pair<>(name, value.stripTrailingZeros().toPlainString()));
     }
 
     public void addQueryString(String name, Boolean value) {

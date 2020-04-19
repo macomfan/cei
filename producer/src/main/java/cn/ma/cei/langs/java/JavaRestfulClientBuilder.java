@@ -22,26 +22,26 @@ public class JavaRestfulClientBuilder implements IRestfulClientBuilder {
     @Override
     public void startClient(VariableType clientType, RestfulOptions options) {
         clientClass = new JavaClass(clientType.getDescriptor());
-        clientClass.addMemberVariable(JavaClass.AccessType.PRIVATE, clientType.addPrivateMember(RestfulOptions.getType(), "options"));
+        clientClass.addMemberVariable(JavaClass.AccessType.PRIVATE, clientType.getMember("option"));
 
         JavaMethod defaultConstructor = new JavaMethod(clientClass);
         defaultConstructor.startConstructor("");
         {
-            defaultConstructor.getCode().appendJavaLine("this.options", "=", "new", RestfulOptions.getType().getDescriptor() + "()");
+            defaultConstructor.getCode().appendJavaLine("this.option", "=", "new", RestfulOptions.getType().getDescriptor() + "()");
             Variable url = BuilderContext.createStringConstant(options.url);
-            defaultConstructor.getCode().appendJavaLine("this.options.url", "=", url.getDescriptor());
+            defaultConstructor.getCode().appendJavaLine("this.option.url", "=", url.getDescriptor());
             if (options.connectionTimeout != null) {
-                defaultConstructor.getCode().appendJavaLine("this.options.connectionTimeout", "=", options.connectionTimeout.toString());
+                defaultConstructor.getCode().appendJavaLine("this.option.connectionTimeout", "=", options.connectionTimeout.toString());
             }
         }
         defaultConstructor.endMethod();
         clientClass.addMethod(defaultConstructor);
 
         JavaMethod optionConstructor = new JavaMethod(clientClass);
-        optionConstructor.startConstructor(RestfulOptions.getType().getDescriptor() + " options");
+        optionConstructor.startConstructor(RestfulOptions.getType().getDescriptor() + " option");
         {
             optionConstructor.getCode().appendJavaLine("this()");
-            optionConstructor.getCode().appendJavaLine("this.options.setFrom(options)");
+            optionConstructor.getCode().appendJavaLine("this.option.setFrom(option)");
         }
         optionConstructor.endMethod();
         clientClass.addMethod(optionConstructor);

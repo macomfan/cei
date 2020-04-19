@@ -11,4 +11,18 @@ package cn.ma.cei.impl;
  */
 public class WebSocketOptions {
     public String url;
+    public String apiKey = null;
+    public String secretKey = null;
+
+    public void setFrom(WebSocketOptions options) {
+        if (options.url != null) {
+            this.url = options.url;
+        }
+        if (options.apiKey != null) {
+            this.apiKey = options.apiKey;
+        }
+        if (options.secretKey != null) {
+            this.secretKey = options.secretKey;
+        }
+    }
 }

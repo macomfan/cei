@@ -84,7 +84,14 @@ public class JsonWrapper {
         jsonObject.put(name, value);
     }
 
-    public void addJsonNumber(String name, Integer value) {
+    public void addJsonNumber(String name, Long value) {
+        if (value == null) {
+            return;
+        }
+        jsonObject.put(name, value);
+    }
+
+    public void addJsonBoolean(String name, Boolean value) {
         if (value == null) {
             return;
         }

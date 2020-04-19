@@ -115,8 +115,8 @@ public class CEIUtils {
         }
     }
 
-    public static String stringReplace(String format, String... args) {
-        return "";
+    public static String stringReplace(String format, Object... args) {
+        return String.format(format, args);
     }
 
     public static String urlEscape(String s) {
@@ -137,6 +137,8 @@ public class CEIUtils {
             SecretKeySpec secKey = new SecretKeySpec(key.getBytes(StandardCharsets.UTF_8), "HmacSHA256");
             hmacSha256.init(secKey);
             return hmacSha256.doFinal(input.getBytes(StandardCharsets.UTF_8));
+        } catch (CEIException e) {
+            throw e;
         } catch (Exception e) {
             throw new CEIException("hmacsha256 error");
         }

@@ -25,6 +25,9 @@ import cn.ma.cei.utils.RegexHelper;
 
 import java.util.List;
 
+/**
+ * To build each line in User Procedure.
+ */
 public class BuildDataProcessor {
 
     private static NormalMap<Class<?>, DataProcessorBase<?>> processorMap = new NormalMap<>();
@@ -53,8 +56,7 @@ public class BuildDataProcessor {
             if (processorMap.containsKey(items.get(0).getClass())) {
                 return processorMap.get(items.get(0).getClass()).callReturnType(items.get(0));
             } else {
-                // TODO
-                CEIErrors.showFailure(CEIErrorType.CODE, "not supported");
+                CEIErrors.showFailure(CEIErrorType.CODE, "Processor is not supporting %s", items.get(0).getClass().getName());
             }
         }
 
@@ -67,7 +69,7 @@ public class BuildDataProcessor {
                 }
             } else {
                 // TODO
-                CEIErrors.showFailure(CEIErrorType.CODE, "not supported");
+                CEIErrors.showFailure(CEIErrorType.CODE, "Processor is not supporting %s", items.get(0).getClass().getName());
             }
         }
         return null;

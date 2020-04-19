@@ -16,7 +16,11 @@ public class xResponse extends xElement {
     @XmlAttribute(name = "type")
     public String type;
 
+    @XmlAttribute(name = "result")
     public String result;
+
+    @XmlAttribute(name = "name")
+    public String name;
 
     @XmlAnyElement(lax = true)
     @CEIXmlAnyElementTypes({

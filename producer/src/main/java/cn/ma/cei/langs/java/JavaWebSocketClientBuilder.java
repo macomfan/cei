@@ -1,8 +1,11 @@
 package cn.ma.cei.langs.java;
 
+import cn.ma.cei.generator.BuilderContext;
+import cn.ma.cei.generator.Variable;
 import cn.ma.cei.generator.VariableType;
 import cn.ma.cei.generator.builder.IWebSocketClientBuilder;
 import cn.ma.cei.generator.builder.IWebSocketInterfaceBuilder;
+import cn.ma.cei.generator.buildin.RestfulOptions;
 import cn.ma.cei.generator.buildin.WebSocketConnection;
 import cn.ma.cei.generator.buildin.WebSocketOptions;
 import cn.ma.cei.langs.java.tools.JavaClass;
@@ -27,15 +30,19 @@ public class JavaWebSocketClientBuilder implements IWebSocketClientBuilder {
         JavaMethod defaultConstructor = new JavaMethod(clientClass);
         defaultConstructor.startConstructor("");
         {
-
+            defaultConstructor.getCode().appendJavaLine("this.option", "=", "new", WebSocketOptions.getType().getDescriptor() + "()");
+            Variable url = BuilderContext.createStringConstant(options.url);
+            defaultConstructor.getCode().appendJavaLine("this.option.url", "=", url.getDescriptor());
+            defaultConstructor.getCode().appendJavaLine("this.connection", "=", "new", WebSocketConnection.getType().getDescriptor() + "()");
         }
         defaultConstructor.endMethod();
         clientClass.addMethod(defaultConstructor);
 
         JavaMethod optionConstructor = new JavaMethod(clientClass);
-        optionConstructor.startConstructor(WebSocketOptions.getType().getDescriptor() + " options");
+        optionConstructor.startConstructor(WebSocketOptions.getType().getDescriptor() + " option");
         {
-
+            optionConstructor.getCode().appendJavaLine("this()");
+            optionConstructor.getCode().appendJavaLine("this.option.setFrom(option)");
         }
         optionConstructor.endMethod();
         clientClass.addReference(WebSocketOptions.getType());

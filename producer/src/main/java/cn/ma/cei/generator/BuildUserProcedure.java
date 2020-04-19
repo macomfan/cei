@@ -41,41 +41,40 @@ public class BuildUserProcedure {
             // Build processor firstly.
             BuildDataProcessor.build(parent.procedure.items, null, value, dataProcessorBuilder);
         }
-        return createUserDefinedValue(value, dataProcessorBuilder);
-
+        return GlobalContext.getCurrentMethod().queryUserDefinedValue(value, dataProcessorBuilder);
     }
 
-    private static Variable createUserDefinedValue(String value, IDataProcessorBuilder builder) {
-        if (Checker.isEmpty(value)) {
-            CEIErrors.showCodeFailure(BuildUserProcedure.class, "Value is null.");
-        }
-        if (RegexHelper.isReference(value) != null) {
-            // {xxx}
-            Variable var = GlobalContext.getCurrentMethod().getVariable(RegexHelper.isReference(value));
-            if (var == null) {
-                throw new CEIException("Cannot lookup variable: " + var);
-            }
-            return var;
-        } else {
-            List<String> linkedParam = RegexHelper.findReference(value);
-            if (linkedParam.isEmpty()) {
-                return GlobalContext.createStringConstant(value);
-            } else {
-                List<Variable> variables = new LinkedList<>();
-                variables.add(GlobalContext.createStringConstant(value));
-                linkedParam.forEach(item -> {
-                    Variable param = GlobalContext.getCurrentMethod().getVariable(item);
-                    if (param == null) {
-                        throw new CEIException("Cannot find variable in target");
-                    }
-                    variables.add(TypeConverter.convertType(param, xString.inst.getType(), builder));
-                });
-                Variable[] params = new Variable[variables.size()];
-                variables.toArray(params);
-                return builder.stringReplacement(params);
-            }
-        }
-    }
+//    private static Variable createUserDefinedValue(String value, IDataProcessorBuilder builder) {
+//        if (Checker.isEmpty(value)) {
+//            CEIErrors.showCodeFailure(BuildUserProcedure.class, "Value is null.");
+//        }
+//        if (RegexHelper.isReference(value) != null) {
+//            // {xxx}
+//            Variable var = GlobalContext.getCurrentMethod().getVariable(RegexHelper.isReference(value));
+//            if (var == null) {
+//                throw new CEIException("Cannot lookup variable: " + var);
+//            }
+//            return var;
+//        } else {
+//            List<String> linkedParam = RegexHelper.findReference(value);
+//            if (linkedParam.isEmpty()) {
+//                return GlobalContext.createStringConstant(value);
+//            } else {
+//                List<Variable> variables = new LinkedList<>();
+//                variables.add(GlobalContext.createStringConstant(value));
+//                linkedParam.forEach(item -> {
+//                    Variable param = GlobalContext.getCurrentMethod().getVariable(item);
+//                    if (param == null) {
+//                        throw new CEIException("Cannot find variable in target");
+//                    }
+//                    variables.add(TypeConverter.convertType(param, xString.inst.getType(), builder));
+//                });
+//                Variable[] params = new Variable[variables.size()];
+//                variables.toArray(params);
+//                return builder.stringReplacement(params);
+//            }
+//        }
+//    }
 
 //        public static Variable createValueFromAttribute (String attrName, xAttributeExtension various, IMethodBuilder
 //        methodBuilder){

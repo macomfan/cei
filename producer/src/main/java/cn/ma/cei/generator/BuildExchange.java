@@ -38,8 +38,6 @@ public class BuildExchange {
                 sdk.clients.webSocketList.forEach((websocket) -> websocket.doBuild(() -> {
                     GlobalContext.setupRunTimeVariableType(websocket.name, BuilderContext.NO_REF);
                     VariableType clientType = GlobalContext.variableType(websocket.name);
-                    clientType.addPrivateMember(WebSocketOptions.getType(), "option");
-                    clientType.addPrivateMember(WebSocketConnection.getType(), "connection");
                     GlobalContext.setCurrentModel(clientType);
                     BuildWebSocketClient.build(websocket, Checker.checkBuilder(builder.createWebSocketClientBuilder(), builder.getClass(), "WebSocketClientBuilder"));
                     GlobalContext.setCurrentModel(null);

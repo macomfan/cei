@@ -6,6 +6,7 @@ import cn.ma.cei.generator.Variable;
 import cn.ma.cei.generator.VariableType;
 import cn.ma.cei.generator.builder.IDataProcessorBuilder;
 import cn.ma.cei.generator.buildin.JsonWrapper;
+import cn.ma.cei.generator.buildin.RestfulResponse;
 import cn.ma.cei.generator.buildin.StringWrapper;
 import cn.ma.cei.model.types.xInt;
 import cn.ma.cei.model.types.xString;
@@ -33,6 +34,10 @@ public class TypeConverter {
         } else if (input.getType() == xInt.inst.getType()) {
             if (objectType == xString.inst.getType()) {
                 return builder.convertIntToString(input);
+            }
+        } else if (input.getType() == RestfulResponse.getType()) {
+            if (objectType == xString.inst.getType()) {
+                return builder.convertRestfulResponseToString(input);
             }
         }
 

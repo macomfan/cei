@@ -26,7 +26,7 @@ public class xWSConnection extends xElement {
     @XmlElement(name = "url")
     public xUrl url;
 
-    @XmlAttribute(name="timeout_s")
+    @XmlAttribute(name = "timeout_s")
     public Integer timeout;
 
 

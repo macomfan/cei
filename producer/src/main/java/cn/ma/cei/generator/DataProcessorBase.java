@@ -79,85 +79,35 @@ public abstract class DataProcessorBase<T extends xDataProcessorItem> {
 
     /***
      * Query the variable from the current method.
-     * the name should be the variable name format, like {xxx}.
-     * If the name is only the variable, like {xxx}, return the variable.
-     * If the name is only a string. return the string constant.
-     * If the name is mixed, like xxx{xxx}xxx, query the variable and replace {xxx}, then return
-     * the statement of String.replace(xxx{xxx}xxx, {xxx}). the stringReplacement in IDataProcessorBuilder will be called.
-     *
-     * If the name is null or "", return the "" of string constant.
+     * @see sMethod#queryUserDefinedValue(String, IDataProcessorBuilder) 
      *
      * @param name the variable name, can be {xxx} or normal string.
      * @return the variable object
      */
     public Variable queryVariableOrConstant(String name) {
-        String variableName = RegexHelper.isReference(name);
-        if (variableName != null) {
-            // The name is {xxx}
-            return innerQueryVariable(variableName);
-        }
-        List<String> variableNames = RegexHelper.findReference(name);
-        if (Checker.isNull(variableNames)) {
-            // The name is xxx
-            if (Checker.isEmpty(name)) {
-                return GlobalContext.createStringConstant("");
-            }
-            return GlobalContext.createStringConstant(name);
-        } else {
-            // The name is xxx{xxx}xxx
-            List<Variable> variables = new LinkedList<>();
-            variables.add(GlobalContext.createStringConstant(name));
-            variableNames.forEach(item -> {
-                Variable param = GlobalContext.getCurrentMethod().getVariable(item);
-                if (param == null) {
-                    CEIErrors.showFailure(CEIErrorType.XML, "Cannot find %s in the method %s", item, GlobalContext.getCurrentMethod().getName());
-                }
-                variables.add(param);
-            });
-            Variable[] params = new Variable[variables.size()];
-            variables.toArray(params);
-            return builder.stringReplacement(params);
-        }
-
+        return GlobalContext.getCurrentMethod().queryUserDefinedValue(name, builder);
     }
 
     /***
-     * Query the variable from the current method. the name should only be the variable name format, like {xxxx}.
-     * If the name is not like {xxx}, report the error.
+     * Query the variable from the current method.
+     * @see sMethod#queryVariable(String) 
      *
      * @param name the variable name, can be {xxx} or normal string.
      * @return the variable object
      */
     public Variable queryVariable(String name) {
-        String variableName = RegexHelper.isReference(name);
-        if (variableName == null) {
-            CEIErrors.showFailure(CEIErrorType.XML, "No a variable name");
-        }
-        return GlobalContext.getCurrentMethod().tryGetVariable(variableName);
+        return GlobalContext.getCurrentMethod().queryVariable(name);
     }
 
     /***
-     * Query the variable from the current method. the name should only be the variable name format, like {xxxx}.
-     * If the name is not like {xxx}, report the error.
+     * Query the variable from the current method, and convert to specify type.
+     * @see sMethod#queryVariable(String, VariableType, IDataProcessorBuilder)
      *
      * @param name the variable name, can be {xxx} or normal string.
      * @return the variable object
      */
     public Variable queryVariable(String name, VariableType specType) {
-        Variable res = queryVariable(name);
-        return TypeConverter.convertType(res, specType, builder);
-    }
-
-    private Variable innerQueryVariable(String name) {
-        String[] variableNames = name.split("\\.");
-        if (variableNames.length == 0) {
-            // TODO
-        }
-        Variable result = GlobalContext.getCurrentMethod().tryGetVariable(variableNames[0]);
-        for (int i = 1; i < variableNames.length; i++) {
-            result = result.queryMember(variableNames[i]);
-        }
-        return result;
+        return GlobalContext.getCurrentMethod().queryVariable(name, specType, builder);
     }
 
     public abstract Variable build(T item, IDataProcessorBuilder builder);

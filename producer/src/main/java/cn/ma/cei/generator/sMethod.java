@@ -2,10 +2,16 @@ package cn.ma.cei.generator;
 
 import cn.ma.cei.exception.CEIErrorType;
 import cn.ma.cei.exception.CEIErrors;
+import cn.ma.cei.generator.builder.IDataProcessorBuilder;
+import cn.ma.cei.generator.dataprocessor.TypeConverter;
+import cn.ma.cei.model.types.xString;
+import cn.ma.cei.utils.Checker;
+import cn.ma.cei.utils.RegexHelper;
 import cn.ma.cei.utils.UniqueList;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.regex.Pattern;
 
 public class sMethod {
     public static final String SELF = "###SELF###";
@@ -119,6 +125,92 @@ public class sMethod {
         return result;
     }
 
+    /***
+     * Query the variable from the current method. the name should only be the variable name format, like {xxxx}.
+     * If the name is not like {xxx}, report the error.
+     *
+     * @param name the variable name, can be {xxx} or normal string.
+     * @return the variable object
+     */
+    public Variable queryVariable(String name) {
+        String variableName = RegexHelper.isReference(name);
+        if (variableName == null) {
+            CEIErrors.showFailure(CEIErrorType.XML, "No a variable name");
+        }
+        return tryGetVariable(variableName);
+    }
+
+    /***
+     * Query the variable from the current method. the name should only be the variable name format, like {xxxx}.
+     * If the name is not like {xxx}, report the error.
+     *
+     * @param name the variable name, can be {xxx} or normal string.
+     * @return the variable object
+     */
+    public Variable queryVariable(String name, VariableType specType, IDataProcessorBuilder dataProcessorBuilder) {
+        Variable res = queryVariable(name);
+        return TypeConverter.convertType(res, specType, dataProcessorBuilder);
+    }
+
+    /***
+     * Query the variable from the current method.
+     * the name should be the variable name format, like {xxx}.
+     * If the name is only the variable, like {xxx}, return the variable.
+     * If the name is only a string. return the string constant.
+     * If the name is mixed, like xxx{xxx}xxx, query the variable and replace {xxx}, then return
+     * the statement of String.replace(xxx{xxx}xxx, {xxx}). the stringReplacement in IDataProcessorBuilder will be called.
+     *
+     * If the name is null or "", return the "" of string constant.
+     *
+     * @param value the variable name, can be {xxx} or normal string.
+     * @return the variable object
+     */
+    public Variable queryUserDefinedValue(String value, IDataProcessorBuilder builder) {
+        String variableName = RegexHelper.isReference(value);
+        if (variableName != null) {
+            // The name is {xxx}
+            return innerQueryVariable(variableName);
+        }
+        List<String> variableNames = RegexHelper.findReference(value);
+        if (Checker.isNull(variableNames)) {
+            // The name is xxx
+            if (Checker.isEmpty(value)) {
+                return GlobalContext.createStringConstant("");
+            }
+            return GlobalContext.createStringConstant(value);
+        } else {
+            // The name is xxx{xxx}xxx
+            List<Variable> variables = new LinkedList<>();
+            String formatString = value;
+            int index = 0;
+            for (String item : variableNames) {
+                Variable param = GlobalContext.getCurrentMethod().getVariable(item);
+                if (param == null) {
+                    CEIErrors.showFailure(CEIErrorType.XML, "Cannot find %s in the method %s", item, GlobalContext.getCurrentMethod().getName());
+                }
+                String formatEntity = builder.getStringFormatEntity(index++, param);
+                formatString = formatString.replaceFirst(Pattern.quote("{" + item + "}"), formatEntity);
+                variables.add(TypeConverter.convertType(param, xString.inst.getType(), builder));
+            }
+            variables.add(0, GlobalContext.createStringConstant(formatString));
+            Variable[] params = new Variable[variables.size()];
+            variables.toArray(params);
+
+            return builder.stringReplacement(params);
+        }
+    }
+
+    private Variable innerQueryVariable(String name) {
+        String[] variableNames = name.split("\\.");
+        if (variableNames.length == 0) {
+            // TODO
+        }
+        Variable result = GlobalContext.getCurrentMethod().tryGetVariable(variableNames[0]);
+        for (int i = 1; i < variableNames.length; i++) {
+            result = result.queryMember(variableNames[i]);
+        }
+        return result;
+    }
 
     private String temporaryVariableName(String variableName) {
         String name = variableName;

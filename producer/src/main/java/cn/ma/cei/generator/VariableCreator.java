@@ -6,6 +6,13 @@ import java.lang.reflect.Constructor;
 
 class VariableCreator {
 
+    /**
+     * Create the user defined variable, the name can be only the natural name. Cannot be {xxx}
+     *
+     * @param type The type of the created Variable.
+     * @param name The natural variable name.
+     * @return
+     */
     public static Variable createUserVariable(VariableType type, String name) {
         return createVariable(type, name, Variable.Position.LOCAL, null);
     }

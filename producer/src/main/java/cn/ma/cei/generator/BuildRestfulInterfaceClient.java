@@ -9,13 +9,15 @@ import cn.ma.cei.utils.Checker;
 public class BuildRestfulInterfaceClient {
 
     public static void build(xRestful client, IRestfulClientBuilder builder) {
-        RestfulOptions options = new RestfulOptions();
+        RestfulOptions option = new RestfulOptions();
         if (client.connection.timeout != null) {
-            options.connectionTimeout = client.connection.timeout;
+            option.connectionTimeout = client.connection.timeout;
         }
-        options.url = client.connection.url;
+        option.url = client.connection.url;
 
-        builder.startClient(GlobalContext.getCurrentModel(), options);
+        GlobalContext.getCurrentModel().addPrivateMember(RestfulOptions.getType(), "option");
+
+        builder.startClient(GlobalContext.getCurrentModel(), option);
 
         if (client.interfaceList != null) {
             client.interfaceList.forEach((restIf) -> restIf.doBuild(() -> {

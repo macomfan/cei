@@ -21,6 +21,10 @@ public class RestfulConnection {
                     builder.get();
                     break;
                 case POST:
+                    byte[] postBody = restfulRequest.getPostBody();
+                    if (postBody == null) {
+                        throw new CEIException("Post request body is null for: " + url);
+                    }
                     builder.post(RequestBody.create(null, restfulRequest.getPostBody()));
                     break;
                 case DELETE:
@@ -30,8 +34,10 @@ public class RestfulConnection {
             Response response = client.newCall(builder.build()).execute();
             //System.out.println(response.body().string());
             return new RestfulResponse(response);
+        } catch (CEIException e) {
+            throw e;
         } catch (Exception e) {
-            throw new CEIException("Query error");
+            throw new CEIException("Query error: " + e.getMessage());
         }
     }
 

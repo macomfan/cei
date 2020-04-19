@@ -2,12 +2,17 @@ package cn.ma.cei.generator;
 
 import cn.ma.cei.exception.CEIException;
 import cn.ma.cei.generator.builder.IWebSocketClientBuilder;
+import cn.ma.cei.generator.buildin.WebSocketConnection;
 import cn.ma.cei.generator.buildin.WebSocketOptions;
 import cn.ma.cei.model.websocket.xWebSocket;
 import cn.ma.cei.utils.Checker;
 
 public class BuildWebSocketClient {
     public static void build(xWebSocket client, IWebSocketClientBuilder builder) {
+
+        GlobalContext.getCurrentModel().addPrivateMember(WebSocketOptions.getType(), "option");
+        GlobalContext.getCurrentModel().addPrivateMember(WebSocketConnection.getType(), "connection");
+
         WebSocketOptions options = new WebSocketOptions();
         if (client.connection.timeout != null) {
             options.connectionTimeout = client.connection.timeout;

@@ -5,9 +5,11 @@
  */
 package cn.ma.cei.service.messages;
 
+import cn.ma.cei.service.WebSocketMessage;
+
 /**
  * @author u0151316
  */
-public class InitMessage extends MessageWithParam {
+public class InitMessage extends MessageBase {
 
 }

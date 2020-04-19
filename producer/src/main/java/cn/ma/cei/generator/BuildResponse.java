@@ -5,9 +5,11 @@ import cn.ma.cei.exception.CEIErrors;
 import cn.ma.cei.generator.builder.IDataProcessorBuilder;
 import cn.ma.cei.generator.builder.IJsonCheckerBuilder;
 import cn.ma.cei.generator.buildin.RestfulResponse;
+import cn.ma.cei.generator.dataprocessor.TypeConverter;
 import cn.ma.cei.model.json.xJsonParser;
 import cn.ma.cei.model.types.xString;
 import cn.ma.cei.model.xResponse;
+import cn.ma.cei.utils.Checker;
 
 public class BuildResponse {
 
@@ -22,12 +24,28 @@ public class BuildResponse {
                 return null;
             }
         } else {
-            return BuildDataProcessor.getResultType(response.items, response.result);
+            VariableType returnType =BuildDataProcessor.getResultType(response.items, response.result);
+            if (returnType == null) {
+                if (response.items.size() == 1) {
+                    CEIErrors.showXMLFailure(response.items.get(0), "Cannot get the return type");
+                } else {
+                    if (Checker.isEmpty(response.result)) {
+                        CEIErrors.showXMLFailure(response, "Must define the return variable");
+                    }
+                    else {
+                        CEIErrors.showXMLFailure(response, "Cannot find the return variable %s", response.result);
+                    }
+                }
+            }
+            return returnType;
         }
     }
 
     public static Variable build(xResponse response,
                                  Variable responseVariable, VariableType returnType, IDataProcessorBuilder dataProcessorBuilder) {
+        if (response.type != null && response.items != null) {
+            CEIErrors.showXMLFailure(response,"The type is defined, cannot defined the process items");
+        }
         if (response.items != null) {
             response.items.forEach(item -> {
                 if (item instanceof xJsonParser) {
@@ -36,6 +54,12 @@ public class BuildResponse {
                 }
             });
             return BuildDataProcessor.build(response.items, responseVariable, "", dataProcessorBuilder);
+        } else {
+            if ("string".equals(response.type)) {
+                return TypeConverter.convertType(responseVariable, xString.inst.getType(), dataProcessorBuilder);
+            } else if ("raw".equals(response.type)) {
+                return responseVariable;
+            }
         }
         return null;
     }

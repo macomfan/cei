@@ -17,9 +17,11 @@ public interface IJsonBuilderBuilder {
     
     void addJsonString(Variable from, Variable jsonObject, Variable itemName);
     
-    void addJsonNumber(Variable from, Variable jsonObject, Variable itemName);
+    void addJsonDecimal(Variable from, Variable jsonObject, Variable itemName);
     
     void addJsonBoolean(Variable from, Variable jsonObject, Variable itemName);
+
+    void addJsonInt(Variable from, Variable jsonObject, Variable itemName);
 
 //    public abstract void addJsonObject(Variable from, Variable jsonObject, Variable itemName);
 //

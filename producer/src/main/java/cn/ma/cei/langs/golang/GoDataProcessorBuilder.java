@@ -51,7 +51,17 @@ public class GoDataProcessorBuilder implements IDataProcessorBuilder {
     }
 
     @Override
+    public String getStringFormatEntity(int index, Variable item) {
+        return null;
+    }
+
+    @Override
     public Variable convertIntToString(Variable intVariable) {
+        return null;
+    }
+
+    @Override
+    public Variable convertRestfulResponseToString(Variable response) {
         return null;
     }
 

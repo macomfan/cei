@@ -34,13 +34,19 @@ public class GoJsonBuilderBuilder implements IJsonBuilderBuilder {
     }
 
     @Override
-    public void addJsonNumber(Variable from, Variable jsonObject, Variable itemName) {
+    public void addJsonDecimal(Variable from, Variable jsonObject, Variable itemName) {
         method.addInvoke(jsonObject.getDescriptor() + ".AddJsonNumber", new GoVar(itemName), new GoVar(from));
     }
+
 
     @Override
     public void addJsonBoolean(Variable from, Variable jsonObject, Variable itemName) {
         method.addInvoke(jsonObject.getDescriptor() + ".AddJsonBoolean", new GoVar(itemName), new GoVar(from));
     }
-    
+
+    @Override
+    public void addJsonInt(Variable from, Variable jsonObject, Variable itemName) {
+
+    }
+
 }

@@ -2,42 +2,31 @@ package cn.ma.cei.service.processors;
 
 import cn.ma.cei.finalizer.XMLDatabase;
 import cn.ma.cei.model.xSDK;
-import cn.ma.cei.service.ProcessContext;
+import cn.ma.cei.service.WebSocketClient;
+import cn.ma.cei.service.WebSocketMessage;
+import cn.ma.cei.service.WebSocketMessageProcessor;
 import cn.ma.cei.service.messages.ExchangeQueryMessage;
 import cn.ma.cei.utils.Checker;
 import cn.ma.cei.xml.Convert;
 import cn.ma.cei.xml.XmlToJson;
 
-public class ExchangeQueryProcessor extends ProcessorBase<ExchangeQueryMessage> {
-    @Override
-    public String getType() {
-        return ProcessorBase.REQ;
-    }
+public class ExchangeQueryProcessor extends WebSocketMessageProcessor {
 
     @Override
-    public String getCatalog() {
-        return "ExQuery";
-    }
-
-    @Override
-    public ExchangeQueryMessage newMessage() {
-        return new ExchangeQueryMessage();
-    }
-
-    @Override
-    public void process(ProcessContext context, ExchangeQueryMessage msg) {
-        String exchangeName = msg.param.exchangeName;
+    public <T extends WebSocketMessage> void process(T message, WebSocketClient client) {
+        ExchangeQueryMessage msg = (ExchangeQueryMessage) message;
+        String exchangeName = msg.exchangeName;
         if (Checker.isEmpty(exchangeName)) {
-            context.error("Invalid exchange name");
+            CommonProcessor.error(client, msg.requestID, "Invalid exchange name");
             return;
         }
         xSDK sdk = XMLDatabase.getSDK(exchangeName);
         if (sdk == null) {
-            context.error("Cannot find exchange: " + exchangeName);
+            CommonProcessor.error(client, msg.requestID, "Cannot find exchange:" + exchangeName);
             return;
         }
         XmlToJson xmlToJson = new XmlToJson();
         Convert.doConvert(xmlToJson, sdk);
-        context.response(xmlToJson.getJsonObject());
+        CommonProcessor.response(client, msg.requestID, xmlToJson.getJsonObject());
     }
 }

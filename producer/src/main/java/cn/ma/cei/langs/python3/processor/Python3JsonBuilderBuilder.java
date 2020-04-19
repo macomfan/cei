@@ -32,12 +32,17 @@ public class Python3JsonBuilderBuilder implements IJsonBuilderBuilder {
     }
 
     @Override
-    public void addJsonNumber(Variable from, Variable jsonObject, Variable itemName) {
+    public void addJsonDecimal(Variable from, Variable jsonObject, Variable itemName) {
         method.addInvoke(jsonObject.getDescriptor() + ".add_json_number", itemName, from);
     }
 
     @Override
     public void addJsonBoolean(Variable from, Variable jsonObject, Variable itemName) {
         method.addInvoke(jsonObject.getDescriptor() + ".add_json_boolean", itemName, from);
+    }
+
+    @Override
+    public void addJsonInt(Variable from, Variable jsonObject, Variable itemName) {
+        method.addInvoke(jsonObject.getDescriptor() + ".add_json_number", itemName, from);
     }
 }

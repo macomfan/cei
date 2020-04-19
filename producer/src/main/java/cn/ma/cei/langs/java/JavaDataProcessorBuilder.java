@@ -7,6 +7,9 @@ import cn.ma.cei.langs.java.processor.JavaGetNowBuilder;
 import cn.ma.cei.langs.java.processor.JavaJsonBuilderBuilder;
 import cn.ma.cei.langs.java.processor.JavaJsonParserBuilder;
 import cn.ma.cei.langs.java.tools.JavaMethod;
+import cn.ma.cei.model.types.xDecimal;
+import cn.ma.cei.model.types.xInt;
+import cn.ma.cei.model.types.xString;
 
 public class JavaDataProcessorBuilder implements IDataProcessorBuilder {
     JavaMethod method;
@@ -51,10 +54,19 @@ public class JavaDataProcessorBuilder implements IDataProcessorBuilder {
     }
 
     @Override
+    public String getStringFormatEntity(int index, Variable item) {
+        return "%s";
+    }
+
+    @Override
     public Variable convertIntToString(Variable intVariable) {
         return BuilderContext.createStatement(method.invoke("Long.toString", intVariable));
     }
 
+    @Override
+    public Variable convertRestfulResponseToString(Variable response) {
+        return BuilderContext.createStatement(method.invoke(response.getDescriptor() + ".getString"));
+    }
 
 
     @Override

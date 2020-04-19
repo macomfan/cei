@@ -27,6 +27,7 @@ StringBuilder
 
 Restful
     Copy in query string - H
+    Array be the input
     Input required - H
 	Input limitation - M
     Host mapping - L

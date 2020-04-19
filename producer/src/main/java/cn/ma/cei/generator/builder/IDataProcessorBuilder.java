@@ -50,10 +50,12 @@ public interface IDataProcessorBuilder {
      * e.g.
      * return BuilderContext.createStatement("StringBuilder.replace(items)");
      *
-     * @param items the input items
+     * @param items the input items, items[0] is the format string
      * @return the statement variable
      */
     Variable stringReplacement(Variable... items);
+
+    String getStringFormatEntity(int index, Variable item);
 
     /***
      * Convert the int value to string.
@@ -64,4 +66,12 @@ public interface IDataProcessorBuilder {
      * @return
      */
     Variable convertIntToString(Variable intVariable);
+
+
+    /***
+     *
+     *
+     * @return
+     */
+    Variable convertRestfulResponseToString(Variable response);
 }
