@@ -2,12 +2,11 @@ package cn.ma.cei.service.processors;
 
 import cn.ma.cei.service.WebSocketClient;
 import cn.ma.cei.service.response.IResponse;
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
+import io.vertx.core.json.JsonObject;
 
 public class CommonProcessor {
-    public static void response(WebSocketClient client, int requestID, JSONObject json) {
-        JSONObject response = new JSONObject();
+    public static void response(WebSocketClient client, int requestID, JsonObject json) {
+        JsonObject response = new JsonObject();
         response.put("status", "ok");
         response.put("id", requestID);
         response.put("data", json);
@@ -15,15 +14,15 @@ public class CommonProcessor {
     }
 
     public static void response(WebSocketClient client, int requestID, IResponse data) {
-        JSONObject response = new JSONObject();
+        JsonObject response = new JsonObject();
         response.put("status", "ok");
         response.put("id", requestID);
-        response.put("data", JSON.toJSON(data));
+        response.put("data", JsonObject.mapFrom(data));
         client.send(response);
     }
 
     public static void error(WebSocketClient client, int requestID, String code) {
-        JSONObject response = new JSONObject();
+        JsonObject response = new JsonObject();
         response.put("status", "err");
         response.put("id", requestID);
         response.put("data", code);

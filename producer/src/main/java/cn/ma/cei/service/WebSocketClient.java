@@ -5,8 +5,8 @@
  */
 package cn.ma.cei.service;
 
-import com.alibaba.fastjson.JSONObject;
 import io.vertx.core.http.ServerWebSocket;
+import io.vertx.core.json.JsonObject;
 
 /**
  *
@@ -23,8 +23,8 @@ public class WebSocketClient {
         this.clientID = clientID;
     }
 
-    public void send(JSONObject json) {
-        String text = json.toJSONString();
+    public void send(JsonObject json) {
+        String text = json.toString();
         System.err.println("[Client] Send: " + text);
         ws.writeTextMessage(text);
     }

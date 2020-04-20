@@ -6,10 +6,11 @@
 package cn.ma.cei.exception;
 
 import cn.ma.cei.utils.ReflectionHelper;
-import com.alibaba.fastjson.JSONObject;
 import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Stack;
+
+import io.vertx.core.json.JsonObject;
 import javafx.util.Pair;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -21,13 +22,13 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class BuildTracer {
 
     private static int currentLevel = 0;
-    private static final Stack<Pair<Integer, JSONObject>> info = new Stack<>();
+    private static final Stack<Pair<Integer, JsonObject>> info = new Stack<>();
 
     public static void startBuilding(Object obj) {
         if (obj.getClass().isAnnotationPresent(XmlRootElement.class)) {
             String name = obj.getClass().getAnnotation(XmlRootElement.class).name();
             List<Field> fields = ReflectionHelper.getAllFields(obj);
-            JSONObject json = new JSONObject();
+            JsonObject json = new JsonObject();
             fields.forEach(item -> {
                 if (item.isAnnotationPresent(XmlAttribute.class)) {
                     try {
@@ -54,7 +55,7 @@ public class BuildTracer {
             for (int i = 0; i < level; i++) {
                 stringBuilder.append("  ");
             }
-            stringBuilder.append(item.getValue().toJSONString());
+            stringBuilder.append(item.getValue().toString());
             stringBuilder.append("\n");
         });
         return stringBuilder.toString();

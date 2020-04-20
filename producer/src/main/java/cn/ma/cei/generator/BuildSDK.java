@@ -47,6 +47,7 @@ public class BuildSDK {
         finalizer.addSDK(sdks);
         List<xSDK> finalSDKs = finalizer.finalizeSDK();
 
+
         List<String> languages;
         if (language.trim().equals("*")) {
             CEIErrors.showInfo("Start to build all supported language.");

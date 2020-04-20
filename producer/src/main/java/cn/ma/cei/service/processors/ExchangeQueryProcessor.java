@@ -27,6 +27,6 @@ public class ExchangeQueryProcessor extends WebSocketMessageProcessor {
         }
         XmlToJson xmlToJson = new XmlToJson();
         Convert.doConvert(xmlToJson, sdk);
-        CommonProcessor.response(client, msg.requestID, xmlToJson.getJsonObject());
+        //CommonProcessor.response(client, msg.requestID, xmlToJson.getJsonObject());
     }
 }

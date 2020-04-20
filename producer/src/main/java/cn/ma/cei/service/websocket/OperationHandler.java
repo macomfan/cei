@@ -5,8 +5,8 @@ import cn.ma.cei.service.WebSocketService;
 import cn.ma.cei.service.messages.ExchangeInfoMessage;
 import cn.ma.cei.service.messages.ExchangeQueryMessage;
 import cn.ma.cei.utils.Checker;
-import com.alibaba.fastjson.JSONObject;
 import io.vertx.core.buffer.Buffer;
+import io.vertx.core.json.JsonObject;
 
 public class OperationHandler implements IWebSocketHandler {
     @Override
@@ -14,29 +14,29 @@ public class OperationHandler implements IWebSocketHandler {
         if (text == null) {
             return WebSocketService.MessageResult.error();
         }
-        JSONObject json = JSONObject.parseObject(text);
+        JsonObject json = new JsonObject(text);
         String type = json.getString("type");
         if (Checker.isEmpty(type)) {
             System.err.println("[Client] Error unknown request type");
             return WebSocketService.MessageResult.error();
         }
-        JSONObject param = json.getJSONObject("param");
+        JsonObject param = json.getJsonObject("param");
         if (param == null) {
             System.err.println("[Client] Error unknown request param");
             return WebSocketService.MessageResult.error();
         }
 
-        int requestID = json.getIntValue("id");
+        int requestID = json.getInteger("id");
 
         WebSocketService.MessageResult result = WebSocketService.MessageResult.error();
         switch (type) {
             case "ExInfo":
-                ExchangeInfoMessage exchangeInfoMessage = param.toJavaObject(ExchangeInfoMessage.class);
+                ExchangeInfoMessage exchangeInfoMessage = param.mapTo(ExchangeInfoMessage.class);
                 exchangeInfoMessage.requestID = requestID;
                 result = WebSocketService.MessageResult.normal(exchangeInfoMessage);
                 break;
             case "ExQuery":
-                ExchangeQueryMessage exchangeQueryMessage = param.toJavaObject(ExchangeQueryMessage.class);
+                ExchangeQueryMessage exchangeQueryMessage = param.mapTo(ExchangeQueryMessage.class);
                 exchangeQueryMessage.requestID = requestID;
                 result = WebSocketService.MessageResult.normal(exchangeQueryMessage);
         }

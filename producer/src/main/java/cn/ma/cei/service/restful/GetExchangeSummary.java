@@ -6,11 +6,10 @@
 package cn.ma.cei.service.restful;
 
 import cn.ma.cei.service.IRestfulHandler;
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
 import io.vertx.core.buffer.Buffer;
 import io.vertx.core.http.HttpMethod;
 import io.vertx.core.http.HttpServerRequest;
+import io.vertx.core.json.JsonObject;
 import io.vertx.ext.web.Router;
 import java.util.LinkedList;
 import java.util.List;
@@ -27,41 +26,41 @@ public class GetExchangeSummary implements IRestfulHandler {
 
     @Override
     public String handle(HttpServerRequest request, Buffer body) {
-        JSONObject data = new JSONObject();
+        JsonObject data = new JsonObject();
         data.put("status", "ok");
-        JSONObject exchang1 = new JSONObject();
+        JsonObject exchang1 = new JsonObject();
         exchang1.put("name", "binance");
 
-        JSONObject exchang2 = new JSONObject();
+        JsonObject exchang2 = new JsonObject();
         exchang2.put("name", "huobipro");
 
-        JSONObject exchang3 = new JSONObject();
+        JsonObject exchang3 = new JsonObject();
         exchang3.put("name", "cei");
         List<String> models = new LinkedList<>();
         models.add("Symbol");
         models.add("LastTrade");
 
-        JSONObject huobiClient = new JSONObject();
+        JsonObject huobiClient = new JsonObject();
         huobiClient.put("name", "huobiClient");
         List<String> restfuls = new LinkedList<>();
         restfuls.add("getSymbols");
         restfuls.add("getLastTrade");
         huobiClient.put("restfuls", restfuls);
-        List<JSONObject> clients = new LinkedList<>();
+        List<JsonObject> clients = new LinkedList<>();
         clients.add(huobiClient);
-        JSONObject binanceClient = new JSONObject();
+        JsonObject binanceClient = new JsonObject();
         binanceClient.put("name", "binanceClient");
         clients.add(binanceClient);
 
         exchang3.put("models", models);
         exchang3.put("client", clients);
 
-        List<JSONObject> exchangeList = new LinkedList<>();
+        List<JsonObject> exchangeList = new LinkedList<>();
         exchangeList.add(exchang1);
         exchangeList.add(exchang2);
         exchangeList.add(exchang3);
 
         data.put("exchanges", exchangeList);
-        return JSON.toJSONString(data);
+        return data.toString();
     }
 }

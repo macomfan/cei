@@ -2,8 +2,8 @@ package cn.ma.cei.xml;
 
 import cn.ma.cei.exception.CEIException;
 import cn.ma.cei.finalizer.TypeAlias;
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
+import io.vertx.core.json.JsonArray;
+import io.vertx.core.json.JsonObject;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
@@ -12,9 +12,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 public class JsonToXml implements IXmlJsonConverter {
-    private JSONObject jsonObject;
+    private JsonObject jsonObject;
 
-    public JsonToXml(JSONObject jsonObject) {
+    public JsonToXml(JsonObject jsonObject) {
         this.jsonObject = jsonObject;
     }
 
@@ -33,7 +33,7 @@ public class JsonToXml implements IXmlJsonConverter {
     @Override
     public void doAttribute(Object xmlObject, Field item) {
         try {
-            item.set(xmlObject, jsonObject.get("_" + item.getName()));
+            item.set(xmlObject, jsonObject.getValue("_" + item.getName()));
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         }
@@ -41,7 +41,7 @@ public class JsonToXml implements IXmlJsonConverter {
 
     @Override
     public void doObject(Object xmlObject, Field item) {
-        JSONObject newJsonObject = jsonObject.getJSONObject("o_" + item.getName());
+        JsonObject newJsonObject = jsonObject.getJsonObject("o_" + item.getName());
         if (newJsonObject == null) {
             // No data in json, ignore
             return;
@@ -68,7 +68,7 @@ public class JsonToXml implements IXmlJsonConverter {
     @Override
     public void doList(Object xmlObject, Field item) {
         try {
-            JSONArray jsonArray = jsonObject.getJSONArray("a_" + item.getName());
+            JsonArray jsonArray = jsonObject.getJsonArray("a_" + item.getName());
             if (jsonArray == null) {
                 // No data in json. ignore.
                 return;
@@ -89,9 +89,9 @@ public class JsonToXml implements IXmlJsonConverter {
             Collection finalList = list;
             jsonArray.forEach((jsonObject) -> {
                 try {
-                    String typeName = ((JSONObject)jsonObject).getString("type");
+                    String typeName = ((JsonObject)jsonObject).getString("type");
                     Object newItemObject = Class.forName(TypeAlias.getClassNameByAlias(typeName)).newInstance();
-                    JsonToXml jsonToXml = new JsonToXml((JSONObject)jsonObject);
+                    JsonToXml jsonToXml = new JsonToXml((JsonObject) jsonObject);
                     Convert.doConvert(jsonToXml, newItemObject);
                     finalList.add(newItemObject);
                 } catch (Exception e) {
@@ -101,6 +101,5 @@ public class JsonToXml implements IXmlJsonConverter {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
     }
 }

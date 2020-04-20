@@ -1,11 +1,13 @@
 package cn.ma.cei;
 
 import cn.ma.cei.exception.CEIErrors;
+import cn.ma.cei.finalizer.XMLDatabase;
 import cn.ma.cei.generator.BuildSDK;
 import cn.ma.cei.langs.cpp.CppFramework;
 import cn.ma.cei.langs.golang.GoFramework;
 import cn.ma.cei.langs.java.JavaFramework;
 import cn.ma.cei.langs.python3.Python3Framework;
+import cn.ma.cei.model.xSDK;
 import cn.ma.cei.service.Service;
 import cn.ma.cei.service.messages.ExchangeInfoMessage;
 import cn.ma.cei.service.messages.ExchangeQueryMessage;
@@ -15,6 +17,9 @@ import cn.ma.cei.service.restful.GetExchangeSummary;
 import cn.ma.cei.service.restful.StaticPage;
 import cn.ma.cei.service.websocket.OperationHandler;
 import cn.ma.cei.utils.Checker;
+import cn.ma.cei.xml.Convert;
+import cn.ma.cei.xml.JsonToXml;
+import cn.ma.cei.xml.XmlToJson;
 import io.vertx.core.cli.CLI;
 import io.vertx.core.cli.CommandLine;
 import io.vertx.core.cli.UsageMessageFormatter;
@@ -119,6 +124,17 @@ public class Main {
         BuildSDK.registerFramework(new CppFramework());
         BuildSDK.registerFramework(new Python3Framework());
         BuildSDK.registerFramework(new GoFramework());
+        BuildSDK.build("C:\\dev\\cei\\exchanges", "java", "C:\\dev\\cei\\output");
+        xSDK sdk = XMLDatabase.getSDK("test");
+        XmlToJson xmlToJson = new XmlToJson();
+        Convert.doConvert(xmlToJson, sdk);
+        System.out.println(xmlToJson.toJsonString());
+        JsonToXml jsonToXml = new JsonToXml(xmlToJson.getJsonObject());
+        xSDK test = new xSDK();
+        Convert.doConvert(jsonToXml, test);
+        XmlToJson xmlToJson2 = new XmlToJson();
+        Convert.doConvert(xmlToJson2, test);
+        System.out.println(xmlToJson2.toJsonString());
     }
 
     public void showHelp() {

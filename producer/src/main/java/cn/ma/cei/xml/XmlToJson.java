@@ -2,16 +2,16 @@ package cn.ma.cei.xml;
 
 import cn.ma.cei.exception.CEIException;
 import cn.ma.cei.finalizer.TypeAlias;
-import com.alibaba.fastjson.JSONObject;
+import io.vertx.core.json.JsonObject;
 
 import java.lang.reflect.Field;
 import java.util.LinkedList;
 import java.util.List;
 
 public class XmlToJson implements IXmlJsonConverter {
-    private JSONObject jsonObject = new JSONObject();
+    private JsonObject jsonObject = new JsonObject();
 
-    public JSONObject getJsonObject() {
+    public JsonObject getJsonObject() {
         return jsonObject;
     }
 
@@ -24,7 +24,9 @@ public class XmlToJson implements IXmlJsonConverter {
     public void doAttribute(Object xmlObject, Field item) {
         try {
             item.setAccessible(true);
-            jsonObject.put("_" + item.getName(), item.get(xmlObject));
+            if (item.get(xmlObject) != null) {
+                jsonObject.put("_" + item.getName(), item.get(xmlObject));
+            }
         } catch (Exception e) {
             throw new CEIException("[XmlToJson] Failed to do attribute: " + item.getName());
         }
@@ -48,7 +50,7 @@ public class XmlToJson implements IXmlJsonConverter {
     @Override
     public void doList(Object xmlObject, Field item) {
         try {
-            List<JSONObject> res = new LinkedList<>();
+            List<JsonObject> res = new LinkedList<>();
             List<?> list = (List<?>) item.get(xmlObject);
             if (list == null) {
                 return;
@@ -65,6 +67,6 @@ public class XmlToJson implements IXmlJsonConverter {
     }
 
     public String toJsonString() {
-        return jsonObject.toJSONString();
+        return jsonObject.toString();
     }
 }
