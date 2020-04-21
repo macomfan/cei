@@ -29,6 +29,6 @@ public class xGetRequestInfo extends xDataProcessorItem {
     public void customCheck() {
         super.customCheck();
         checkMemberNotNull(info, "info");
-        checkMemberNotNull(name, "output");
+        checkMemberNotNull(name, "name");
     }
 }

@@ -11,12 +11,6 @@ import cn.ma.cei.utils.Checker;
 public class BuildGetRequestInfo extends DataProcessorBase<xGetRequestInfo> {
     @Override
     public Variable build(xGetRequestInfo item, IDataProcessorBuilder builder) {
-        if (Checker.isEmpty(item.name)) {
-            throw new CEIException("[BuildSignature] output must be defined for GetRequestInfo");
-        }
-        if (Checker.isEmpty(item.info)) {
-            throw new CEIException("[BuildSignature] info must be defined for GetRequestInfo");
-        }
         Variable output = createUserVariable(xString.inst.getType(), item.name);
         Variable requestVariable = queryVariable("{request}");
 
