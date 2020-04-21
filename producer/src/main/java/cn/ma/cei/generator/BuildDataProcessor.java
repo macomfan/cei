@@ -11,10 +11,7 @@ import cn.ma.cei.model.authentication.xGetRequestInfo;
 import cn.ma.cei.model.base.xDataProcessorItem;
 import cn.ma.cei.model.json.xJsonBuilder;
 import cn.ma.cei.model.json.xJsonParser;
-import cn.ma.cei.model.processor.xBase64;
-import cn.ma.cei.model.processor.xGetNow;
-import cn.ma.cei.model.processor.xHmacSHA256;
-import cn.ma.cei.model.processor.xURLEscape;
+import cn.ma.cei.model.processor.*;
 import cn.ma.cei.model.string.xStringBuilder;
 import cn.ma.cei.model.xProcedure;
 import cn.ma.cei.utils.Checker;
@@ -43,6 +40,7 @@ public class BuildDataProcessor {
         processorMap.put(xJsonBuilder.class, new BuildJsonBuilder());
         processorMap.put(xStringBuilder.class, new BuildStringWrapper());
         processorMap.put(xURLEscape.class, new BuildURLEscape());
+        processorMap.put(xGZip.class, new BuildGZip());
     }
 
 
@@ -99,7 +97,7 @@ public class BuildDataProcessor {
             processSingleItem(item, defaultInput, builder);
         });
 
-        Variable result = GlobalContext.getCurrentMethod().getVariable(RegexHelper.isReference(resultVariableName));
+        Variable result = GlobalContext.getCurrentMethod().queryVariable(resultVariableName);
         if (result == null) {
             CEIErrors.showFailure(CEIErrorType.XML, "Cannot find the result variable: %s", RegexHelper.isReference(resultVariableName));
             return null;

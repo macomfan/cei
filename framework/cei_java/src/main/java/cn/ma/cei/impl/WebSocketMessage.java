@@ -15,6 +15,6 @@ public class WebSocketMessage {
     }
 
     public JsonWrapper getJson() {
-        return null;
+        return JsonWrapper.parseFromString(text);
     }
 }

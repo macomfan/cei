@@ -5,12 +5,15 @@ import javafx.util.Pair;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.zip.GZIPInputStream;
 
 public class CEIUtils {
     public enum Constant {
@@ -142,6 +145,27 @@ public class CEIUtils {
         } catch (Exception e) {
             throw new CEIException("hmacsha256 error");
         }
+    }
+
+    public static String gzip(byte[] input) {
+        try {
+            ByteArrayInputStream bais = new ByteArrayInputStream(input);
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            GZIPInputStream gis = new GZIPInputStream(bais);
+            int count;
+            byte[] data = new byte[1024];
+            while ((count = gis.read(data, 0, 1024)) != -1) {
+                baos.write(data, 0, count);
+            }
+            gis.close();
+            baos.flush();
+            baos.close();
+            bais.close();
+            return new String(baos.toByteArray());
+        } catch (Exception e) {
+
+        }
+        return "";
     }
 
     public static String base64(byte[] input) {

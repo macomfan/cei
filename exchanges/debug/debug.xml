@@ -7,56 +7,77 @@
     <definition document="debug"/>
 
     <models>
-        <model name="BestQuote">
-            <string name="status"/>
-            <string name="ch"/>
-            <int name="ts"/>
-            <decimal name="bestBidPrice"/>
-            <decimal name="bestBidAmount"/>
-            <decimal name="bestAskPrice"/>
-            <decimal name="bestAskAmount"/>
+        <model name="SimpleInfo">
+            <string name="Name"/>
+            <int name="Number"/>
+            <decimal name="Price"/>
+            <boolean name="Status"/>
         </model>
     </models>
 
     <clients>
-        <restful name="MarketClient">
-            <connection url="https://debug"/>
+        <websocket name="WSClient">
+            <connection>
+                <inputs>
+                    <string name="Channel"/>
+                    <string name="Name"/>
+                </inputs>
+                <url target="http://127.0.0.1:8888/websocket/{Channel}"/>
+                <on_connect>
+                    <send value="{login}">
+                        <procedure>
+                            <json_builder name="{login}">
+                                <json_value key="op" value="echo"/>
+                                <json_object key="param">
+                                    <json_value copy="Name"/>
+                                </json_object>
+                            </json_builder>
+                        </procedure>
+                    </send>
+                </on_connect>
+            </connection>
             <interfaces>
-                <interface name="getBestQuote">
+                <interface name="requestEcho">
                     <inputs>
-                        <string name="symbol"/>
+                        <string name="Name"/>
+                        <decimal name="Price"/>
+                        <int name="Number"/>
+                        <boolean name="Status"/>
                     </inputs>
-                    <request method="get" target="/market/depth">
-                        <query_strings>
-                            <query key="symbol" value="{symbol}"/>
-                            <query key="depth" value="5"/>
-                            <query key="type" value="step0"/>
-                        </query_strings>
-                    </request>
-                    <response>
-                        <json_parser model="BestQuote">
-                            <json_value copy="status"/>
-                            <json_value copy="ts"/>
-                            <json_object key="tick">
-                                <json_object key="bids">
-                                    <json_object key="[0]">
-                                        <json_value key="[0]" value="{bestBidPrice}"/>
-                                        <json_value key="[1]" value="{bestBidAmount}"/>
-                                    </json_object>
+                    <send value="{json}">
+                        <procedure>
+                            <json_builder name="{json}">
+                                <json_value key="op" value="echo"/>
+                                <json_object key="param">
+                                    <json_value key="Name" value="{Name}"/>
+                                    <json_value key="Price" value="{Price}"/>
+                                    <json_value key="Number" value="{Number}"/>
+                                    <json_value key="Status" value="{Status}"/>
                                 </json_object>
-                                <json_object key="asks">
-                                    <json_object key="[0]">
-                                        <json_value key="[0]" value="{bestAskPrice}"/>
-                                        <json_value key="[1]" value="{bestAskAmount}"/>
-                                    </json_object>
+                            </json_builder>
+                        </procedure>
+                    </send>
+                    <callback name="onEcho" persistent="false">
+                        <trigger>
+                            <json_checker>
+                                <json_checker_equal key="op" value="echo"/>
+                                <json_object key="param">
+                                    <json_checker_equal key="Name" value="{Name}"/>
                                 </json_object>
-                            </json_object>
-                            <json_value copy="ch"/>
-                        </json_parser>
-                    </response>
+                            </json_checker>
+                        </trigger>
+                        <response>
+                            <json_parser model="SimpleInfo">
+                                <json_value copy="Name"/>
+                                <json_value copy="Number"/>
+                                <json_value copy="Price"/>
+                                <json_value copy="Status"/>
+                            </json_parser>
+                        </response>
+                    </callback>
                 </interface>
             </interfaces>
-        </restful>
+        </websocket>
     </clients>
 
 </sdk>

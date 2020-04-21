@@ -94,6 +94,11 @@ public class GoDataProcessorBuilder implements IDataProcessorBuilder {
     }
 
     @Override
+    public void gzip(Variable output, Variable input) {
+
+    }
+
+    @Override
     public void addQueryString(Variable requestVariable, Variable key, Variable value) {
         method.addInvoke(requestVariable.getDescriptor() + ".AddQueryString", new GoVar(key), new GoVar(value));
     }

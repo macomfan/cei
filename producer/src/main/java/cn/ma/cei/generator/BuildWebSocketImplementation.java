@@ -3,6 +3,7 @@ package cn.ma.cei.generator;
 import cn.ma.cei.generator.builder.IDataProcessorBuilder;
 import cn.ma.cei.generator.builder.IJsonCheckerBuilder;
 import cn.ma.cei.generator.builder.IWebSocketImplementationBuilder;
+import cn.ma.cei.generator.dataprocessor.TypeConverter;
 import cn.ma.cei.model.base.xDataProcessorItem;
 import cn.ma.cei.model.json.xJsonParser;
 import cn.ma.cei.model.types.xString;
@@ -31,7 +32,6 @@ public class BuildWebSocketImplementation {
 
     public static void buildSendInAction(xSend send, Variable msg, IWebSocketImplementationBuilder builder) {
         Checker.isNull(builder, BuildWebSocketImplementation.class, "WebSocketImplementationBuilder");
-        // Variable sendVariable = BuildUserProcedure.createValueFromAttribute("value", send, builder);
         Variable sendVariable = BuildUserProcedure.createValueFromProcedure(xString.inst.getType(), send.value, send, builder);
         builder.send(sendVariable);
     }

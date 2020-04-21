@@ -36,7 +36,7 @@ public class BuildWebSocketConnection {
                 }));
             }
 
-            if (connection.onConnect.send != null) {
+            if (connection.onConnect != null && connection.onConnect.send != null) {
                 sMethod onConnect = connectMethod.createNestedMethod("onConnect");
                 GlobalContext.setCurrentMethod(onConnect);
                 Variable connectionVariable = onConnect.createInputVariable(WebSocketConnection.getType(), "connection");

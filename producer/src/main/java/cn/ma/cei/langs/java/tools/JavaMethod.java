@@ -71,6 +71,10 @@ public class JavaMethod {
         code.appendln("});");
     }
 
+    public void addReference(VariableType type) {
+        parent.addReference(type);
+    }
+
     public String newInstance(VariableType type, Variable... params) {
         parent.addReference(type);
         List<Variable> tmp = Arrays.asList(params);

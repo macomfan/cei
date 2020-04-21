@@ -10,6 +10,7 @@ public class EchoProcessor extends WebSocketMessageProcessor {
     @Override
     public <T extends WebSocketMessage> void process(T message, WebSocketClient client) {
         EchoMessage echoMessage = (EchoMessage)message;
+
         client.send(echoMessage.text);
     }
 }

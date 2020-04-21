@@ -28,11 +28,11 @@ public class TestVariable {
 
         Variable a = VariableCreator.createLocalVariable(modelA, "a");
         assertEquals("a", a.getDescriptor());
-        Variable ab = a.queryMember("b");
+        Variable ab = a.getMember("b");
         assertEquals("a.b", ab.getDescriptor());
-        Variable abc = ab.queryMember("c");
+        Variable abc = ab.getMember("c");
         assertEquals("a.b.c", abc.getDescriptor());
-        Variable abc_str_c = abc.queryMember("str_c");
+        Variable abc_str_c = abc.getMember("str_c");
         assertEquals("a.b.c.str_c", abc_str_c .getDescriptor());
     }
 }

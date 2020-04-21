@@ -95,4 +95,9 @@ public class Python3DataProcessorBuilder implements IDataProcessorBuilder {
         method.addAssign(method.defineVariable(output), method.invoke("CEIUtils.url_escape", input));
 
     }
+
+    @Override
+    public void gzip(Variable output, Variable input) {
+
+    }
 }

@@ -27,22 +27,52 @@ public class Python3JsonBuilderBuilder implements IJsonBuilderBuilder {
     }
 
     @Override
-    public void addJsonString(Variable from, Variable jsonObject, Variable itemName) {
-        method.addInvoke(jsonObject.getDescriptor() + ".add_json_string", itemName, from);
+    public void defineJsonObject(Variable jsonObject) {
+
     }
 
     @Override
-    public void addJsonDecimal(Variable from, Variable jsonObject, Variable itemName) {
-        method.addInvoke(jsonObject.getDescriptor() + ".add_json_number", itemName, from);
+    public void addJsonString(Variable from, Variable jsonObject, Variable key) {
+        method.addInvoke(jsonObject.getDescriptor() + ".add_json_string", key, from);
     }
 
     @Override
-    public void addJsonBoolean(Variable from, Variable jsonObject, Variable itemName) {
-        method.addInvoke(jsonObject.getDescriptor() + ".add_json_boolean", itemName, from);
+    public void addJsonDecimal(Variable value, Variable jsonObject, Variable key) {
+        method.addInvoke(jsonObject.getDescriptor() + ".add_json_number", key, value);
     }
 
     @Override
-    public void addJsonInt(Variable from, Variable jsonObject, Variable itemName) {
-        method.addInvoke(jsonObject.getDescriptor() + ".add_json_number", itemName, from);
+    public void addJsonBoolean(Variable value, Variable jsonObject, Variable key) {
+        method.addInvoke(jsonObject.getDescriptor() + ".add_json_boolean", key, value);
+    }
+
+    @Override
+    public void addJsonInt(Variable value, Variable jsonObject, Variable key) {
+        method.addInvoke(jsonObject.getDescriptor() + ".add_json_number", key, value);
+    }
+
+    @Override
+    public void addJsonStringArray(Variable value, Variable jsonObject, Variable key) {
+
+    }
+
+    @Override
+    public void addJsonIntegerArray(Variable value, Variable jsonObject, Variable key) {
+
+    }
+
+    @Override
+    public void addJsonDecimalArray(Variable value, Variable jsonObject, Variable key) {
+
+    }
+
+    @Override
+    public void addJsonBooleanArray(Variable value, Variable jsonObject, Variable key) {
+
+    }
+
+    @Override
+    public void addJsonObject(Variable value, Variable jsonObject, Variable key) {
+
     }
 }

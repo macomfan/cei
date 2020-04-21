@@ -42,12 +42,12 @@ public class sMethod {
         return method;
     }
 
-    public void setReturnType(VariableType returnType) {
-        this.returnType = returnType;
-    }
-
     public VariableType getReturnType() {
         return this.returnType;
+    }
+
+    public void setReturnType(VariableType returnType) {
+        this.returnType = returnType;
     }
 
     public String getName() {
@@ -106,7 +106,7 @@ public class sMethod {
         if (variableList.containsKey(variableName)) {
             return variableList.get(variableName);
         } else {
-            return self.queryMember(variableName);
+            return self.getMember(variableName);
         }
     }
 
@@ -128,24 +128,29 @@ public class sMethod {
     /***
      * Query the variable from the current method. the name should only be the variable name format, like {xxxx}.
      * If the name is not like {xxx}, report the error.
+     * If the name cannot be found, report the error.
      *
      * @param name the variable name, can be {xxx} or normal string.
      * @return the variable object
      */
     public Variable queryVariable(String name) {
         String variableName = RegexHelper.isReference(name);
-        if (variableName == null) {
-            CEIErrors.showFailure(CEIErrorType.XML, "No a variable name");
+        if (Checker.isEmpty(variableName)) {
+            CEIErrors.showFailure(CEIErrorType.XML, "%s is not a variable name", name);
         }
-        return tryGetVariable(variableName);
+        return innerQueryVariable(variableName);
     }
 
-    /***
+    /**
      * Query the variable from the current method. the name should only be the variable name format, like {xxxx}.
      * If the name is not like {xxx}, report the error.
+     * If the name cannot be found, report the error.
+     * After the query successfully, convert to the specified type.
      *
-     * @param name the variable name, can be {xxx} or normal string.
-     * @return the variable object
+     * @param name
+     * @param specType
+     * @param dataProcessorBuilder
+     * @return
      */
     public Variable queryVariable(String name, VariableType specType, IDataProcessorBuilder dataProcessorBuilder) {
         Variable res = queryVariable(name);
@@ -165,9 +170,9 @@ public class sMethod {
      * @param value the variable name, can be {xxx} or normal string.
      * @return the variable object
      */
-    public Variable queryUserDefinedValue(String value, IDataProcessorBuilder builder) {
+    public Variable queryVariableOrConstant(String value, IDataProcessorBuilder builder) {
         String variableName = RegexHelper.isReference(value);
-        if (variableName != null) {
+        if (!Checker.isEmpty(variableName)) {
             // The name is {xxx}
             return innerQueryVariable(variableName);
         }
@@ -184,10 +189,7 @@ public class sMethod {
             String formatString = value;
             int index = 0;
             for (String item : variableNames) {
-                Variable param = GlobalContext.getCurrentMethod().getVariable(item);
-                if (param == null) {
-                    CEIErrors.showFailure(CEIErrorType.XML, "Cannot find %s in the method %s", item, GlobalContext.getCurrentMethod().getName());
-                }
+                Variable param = GlobalContext.getCurrentMethod().tryGetVariable(item);
                 String formatEntity = builder.getStringFormatEntity(index++, param);
                 formatString = formatString.replaceFirst(Pattern.quote("{" + item + "}"), formatEntity);
                 variables.add(TypeConverter.convertType(param, xString.inst.getType(), builder));
@@ -195,7 +197,6 @@ public class sMethod {
             variables.add(0, GlobalContext.createStringConstant(formatString));
             Variable[] params = new Variable[variables.size()];
             variables.toArray(params);
-
             return builder.stringReplacement(params);
         }
     }
@@ -204,10 +205,11 @@ public class sMethod {
         String[] variableNames = name.split("\\.");
         if (variableNames.length == 0) {
             // TODO
+            // error case
         }
         Variable result = GlobalContext.getCurrentMethod().tryGetVariable(variableNames[0]);
         for (int i = 1; i < variableNames.length; i++) {
-            result = result.queryMember(variableNames[i]);
+            result = result.tryGetMember(variableNames[i]);
         }
         return result;
     }

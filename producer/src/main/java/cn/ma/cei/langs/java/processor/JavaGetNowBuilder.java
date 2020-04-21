@@ -2,6 +2,7 @@ package cn.ma.cei.langs.java.processor;
 
 import cn.ma.cei.generator.Variable;
 import cn.ma.cei.generator.builder.IGetNowBuilder;
+import cn.ma.cei.generator.buildin.CEIUtils;
 import cn.ma.cei.langs.java.tools.JavaMethod;
 
 
@@ -12,37 +13,6 @@ public class JavaGetNowBuilder implements IGetNowBuilder {
     public JavaGetNowBuilder(JavaMethod method) {
         this.method = method;
     }
-
-    @Override
-    public String convertToStringFormat(String format) {
-
-        if ("Unix_s".equals(format) || "Unix_ms".equals(format)) {
-            return format;
-        } else {
-            StringBuilder javaTimeFormatSting = new StringBuilder();
-            String[] items = format.split("\\%");
-            for (int i = 0; i<items.length; i++) {
-                if (i == 0) {
-                    if (!"".equals(items[i])) {
-                        javaTimeFormatSting.append('\'');
-                        javaTimeFormatSting.append(items[i]);
-                        javaTimeFormatSting.append('\'');
-                    }
-                }
-                else {
-                    javaTimeFormatSting.append(processSingleTimeFormatSyntax("%" + items[i]));
-                }
-            }
-            return javaTimeFormatSting.toString();
-        }
-    }
-
-    @Override
-    public void getNow(Variable output, Variable format) {
-        method.addAssign(method.defineVariable(output), method.invoke("CEIUtils.getNow", format));
-    }
-
-
 
     private static String processSingleTimeFormatSyntax(String input) {
         if (input == null || input.isEmpty() || input.charAt(0) != '%') {
@@ -91,8 +61,7 @@ public class JavaGetNowBuilder implements IGetNowBuilder {
             // TODO
             // Cannot process
             System.err.println("Cannot support " + commandString);
-        }
-        else {
+        } else {
             if (normalString.length() > 0) {
                 res.append('\'');
                 res.append(normalString.toString());
@@ -100,5 +69,33 @@ public class JavaGetNowBuilder implements IGetNowBuilder {
             }
         }
         return res.toString();
+    }
+
+    @Override
+    public String convertToStringFormat(String format) {
+        if ("Unix_s".equals(format) || "Unix_ms".equals(format)) {
+            return format;
+        } else {
+            StringBuilder javaTimeFormatSting = new StringBuilder();
+            String[] items = format.split("\\%");
+            for (int i = 0; i < items.length; i++) {
+                if (i == 0) {
+                    if (!"".equals(items[i])) {
+                        javaTimeFormatSting.append('\'');
+                        javaTimeFormatSting.append(items[i]);
+                        javaTimeFormatSting.append('\'');
+                    }
+                } else {
+                    javaTimeFormatSting.append(processSingleTimeFormatSyntax("%" + items[i]));
+                }
+            }
+            return javaTimeFormatSting.toString();
+        }
+    }
+
+    @Override
+    public void getNow(Variable output, Variable format) {
+        method.addReference(CEIUtils.getType());
+        method.addAssign(method.defineVariable(output), method.invoke("CEIUtils.getNow", format));
     }
 }

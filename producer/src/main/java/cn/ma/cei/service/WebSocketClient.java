@@ -30,7 +30,8 @@ public class WebSocketClient {
     }
 
     public void send(String text) {
-
+        System.err.println("Send " + text);
+        ws.writeTextMessage(text);
     }
 
     public void onClose() {

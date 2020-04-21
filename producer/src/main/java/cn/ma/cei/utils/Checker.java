@@ -17,7 +17,6 @@ import java.util.List;
  * @author u0151316
  */
 public class Checker {
-
     public static <T> T checkBuilder(T builder, Class<?> creator, String description) {
         if (builder == null) {
             CEIErrors.showCodeFailure(creator, "%s is null.", description);

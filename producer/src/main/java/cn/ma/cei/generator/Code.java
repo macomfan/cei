@@ -98,7 +98,6 @@ public class Code {
 
     @FunctionalInterface
     public interface Block {
-
         void inBlock();
     }
 

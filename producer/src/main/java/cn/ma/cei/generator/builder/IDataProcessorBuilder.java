@@ -24,6 +24,8 @@ public interface IDataProcessorBuilder {
 
     void URLEscape(Variable output, Variable input);
 
+    void gzip(Variable output, Variable input);
+
     /***
      * Return the statement of converting the json wrapper to string;
      * e.g.

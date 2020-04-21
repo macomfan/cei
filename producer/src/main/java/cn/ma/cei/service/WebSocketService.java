@@ -104,6 +104,7 @@ public class WebSocketService {
         server.websocketHandler(webSocket -> {
             IWebSocketHandler handler = channelHandlerMap.getOrDefault(webSocket.path(), null);
             if (handler == null) {
+                System.out.println(String.format("Client connected and rejected by path %s", webSocket.path()));
                 webSocket.reject();
                 return;
             }

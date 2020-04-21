@@ -8,14 +8,9 @@ import cn.ma.cei.generator.Variable;
 import cn.ma.cei.generator.VariableType;
 import cn.ma.cei.generator.builder.IDataProcessorBuilder;
 import cn.ma.cei.generator.builder.IJsonBuilderBuilder;
-import cn.ma.cei.generator.builder.IJsonCheckerBuilder;
-import cn.ma.cei.generator.builder.IJsonParserBuilder;
 import cn.ma.cei.generator.buildin.JsonWrapper;
 import cn.ma.cei.model.json.*;
-import cn.ma.cei.model.types.xBoolean;
-import cn.ma.cei.model.types.xDecimal;
-import cn.ma.cei.model.types.xInt;
-import cn.ma.cei.model.types.xString;
+import cn.ma.cei.model.types.*;
 import cn.ma.cei.utils.Checker;
 
 public class BuildJsonBuilder extends DataProcessorBase<xJsonBuilder> {
@@ -24,7 +19,6 @@ public class BuildJsonBuilder extends DataProcessorBase<xJsonBuilder> {
         Variable currentJsonObject = null;
         IJsonBuilderBuilder jsonBuilderBuilder = null;
     }
-
 
     @Override
     public Variable build(xJsonBuilder jsonBuilder, IDataProcessorBuilder builder) {
@@ -43,53 +37,161 @@ public class BuildJsonBuilder extends DataProcessorBase<xJsonBuilder> {
             newContext.currentJsonObject = jsonObject;
             newContext.jsonBuilderBuilder = jsonBuilderBuilder;
             processJsonItem(newContext);
-
-            Variable from = getFromVariable(item);
-            if (from == null) {
-                throw new CEIException("[BuildJsonBuilder] cannot process from");
-            }
-            Variable to = BuilderContext.createStringConstant(item.key);
-
-            if (item instanceof xJsonValue) {
-                if (from.getType() == xString.inst.getType()) {
-                    jsonBuilderBuilder.addJsonString(from, jsonObject, to);
-                } else if (from.getType() == xDecimal.inst.getType()) {
-                    jsonBuilderBuilder.addJsonDecimal(from, jsonObject, to);
-                } else if (from.getType() == xBoolean.inst.getType()) {
-                    jsonBuilderBuilder.addJsonBoolean(from, jsonObject, to);
-                } else if (from.getType() == xInt.inst.getType()) {
-                    jsonBuilderBuilder.addJsonInt(from, jsonObject, to);
-                }
-                // TODO
-            } else if (item instanceof xJsonString) {
-                jsonBuilderBuilder.addJsonString(from, jsonObject, to);
-            } else if (item instanceof xJsonInteger) {
-                jsonBuilderBuilder.addJsonInt(from, jsonObject, to);
-            } else if (item instanceof xJsonBoolean) {
-                jsonBuilderBuilder.addJsonBoolean(from, jsonObject, to);
-            } else if (item instanceof xJsonDecimal) {
-                jsonBuilderBuilder.addJsonDecimal(from, jsonObject, to);
-            }
         }));
 
         return jsonObject;
     }
 
     private void processJsonItem(JsonItemContext context) {
-        if (context.currentItem.copy != null && (context.currentItem.key != null || context.currentItem.value != null)) {
-            CEIErrors.showXMLFailure(context.currentItem, " key, value cannot exist with copy.");
-        } else if (context.currentItem.copy != null) {
-            context.currentItem.key = context.currentItem.copy;
-            context.currentItem.value = "{" + context.currentItem.copy + "}";
-            context.currentItem.copy = null;
+        Variable value = getValueVariable(context.currentItem);
+
+        if (context.currentItem instanceof xJsonValue) {
+            processJsonValue(value, context);
+        } else if (context.currentItem instanceof xJsonObject) {
+            processJsonObject(value, context);
+        } else if (context.currentItem instanceof xJsonObjectForEach) {
+            processJsonObjectForEach(value, context);
+        } else {
+            if (value == null) {
+                throw new CEIException("[BuildJsonParser] value cannot be null for basic type");
+            }
+            if (context.currentItem instanceof xJsonString) {
+                assignJsonString(value, context);
+            } else if (context.currentItem instanceof xJsonInteger) {
+                assignJsonInt(value, context);
+            } else if (context.currentItem instanceof xJsonBoolean) {
+                assignJsonBoolean(value, context);
+            } else if (context.currentItem instanceof xJsonDecimal) {
+                assignJsonDecimal(value, context);
+            } else if (context.currentItem instanceof xJsonStringArray) {
+                assignJsonStringArray(value, context);
+            } else if (context.currentItem instanceof xJsonDecimalArray) {
+                assignJsonDecimalArray(value, context);
+            } else if (context.currentItem instanceof xJsonIntArray) {
+                assignJsonIntArray(value, context);
+            } else if (context.currentItem instanceof xJsonBooleanArray) {
+                assignJsonBooleanArray(value, context);
+            }
         }
     }
 
-    private Variable getFromVariable(xJsonType jsonItem) {
-        if (jsonItem.key != null && !jsonItem.key.equals("")) {
-            return queryVariableOrConstant(jsonItem.value);
+    private void processJsonValue(Variable value, JsonItemContext context) {
+        if (value == null) {
+            throw new CEIException("[BuildJsonParser] value cannot be null for basic type");
         }
-        return null;
+        if (value.getType().equalTo(xString.typeName)) {
+            assignJsonString(value, context);
+        } else if (value.getType().equalTo(xInt.typeName)) {
+            assignJsonInt(value, context);
+        } else if (value.getType().equalTo(xBoolean.typeName)) {
+            assignJsonBoolean(value, context);
+        } else if (value.getType().equalTo(xDecimal.typeName)) {
+            assignJsonDecimal(value, context);
+        } else if (value.getType().equalTo(xStringArray.typeName)) {
+            assignJsonStringArray(value, context);
+        } else if (value.getType().equalTo(xDecimalArray.typeName)) {
+            assignJsonDecimalArray(value, context);
+        } else if (value.getType().equalTo(xBooleanArray.typeName)) {
+            assignJsonBooleanArray(value, context);
+        } else if (value.getType().equalTo(xIntArray.typeName)) {
+            assignJsonIntArray(value, context);
+        } else {
+            throw new CEIException("[BuildJsonParser] json_value only support the basic type");
+        }
+    }
+
+    private void processJsonObject(Variable value, JsonItemContext context) {
+        xJsonWithModel jsonWithModel = (xJsonWithModel) context.currentItem;
+        Variable key = getKeyVariable(jsonWithModel.key);
+        Variable newJsonObject = defineJsonObject(context);
+        context.jsonBuilderBuilder.defineJsonObject(newJsonObject);
+
+        jsonWithModel.itemList.forEach(item -> item.doBuild(() -> {
+            JsonItemContext newContext = new JsonItemContext();
+            newContext.currentItem = item;
+            newContext.currentJsonObject = newJsonObject;
+            newContext.jsonBuilderBuilder = context.jsonBuilderBuilder;
+            processJsonItem(newContext);
+        }));
+
+        context.jsonBuilderBuilder.addJsonObject(newJsonObject, context.currentJsonObject, key);
+    }
+
+    private void processJsonObjectForEach(Variable to, JsonItemContext context) {
+        xJsonWithModel jsonWithModel = (xJsonWithModel) context.currentItem;
+        Variable newJsonObject = defineJsonObject(context);
+        if (!Checker.isEmpty(jsonWithModel.key)) {
+            Variable key = getKeyVariable(jsonWithModel.key);
+            context.jsonBuilderBuilder.defineJsonObject(newJsonObject);
+        }
+//        Variable eachItemJsonObject = createTempVariable(JsonWrapper.getType(), "item");
+//        context.jsonBuilderBuilder.startJsonObjectArray(eachItemJsonObject, newJsonObject);
+//        Variable newModel = defineModel(context);
+//
+//        jsonWithModel.itemList.forEach((item) -> item.doBuild(() -> {
+//            BuildJsonParser.JsonItemContext newContext = new BuildJsonParser.JsonItemContext();
+//            newContext.currentItem = item;
+//            newContext.parentModel = newModel;
+//            newContext.parentJsonObject = eachItemJsonObject;
+//            newContext.jsonParserBuilder = context.jsonParserBuilder;
+//            processJsonItem(newContext);
+//        }));
+//        context.jsonParserBuilder.endJsonObjectArray(to, newModel);
+    }
+
+    private void assignJsonString(Variable value, JsonItemContext context) {
+        context.jsonBuilderBuilder.addJsonString(value, context.currentJsonObject, getKeyVariable(context.currentItem.key));
+    }
+    private void assignJsonInt(Variable value, JsonItemContext context) {
+        context.jsonBuilderBuilder.addJsonInt(value, context.currentJsonObject, getKeyVariable(context.currentItem.key));
+    }
+
+    private void assignJsonDecimal(Variable value, JsonItemContext context) {
+        context.jsonBuilderBuilder.addJsonDecimal(value, context.currentJsonObject, getKeyVariable(context.currentItem.key));
+    }
+
+    private void assignJsonBoolean(Variable value, JsonItemContext context) {
+        context.jsonBuilderBuilder.addJsonBoolean(value, context.currentJsonObject, getKeyVariable(context.currentItem.key));
+    }
+
+    private void assignJsonStringArray(Variable value, JsonItemContext context) {
+        context.jsonBuilderBuilder.addJsonStringArray(value, context.currentJsonObject, getKeyVariable(context.currentItem.key));
+    }
+
+    private void assignJsonBooleanArray(Variable value, JsonItemContext context) {
+        context.jsonBuilderBuilder.addJsonBooleanArray(value, context.currentJsonObject, getKeyVariable(context.currentItem.key));
+    }
+
+    private void assignJsonDecimalArray(Variable value, JsonItemContext context) {
+        context.jsonBuilderBuilder.addJsonDecimalArray(value, context.currentJsonObject, getKeyVariable(context.currentItem.key));
+    }
+
+    private void assignJsonIntArray(Variable value, JsonItemContext context) {
+        context.jsonBuilderBuilder.addJsonIntegerArray(value, context.currentJsonObject, getKeyVariable(context.currentItem.key));
+    }
+
+    private Variable getKeyVariable(String key) {
+        if (Checker.isEmpty(key)) {
+            CEIErrors.showCodeFailure(this.getClass(), "Key cannot be null");
+        }
+        return BuilderContext.createStringConstant(key);
+    }
+
+    private Variable getValueVariable(xJsonType jsonItem) {
+        if (!Checker.isEmpty(jsonItem.value)) {
+            return queryVariableOrConstant(jsonItem.value);
+        } else {
+            return null;
+        }
+    }
+
+    private Variable defineJsonObject(JsonItemContext context) {
+        xJsonWithModel jsonWithModel = (xJsonWithModel) context.currentItem;
+        if (Checker.isEmpty(jsonWithModel.key)) {
+            // If key is null, use the parent json object
+            return context.currentJsonObject;
+        }
+        return createTempVariable(JsonWrapper.getType(), "obj");
     }
 
     @Override

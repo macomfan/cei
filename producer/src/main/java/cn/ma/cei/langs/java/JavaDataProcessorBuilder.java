@@ -3,6 +3,7 @@ package cn.ma.cei.langs.java;
 import cn.ma.cei.generator.BuilderContext;
 import cn.ma.cei.generator.Variable;
 import cn.ma.cei.generator.builder.*;
+import cn.ma.cei.generator.buildin.CEIUtils;
 import cn.ma.cei.langs.java.processor.JavaGetNowBuilder;
 import cn.ma.cei.langs.java.processor.JavaJsonBuilderBuilder;
 import cn.ma.cei.langs.java.processor.JavaJsonParserBuilder;
@@ -50,6 +51,7 @@ public class JavaDataProcessorBuilder implements IDataProcessorBuilder {
 
     @Override
     public Variable stringReplacement(Variable... items) {
+        method.addReference(CEIUtils.getType());
         return BuilderContext.createStatement(method.invoke("CEIUtils.stringReplace", items));
     }
 
@@ -97,5 +99,10 @@ public class JavaDataProcessorBuilder implements IDataProcessorBuilder {
     @Override
     public void URLEscape(Variable output, Variable input) {
         method.addAssign(method.defineVariable(output), method.invoke("CEIUtils.urlEscape", input));
+    }
+
+    @Override
+    public void gzip(Variable output, Variable input) {
+        method.addAssign(method.defineVariable(output), method.invoke("CEIUtils.gzip", input));
     }
 }

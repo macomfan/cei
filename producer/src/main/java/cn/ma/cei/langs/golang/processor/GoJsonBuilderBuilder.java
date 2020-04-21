@@ -29,23 +29,53 @@ public class GoJsonBuilderBuilder implements IJsonBuilderBuilder {
     }
 
     @Override
-    public void addJsonString(Variable from, Variable jsonObject, Variable itemName) {
-        method.addInvoke(jsonObject.getDescriptor() + ".AddJsonString", new GoVar(itemName), new GoVar(from));
+    public void defineJsonObject(Variable jsonObject) {
+
     }
 
     @Override
-    public void addJsonDecimal(Variable from, Variable jsonObject, Variable itemName) {
-        method.addInvoke(jsonObject.getDescriptor() + ".AddJsonNumber", new GoVar(itemName), new GoVar(from));
+    public void addJsonString(Variable from, Variable jsonObject, Variable key) {
+        method.addInvoke(jsonObject.getDescriptor() + ".AddJsonString", new GoVar(key), new GoVar(from));
+    }
+
+    @Override
+    public void addJsonDecimal(Variable value, Variable jsonObject, Variable key) {
+        method.addInvoke(jsonObject.getDescriptor() + ".AddJsonNumber", new GoVar(key), new GoVar(value));
     }
 
 
     @Override
-    public void addJsonBoolean(Variable from, Variable jsonObject, Variable itemName) {
-        method.addInvoke(jsonObject.getDescriptor() + ".AddJsonBoolean", new GoVar(itemName), new GoVar(from));
+    public void addJsonBoolean(Variable value, Variable jsonObject, Variable key) {
+        method.addInvoke(jsonObject.getDescriptor() + ".AddJsonBoolean", new GoVar(key), new GoVar(value));
     }
 
     @Override
-    public void addJsonInt(Variable from, Variable jsonObject, Variable itemName) {
+    public void addJsonInt(Variable value, Variable jsonObject, Variable key) {
+
+    }
+
+    @Override
+    public void addJsonStringArray(Variable value, Variable jsonObject, Variable key) {
+
+    }
+
+    @Override
+    public void addJsonIntegerArray(Variable value, Variable jsonObject, Variable key) {
+
+    }
+
+    @Override
+    public void addJsonDecimalArray(Variable value, Variable jsonObject, Variable key) {
+
+    }
+
+    @Override
+    public void addJsonBooleanArray(Variable value, Variable jsonObject, Variable key) {
+
+    }
+
+    @Override
+    public void addJsonObject(Variable value, Variable jsonObject, Variable key) {
 
     }
 

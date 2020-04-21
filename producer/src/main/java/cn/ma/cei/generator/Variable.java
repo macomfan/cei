@@ -96,15 +96,15 @@ public class Variable {
         this.position = position;
     }
 
-    public Variable tryQueryMember(String name) {
-        Variable member = queryMember(name);
+    public Variable tryGetMember(String name) {
+        Variable member = getMember(name);
         if (member == null) {
             CEIErrors.showFailure(CEIErrorType.XML, "Cannot find member: \"%s\" in model: \"%s\"", name, this.getType().getName());
         }
         return member;
     }
 
-    public Variable queryMember(String name) {
+    public Variable getMember(String name) {
         Variable member = type.getMember(name);
         if (member == null) {
             return null;

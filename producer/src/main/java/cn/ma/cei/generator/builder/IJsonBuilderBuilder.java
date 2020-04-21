@@ -8,30 +8,57 @@ package cn.ma.cei.generator.builder;
 import cn.ma.cei.generator.Variable;
 
 /**
- *
  * @author u0151316
  */
 public interface IJsonBuilderBuilder {
 
     void defineRootJsonObject(Variable jsonObject);
-    
-    void addJsonString(Variable from, Variable jsonObject, Variable itemName);
-    
-    void addJsonDecimal(Variable from, Variable jsonObject, Variable itemName);
-    
-    void addJsonBoolean(Variable from, Variable jsonObject, Variable itemName);
 
-    void addJsonInt(Variable from, Variable jsonObject, Variable itemName);
+    /**
+     * For create new json object
+     * e.g.
+     * JsonWrapper jsonObject = new JsonWrapper()
+     *
+     * @param jsonObject
+     */
+    void defineJsonObject(Variable jsonObject);
 
-//    public abstract void addJsonObject(Variable from, Variable jsonObject, Variable itemName);
+    /**
+     * Add string value to the jsonObject.
+     * e.g.
+     * jsonObject.addString(key, value)
+     *
+     * @param value      the value to be set to the json object
+     * @param jsonObject the current json object
+     * @param key        the string of key name
+     */
+    void addJsonString(Variable value, Variable jsonObject, Variable key);
+
+    void addJsonDecimal(Variable value, Variable jsonObject, Variable key);
+
+    void addJsonBoolean(Variable value, Variable jsonObject, Variable key);
+
+    void addJsonInt(Variable value, Variable jsonObject, Variable key);
+
+    //    public abstract void addJsonObject(Variable value, Variable jsonObject, Variable key);
 //
-//    public abstract void addJsonObjectArray(Variable from, Variable jsonObject, Variable itemName);
+//    public abstract void addJsonObjectArray(Variable value, Variable jsonObject, Variable key);
 //
-//    public abstract void addJsonStringArray(Variable from, Variable jsonObject, Variable itemName);
-//
-//    public abstract void addJsonIntegerArray(Variable from, Variable jsonObject, Variable itemName);
-//
-//    public abstract void addJsonDecimalArray(Variable from, Variable jsonObject, Variable itemName);
-//
-//    public abstract void addJsonBooleanArray(Variable from, Variable jsonObject, Variable itemName);
+    void addJsonStringArray(Variable value, Variable jsonObject, Variable key);
+
+    void addJsonIntegerArray(Variable value, Variable jsonObject, Variable key);
+
+    void addJsonDecimalArray(Variable value, Variable jsonObject, Variable key);
+
+    void addJsonBooleanArray(Variable value, Variable jsonObject, Variable key);
+
+    /**
+     * Add a json object to current json object.
+     * e.g.
+     * jsonObject.addJsonObject(key, value);
+     *
+     * @param value
+     * @param key
+     */
+    void addJsonObject(Variable value, Variable jsonObject, Variable key);
 }

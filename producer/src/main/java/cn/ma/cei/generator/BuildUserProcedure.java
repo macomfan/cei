@@ -1,17 +1,11 @@
 package cn.ma.cei.generator;
 
 import cn.ma.cei.exception.CEIErrors;
-import cn.ma.cei.exception.CEIException;
 import cn.ma.cei.generator.builder.IDataProcessorBuilder;
 import cn.ma.cei.generator.builder.IMethodBuilder;
 import cn.ma.cei.generator.dataprocessor.TypeConverter;
 import cn.ma.cei.model.base.xItemWithProcedure;
-import cn.ma.cei.model.types.xString;
 import cn.ma.cei.utils.Checker;
-import cn.ma.cei.utils.RegexHelper;
-
-import java.util.LinkedList;
-import java.util.List;
 
 public class BuildUserProcedure {
 
@@ -41,7 +35,7 @@ public class BuildUserProcedure {
             // Build processor firstly.
             BuildDataProcessor.build(parent.procedure.items, null, value, dataProcessorBuilder);
         }
-        return GlobalContext.getCurrentMethod().queryUserDefinedValue(value, dataProcessorBuilder);
+        return GlobalContext.getCurrentMethod().queryVariableOrConstant(value, dataProcessorBuilder);
     }
 
 //    private static Variable createUserDefinedValue(String value, IDataProcessorBuilder builder) {

@@ -3,6 +3,7 @@ package cn.ma.cei.generator;
 import cn.ma.cei.exception.CEIException;
 import cn.ma.cei.generator.builder.IWebSocketInterfaceBuilder;
 import cn.ma.cei.generator.buildin.WebSocketCallback;
+import cn.ma.cei.model.types.xString;
 import cn.ma.cei.model.websocket.xCallback;
 import cn.ma.cei.model.websocket.xWSInterface;
 
@@ -40,7 +41,7 @@ public class BuildWebSocketInterface {
         }
         // Build send
         if (intf.send != null) {
-            Variable sendVariable = BuildUserProcedure.createValueFromProcedure(intf.send.value, intf.send, builder);
+            Variable sendVariable = BuildUserProcedure.createValueFromProcedure(xString.inst.getType(), intf.send.value, intf.send, builder);
             builder.send(sendVariable);
         }
         builder.endMethod();

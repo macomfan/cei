@@ -77,6 +77,13 @@ public class JsonWrapper {
         }
     }
 
+    public boolean contains(String name) {
+        if (jsonObject != null) {
+            return jsonObject.containsKey(name);
+        }
+        return false;
+    }
+
     public void addJsonString(String name, String value) {
         if (value == null) {
             return;
@@ -103,6 +110,15 @@ public class JsonWrapper {
             return;
         }
         jsonObject.put(name, value);
+    }
+
+    public void addJsonObject(String name, JsonWrapper jsonWrapper) {
+        if (jsonWrapper.jsonObject == null && jsonWrapper.jsonArray == null) {
+            throw new CEIException("Cannot add a null object to json object");
+        }
+        if (jsonObject != null) {
+            jsonObject.put(name, jsonWrapper.jsonObject);
+        }
     }
 
     private Object checkMandatoryField(String name) {

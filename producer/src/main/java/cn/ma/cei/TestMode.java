@@ -22,7 +22,7 @@ public class TestMode {
                 .registerRestful("/restful/post/echo", new Echo())
                 .registerRestful("/restful/post/authentication",  new Authentication());
 
-        service.registerWebSocket("/request", new RequestHandler());
+        service.registerWebSocket("/websocket/request", new RequestHandler());
 
         EchoMessage.setProcessor(new EchoProcessor());
 

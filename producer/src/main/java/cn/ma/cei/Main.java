@@ -125,7 +125,7 @@ public class Main {
         BuildSDK.registerFramework(new Python3Framework());
         BuildSDK.registerFramework(new GoFramework());
         BuildSDK.build("C:\\dev\\cei\\exchanges", "java", "C:\\dev\\cei\\output");
-        xSDK sdk = XMLDatabase.getSDK("test");
+        xSDK sdk = XMLDatabase.getSDK("debug");
         XmlToJson xmlToJson = new XmlToJson();
         Convert.doConvert(xmlToJson, sdk);
         System.out.println(xmlToJson.toJsonString());
@@ -172,7 +172,7 @@ public class Main {
     }
 
     private void runTest() {
-        BuildSDK.build("C:\\dev\\cei\\exchanges", "java", "C:\\dev\\cei\\output");
+        //BuildSDK.build("C:\\dev\\cei\\exchanges", "java", "C:\\dev\\cei\\output");
         TestMode.run(8888);
     }
 

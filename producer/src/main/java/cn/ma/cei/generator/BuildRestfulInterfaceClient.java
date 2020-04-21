@@ -1,6 +1,5 @@
 package cn.ma.cei.generator;
 
-import cn.ma.cei.exception.CEIException;
 import cn.ma.cei.generator.builder.IRestfulClientBuilder;
 import cn.ma.cei.generator.buildin.RestfulOptions;
 import cn.ma.cei.model.restful.xRestful;

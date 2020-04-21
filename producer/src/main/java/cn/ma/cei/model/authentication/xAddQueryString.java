@@ -15,6 +15,10 @@ import javax.xml.bind.annotation.XmlRootElement;
  */
 @XmlRootElement(name = "add_query_string")
 public class xAddQueryString extends xDataProcessorItem {
+
+//    @XmlAttribute(name = "input", required = true)
+//    public String input;
+
     @XmlAttribute(name = "key", required = true)
     public String key;
 

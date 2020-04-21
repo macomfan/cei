@@ -282,6 +282,50 @@
                 </interface>
             </interfaces>
         </restful>
+
+        <websocket name="WSClient">
+            <connection>
+                <url target="wss://api.huobi.pro/ws"/>
+            </connection>
+            <interfaces>
+                <interface name="requestCandlestick">
+                    <inputs>
+                        <string name="symbol"/>
+                        <string name="period"/>
+                    </inputs>
+                    <send value="{json}">
+                        <procedure>
+                            <get_now name="{ts}" format="Unix_ms"/>
+                            <json_builder name="{json}">
+                                <json_value key="sub" value="market.{symbol}.kline.{period}"/>
+                                <json_string key="id" value="{ts}"/>
+                            </json_builder>
+                        </procedure>
+                    </send>
+                    <callback name="onCandlestick" persistent="true">
+                        <trigger>
+                            <json_checker>
+                                <json_checker_equal key="ch" value="market.{symbol}.kline.{period}"/>
+                            </json_checker>
+                        </trigger>
+                        <response>
+                            <json_parser model="CandlestickData">
+                                <json_object copy="tick">
+                                    <json_value copy="id"/>
+                                    <json_value copy="amount"/>
+                                    <json_value copy="count"/>
+                                    <json_value copy="open"/>
+                                    <json_value copy="close"/>
+                                    <json_value copy="low"/>
+                                    <json_value copy="high"/>
+                                    <json_value copy="vol"/>
+                                </json_object>
+                            </json_parser>
+                        </response>
+                    </callback>
+                </interface>
+            </interfaces>
+        </websocket>
     </clients>
 
 </sdk>

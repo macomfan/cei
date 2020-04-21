@@ -58,6 +58,6 @@ public class Service {
 
         websocketService.startService(httpServer);
         httpServer.listen(port);
-        System.out.println("Server started");
+        System.out.println(String.format("Server started on port %d", port));
     }
 }

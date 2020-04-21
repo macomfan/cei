@@ -27,12 +27,6 @@ public class JavaAuthenticationBuilder implements IAuthenticationBuilder {
         parent = javaClass;
     }
 
-
-
-
-
-
-
     @Override
     public void onAddReference(VariableType variableType) {
         parent.addReference(variableType);

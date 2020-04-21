@@ -2,15 +2,10 @@ package cn.ma.cei.generator;
 
 import cn.ma.cei.exception.CEIErrorType;
 import cn.ma.cei.exception.CEIErrors;
-import cn.ma.cei.exception.CEIException;
 import cn.ma.cei.generator.builder.IDataProcessorBuilder;
 import cn.ma.cei.generator.dataprocessor.TypeConverter;
 import cn.ma.cei.model.base.xDataProcessorItem;
-import cn.ma.cei.utils.Checker;
 import cn.ma.cei.utils.RegexHelper;
-
-import java.util.LinkedList;
-import java.util.List;
 
 public abstract class DataProcessorBase<T extends xDataProcessorItem> {
     private Variable defaultInput = null;
@@ -79,13 +74,13 @@ public abstract class DataProcessorBase<T extends xDataProcessorItem> {
 
     /***
      * Query the variable from the current method.
-     * @see sMethod#queryUserDefinedValue(String, IDataProcessorBuilder) 
+     * @see sMethod#queryVariableOrConstant(String, IDataProcessorBuilder)
      *
      * @param name the variable name, can be {xxx} or normal string.
      * @return the variable object
      */
     public Variable queryVariableOrConstant(String name) {
-        return GlobalContext.getCurrentMethod().queryUserDefinedValue(name, builder);
+        return GlobalContext.getCurrentMethod().queryVariableOrConstant(name, builder);
     }
 
     /***
@@ -107,6 +102,17 @@ public abstract class DataProcessorBase<T extends xDataProcessorItem> {
      * @return the variable object
      */
     public Variable queryVariable(String name, VariableType specType) {
+        return GlobalContext.getCurrentMethod().queryVariable(name, specType, builder);
+    }
+
+    /***
+     * Query the variable from the current method, and convert to specify type.
+     * @see sMethod#queryVariable(String, VariableType, IDataProcessorBuilder)
+     *
+     * @param name the variable name, can be {xxx} or normal string.
+     * @return the variable object
+     */
+    public Variable tryQueryVariable(String name, VariableType specType) {
         return GlobalContext.getCurrentMethod().queryVariable(name, specType, builder);
     }
 
