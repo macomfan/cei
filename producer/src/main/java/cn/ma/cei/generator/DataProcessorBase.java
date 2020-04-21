@@ -50,10 +50,10 @@ public abstract class DataProcessorBase<T extends xDataProcessorItem> {
 
     public Variable createUserVariable(VariableType type, String name) {
         String variableName = RegexHelper.isReference(name);
-        if (variableName == null) {
+        if (variableName != null) {
             CEIErrors.showFailure(CEIErrorType.XML, "Variable name %s is not valid, should be {xxx}", name);
         }
-        return GlobalContext.getCurrentMethod().createUserVariable(type, variableName);
+        return GlobalContext.getCurrentMethod().createUserVariable(type, name);
     }
 
     public Variable getDefaultInput() {

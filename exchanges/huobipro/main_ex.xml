@@ -9,27 +9,27 @@
     <authentications>
         <restful name="restful">
             <procedure>
-                <get_now name="{ts_tmp}" format=""/>
-                <url_escape name="{ts}" input="{ts_tmp}"/>
+                <get_now name="ts_tmp" format=""/>
+                <url_escape name="ts" input="{ts_tmp}"/>
             </procedure>
             <add_query_string key="AccessKeyId" value="{option.apiKey}"/>
             <add_query_string key="SignatureMethod" value="HmacSHA256"/>
             <add_query_string key="SignatureVersion" value="2"/>
             <add_query_string key="Timestamp" value="{ts}"/>
-            <combine_query_string name="{queryString}" sort="asc" separator="&amp;"/>
-            <get_request_info name="{method}" info="method" convert="uppercase"/>
-            <get_request_info name="{host}" info="host"/>
-            <get_request_info name="{target}" info="target"/>
+            <combine_query_string name="queryString" sort="asc" separator="&amp;"/>
+            <get_request_info name="method" info="method" convert="uppercase"/>
+            <get_request_info name="host" info="host"/>
+            <get_request_info name="target" info="target"/>
             <procedure>
-                <string_builder name="{buffer}">
+                <string_builder name="buffer">
                     <add_string_item input="{method}"/>
                     <add_string_item input="{host}"/>
                     <add_string_item input="{target}"/>
                     <add_string_item input="{queryString}"/>
                     <combine_string_items separator="\n"/>
                 </string_builder>
-                <hmacsha256 name="{hmacsha256}" input="{buffer}" key="{option.secretKey}"/>
-                <base64 name="{result}" input="{hmacsha256}"/>
+                <hmacsha256 name="hmacsha256" input="{buffer}" key="{option.secretKey}"/>
+                <base64 name="result" input="{hmacsha256}"/>
             </procedure>
             <add_query_string key="Signature" value="{result}"/>
         </restful>
@@ -226,10 +226,10 @@
                         <string name="amount"/>
                         <string name="price"/>
                     </inputs>
-                    <request method="post" target="/v1/order/orders/place" signature="restful">
+                    <request method="post" target="/v1/order/orders/place" authentication="restful">
                         <post_body value="{result}">
                             <procedure>
-                                <json_builder name="{result}">
+                                <json_builder name="result">
                                     <json_value key="account-Id" value="{accountId}"/>
                                     <json_value copy="symbol"/>
                                     <json_value key="orderType" value="{orderType}"/>
@@ -251,7 +251,7 @@
                     <inputs>
                         <int name="orderId"/>
                     </inputs>
-                    <request method="post" target="/v1/order/orders/{orderId}/submitcancel" signature="restful"/>
+                    <request method="post" target="/v1/order/orders/{orderId}/submitcancel" authentication="restful"/>
                     <response>
                         <json_parser model="OrderID">
                             <json_value copy="status"/>
@@ -267,7 +267,7 @@
             <connection url="https://api.huobi.so"/>
             <interfaces>
                 <interface name="getAccounts">
-                    <request method="get" target="/v1/account/accounts" signature="restful"/>
+                    <request method="get" target="/v1/account/accounts" authentication="restful"/>
                     <response>
                         <json_parser model="Account">
                             <json_value copy="status"/>
@@ -295,8 +295,8 @@
                     </inputs>
                     <send value="{json}">
                         <procedure>
-                            <get_now name="{ts}" format="Unix_ms"/>
-                            <json_builder name="{json}">
+                            <get_now name="ts" format="Unix_ms"/>
+                            <json_builder name="json">
                                 <json_value key="sub" value="market.{symbol}.kline.{period}"/>
                                 <json_string key="id" value="{ts}"/>
                             </json_builder>
