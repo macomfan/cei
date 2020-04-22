@@ -10,6 +10,7 @@ import cn.ma.cei.model.websocket.xAction;
 import cn.ma.cei.model.websocket.xWSAuthentication;
 import cn.ma.cei.model.websocket.xWSConnection;
 import cn.ma.cei.model.websocket.xWSInterface;
+import cn.ma.cei.model.xFunction;
 import cn.ma.cei.model.xModel;
 import cn.ma.cei.model.xSDKDefinition;
 import cn.ma.cei.utils.NormalMap;
@@ -97,8 +98,9 @@ public class ExchangeData {
     private ListData<xConnection> restfulClientList = new ListData<>();
     private ListData<xWSConnection> wsClientList = new ListData<>();
 
-    private ListData<xAuthentication> restfulAuthList = new ListData<>();
-    private ListData<xWSAuthentication> wsAuthList = new ListData<>();
+    //    private ListData<xAuthentication> restfulAuthList = new ListData<>();
+//    private ListData<xWSAuthentication> wsAuthList = new ListData<>();
+    private ListData<xFunction> functionList = new ListData<>();
     private NormalMap<String, xElement> authNameMap = new NormalMap<>();
 
     private InterfaceData<xInterface> restfulInterfaceList = new InterfaceData<>();
@@ -131,14 +133,19 @@ public class ExchangeData {
         modelList.appendList(list, item -> item.name);
     }
 
-    public void appendRestfulAuth(List<xAuthentication> list) {
-        checkAuthName(list, item -> item.name);
-        restfulAuthList.appendList(list, item -> item.name);
-    }
+//    public void appendRestfulAuth(List<xAuthentication> list) {
+//        checkAuthName(list, item -> item.name);
+//        restfulAuthList.appendList(list, item -> item.name);
+//    }
+//
+//    public void appendWSAuth(List<xWSAuthentication> list) {
+//        checkAuthName(list, item -> item.name);
+//        wsAuthList.appendList(list, item -> item.name);
+//    }
 
-    public void appendWSAuth(List<xWSAuthentication> list) {
+    public void appendFunction(List<xFunction> list) {
         checkAuthName(list, item -> item.name);
-        wsAuthList.appendList(list, item -> item.name);
+        functionList.appendList(list, item -> item.name);
     }
 
     public void addRestfulClient(String name, xConnection connection) {
@@ -171,12 +178,16 @@ public class ExchangeData {
         return modelList.getList();
     }
 
-    public List<xAuthentication> getRestfulAuthList() {
-        return restfulAuthList.getList();
-    }
+//    public List<xAuthentication> getRestfulAuthList() {
+//        return restfulAuthList.getList();
+//    }
 
-    public List<xWSAuthentication> getWSAuthList() {
-        return wsAuthList.getList();
+//    public List<xWSAuthentication> getWSAuthList() {
+//        return wsAuthList.getList();
+//    }
+
+    public List<xFunction> getFunctionList() {
+        return functionList.getList();
     }
 
     public List<String> getRestfulClientList() {

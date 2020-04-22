@@ -5,9 +5,9 @@ import cn.ma.cei.exception.CEIErrors;
 import cn.ma.cei.generator.builder.IDataProcessorBuilder;
 import cn.ma.cei.generator.dataprocessor.*;
 import cn.ma.cei.generator.dataprocessor.BuildJsonParser;
-import cn.ma.cei.model.authentication.xAddQueryString;
-import cn.ma.cei.model.authentication.xCombineQueryString;
-import cn.ma.cei.model.authentication.xGetRequestInfo;
+import cn.ma.cei.model.processor.xAddQueryString;
+import cn.ma.cei.model.processor.xCombineQueryString;
+import cn.ma.cei.model.processor.xGetRequestInfo;
 import cn.ma.cei.model.base.xDataProcessorItem;
 import cn.ma.cei.model.json.xJsonBuilder;
 import cn.ma.cei.model.json.xJsonParser;
@@ -16,7 +16,6 @@ import cn.ma.cei.model.string.xStringBuilder;
 import cn.ma.cei.model.xProcedure;
 import cn.ma.cei.utils.Checker;
 import cn.ma.cei.utils.NormalMap;
-import cn.ma.cei.utils.ReflectionHelper;
 import cn.ma.cei.utils.RegexHelper;
 
 
@@ -27,7 +26,7 @@ import java.util.List;
  */
 public class BuildDataProcessor {
 
-    private static NormalMap<Class<?>, DataProcessorBase<?>> processorMap = new NormalMap<>();
+    private static final NormalMap<Class<?>, DataProcessorBase<?>> processorMap = new NormalMap<>();
 
     static {
         processorMap.put(xGetNow.class, new BuildGetNow());
@@ -41,15 +40,16 @@ public class BuildDataProcessor {
         processorMap.put(xStringBuilder.class, new BuildStringWrapper());
         processorMap.put(xURLEscape.class, new BuildURLEscape());
         processorMap.put(xGZip.class, new BuildGZip());
+        // processorMap.put(xInvoke.class);
     }
 
 
-    public static VariableType getResultType(List<xDataProcessorItem> items, String resultVariableName) {
+    public static VariableType getResultType(List<xDataProcessorItem> items, String returnVariableName) {
         if (items == null) {
             return null;
         }
 
-        if (items.size() == 1 && Checker.isEmpty(resultVariableName)) {
+        if (items.size() == 1 && Checker.isEmpty(returnVariableName)) {
             // Only one item in the processor list, return the only item. Do not define output name in this item.
             if (processorMap.containsKey(items.get(0).getClass())) {
                 return processorMap.get(items.get(0).getClass()).callReturnType(items.get(0));
@@ -57,12 +57,12 @@ public class BuildDataProcessor {
                 CEIErrors.showFailure(CEIErrorType.CODE, "Processor is not supporting %s", items.get(0).getClass().getName());
             }
         }
-
         for (xDataProcessorItem item : items) {
             if (processorMap.containsKey(item.getClass())) {
                 DataProcessorBase<?> processor = processorMap.get(item.getClass());
                 String resultInProcessor = processor.callResultVariableName(item);
-                if (resultInProcessor.equals(resultVariableName)) {
+                if (!Checker.isEmpty(resultInProcessor))
+                if (resultInProcessor.equals(returnVariableName)) {
                     return processor.callReturnType(item);
                 }
             } else {

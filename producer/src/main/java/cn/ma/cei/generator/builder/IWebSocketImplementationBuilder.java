@@ -9,7 +9,7 @@ public interface IWebSocketImplementationBuilder extends IMethodBuilder {
 
     default void startMethod(VariableType returnType, String methodDescriptor, List<Variable> params) {}
 
-    default void endMethod() {}
+    default void endMethod(Variable returnVariable) {}
 
     /**
      * Send the variable to WebSocket.

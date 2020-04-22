@@ -35,6 +35,11 @@ public class CppExchangeBuilder implements IExchangeBuilder {
     }
 
     @Override
+    public IMethodBuilder createFunctionBuilder() {
+        return null;
+    }
+
+    @Override
     public IModelBuilder createModelBuilder() {
         return new CppModelBuilder(exchangeName);
     }
@@ -42,10 +47,5 @@ public class CppExchangeBuilder implements IExchangeBuilder {
     @Override
     public void endExchange() {
 
-    }
-
-    @Override
-    public IAuthenticationBuilder createAuthenticationBuilder() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

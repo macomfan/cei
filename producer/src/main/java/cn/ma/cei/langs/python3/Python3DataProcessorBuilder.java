@@ -97,6 +97,11 @@ public class Python3DataProcessorBuilder implements IDataProcessorBuilder {
     }
 
     @Override
+    public void invokeFunction(String methodName, Variable returnVariable, Variable... params) {
+
+    }
+
+    @Override
     public void gzip(Variable output, Variable input) {
 
     }

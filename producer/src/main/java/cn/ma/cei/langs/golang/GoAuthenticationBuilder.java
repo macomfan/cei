@@ -77,7 +77,7 @@ public class GoAuthenticationBuilder implements IAuthenticationBuilder {
     }
 
     @Override
-    public void endMethod() {
+    public void endMethod(Variable returnVariable) {
         method.endMethod();
         mainFile.addMethod(method);
     }

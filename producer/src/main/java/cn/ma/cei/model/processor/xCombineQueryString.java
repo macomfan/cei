@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package cn.ma.cei.model.authentication;
+package cn.ma.cei.model.processor;
 
 import cn.ma.cei.model.base.xDataProcessorItem;
 
@@ -14,21 +14,20 @@ import javax.xml.bind.annotation.XmlRootElement;
  *
  * @author u0151316
  */
-@XmlRootElement(name = "get_request_info")
-public class xGetRequestInfo extends xDataProcessorItem {
-    @XmlAttribute(name = "info")
-    public String info;
+@XmlRootElement(name = "combine_query_string")
+public class xCombineQueryString extends xDataProcessorItem {
 
-    @XmlAttribute(name = "name")
+    @XmlAttribute(name = "name", required = true)
     public String name;
     
-    @XmlAttribute(name = "convert")
-    public String convert;
+    @XmlAttribute(name = "sort")
+    public String sort;
+    
+    @XmlAttribute(name = "separator")
+    public String separator;
 
     @Override
     public void customCheck() {
         super.customCheck();
-        checkMemberNotNull(info, "info");
-        checkMemberNotNull(name, "name");
     }
 }

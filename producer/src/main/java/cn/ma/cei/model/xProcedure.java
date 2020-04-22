@@ -1,7 +1,6 @@
 package cn.ma.cei.model;
 
 import cn.ma.cei.model.base.xDataProcessorItem;
-import cn.ma.cei.model.base.xElement;
 import cn.ma.cei.model.json.xJsonBuilder;
 import cn.ma.cei.model.processor.*;
 import cn.ma.cei.model.string.xStringBuilder;
@@ -21,6 +20,10 @@ public class xProcedure extends xDataProcessorItem {
             xURLEscape.class,
             xGetNow.class,
             xJsonBuilder.class,
-            xStringBuilder.class})
+            xStringBuilder.class,
+            xAddQueryString.class,
+            xCombineQueryString.class,
+            xGetRequestInfo.class,
+            xInvoke.class})
     public List<xDataProcessorItem> items;
 }

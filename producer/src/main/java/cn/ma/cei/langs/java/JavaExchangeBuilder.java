@@ -13,7 +13,7 @@ import cn.ma.cei.model.types.xString;
 public class JavaExchangeBuilder implements IExchangeBuilder {
 
     private JavaClass mainClass;
-    private JavaClass authenticationClass;
+    private JavaClass functionClass;
 
     @Override
     public void startExchange(String exchangeName) {
@@ -45,6 +45,7 @@ public class JavaExchangeBuilder implements IExchangeBuilder {
         BuilderContext.setupBuildInVariableType(TheStream.typeName, "byte[]", BuilderContext.NO_REF);
         BuilderContext.setupBuildInVariableType(JsonChecker.typeName, "JsonChecker", "cn.ma.cei.impl.JsonChecker");
         BuilderContext.setupBuildInVariableType(StringWrapper.typeName, "StringWrapper", "cn.ma.cei.impl.StringWrapper");
+        BuilderContext.setupBuildInVariableType(Procedures.typeName, "Procedures", BuilderContext.NO_REF);
 
         BuilderContext.setupBuildInVariableType(WebSocketConnection.typeName, "WebSocketConnection", "cn.ma.cei.impl.WebSocketConnection");
         BuilderContext.setupBuildInVariableType(WebSocketAction.typeName, "WebSocketAction", "cn.ma.cei.impl.WebSocketAction");
@@ -58,7 +59,7 @@ public class JavaExchangeBuilder implements IExchangeBuilder {
         BuilderContext.setExchangeFolder(exchangeFolder);
 
         mainClass = new JavaClass(exchangeName, "cn.ma.cei.exchanges");
-        authenticationClass = new JavaClass("Authentication");
+        functionClass = new JavaClass(Procedures.getType().getDescriptor());
     }
 
     @Override
@@ -72,19 +73,19 @@ public class JavaExchangeBuilder implements IExchangeBuilder {
     }
 
     @Override
+    public IMethodBuilder createFunctionBuilder() {
+        return new JavaFunctionBuilder(functionClass);
+    }
+
+    @Override
     public IModelBuilder createModelBuilder() {
         return new JavaModelBuilder(mainClass);
     }
 
     @Override
-    public IAuthenticationBuilder createAuthenticationBuilder() {
-        return new JavaAuthenticationBuilder(authenticationClass);
-    }
-
-    @Override
     public void endExchange() {
-        if (authenticationClass != null) {
-            mainClass.addInnerClass(authenticationClass);
+        if (functionClass != null) {
+            mainClass.addInnerClass(functionClass);
         }
         mainClass.build(BuilderContext.getExchangeFolder());
     }

@@ -12,5 +12,5 @@ public interface IMethodBuilder {
 
     IDataProcessorBuilder createDataProcessorBuilder();
 
-    void endMethod();
+    void endMethod(Variable returnVariable);
 }

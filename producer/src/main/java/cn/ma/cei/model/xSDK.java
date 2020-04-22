@@ -21,8 +21,11 @@ public class xSDK extends xElement {
     @XmlElement(name = "model")
     public List<xModel> modelList;
 
-    @XmlElement(name = "authentications")
-    public xSDKAuthentications authentications;
+//    @XmlElement(name = "authentications")
+//    public xSDKAuthentications authentications;
+
+    @XmlElement(name = "procedures")
+    public xCustomProcedures procedures;
 
     @XmlElement(name = "clients")
     public xSDKClients clients;

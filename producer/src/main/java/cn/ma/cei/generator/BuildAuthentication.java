@@ -23,16 +23,16 @@ public class BuildAuthentication {
         Checker.isNull(builder, BuildAuthentication.class, "AuthenticationBuilder");
 
 
-        Variable request = GlobalContext.getCurrentMethod().createInputVariable(RestfulRequest.getType(), "request");
-        Variable options = GlobalContext.getCurrentMethod().createInputVariable(RestfulOptions.getType(), "option");
-
-        builder.startMethod(null,
-                GlobalContext.getCurrentMethod().getDescriptor(),
-                GlobalContext.getCurrentMethod().getInputVariableList());
-
-        BuildDataProcessor.build(authentication.items,
-                Checker.checkBuilder(builder.createDataProcessorBuilder(), builder.getClass(), "DataProcessorBuilder"));
-        builder.endMethod();
+//        Variable request = GlobalContext.getCurrentMethod().createInputVariable(RestfulRequest.getType(), "request");
+//        Variable options = GlobalContext.getCurrentMethod().createInputVariable(RestfulOptions.getType(), "option");
+//
+//        builder.startMethod(null,
+//                GlobalContext.getCurrentMethod().getDescriptor(),
+//                GlobalContext.getCurrentMethod().getInputVariableList());
+//
+//        BuildDataProcessor.build(authentication.items,
+//                Checker.checkBuilder(builder.createDataProcessorBuilder(), builder.getClass(), "DataProcessorBuilder"));
+//        builder.endMethod(null);
     }
 
     public static void buildWebSocket(xWSAuthentication authentication, IAuthenticationBuilder builder) {

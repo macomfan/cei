@@ -18,7 +18,7 @@ public interface IExchangeBuilder {
 
     IWebSocketClientBuilder createWebSocketClientBuilder();
     
-    IAuthenticationBuilder createAuthenticationBuilder();
+    IMethodBuilder createFunctionBuilder();
     
     /***
      * To create the ModelBuilder for each model.

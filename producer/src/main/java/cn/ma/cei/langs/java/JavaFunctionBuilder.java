@@ -7,8 +7,8 @@ package cn.ma.cei.langs.java;
 
 import cn.ma.cei.generator.Variable;
 import cn.ma.cei.generator.VariableType;
-import cn.ma.cei.generator.builder.IAuthenticationBuilder;
 import cn.ma.cei.generator.builder.IDataProcessorBuilder;
+import cn.ma.cei.generator.builder.IMethodBuilder;
 import cn.ma.cei.generator.buildin.CEIUtils;
 import cn.ma.cei.langs.java.tools.JavaClass;
 import cn.ma.cei.langs.java.tools.JavaMethod;
@@ -18,12 +18,12 @@ import java.util.List;
 /**
  * @author u0151316
  */
-public class JavaAuthenticationBuilder implements IAuthenticationBuilder {
+public class JavaFunctionBuilder implements IMethodBuilder {
 
     private JavaMethod method;
-    private JavaClass parent;
+    private final JavaClass parent;
 
-    public JavaAuthenticationBuilder(JavaClass javaClass) {
+    public JavaFunctionBuilder(JavaClass javaClass) {
         parent = javaClass;
     }
 
@@ -37,7 +37,7 @@ public class JavaAuthenticationBuilder implements IAuthenticationBuilder {
     public void startMethod(VariableType returnType, String methodDescriptor, List<Variable> params) {
         method = new JavaMethod(parent);
         parent.addReference(CEIUtils.getType());
-        method.startStaticMethod(null, methodDescriptor, params);
+        method.startStaticMethod(returnType, methodDescriptor, params);
     }
 
     @Override
@@ -46,7 +46,10 @@ public class JavaAuthenticationBuilder implements IAuthenticationBuilder {
     }
 
     @Override
-    public void endMethod() {
+    public void endMethod(Variable returnVariable) {
+        if (returnVariable != null) {
+            method.addReturn(returnVariable.getDescriptor());
+        }
         method.endMethod();
         parent.addMethod(method);
     }

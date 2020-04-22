@@ -66,7 +66,7 @@ public class Python3WebSocketInterfaceBuilder implements IWebSocketInterfaceBuil
     }
 
     @Override
-    public void endMethod() {
+    public void endMethod(Variable returnVariable) {
         method.endMethod();
         clientClass.addMethod(method);
     }

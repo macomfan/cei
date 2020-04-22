@@ -28,8 +28,8 @@ public class Python3RestfulInterfaceBuilder implements IRestfulInterfaceBuilder 
     }
 
     @Override
-    public void setRequestTarget(Variable request, Variable... targets) {
-        method.addInvoke(request.getDescriptor() + ".set_target", targets);
+    public void setRequestTarget(Variable request, Variable target) {
+        method.addInvoke(request.getDescriptor() + ".set_target", target);
     }
 
     @Override
@@ -75,7 +75,7 @@ public class Python3RestfulInterfaceBuilder implements IRestfulInterfaceBuilder 
     }
 
     @Override
-    public void endMethod() {
+    public void endMethod(Variable returnVariable) {
         method.endMethod();
         clientClass.addMethod(method);
     }

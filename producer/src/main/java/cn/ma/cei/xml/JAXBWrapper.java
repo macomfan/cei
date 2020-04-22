@@ -30,8 +30,8 @@ public class JAXBWrapper {
         try {
             JAXBContext context = JAXBContext.newInstance(tmp, null);
             unmarshaller = context.createUnmarshaller();
-        } catch (Exception ignore) {
-
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
         }
     }
 

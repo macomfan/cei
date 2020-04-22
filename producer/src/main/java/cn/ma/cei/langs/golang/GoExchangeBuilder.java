@@ -69,8 +69,8 @@ public class GoExchangeBuilder implements IExchangeBuilder {
     }
 
     @Override
-    public IAuthenticationBuilder createAuthenticationBuilder() {
-        return new GoAuthenticationBuilder(mainFile);
+    public IMethodBuilder createFunctionBuilder() {
+        return null;
     }
 
     @Override

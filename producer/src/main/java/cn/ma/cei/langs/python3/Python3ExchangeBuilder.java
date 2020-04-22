@@ -80,6 +80,11 @@ public class Python3ExchangeBuilder implements IExchangeBuilder {
     }
 
     @Override
+    public IMethodBuilder createFunctionBuilder() {
+        return null;
+    }
+
+    @Override
     public IModelBuilder createModelBuilder() {
         return new Python3ModelBuilder(mainFile);
     }
@@ -90,10 +95,4 @@ public class Python3ExchangeBuilder implements IExchangeBuilder {
         mainFile.build(BuilderContext.getExchangeFolder());
         
     }
-
-    @Override
-    public IAuthenticationBuilder createAuthenticationBuilder() {
-        return new Python3AuthenticationBuilder(authenticationClass);
-    }
-
 }

@@ -22,7 +22,7 @@ import java.util.List;
 public class Python3AuthenticationBuilder implements IAuthenticationBuilder {
 
     private Python3Method method;
-    private Python3Class parent;
+    private final Python3Class parent;
 
     public Python3AuthenticationBuilder(Python3Class parent) {
         this.parent = parent;
@@ -46,7 +46,7 @@ public class Python3AuthenticationBuilder implements IAuthenticationBuilder {
     }
 
     @Override
-    public void endMethod() {
+    public void endMethod(Variable returnVariable) {
         method.endMethod();
         parent.addMethod(method);
     }

@@ -17,8 +17,8 @@ public class xRequest extends xItemWithProcedure {
     @XmlAttribute(name = "target")
     public String target;
 
-    @XmlAttribute(name = "authentication")
-    public String authentication;
+    @XmlElement(name = "authentication")
+    public xAuthentication authentication;
 
     @XmlElementWrapper(name = "headers")
     @XmlElement(name = "header")

@@ -1,11 +1,10 @@
 package cn.ma.cei.generator.dataprocessor;
 
-import cn.ma.cei.generator.BuilderContext;
 import cn.ma.cei.generator.DataProcessorBase;
 import cn.ma.cei.generator.Variable;
 import cn.ma.cei.generator.VariableType;
 import cn.ma.cei.generator.builder.IDataProcessorBuilder;
-import cn.ma.cei.model.authentication.xAddQueryString;
+import cn.ma.cei.model.processor.xAddQueryString;
 import cn.ma.cei.model.types.xString;
 
 public class BuildAddQueryString extends DataProcessorBase<xAddQueryString> {

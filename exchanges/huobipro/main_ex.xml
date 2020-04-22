@@ -6,21 +6,22 @@
 
     <definition document="https://huobiapi.github.io/docs/spot/v1/en/"/>
 
-    <authentications>
-        <restful name="restful">
-            <procedure>
-                <get_now name="ts_tmp" format=""/>
-                <url_escape name="ts" input="{ts_tmp}"/>
-            </procedure>
-            <add_query_string key="AccessKeyId" value="{option.apiKey}"/>
-            <add_query_string key="SignatureMethod" value="HmacSHA256"/>
-            <add_query_string key="SignatureVersion" value="2"/>
-            <add_query_string key="Timestamp" value="{ts}"/>
-            <combine_query_string name="queryString" sort="asc" separator="&amp;"/>
-            <get_request_info name="method" info="method" convert="uppercase"/>
-            <get_request_info name="host" info="host"/>
-            <get_request_info name="target" info="target"/>
-            <procedure>
+    <procedures>
+        <function name="restfulAuth">
+            <inputs>
+                <restful_request name="request"/>
+                <restful_options name="option"/>
+            </inputs>
+            <implementation>
+                <get_now name="timestamp" format="%Y:%M:%DT%h:%m:%s"/>
+                <add_query_string input="{request}" key="AccessKeyId" value="{option.apiKey}"/>
+                <add_query_string input="{request}" key="SignatureMethod" value="HmacSHA256"/>
+                <add_query_string input="{request}" key="SignatureVersion" value="2"/>
+                <add_query_string input="{request}" key="Timestamp" value="{timestamp}"/>
+                <combine_query_string input="{request}" name="queryString" sort="asc" separator="&amp;"/>
+                <get_request_info input="{request}" name="method" info="method" convert="uppercase"/>
+                <get_request_info input="{request}" name="host" info="host"/>
+                <get_request_info input="{request}" name="target" info="target"/>
                 <string_builder name="buffer">
                     <add_string_item input="{method}"/>
                     <add_string_item input="{host}"/>
@@ -30,10 +31,10 @@
                 </string_builder>
                 <hmacsha256 name="hmacsha256" input="{buffer}" key="{option.secretKey}"/>
                 <base64 name="result" input="{hmacsha256}"/>
-            </procedure>
-            <add_query_string key="Signature" value="{result}"/>
-        </restful>
-    </authentications>
+                <add_query_string input="{request}" key="Signature" value="{result}"/>
+            </implementation>
+        </function>
+    </procedures>
     <clients>
         <restful name="MarketClient">
             <connection url="https://api.huobi.so"/>
@@ -226,7 +227,7 @@
                         <string name="amount"/>
                         <string name="price"/>
                     </inputs>
-                    <request method="post" target="/v1/order/orders/place" authentication="restful">
+                    <request method="post" target="/v1/order/orders/place">
                         <post_body value="{result}">
                             <procedure>
                                 <json_builder name="result">
@@ -251,7 +252,9 @@
                     <inputs>
                         <int name="orderId"/>
                     </inputs>
-                    <request method="post" target="/v1/order/orders/{orderId}/submitcancel" authentication="restful"/>
+                    <request method="post" target="/v1/order/orders/{orderId}/submitcancel">
+                        <authentication name="restfulAuth"/>
+                    </request>
                     <response>
                         <json_parser model="OrderID">
                             <json_value copy="status"/>
@@ -267,7 +270,9 @@
             <connection url="https://api.huobi.so"/>
             <interfaces>
                 <interface name="getAccounts">
-                    <request method="get" target="/v1/account/accounts" authentication="restful"/>
+                    <request method="get" target="/v1/account/accounts">
+                        <authentication name="restfulAuth"/>
+                    </request>
                     <response>
                         <json_parser model="Account">
                             <json_value copy="status"/>

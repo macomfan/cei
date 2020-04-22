@@ -3,12 +3,9 @@ package cn.ma.cei.finalizer;
 import cn.ma.cei.exception.CEIErrorType;
 import cn.ma.cei.exception.CEIErrors;
 import cn.ma.cei.exception.CEIException;
+import cn.ma.cei.model.*;
 import cn.ma.cei.model.restful.xRestful;
 import cn.ma.cei.model.websocket.xWebSocket;
-import cn.ma.cei.model.xModel;
-import cn.ma.cei.model.xSDK;
-import cn.ma.cei.model.xSDKAuthentications;
-import cn.ma.cei.model.xSDKClients;
 import cn.ma.cei.utils.NormalMap;
 
 import java.util.Collection;
@@ -72,10 +69,9 @@ public class XMLDatabase {
             // For model
             sdk.modelList = data.getModelList();
             // For authentication
-            sdk.authentications = new xSDKAuthentications();
-            sdk.authentications.filename = sdk.filename;
-            sdk.authentications.restfulList = data.getRestfulAuthList();
-            sdk.authentications.webSocketList = data.getWSAuthList();
+            sdk.procedures = new xCustomProcedures();
+            sdk.procedures.filename = sdk.filename;
+            sdk.procedures.functions = data.getFunctionList();
 
             sdk.clients = new xSDKClients();
             sdk.clients.filename = sdk.filename;
@@ -112,9 +108,8 @@ public class XMLDatabase {
         ExchangeData exchangeData = sdkData.get(sdk.name);
         exchangeData.setDefinition(sdk.definition);
         exchangeData.appendModelList(sdk.modelList);
-        if (sdk.authentications != null) {
-            exchangeData.appendRestfulAuth(sdk.authentications.restfulList);
-            exchangeData.appendWSAuth(sdk.authentications.webSocketList);
+        if (sdk.procedures != null) {
+            exchangeData.appendFunction(sdk.procedures.functions);
         }
         if (sdk.clients != null && sdk.clients.restfulList != null) {
             sdk.clients.restfulList.forEach(item -> {

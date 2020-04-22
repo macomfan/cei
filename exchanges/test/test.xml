@@ -65,20 +65,22 @@
         </model>
     </models>
 
-    <authentications>
-        <restful name="restful">
-            <procedure>
+    <procedures>
+        <function name="restfulAuth" return="{request}">
+            <inputs>
+                <restful_request name="request"/>
+                <restful_options name="option"/>
+            </inputs>
+            <implementation>
                 <get_now name="timestamp" format="%Y:%M:%DT%h:%m:%s"/>
-            </procedure>
-            <add_query_string key="AccessKeyId" value="{option.apiKey}"/>
-            <add_query_string key="SignatureMethod" value="HmacSHA256"/>
-            <add_query_string key="SignatureVersion" value="2"/>
-            <add_query_string key="Timestamp" value="{timestamp}"/>
-            <combine_query_string name="queryString" sort="asc" separator="&amp;"/>
-            <get_request_info name="method" info="method" convert="uppercase"/>
-            <get_request_info name="host" info="host"/>
-            <get_request_info name="target" info="target"/>
-            <procedure>
+                <add_query_string input="{request}" key="AccessKeyId" value="{option.apiKey}"/>
+                <add_query_string input="{request}" key="SignatureMethod" value="HmacSHA256"/>
+                <add_query_string input="{request}" key="SignatureVersion" value="2"/>
+                <add_query_string input="{request}" key="Timestamp" value="{timestamp}"/>
+                <combine_query_string input="{request}" name="queryString" sort="asc" separator="&amp;"/>
+                <get_request_info input="{request}" name="method" info="method" convert="uppercase"/>
+                <get_request_info input="{request}" name="host" info="host"/>
+                <get_request_info input="{request}" name="target" info="target"/>
                 <string_builder name="buffer">
                     <add_string_item input="{method}"/>
                     <add_string_item input="{host}"/>
@@ -88,10 +90,10 @@
                 </string_builder>
                 <hmacsha256 name="hmacsha256" input="{buffer}" key="{option.secretKey}"/>
                 <base64 name="result" input="{hmacsha256}"/>
-            </procedure>
-            <add_query_string key="Signature" value="{result}"/>
-        </restful>
-    </authentications>
+                <add_query_string input="{request}" key="Signature" value="{result}"/>
+            </implementation>
+        </function>
+    </procedures>
 
     <clients>
         <restful name="GetClient">
@@ -113,6 +115,9 @@
                     <request method="get" target="/restful/get/modelInfo"/>
                     <response>
                         <json_parser model="ModelInfo">
+                            <json_checker>
+                                <json_checker_equal key="aaa" value="aa"/>
+                            </json_checker>
                             <json_value copy="Name"/>
                             <json_object key="DataL1">
                                 <json_object key="DataL2">
@@ -235,7 +240,7 @@
                         <string name="Name"/>
                         <int name="Number"/>
                     </inputs>
-                    <request method="post" target="/restful/post/authentication" authentication="restful">
+                    <request method="post" target="/restful/post/authentication">
                         <query_strings>
                             <query key="Name" value="{Name}"/>
                         </query_strings>
@@ -246,6 +251,7 @@
                                 </json_builder>
                             </procedure>
                         </post_body>
+                        <authentication name="restfulAuth"/>
                     </request>
                     <response>
                         <json_parser model="SimpleInfo">

@@ -10,9 +10,9 @@ import java.util.List;
 
 @XmlRootElement(name = "authentications")
 public class xSDKAuthentications extends xElement {
-    @XmlElement(name = "restful")
-    public List<xAuthentication> restfulList;
-
-    @XmlElement(name = "websocket")
-    public List<xWSAuthentication> webSocketList;
+//    @XmlElement(name = "restful")
+//    public List<xAuthentication> restfulList;
+//
+//    @XmlElement(name = "websocket")
+//    public List<xWSAuthentication> webSocketList;
 }

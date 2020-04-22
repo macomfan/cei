@@ -44,7 +44,7 @@ public class BuildWebSocketInterface {
             Variable sendVariable = BuildUserProcedure.createValueFromProcedure(xString.inst.getType(), intf.send.value, intf.send, builder);
             builder.send(sendVariable);
         }
-        builder.endMethod();
+        builder.endMethod(null);
     }
 
     private static VariableType getCallbackMessageType(xCallback callback) {

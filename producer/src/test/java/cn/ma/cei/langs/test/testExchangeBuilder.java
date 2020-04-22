@@ -19,7 +19,7 @@ public class testExchangeBuilder implements IExchangeBuilder {
     }
 
     @Override
-    public IAuthenticationBuilder createAuthenticationBuilder() {
+    public IMethodBuilder createFunctionBuilder() {
         return null;
     }
 

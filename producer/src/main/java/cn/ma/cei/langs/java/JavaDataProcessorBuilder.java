@@ -4,13 +4,11 @@ import cn.ma.cei.generator.BuilderContext;
 import cn.ma.cei.generator.Variable;
 import cn.ma.cei.generator.builder.*;
 import cn.ma.cei.generator.buildin.CEIUtils;
+import cn.ma.cei.generator.buildin.Procedures;
 import cn.ma.cei.langs.java.processor.JavaGetNowBuilder;
 import cn.ma.cei.langs.java.processor.JavaJsonBuilderBuilder;
 import cn.ma.cei.langs.java.processor.JavaJsonParserBuilder;
 import cn.ma.cei.langs.java.tools.JavaMethod;
-import cn.ma.cei.model.types.xDecimal;
-import cn.ma.cei.model.types.xInt;
-import cn.ma.cei.model.types.xString;
 
 public class JavaDataProcessorBuilder implements IDataProcessorBuilder {
     JavaMethod method;
@@ -99,6 +97,15 @@ public class JavaDataProcessorBuilder implements IDataProcessorBuilder {
     @Override
     public void URLEscape(Variable output, Variable input) {
         method.addAssign(method.defineVariable(output), method.invoke("CEIUtils.urlEscape", input));
+    }
+
+    @Override
+    public void invokeFunction(String methodName, Variable returnVariable, Variable... params) {
+        if (returnVariable == null) {
+            method.addInvoke(Procedures.getType().getDescriptor() + "." + methodName, params);
+        } else {
+            method.addAssign(returnVariable.getDescriptor(), method.invoke(Procedures.getType().getDescriptor() + "." +methodName, params));
+        }
     }
 
     @Override

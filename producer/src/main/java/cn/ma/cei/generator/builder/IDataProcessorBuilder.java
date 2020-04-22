@@ -24,6 +24,8 @@ public interface IDataProcessorBuilder {
 
     void URLEscape(Variable output, Variable input);
 
+    void invokeFunction(String methodName, Variable returnVariable, Variable... params);
+
     void gzip(Variable output, Variable input);
 
     /***

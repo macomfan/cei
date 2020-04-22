@@ -20,8 +20,8 @@ public class JavaRestfulInterfaceBuilder implements IRestfulInterfaceBuilder {
     }
 
     @Override
-    public void setRequestTarget(Variable request, Variable... targets ) {
-        method.addInvoke(request.getDescriptor() + ".setTarget", targets);
+    public void setRequestTarget(Variable request, Variable target ) {
+        method.addInvoke(request.getDescriptor() + ".setTarget", target);
     }
 
     @Override
@@ -92,7 +92,7 @@ public class JavaRestfulInterfaceBuilder implements IRestfulInterfaceBuilder {
     }
 
     @Override
-    public void endMethod() {
+    public void endMethod(Variable returnVariable) {
         method.endMethod();
         clientClass.addMethod(method);
     }

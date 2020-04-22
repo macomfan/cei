@@ -30,14 +30,14 @@ public class GoRestfulInterfaceBuilder implements IRestfulInterfaceBuilder {
     }
 
     @Override
-    public void setRequestTarget(Variable request, Variable... targets) {
-        List<GoVar> paramList = new ArrayList<>();
-        for (Variable variable : targets) {
-            paramList.add(new GoVar(variable));
-        }
-        GoVar[] params = new GoVar[paramList.size()];
-        paramList.toArray(params);
-        method.addInvoke(request.getDescriptor() + ".SetTarget", params);
+    public void setRequestTarget(Variable request, Variable target) {
+//        List<GoVar> paramList = new ArrayList<>();
+//        for (Variable variable : targets) {
+//            paramList.add(new GoVar(target));
+//        }
+//        GoVar[] params = new GoVar[paramList.size()];
+//        paramList.toArray(params);
+        method.addInvoke(request.getDescriptor() + ".SetTarget", new GoVar(target));
     }
 
     @Override
@@ -123,7 +123,7 @@ public class GoRestfulInterfaceBuilder implements IRestfulInterfaceBuilder {
     }
 
     @Override
-    public void endMethod() {
+    public void endMethod(Variable returnVariable) {
         method.endMethod();
         clientStruct.addMethod(method);
     }

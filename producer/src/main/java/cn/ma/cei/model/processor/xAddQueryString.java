@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package cn.ma.cei.model.authentication;
+package cn.ma.cei.model.processor;
 
 import cn.ma.cei.model.base.xDataProcessorItem;
 

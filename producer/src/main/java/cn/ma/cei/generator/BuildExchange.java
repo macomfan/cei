@@ -2,10 +2,7 @@ package cn.ma.cei.generator;
 
 import cn.ma.cei.exception.CEIErrors;
 import cn.ma.cei.generator.builder.IExchangeBuilder;
-import cn.ma.cei.generator.buildin.CEIUtils;
-import cn.ma.cei.generator.buildin.RestfulOptions;
-import cn.ma.cei.generator.buildin.WebSocketConnection;
-import cn.ma.cei.generator.buildin.WebSocketOptions;
+import cn.ma.cei.generator.buildin.*;
 import cn.ma.cei.model.xSDK;
 import cn.ma.cei.utils.Checker;
 
@@ -19,6 +16,20 @@ public class BuildExchange {
             sdk.modelList.forEach((model) -> model.doBuild(() -> {
                 BuildModel.build(model, Checker.checkBuilder(builder.createModelBuilder(), builder.getClass(), "ModelBuilder"));
             }));
+        }
+
+        VariableType procedureModel = GlobalContext.variableType(Procedures.typeName);
+        if (sdk.procedures != null) {
+            GlobalContext.setCurrentModel(procedureModel);
+            if (sdk.procedures.functions != null) {
+                sdk.procedures.functions.forEach(function -> function.doBuild(() -> {
+                    sMethod functionMethod = procedureModel.createMethod(function.name);
+                    GlobalContext.setCurrentMethod(functionMethod);
+                    BuildFunction.build(function, Checker.checkBuilder(builder.createFunctionBuilder(), builder.getClass(), "FunctionBuilder"));
+                    GlobalContext.setCurrentMethod(null);
+                }));
+            }
+            GlobalContext.setCurrentModel(null);
         }
 
         // Build restful interfaces
@@ -43,28 +54,6 @@ public class BuildExchange {
                     GlobalContext.setCurrentModel(null);
                 }));
             }
-        }
-
-        VariableType authenticationType = GlobalContext.variableType(CEIUtils.typeName);
-        if (sdk.authentications != null) {
-            GlobalContext.setCurrentModel(authenticationType);
-            if (sdk.authentications.restfulList != null) {
-                sdk.authentications.restfulList.forEach(authentication -> authentication.doBuild(() -> {
-                    sMethod authenticationMethod = authenticationType.createMethod(authentication.name);
-                    GlobalContext.setCurrentMethod(authenticationMethod);
-                    BuildAuthentication.buildRestful(authentication, Checker.checkBuilder(builder.createAuthenticationBuilder(), builder.getClass(), "AuthenticationBuilder"));
-                    GlobalContext.setCurrentMethod(null);
-                }));
-            }
-            if (sdk.authentications.webSocketList != null) {
-                sdk.authentications.webSocketList.forEach(authentication -> authentication.doBuild(() -> {
-                    sMethod authenticationMethod = authenticationType.createMethod(authentication.name);
-                    GlobalContext.setCurrentMethod(authenticationMethod);
-                    BuildAuthentication.buildWebSocket(authentication, Checker.checkBuilder(builder.createAuthenticationBuilder(), builder.getClass(), "AuthenticationBuilder"));
-                    GlobalContext.setCurrentMethod(null);
-                }));
-            }
-            GlobalContext.setCurrentModel(null);
         }
         builder.endExchange();
     }

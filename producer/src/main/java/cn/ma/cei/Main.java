@@ -115,7 +115,6 @@ public class Main {
         }
         if (!configFile.endsWith(".xml")) {
             CEIErrors.showInputFailure("a *.xml file is required for -f or --file");
-            return;
         }
     }
 
@@ -124,7 +123,7 @@ public class Main {
         BuildSDK.registerFramework(new CppFramework());
         BuildSDK.registerFramework(new Python3Framework());
         BuildSDK.registerFramework(new GoFramework());
-        BuildSDK.build("C:\\dev\\cei\\exchanges", "java", "C:\\dev\\cei\\output");
+        BuildSDK.build("C:\\dev\\cei\\exchanges\\test", "java", "C:\\dev\\cei\\output");
         xSDK sdk = XMLDatabase.getSDK("debug");
         XmlToJson xmlToJson = new XmlToJson();
         Convert.doConvert(xmlToJson, sdk);

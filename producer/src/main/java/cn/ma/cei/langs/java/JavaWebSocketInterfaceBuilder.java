@@ -37,7 +37,7 @@ public class JavaWebSocketInterfaceBuilder implements IWebSocketInterfaceBuilder
     }
 
     @Override
-    public void endMethod() {
+    public void endMethod(Variable returnVariable) {
         method.endMethod();
         clientClass.addMethod(method);
     }

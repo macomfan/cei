@@ -1,15 +1,11 @@
 package cn.ma.cei.generator;
 
+import cn.ma.cei.exception.CEIErrors;
 import cn.ma.cei.exception.CEIException;
 import cn.ma.cei.generator.builder.IDataProcessorBuilder;
 import cn.ma.cei.generator.builder.IRestfulInterfaceBuilder;
-import cn.ma.cei.generator.buildin.RestfulConnection;
-import cn.ma.cei.generator.buildin.RestfulRequest;
-import cn.ma.cei.generator.buildin.RestfulResponse;
-import cn.ma.cei.model.restful.xHeader;
-import cn.ma.cei.model.restful.xInterface;
-import cn.ma.cei.model.restful.xPostBody;
-import cn.ma.cei.model.restful.xQuery;
+import cn.ma.cei.generator.buildin.*;
+import cn.ma.cei.model.restful.*;
 import cn.ma.cei.model.types.xString;
 import cn.ma.cei.utils.Checker;
 import cn.ma.cei.utils.RegexHelper;
@@ -64,7 +60,7 @@ public class BuildRestfulInterface {
                 builder.returnResult(returnVariable);
             });
         }
-        builder.endMethod();
+        builder.endMethod(null);
     }
 
     private static void makeHeaders(List<xHeader> headers, IRestfulInterfaceBuilder builder) {
@@ -112,9 +108,25 @@ public class BuildRestfulInterface {
         });
     }
 
-    private static void makeAuthentication(String authenticationName, Variable request, IRestfulInterfaceBuilder builder) {
-        if (authenticationName != null && !authenticationName.equals("")) {
-            builder.invokeAuthentication(request, GlobalContext.getCurrentDescriptionConverter().getMethodDescriptor(authenticationName));
+    private static void makeAuthentication(xAuthentication authentication, Variable request, IRestfulInterfaceBuilder builder) {
+        if (authentication != null && !Checker.isEmpty(authentication.name)) {
+
+            VariableType procedureType = Procedures.getType();
+            sMethod authenticationMethod = procedureType.getMethod(authentication.name);
+            if (authenticationMethod == null) {
+                CEIErrors.showXMLFailure(authentication, "Cannot find method: %s", authentication.name);
+                return;
+            }
+            List<Variable> inputs = authenticationMethod.getInputVariableList();
+            if (Checker.isNull(inputs) || inputs.size() < 2
+                    || inputs.get(0).getType() != RestfulRequest.getType() || inputs.get(1).getType() != RestfulOptions.getType()) {
+                CEIErrors.showXMLFailure(authentication, "%s cannot be the authentication function, it must defines 2 inputs, one is RestfulRequest, another is RestfulOptions");
+            }
+            Variable option = GlobalContext.getCurrentMethod().queryVariable("{option}");
+
+            IDataProcessorBuilder dataProcessorBuilder =
+                    Checker.checkBuilder(builder.createDataProcessorBuilder(), builder.getClass(), "DataProcessorBuilder");
+            dataProcessorBuilder.invokeFunction(authentication.name, null, request, option);
         }
     }
 }

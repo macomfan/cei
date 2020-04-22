@@ -4,7 +4,7 @@ import cn.ma.cei.generator.Variable;
 
 public interface IRestfulInterfaceBuilder extends IMethodBuilder {
 
-    void setRequestTarget(Variable request, Variable... targets);
+    void setRequestTarget(Variable request, Variable target);
 
     void addHeader(Variable request, Variable tag, Variable value);
 

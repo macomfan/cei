@@ -1,10 +1,9 @@
 package cn.ma.cei.generator.dataprocessor;
 
-import cn.ma.cei.exception.CEIException;
 import cn.ma.cei.generator.*;
 import cn.ma.cei.generator.builder.IDataProcessorBuilder;
 import cn.ma.cei.generator.buildin.CEIUtils;
-import cn.ma.cei.model.authentication.xGetRequestInfo;
+import cn.ma.cei.model.processor.xGetRequestInfo;
 import cn.ma.cei.model.types.xString;
 import cn.ma.cei.utils.Checker;
 
