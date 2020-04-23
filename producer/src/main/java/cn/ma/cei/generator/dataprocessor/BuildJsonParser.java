@@ -31,7 +31,7 @@ public class BuildJsonParser extends DataProcessorBase<xJsonParser> {
     @Override
     public Variable build(xJsonParser jsonParser, IDataProcessorBuilder builder) {
         IJsonParserBuilder jsonParserBuilder =
-                Checker.checkBuilder(builder.createJsonParserBuilder(), builder.getClass(), "JsonParserBuilder");
+                Checker.checkNull(builder.createJsonParserBuilder(), builder, "JsonParserBuilder");
         Variable inputVariable = getInputVariable(jsonParser);
 
         // Define the root json object.
@@ -97,7 +97,7 @@ public class BuildJsonParser extends DataProcessorBase<xJsonParser> {
             IJsonParserBuilder jsonParserBuilder,
             Variable rootJsonObject) {
         IJsonCheckerBuilder jsonCheckerBuilder =
-                Checker.checkBuilder(jsonParserBuilder.createJsonCheckerBuilder(), jsonParserBuilder.getClass(), "JsonCheckerBuilder");
+                Checker.checkNull(jsonParserBuilder.createJsonCheckerBuilder(), jsonParserBuilder, "JsonCheckerBuilder");
 
         Variable jsonCheckerVar = createTempVariable(JsonChecker.getType(), "jsonChecker");
         jsonCheckerBuilder.defineJsonChecker(jsonCheckerVar);

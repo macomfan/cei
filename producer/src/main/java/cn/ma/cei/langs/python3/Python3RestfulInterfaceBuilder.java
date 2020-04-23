@@ -33,9 +33,9 @@ public class Python3RestfulInterfaceBuilder implements IRestfulInterfaceBuilder 
     }
 
     @Override
-    public void defineRequest(Variable request) {
-        Variable options = BuilderContext.createStatement("self.__options");
-        method.addAssign(method.defineVariable(request), method.newInstance(request.getType(), options));
+    public void defineRequest(Variable request, Variable option) {
+        //Variable options = BuilderContext.createStatement("self.__options");
+        method.addAssign(method.defineVariable(request), method.newInstance(request.getType(), option));
     }
 
     @Override

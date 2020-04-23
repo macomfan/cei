@@ -36,7 +36,7 @@ public class BuildFunction {
                 GlobalContext.getCurrentMethod().getDescriptor(),
                 GlobalContext.getCurrentMethod().getInputVariableList());
 
-        IDataProcessorBuilder processorBuilder = Checker.checkBuilder(builder.createDataProcessorBuilder(), builder.getClass(), "DataProcessorBuilder");
+        IDataProcessorBuilder processorBuilder = Checker.checkNull(builder.createDataProcessorBuilder(), builder, "DataProcessorBuilder");
         BuildDataProcessor.build(function.implementation.items, processorBuilder);
         Variable returnVariable = null;
         if (!Checker.isEmpty(function.procedureReturn)) {

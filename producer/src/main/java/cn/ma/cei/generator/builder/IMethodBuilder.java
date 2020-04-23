@@ -5,7 +5,7 @@ import cn.ma.cei.generator.VariableType;
 
 import java.util.List;
 
-public interface IMethodBuilder {
+public interface IMethodBuilder extends IBuilderBase {
     void onAddReference(VariableType variableType);
 
     void startMethod(VariableType returnType, String methodDescriptor, List<Variable> params);

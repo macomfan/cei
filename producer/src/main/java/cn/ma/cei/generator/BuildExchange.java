@@ -1,6 +1,5 @@
 package cn.ma.cei.generator;
 
-import cn.ma.cei.exception.CEIErrors;
 import cn.ma.cei.generator.builder.IExchangeBuilder;
 import cn.ma.cei.generator.buildin.*;
 import cn.ma.cei.model.xSDK;
@@ -14,7 +13,7 @@ public class BuildExchange {
 
         if (sdk.modelList != null) {
             sdk.modelList.forEach((model) -> model.doBuild(() -> {
-                BuildModel.build(model, Checker.checkBuilder(builder.createModelBuilder(), builder.getClass(), "ModelBuilder"));
+                BuildModel.build(model, Checker.checkNull(builder.createModelBuilder(), builder, "ModelBuilder"));
             }));
         }
 
@@ -25,7 +24,7 @@ public class BuildExchange {
                 sdk.procedures.functions.forEach(function -> function.doBuild(() -> {
                     sMethod functionMethod = procedureModel.createMethod(function.name);
                     GlobalContext.setCurrentMethod(functionMethod);
-                    BuildFunction.build(function, Checker.checkBuilder(builder.createFunctionBuilder(), builder.getClass(), "FunctionBuilder"));
+                    BuildFunction.build(function, Checker.checkNull(builder.createFunctionBuilder(), builder, "FunctionBuilder"));
                     GlobalContext.setCurrentMethod(null);
                 }));
             }
@@ -39,7 +38,7 @@ public class BuildExchange {
                     GlobalContext.setupRunTimeVariableType(restful.name, BuilderContext.NO_REF);
                     VariableType clientType = GlobalContext.variableType(restful.name);
                     GlobalContext.setCurrentModel(clientType);
-                    BuildRestfulInterfaceClient.build(restful, Checker.checkBuilder(builder.createRestfulClientBuilder(), builder.getClass(), "RestfulClientBuilder"));
+                    BuildRestfulInterfaceClient.build(restful, Checker.checkNull(builder.createRestfulClientBuilder(), builder, "RestfulClientBuilder"));
                     GlobalContext.setCurrentModel(null);
                 }));
             }
@@ -50,7 +49,7 @@ public class BuildExchange {
                     GlobalContext.setupRunTimeVariableType(websocket.name, BuilderContext.NO_REF);
                     VariableType clientType = GlobalContext.variableType(websocket.name);
                     GlobalContext.setCurrentModel(clientType);
-                    BuildWebSocketClient.build(websocket, Checker.checkBuilder(builder.createWebSocketClientBuilder(), builder.getClass(), "WebSocketClientBuilder"));
+                    BuildWebSocketClient.build(websocket, Checker.checkNull(builder.createWebSocketClientBuilder(), builder, "WebSocketClientBuilder"));
                     GlobalContext.setCurrentModel(null);
                 }));
             }

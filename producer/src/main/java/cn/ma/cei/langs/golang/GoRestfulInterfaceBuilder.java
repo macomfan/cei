@@ -46,7 +46,7 @@ public class GoRestfulInterfaceBuilder implements IRestfulInterfaceBuilder {
     }
 
     @Override
-    public void defineRequest(Variable request) {
+    public void defineRequest(Variable request, Variable option) {
         method.addAssignAndDeclare(method.useVariable(new GoVar(request)), "ceiimpl.NewRestfulRequest(inst.options)");
     }
 

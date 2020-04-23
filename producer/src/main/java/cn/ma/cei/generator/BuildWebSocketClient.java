@@ -1,6 +1,5 @@
 package cn.ma.cei.generator;
 
-import cn.ma.cei.exception.CEIException;
 import cn.ma.cei.generator.builder.IWebSocketClientBuilder;
 import cn.ma.cei.generator.buildin.WebSocketConnection;
 import cn.ma.cei.generator.buildin.WebSocketOptions;
@@ -24,7 +23,7 @@ public class BuildWebSocketClient {
         sMethod connectMethod = GlobalContext.getCurrentModel().createMethod("connect");
         GlobalContext.setCurrentMethod(connectMethod);
         BuildWebSocketConnection.build(client.connection, client.actions,
-                Checker.checkBuilder(builder.createWebSocketInterfaceBuilder(),builder.getClass(), "WebSocketInterfaceBuilder"));
+                Checker.checkNull(builder.createWebSocketInterfaceBuilder(),builder, "WebSocketInterfaceBuilder"));
         GlobalContext.setCurrentMethod(null);
 
         // Build interfaces
@@ -33,7 +32,7 @@ public class BuildWebSocketClient {
                 sMethod method = GlobalContext.getCurrentModel().createMethod(intf.name);
                 GlobalContext.setCurrentMethod(method);
                 BuildWebSocketInterface.build(intf,
-                        Checker.checkBuilder(builder.createWebSocketInterfaceBuilder(), builder.getClass(), "WebSocketInterfaceBuilder"));
+                        Checker.checkNull(builder.createWebSocketInterfaceBuilder(), builder, "WebSocketInterfaceBuilder"));
                 GlobalContext.setCurrentMethod(null);
             }));
         }

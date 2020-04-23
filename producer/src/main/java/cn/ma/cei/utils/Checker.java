@@ -8,6 +8,7 @@ package cn.ma.cei.utils;
 import cn.ma.cei.exception.CEIErrorType;
 import cn.ma.cei.exception.CEIErrors;
 import cn.ma.cei.exception.CEIException;
+import cn.ma.cei.generator.builder.IBuilderBase;
 
 import java.lang.reflect.ParameterizedType;
 import java.util.List;
@@ -17,11 +18,11 @@ import java.util.List;
  * @author u0151316
  */
 public class Checker {
-    public static <T> T checkBuilder(T builder, Class<?> creator, String description) {
-        if (builder == null) {
-            CEIErrors.showCodeFailure(creator, "%s is null.", description);
+    public static <T> T checkNull(T object, IBuilderBase builder, String description) {
+        if (object == null) {
+            CEIErrors.showCodeFailure(builder.getClass(), "%s is null.", description);
         } else {
-            return builder;
+            return object;
         }
         return null;
     }

@@ -22,7 +22,7 @@ public class BuildRestfulInterfaceClient {
             client.interfaceList.forEach((restIf) -> restIf.doBuild(() -> {
                 sMethod method = GlobalContext.getCurrentModel().createMethod(restIf.name);
                 GlobalContext.setCurrentMethod(method);
-                BuildRestfulInterface.build(restIf, Checker.checkBuilder(builder.createRestfulInterfaceBuilder(method), builder.getClass(), "RestfulInterfaceBuilder"));
+                BuildRestfulInterface.build(restIf, Checker.checkNull(builder.createRestfulInterfaceBuilder(method), builder, "RestfulInterfaceBuilder"));
                 GlobalContext.setCurrentMethod(null);
             }));
         }

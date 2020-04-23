@@ -191,6 +191,9 @@ public class sMethod {
             for (String item : variableNames) {
                 Variable param = GlobalContext.getCurrentMethod().tryGetVariable(item);
                 String formatEntity = builder.getStringFormatEntity(index++, param);
+                if (Checker.isEmpty(formatEntity)) {
+                    CEIErrors.showCodeFailure(builder.getClass(), "getStringFormatEntity is null");
+                }
                 formatString = formatString.replaceFirst(Pattern.quote("{" + item + "}"), formatEntity);
                 variables.add(TypeConverter.convertType(param, xString.inst.getType(), builder));
             }

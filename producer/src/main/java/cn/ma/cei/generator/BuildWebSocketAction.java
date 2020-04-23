@@ -61,7 +61,7 @@ public class BuildWebSocketAction {
             Variable msg = trigger.createInputVariable(WebSocketMessage.getType(), "msg");
             // Build trigger
             IWebSocketImplementationBuilder implementationBuilder =
-                    Checker.checkBuilder(actionBuilder.createImplementationBuilderForTrigger(), actionBuilder.getClass(), "ImplementationBuilderForTrigger");
+                    Checker.checkNull(actionBuilder.createImplementationBuilderForTrigger(), actionBuilder, "ImplementationBuilderForTrigger");
             BuildWebSocketImplementation.buildTrigger(context.trigger, msg, implementationBuilder);
             actionBuilder.setTriggerToAction(actionVariable, trigger);
         } else {
@@ -74,7 +74,7 @@ public class BuildWebSocketAction {
             // Build send
             Variable msg = send.createInputVariable(WebSocketMessage.getType(), "msg");
             IWebSocketImplementationBuilder implementationBuilder =
-                    Checker.checkBuilder(actionBuilder.createImplementationBuilderForResponse(), actionBuilder.getClass(), "ImplementationBuilderForResponse");
+                    Checker.checkNull(actionBuilder.createImplementationBuilderForResponse(), actionBuilder, "ImplementationBuilderForResponse");
             BuildWebSocketImplementation.buildSendInAction(context.send, msg, implementationBuilder);
             actionBuilder.setActionToAction(actionVariable, send);
             GlobalContext.setCurrentMethod(interfaceMethod);

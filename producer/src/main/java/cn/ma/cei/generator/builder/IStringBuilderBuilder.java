@@ -2,7 +2,7 @@ package cn.ma.cei.generator.builder;
 
 import cn.ma.cei.generator.Variable;
 
-public interface IStringBuilderBuilder {
+public interface IStringBuilderBuilder extends IBuilderBase {
     /**
      * Define the StringWrapper object.
      * e.g.

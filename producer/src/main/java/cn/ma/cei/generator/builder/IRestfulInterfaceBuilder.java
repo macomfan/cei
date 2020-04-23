@@ -8,7 +8,7 @@ public interface IRestfulInterfaceBuilder extends IMethodBuilder {
 
     void addHeader(Variable request, Variable tag, Variable value);
 
-    void defineRequest(Variable request);
+    void defineRequest(Variable request, Variable option);
 
     void addToQueryString(Variable request, Variable queryStringName, Variable variable);
 

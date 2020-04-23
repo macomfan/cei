@@ -12,7 +12,7 @@ import cn.ma.cei.generator.naming.IDescriptionConverter;
  *
  * @author u0151316
  */
-public interface IFramework {
+public interface IFramework extends IBuilderBase {
     /***
      * Return the language of the framework.
      * For java: new Language("java", "cei_java"),

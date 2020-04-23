@@ -85,7 +85,7 @@ public class BuildSDK {
                 GlobalContext.setCurrentExchange(sdk.name);
                 GlobalContext.setCurrentLanguage(frameworks.get1(item));
                 GlobalContext.setCurrentFramework(framework);
-                BuildExchange.build(sdk, Checker.checkBuilder(framework.createExchangeBuilder(), framework.getClass(), "ExchangeBuilder"));
+                BuildExchange.build(sdk, Checker.checkNull(framework.createExchangeBuilder(), framework, "ExchangeBuilder"));
             }));
             CEIErrors.showInfo("Build %s complete", item);
         });

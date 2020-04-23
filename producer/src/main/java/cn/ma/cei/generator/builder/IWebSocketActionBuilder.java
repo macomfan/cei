@@ -3,7 +3,7 @@ package cn.ma.cei.generator.builder;
 import cn.ma.cei.generator.Variable;
 import cn.ma.cei.generator.sMethod;
 
-public interface IWebSocketActionBuilder {
+public interface IWebSocketActionBuilder extends IBuilderBase {
     void startAction();
 
     IWebSocketImplementationBuilder createImplementationBuilderForTrigger();

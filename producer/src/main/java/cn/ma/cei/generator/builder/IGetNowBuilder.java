@@ -16,7 +16,7 @@ import cn.ma.cei.generator.Variable;
  * Unix_ms The unix format timestamp based on millisecond. (default)
  *
  */
-public interface IGetNowBuilder {
+public interface IGetNowBuilder extends IBuilderBase {
     String convertToStringFormat(String format);
 
     void getNow(Variable output, Variable format);

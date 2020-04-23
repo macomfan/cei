@@ -34,17 +34,17 @@ public class Python3RestfulClientBuilder implements IRestfulClientBuilder {
         clientClass = new Python3Class(clientType.getDescriptor());
         Python3Method defaultConstructor = new Python3Method(clientClass);
 
-        defaultConstructor.getCode().appendln("def __init__(self, options=None):");
+        defaultConstructor.getCode().appendln("def __init__(self, option=None):");
         defaultConstructor.getCode().newBlock(() -> {
             clientClass.attachDefaultConstructor(defaultConstructor);
-            defaultConstructor.getCode().appendWordsln("self.__options", "=", RestfulOptions.getType().getDescriptor() + "()");
+            defaultConstructor.getCode().appendWordsln("self.__option", "=", RestfulOptions.getType().getDescriptor() + "()");
             Variable url = BuilderContext.createStringConstant(options.url);
-            defaultConstructor.getCode().appendWordsln("self.__options.url", "=", url.getDescriptor());
+            defaultConstructor.getCode().appendWordsln("self.__option.url", "=", url.getDescriptor());
             if (options.connectionTimeout != null) {
-                defaultConstructor.getCode().appendWordsln("self.__options.connectionTimeout", "=", options.connectionTimeout.toString());
+                defaultConstructor.getCode().appendWordsln("self.__option.connectionTimeout", "=", options.connectionTimeout.toString());
             }
             defaultConstructor.getCode().appendln("if options is not None:");
-            defaultConstructor.getCode().newBlock(() -> defaultConstructor.getCode().appendln("self.__options.set_from(options)"));
+            defaultConstructor.getCode().newBlock(() -> defaultConstructor.getCode().appendln("self.__options.set_from(option)"));
         });
         clientClass.addReference(RestfulOptions.getType());
     }

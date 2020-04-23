@@ -2,7 +2,7 @@ package cn.ma.cei.generator.builder;
 
 import cn.ma.cei.generator.Variable;
 
-public interface IJsonCheckerBuilder {
+public interface IJsonCheckerBuilder extends IBuilderBase {
 
     enum UsedFor{
         RETURN_RESULT,

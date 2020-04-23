@@ -12,7 +12,7 @@ public class BuildUserProcedure {
     public static Variable createValueFromProcedure(VariableType objType, String value, xItemWithProcedure parent, IMethodBuilder methodBuilder) {
         Checker.isNull(methodBuilder, BuildUserProcedure.class, "IMethodBuilder");
         Checker.isNull(parent, BuildUserProcedure.class, "xItemWithProcedure");
-        IDataProcessorBuilder dataProcessorBuilder = Checker.checkBuilder(methodBuilder.createDataProcessorBuilder(), methodBuilder.getClass(), "DataProcessorBuilder");
+        IDataProcessorBuilder dataProcessorBuilder = Checker.checkNull(methodBuilder.createDataProcessorBuilder(), methodBuilder, "DataProcessorBuilder");
         Checker.isNull(dataProcessorBuilder, BuildUserProcedure.class, "IDataProcessorBuilder");
         Variable result = innerCreateValueFromProcedure(value, parent, dataProcessorBuilder);
         return TypeConverter.convertType(result, objType, dataProcessorBuilder);

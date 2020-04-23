@@ -1,5 +1,6 @@
 package cn.ma.cei.langs.python3;
 
+import cn.ma.cei.generator.BuildDataProcessor;
 import cn.ma.cei.generator.BuilderContext;
 import cn.ma.cei.generator.Variable;
 import cn.ma.cei.generator.builder.*;
@@ -52,7 +53,7 @@ public class Python3DataProcessorBuilder implements IDataProcessorBuilder {
 
     @Override
     public String getStringFormatEntity(int index, Variable item) {
-        return null;
+        return String.format("{%d}", index);
     }
 
     @Override
@@ -62,7 +63,7 @@ public class Python3DataProcessorBuilder implements IDataProcessorBuilder {
 
     @Override
     public Variable convertRestfulResponseToString(Variable response) {
-        return null;
+        return BuilderContext.createStatement(response.getDescriptor() + ".to_string()");
     }
 
     @Override

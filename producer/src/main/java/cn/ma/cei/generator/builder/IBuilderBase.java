@@ -5,12 +5,10 @@
  */
 package cn.ma.cei.generator.builder;
 
-import cn.ma.cei.generator.Variable;
-
 /**
  *
  * @author U0151316
  */
-public interface IAuthenticationBuilder extends IMethodBuilder {
+public interface IBuilderBase {
 
 }

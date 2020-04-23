@@ -123,7 +123,7 @@ public class Main {
         BuildSDK.registerFramework(new CppFramework());
         BuildSDK.registerFramework(new Python3Framework());
         BuildSDK.registerFramework(new GoFramework());
-        BuildSDK.build("C:\\dev\\cei\\exchanges\\test", "java", "C:\\dev\\cei\\output");
+        BuildSDK.build("C:\\dev\\cei\\exchanges\\test", "python3", "C:\\dev\\cei\\output");
         xSDK sdk = XMLDatabase.getSDK("debug");
         XmlToJson xmlToJson = new XmlToJson();
         Convert.doConvert(xmlToJson, sdk);

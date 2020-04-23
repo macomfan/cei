@@ -32,7 +32,7 @@ public class BuildWebSocketConnection {
             if (actions != null) {
                 actions.forEach((action) -> action.doBuild(() -> {
                     BuildWebSocketAction.build(action,
-                            Checker.checkBuilder(builder.createWebSocketActionBuilder(), builder.getClass(), "WebSocketActionBuilder"));
+                            Checker.checkNull(builder.createWebSocketActionBuilder(), builder, "WebSocketActionBuilder"));
                 }));
             }
 
@@ -41,7 +41,7 @@ public class BuildWebSocketConnection {
                 GlobalContext.setCurrentMethod(onConnect);
                 Variable connectionVariable = onConnect.createInputVariable(WebSocketConnection.getType(), "connection");
                 IWebSocketImplementationBuilder implementationBuilder =
-                        Checker.checkBuilder(builder.createOnConnectBuilder(), builder.getClass(), "OnConnectBuilder");
+                        Checker.checkNull(builder.createOnConnectBuilder(), builder, "OnConnectBuilder");
                 BuildWebSocketImplementation.buildSendInAction(connection.onConnect.send, connectionVariable, implementationBuilder);
                 builder.setupOnConnect(onConnect);
                 GlobalContext.setCurrentMethod(connectMethod);

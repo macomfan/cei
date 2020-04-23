@@ -1,6 +1,6 @@
 package cn.ma.cei.generator.builder;
 
-public interface IExchangeBuilder {
+public interface IExchangeBuilder extends IBuilderBase {
     /***
      * 
      * 

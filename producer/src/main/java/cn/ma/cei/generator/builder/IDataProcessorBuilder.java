@@ -3,7 +3,7 @@ package cn.ma.cei.generator.builder;
 import cn.ma.cei.generator.BuilderContext;
 import cn.ma.cei.generator.Variable;
 
-public interface IDataProcessorBuilder {
+public interface IDataProcessorBuilder extends IBuilderBase {
     IJsonBuilderBuilder createJsonBuilderBuilder();
 
     IStringBuilderBuilder createStringBuilderBuilder();

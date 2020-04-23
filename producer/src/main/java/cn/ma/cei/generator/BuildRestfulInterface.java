@@ -40,7 +40,8 @@ public class BuildRestfulInterface {
         builder.startMethod(returnType.get(), GlobalContext.getCurrentDescriptionConverter().getMethodDescriptor(restIf.name), inputVariableList);
         {
             restIf.request.doBuild(() -> {
-                builder.defineRequest(request);
+                Variable option = GlobalContext.getCurrentMethod().queryVariable("{option}");
+                builder.defineRequest(request, option);
                 builder.setRequestTarget(request, BuildUserProcedure.createValueFromProcedure(restIf.request.target, restIf.request, builder));
                 Variable requestMethod = GlobalContext.createStatement(Constant.requestMethod().get(restIf.request.method));
                 builder.setRequestMethod(request, requestMethod);
@@ -55,7 +56,7 @@ public class BuildRestfulInterface {
             VariableType finalReturnType = returnType.get();
             restIf.response.doBuild(() -> {
                 builder.invokeQuery(response, request);
-                IDataProcessorBuilder dataProcessorBuilder = Checker.checkBuilder(builder.createDataProcessorBuilder(), builder.getClass(), "DataProcessorBuilder");
+                IDataProcessorBuilder dataProcessorBuilder = Checker.checkNull(builder.createDataProcessorBuilder(), builder, "DataProcessorBuilder");
                 Variable returnVariable = BuildResponse.build(restIf.response, response, finalReturnType, dataProcessorBuilder);
                 builder.returnResult(returnVariable);
             });
@@ -125,7 +126,7 @@ public class BuildRestfulInterface {
             Variable option = GlobalContext.getCurrentMethod().queryVariable("{option}");
 
             IDataProcessorBuilder dataProcessorBuilder =
-                    Checker.checkBuilder(builder.createDataProcessorBuilder(), builder.getClass(), "DataProcessorBuilder");
+                    Checker.checkNull(builder.createDataProcessorBuilder(), builder, "DataProcessorBuilder");
             dataProcessorBuilder.invokeFunction(authentication.name, null, request, option);
         }
     }

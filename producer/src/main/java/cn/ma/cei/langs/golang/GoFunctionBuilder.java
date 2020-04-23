@@ -17,12 +17,12 @@ import java.util.List;
  *
  * @author U0151316
  */
-public class GoAuthenticationBuilder implements IAuthenticationBuilder {
+public class GoFunctionBuilder implements IMethodBuilder {
 
     private GoFile mainFile;
     private GoMethod method;
 
-    public GoAuthenticationBuilder(GoFile mainFile) {
+    public GoFunctionBuilder(GoFile mainFile) {
         this.mainFile = mainFile;
     }
 

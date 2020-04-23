@@ -3,33 +3,6 @@ import time
 class CEIUtils:
 
     @staticmethod
-    def process_single_time_format_syntax(input):
-        command_string = "%"
-        res = ""
-        for char in input:
-            if command_string != "":
-                command_string += char
-                if command_string == "%Y":
-                    res += "%Y"
-                    pass
-                elif command_string == "%M":
-                    pass
-                elif command_string == "%D":
-                    pass
-                elif command_string == "%h":
-                    pass
-                elif command_string == "%m":
-                    pass
-                elif command_string == "%s":
-                    pass
-                elif command_string == "%ms":
-                    pass
-            else:
-
-
-        pass
-
-    @staticmethod
     def get_now(format: 'str'):
         """
         Convert current date/time in UTC to string

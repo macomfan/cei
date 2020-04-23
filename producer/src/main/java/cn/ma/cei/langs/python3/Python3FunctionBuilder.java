@@ -7,8 +7,9 @@ package cn.ma.cei.langs.python3;
 
 import cn.ma.cei.generator.Variable;
 import cn.ma.cei.generator.VariableType;
-import cn.ma.cei.generator.builder.IAuthenticationBuilder;
+import cn.ma.cei.generator.builder.IBuilderBase;
 import cn.ma.cei.generator.builder.IDataProcessorBuilder;
+import cn.ma.cei.generator.builder.IMethodBuilder;
 import cn.ma.cei.generator.buildin.CEIUtils;
 import cn.ma.cei.langs.python3.tools.Python3Class;
 import cn.ma.cei.langs.python3.tools.Python3Method;
@@ -19,12 +20,12 @@ import java.util.List;
 /**
  * @author u0151316
  */
-public class Python3AuthenticationBuilder implements IAuthenticationBuilder {
+public class Python3FunctionBuilder implements IMethodBuilder {
 
     private Python3Method method;
     private final Python3Class parent;
 
-    public Python3AuthenticationBuilder(Python3Class parent) {
+    public Python3FunctionBuilder(Python3Class parent) {
         this.parent = parent;
     }
 

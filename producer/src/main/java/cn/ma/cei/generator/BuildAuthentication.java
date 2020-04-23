@@ -5,21 +5,17 @@
  */
 package cn.ma.cei.generator;
 
-import cn.ma.cei.exception.CEIException;
-import cn.ma.cei.generator.builder.IAuthenticationBuilder;
-import cn.ma.cei.generator.buildin.RestfulOptions;
-import cn.ma.cei.generator.buildin.RestfulRequest;
+import cn.ma.cei.generator.builder.IBuilderBase;
 import cn.ma.cei.model.restful.xAuthentication;
 import cn.ma.cei.model.websocket.xWSAuthentication;
 import cn.ma.cei.utils.Checker;
-import cn.ma.cei.utils.RegexHelper;
 
 /**
  * @author U0151316
  */
 public class BuildAuthentication {
 
-    public static void buildRestful(xAuthentication authentication, IAuthenticationBuilder builder) {
+    public static void buildRestful(xAuthentication authentication, IBuilderBase builder) {
         Checker.isNull(builder, BuildAuthentication.class, "AuthenticationBuilder");
 
 
@@ -35,7 +31,7 @@ public class BuildAuthentication {
 //        builder.endMethod(null);
     }
 
-    public static void buildWebSocket(xWSAuthentication authentication, IAuthenticationBuilder builder) {
+    public static void buildWebSocket(xWSAuthentication authentication, IBuilderBase builder) {
 
     }
 }

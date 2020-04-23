@@ -22,7 +22,7 @@ public class BuildJsonBuilder extends DataProcessorBase<xJsonBuilder> {
 
     @Override
     public Variable build(xJsonBuilder jsonBuilder, IDataProcessorBuilder builder) {
-        IJsonBuilderBuilder jsonBuilderBuilder = Checker.checkBuilder(builder.createJsonBuilderBuilder(), builder.getClass(), "JsonBuilderBuilder");
+        IJsonBuilderBuilder jsonBuilderBuilder = Checker.checkNull(builder.createJsonBuilderBuilder(), builder, "JsonBuilderBuilder");
         Variable jsonObject;
         if (Checker.isEmpty(jsonBuilder.name)) {
             jsonObject = createTempVariable(JsonWrapper.getType(), "jsonBuilder");

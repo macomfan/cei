@@ -2,7 +2,7 @@ package cn.ma.cei.generator.builder;
 
 import cn.ma.cei.generator.Variable;
 
-public interface IJsonParserBuilder {
+public interface IJsonParserBuilder extends IBuilderBase {
 
     /***
      * Should be [ to.nameDescriptor = jsonObject.nameDescriptor.getString(itemName) ]

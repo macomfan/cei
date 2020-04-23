@@ -109,6 +109,6 @@ public class Variable {
         if (member == null) {
             return null;
         }
-        return VariableCreator.createVariable(member.getType(), name, Variable.Position.REFER, this);
+        return VariableCreator.createVariable(member.getType(), member.getDescriptor(), Variable.Position.REFER, this);
     }
 }

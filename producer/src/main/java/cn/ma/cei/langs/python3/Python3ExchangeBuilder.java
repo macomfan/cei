@@ -22,7 +22,7 @@ import cn.ma.cei.model.types.xString;
 public class Python3ExchangeBuilder implements IExchangeBuilder {
 
     private Python3File mainFile;
-    private Python3Class authenticationClass;
+    private Python3Class functionClass;
     
 
     @Override
@@ -53,6 +53,7 @@ public class Python3ExchangeBuilder implements IExchangeBuilder {
         BuilderContext.setupBuildInVariableType(TheStream.typeName, "byte[]", BuilderContext.NO_REF);
         BuilderContext.setupBuildInVariableType(JsonChecker.typeName, "JsonChecker", "from impl.jsonchecker import JsonChecker");
         BuilderContext.setupBuildInVariableType(StringWrapper.typeName, "StringWrapper", "from impl.stringwrapper import StringWrapper");
+        BuilderContext.setupBuildInVariableType(Procedures.typeName, "Procedures", BuilderContext.NO_REF);
 
         BuilderContext.setupBuildInVariableType(WebSocketConnection.typeName, "WebSocketConnection", "from impl.websocketconnection import WebSocketConnection");
         BuilderContext.setupBuildInVariableType(WebSocketAction.typeName, "WebSocketAction", "from impl.websocketaction import WebSocketAction");
@@ -66,7 +67,7 @@ public class Python3ExchangeBuilder implements IExchangeBuilder {
         BuilderContext.setExchangeFolder(exchangeFolder);
 
         mainFile = new Python3File(exchangeName);
-        authenticationClass = new Python3Class("Authentication");
+        functionClass = new Python3Class("Authentication");
     }
 
     @Override
@@ -81,7 +82,7 @@ public class Python3ExchangeBuilder implements IExchangeBuilder {
 
     @Override
     public IMethodBuilder createFunctionBuilder() {
-        return null;
+        return new Python3FunctionBuilder(functionClass);
     }
 
     @Override
@@ -91,7 +92,7 @@ public class Python3ExchangeBuilder implements IExchangeBuilder {
 
     @Override
     public void endExchange() {
-        mainFile.addInnerClass(authenticationClass);
+        mainFile.addInnerClass(functionClass);
         mainFile.build(BuilderContext.getExchangeFolder());
         
     }

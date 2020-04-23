@@ -10,6 +10,7 @@ import cn.ma.cei.generator.buildin.RestfulResponse;
 import cn.ma.cei.generator.buildin.StringWrapper;
 import cn.ma.cei.model.types.xInt;
 import cn.ma.cei.model.types.xString;
+import cn.ma.cei.utils.Checker;
 
 public class TypeConverter {
     public static Variable convertType(Variable input, VariableType objectType, IDataProcessorBuilder builder) {
@@ -17,13 +18,13 @@ public class TypeConverter {
             return input;
         } else if (input.getType() == JsonWrapper.getType()) {
             if (objectType == xString.inst.getType()) {
-                return builder.jsonWrapperToString(input);
+                return Checker.checkNull(builder.jsonWrapperToString(input), builder, "jsonWrapperToString");
             } else {
                 CEIErrors.showFailure(CEIErrorType.XML, "Cannot convert JsonWrapper to %s", objectType.getDescriptor());
             }
         } else if (input.getType() == StringWrapper.getType()) {
             if (objectType == xString.inst.getType()) {
-                return builder.stringWrapperToString(input);
+                return Checker.checkNull(builder.stringWrapperToString(input), builder, "stringWrapperToString");
             } else {
                 CEIErrors.showFailure(CEIErrorType.XML, "Cannot convert StringWrapper to %s", objectType.getDescriptor());
             }
@@ -33,11 +34,11 @@ public class TypeConverter {
 
         } else if (input.getType() == xInt.inst.getType()) {
             if (objectType == xString.inst.getType()) {
-                return builder.convertIntToString(input);
+                return Checker.checkNull(builder.convertIntToString(input), builder, "convertIntToString");
             }
         } else if (input.getType() == RestfulResponse.getType()) {
             if (objectType == xString.inst.getType()) {
-                return builder.convertRestfulResponseToString(input);
+                return Checker.checkNull(builder.convertRestfulResponseToString(input), builder, "convertRestfulResponseToString");
             }
         }
 

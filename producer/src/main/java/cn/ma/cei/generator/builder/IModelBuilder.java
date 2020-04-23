@@ -3,7 +3,7 @@ package cn.ma.cei.generator.builder;
 import cn.ma.cei.generator.Variable;
 import cn.ma.cei.generator.VariableType;
 
-public interface IModelBuilder {
+public interface IModelBuilder extends IBuilderBase {
     String getReference(String modelDescriptor);
 
     void startModel(VariableType modelType);

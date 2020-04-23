@@ -15,7 +15,7 @@ public class BuildGetNow extends DataProcessorBase<xGetNow> {
 
     @Override
     public Variable build(xGetNow item, IDataProcessorBuilder builder) {
-        IGetNowBuilder getNowBuilder = Checker.checkBuilder(builder.createGetNowBuilder(), builder.getClass(), "GetNowBuilder");
+        IGetNowBuilder getNowBuilder = Checker.checkNull(builder.createGetNowBuilder(), builder, "GetNowBuilder");
         Variable output = createUserVariable(xString.inst.getType(), item.name);
         String convertedFormatString = "";
         if (!Checker.isEmpty(item.format)) {

@@ -22,7 +22,7 @@ public class CppRestfulInterfaceBuilder implements IRestfulInterfaceBuilder {
 //    }
     
     @Override
-    public void defineRequest(Variable request) {
+    public void defineRequest(Variable request, Variable option) {
         cppMethod.getCode().appendStatementWordsln(request.getTypeDescriptor(), request.getDescriptor());
     }
     

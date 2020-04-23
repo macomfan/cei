@@ -94,7 +94,7 @@ class GlobalContext {
     }
 
     public static IDescriptionConverter getCurrentDescriptionConverter() {
-        return Checker.checkBuilder(currentFramework.getDescriptionConverter(), currentFramework.getClass(), "DescriptionConverter");
+        return Checker.checkNull(currentFramework.getDescriptionConverter(), currentFramework, "DescriptionConverter");
     }
 
     public static void setupBuildInVariableType(String typeName, String typeDescriptor, String reference) {
