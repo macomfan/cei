@@ -214,15 +214,16 @@
                         <int name="Number"/>
                         <boolean name="Status"/>
                     </inputs>
-                    <request method="post" target="/restful/post/echo">
-                        <post_body value="aa{result}">
-                            <json_builder name="result">
+                    <request method="post" target="/restful/post/echo/{postMsg}">
+                        <pre_processor>
+                            <json_builder name="postMsg">
                                 <json_value copy="Name"/>
                                 <json_value copy="Price"/>
                                 <json_value copy="Number"/>
                                 <json_value key="Status_1" value="{Status}"/>
                             </json_builder>
-                        </post_body>
+                        </pre_processor>
+                        <post_body value="aa{postMsg}"/>
                     </request>
                     <response>
                         <json_parser model="SimpleInfo">
@@ -239,14 +240,15 @@
                         <int name="Number"/>
                     </inputs>
                     <request method="post" target="/restful/post/authentication">
+                        <pre_processor>
+                            <json_builder name="postMsg">
+                                <json_value copy="Number"/>
+                            </json_builder>
+                        </pre_processor>
                         <query_strings>
                             <query key="Name" value="{Name}"/>
                         </query_strings>
-                        <post_body value="{result}">
-                            <json_builder name="result">
-                                <json_value copy="Number"/>
-                            </json_builder>
-                        </post_body>
+                        <post_body value="{postMsg}"/>
                         <authentication name="restfulAuth"/>
                     </request>
                     <response>

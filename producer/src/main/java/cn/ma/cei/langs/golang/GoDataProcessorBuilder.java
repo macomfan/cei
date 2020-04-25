@@ -36,12 +36,17 @@ public class GoDataProcessorBuilder implements IDataProcessorBuilder {
 
 
     @Override
-    public Variable jsonWrapperToString(Variable jsonWrapper) {
+    public Variable convertJsonWrapperToString(Variable jsonWrapper) {
         return null;
     }
 
     @Override
-    public Variable stringWrapperToString(Variable stringWrapper) {
+    public Variable convertStringWrapperToString(Variable stringWrapper) {
+        return null;
+    }
+
+    @Override
+    public Variable convertStringWrapperToArray(Variable stringWrapper) {
         return null;
     }
 
@@ -62,6 +67,16 @@ public class GoDataProcessorBuilder implements IDataProcessorBuilder {
 
     @Override
     public Variable convertRestfulResponseToString(Variable response) {
+        return null;
+    }
+
+    @Override
+    public Variable convertDecimalToString(Variable decimalVariable) {
+        return null;
+    }
+
+    @Override
+    public Variable convertBooleanToString(Variable booleanVariable) {
         return null;
     }
 

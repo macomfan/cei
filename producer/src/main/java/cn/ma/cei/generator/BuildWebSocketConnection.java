@@ -1,8 +1,10 @@
 package cn.ma.cei.generator;
 
+import cn.ma.cei.generator.builder.IDataProcessorBuilder;
 import cn.ma.cei.generator.builder.IWebSocketImplementationBuilder;
 import cn.ma.cei.generator.builder.IWebSocketInterfaceBuilder;
 import cn.ma.cei.generator.buildin.WebSocketConnection;
+import cn.ma.cei.model.types.xString;
 import cn.ma.cei.model.websocket.xAction;
 import cn.ma.cei.model.websocket.xWSConnection;
 import cn.ma.cei.utils.Checker;
@@ -48,7 +50,8 @@ public class BuildWebSocketConnection {
             }
 
             // Connect
-            Variable url = BuildUserProcedure.createValueFromProcedure(connection.url.target, connection.url, builder);
+            IDataProcessorBuilder dataProcessorBuilder = Checker.checkNull(builder.createDataProcessorBuilder(), builder, "DataProcessorBuilder");
+            Variable url = GlobalContext.getCurrentMethod().queryVariableOrConstant(connection.url.target, xString.inst.getType(), dataProcessorBuilder);
             // TODO
             // if url is not string, convert to string
             builder.connect(url, option);

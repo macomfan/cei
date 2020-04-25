@@ -1,8 +1,8 @@
 package cn.ma.cei.utils;
 
 public class TwoTuple<Value1, Value2> {
-    private Value1 value1;
-    private Value2 value2;
+    private final Value1 value1;
+    private final Value2 value2;
 
     public TwoTuple(Value1 value1, Value2 value2) {
         this.value1 = value1;

@@ -4,8 +4,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class DuplexMap<Key, Value> {
-    private Map<Key, Value> keyValueMap = new HashMap<>();
-    private Map<Value, Key> valueKeyMap = new HashMap<>();
+    private final Map<Key, Value> keyValueMap = new HashMap<>();
+    private final Map<Value, Key> valueKeyMap = new HashMap<>();
 
     public void put(Key key, Value value) {
         keyValueMap.put(key, value);

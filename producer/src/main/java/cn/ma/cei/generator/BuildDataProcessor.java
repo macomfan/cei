@@ -3,7 +3,6 @@ package cn.ma.cei.generator;
 import cn.ma.cei.exception.CEIErrorType;
 import cn.ma.cei.exception.CEIErrors;
 import cn.ma.cei.generator.builder.IDataProcessorBuilder;
-import cn.ma.cei.generator.builder.IMethodBuilder;
 import cn.ma.cei.generator.dataprocessor.*;
 import cn.ma.cei.model.base.xDataProcessorItem;
 import cn.ma.cei.model.json.xJsonBuilder;
@@ -26,8 +25,7 @@ public class BuildDataProcessor {
         public String returnVariableName = null;
         public VariableType specifiedReturnType = null;
         public Variable defaultInput = null;
-        public IMethodBuilder methodBuilder = null;
-        public boolean requiredDefaultReturn = false;
+        public IDataProcessorBuilder dataProcessorBuilder = null;
     }
 
     private static final NormalMap<Class<?>, DataProcessorBase<?>> processorMap = new NormalMap<>();
@@ -85,29 +83,30 @@ public class BuildDataProcessor {
 
 
     public static Variable build(Context context) {
+        if (context.dataProcessorBuilder == null) {
+            CEIErrors.showCodeFailure(BuildDataProcessor.class, "DataProcessorBuilder is null");
+        }
         if (context.procedure == null || Checker.isNull(context.procedure.items)) {
             return null;
         }
-        IDataProcessorBuilder dataProcessorBuilder =
-                Checker.checkNull(context.methodBuilder.createDataProcessorBuilder(), context.methodBuilder, "DataProcessorBuilder");
         Variable result = null;
         if (Checker.isEmpty(context.returnVariableName)) {
             if (context.procedure.items.size() == 1) {
                 // Only one item in the processor list, return the only item. Do not define output name in this item.
-                result = processSingleItem(context.procedure.items.get(0), context.defaultInput, dataProcessorBuilder);
+                result = processSingleItem(context.procedure.items.get(0), context.defaultInput, context.dataProcessorBuilder);
             }
         } else {
             context.procedure.items.forEach(item -> {
-                processSingleItem(item, context.defaultInput, dataProcessorBuilder);
+                processSingleItem(item, context.defaultInput, context.dataProcessorBuilder);
             });
 
-            result = GlobalContext.getCurrentMethod().queryVariableOrConstant(context.returnVariableName, dataProcessorBuilder );
+            result = GlobalContext.getCurrentMethod().queryVariableOrConstant(context.returnVariableName, context.dataProcessorBuilder);
             if (result == null) {
                 CEIErrors.showFailure(CEIErrorType.XML, "Cannot find the result variable: %s", RegexHelper.isReference(context.returnVariableName));
             }
         }
         if (context.specifiedReturnType != null && result != null) {
-            return TypeConverter.convertType(result, context.specifiedReturnType, dataProcessorBuilder);
+            return TypeConverter.convertType(result, context.specifiedReturnType, context.dataProcessorBuilder);
         } else {
             return result;
         }

@@ -1,7 +1,7 @@
 package cn.ma.cei.model.restful;
 
-import cn.ma.cei.model.base.xItemWithProcedure;
-import cn.ma.cei.model.xProcedure;
+import cn.ma.cei.model.base.xElement;
+import cn.ma.cei.model.xPreProcessor;
 
 import java.util.List;
 import javax.xml.bind.annotation.XmlAttribute;
@@ -10,7 +10,7 @@ import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement(name = "request")
-public class xRequest extends xProcedure {
+public class xRequest extends xElement {
 
     @XmlAttribute(name = "method")
     public String method;
@@ -31,4 +31,7 @@ public class xRequest extends xProcedure {
 
     @XmlElement(name = "post_body")
     public xPostBody postBody;
+
+    @XmlElement(name = "pre_processor")
+    public xPreProcessor preProcessor;
 }

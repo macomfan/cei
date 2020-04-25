@@ -157,6 +157,11 @@ public class sMethod {
         return TypeConverter.convertType(res, specType, dataProcessorBuilder);
     }
 
+    public Variable queryVariableOrConstant(String value, VariableType specType, IDataProcessorBuilder builder) {
+        Variable res = queryVariableOrConstant(value, builder);
+        return TypeConverter.convertType(res, specType, builder);
+    }
+
     /***
      * Query the variable from the current method.
      * the name should be the variable name format, like {xxx}.

@@ -38,13 +38,18 @@ public class JavaDataProcessorBuilder implements IDataProcessorBuilder {
     }
 
     @Override
-    public Variable jsonWrapperToString(Variable jsonWrapper) {
+    public Variable convertJsonWrapperToString(Variable jsonWrapper) {
         return BuilderContext.createStatement(jsonWrapper.getDescriptor() + ".toJsonString()");
     }
 
     @Override
-    public Variable stringWrapperToString(Variable stringWrapper) {
+    public Variable convertStringWrapperToString(Variable stringWrapper) {
         return BuilderContext.createStatement(stringWrapper.getDescriptor() + ".toNormalString()");
+    }
+
+    @Override
+    public Variable convertStringWrapperToArray(Variable stringWrapper) {
+        return null;
     }
 
     @Override
@@ -66,6 +71,16 @@ public class JavaDataProcessorBuilder implements IDataProcessorBuilder {
     @Override
     public Variable convertRestfulResponseToString(Variable response) {
         return BuilderContext.createStatement(method.invoke(response.getDescriptor() + ".getString"));
+    }
+
+    @Override
+    public Variable convertDecimalToString(Variable decimalVariable) {
+        return BuilderContext.createStatement(method.invoke(decimalVariable.getDescriptor() + ".toString"));
+    }
+
+    @Override
+    public Variable convertBooleanToString(Variable booleanVariable) {
+        return BuilderContext.createStatement(method.invoke(booleanVariable.getDescriptor() + ".toString"));
     }
 
     @Override

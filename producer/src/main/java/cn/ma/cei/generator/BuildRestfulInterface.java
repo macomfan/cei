@@ -3,6 +3,7 @@ package cn.ma.cei.generator;
 import cn.ma.cei.exception.CEIErrors;
 import cn.ma.cei.exception.CEIException;
 import cn.ma.cei.generator.builder.IDataProcessorBuilder;
+import cn.ma.cei.generator.builder.IMethodBuilder;
 import cn.ma.cei.generator.builder.IRestfulInterfaceBuilder;
 import cn.ma.cei.generator.buildin.*;
 import cn.ma.cei.model.restful.*;
@@ -41,21 +42,22 @@ public class BuildRestfulInterface {
         restIf.request.doBuild(() -> {
             Variable option = GlobalContext.getCurrentMethod().queryVariable("{option}");
             builder.defineRequest(request, option);
+            IDataProcessorBuilder dataProcessorBuilder = Checker.checkNull(builder.createDataProcessorBuilder(), builder, "DataProcessorBuilder");
             BuildDataProcessor.Context context = new BuildDataProcessor.Context();
-            context.procedure = restIf.request;
-            context.specifiedReturnType = xString.inst.getType();
-            context.returnVariableName = restIf.request.target;
-            context.methodBuilder = builder;
+            context.procedure = restIf.request.preProcessor;
+            context.defaultInput = request;
+            context.dataProcessorBuilder = dataProcessorBuilder;
+            BuildDataProcessor.build(context);
             //builder.setRequestTarget(request, BuildUserProcedure.createValueFromProcedure(restIf.request.target, restIf.request, builder));
-            builder.setRequestTarget(request, BuildDataProcessor.build(context));
+            builder.setRequestTarget(request, GlobalContext.getCurrentMethod().queryVariableOrConstant(restIf.request.target, dataProcessorBuilder));
             Variable requestMethod = GlobalContext.createStatement(Constant.requestMethod().get(restIf.request.method));
             builder.setRequestMethod(request, requestMethod);
-        });
-        makeHeaders(restIf.request.headers, builder);
-        makeQueryString(restIf.request.queryStrings, builder);
-        makePostBody(restIf.request.postBody, request, builder);
 
-        restIf.request.doBuild(() -> makeAuthentication(restIf.request.authentication, request, builder));
+            makeHeaders(restIf.request.headers, builder);
+            makeQueryString(restIf.request.queryStrings, builder);
+            makePostBody(restIf.request.postBody, request, builder, dataProcessorBuilder);
+            makeAuthentication(restIf.request.authentication, request, builder);
+        });
 
         builder.onAddReference(RestfulConnection.getType());
         VariableType finalReturnType = returnType.get();
@@ -94,27 +96,20 @@ public class BuildRestfulInterface {
         }
         Variable request = GlobalContext.getCurrentMethod().getVariable("request");
         queryStrings.forEach((queryString) -> queryString.doBuild(() -> {
-            Variable var = BuildUserProcedure. createValueFromProcedure(queryString.value, queryString, builder);
-            Variable key = BuildUserProcedure.createValueFromProcedure(queryString.key, queryString, builder);
+            IDataProcessorBuilder dataProcessorBuilder = Checker.checkNull(builder.createDataProcessorBuilder(), builder, "DataProcessorBuilder");
+            Variable var = GlobalContext.getCurrentMethod().queryVariableOrConstant(queryString.value, xString.inst.getType(), dataProcessorBuilder);
+            Variable key = GlobalContext.getCurrentMethod().queryVariableOrConstant(queryString.key, xString.inst.getType(), dataProcessorBuilder);
             builder.addToQueryString(request, key, var);
         }));
     }
 
-    private static void makePostBody(xPostBody postBody, Variable request, IRestfulInterfaceBuilder builder) {
+    private static void makePostBody(xPostBody postBody, Variable request, IRestfulInterfaceBuilder restfulInterfaceBuilder, IDataProcessorBuilder dataProcessorBuilder) {
         if (postBody == null) {
             return;
         }
         postBody.doBuild(() -> {
-            // Variable result = BuildUserProcedure.createValueFromProcedure(xString.inst.getType(), postBody.value, postBody, builder);
-            BuildDataProcessor.Context context = new BuildDataProcessor.Context();
-            context.procedure = postBody;
-            context.specifiedReturnType = xString.inst.getType();
-            context.returnVariableName = postBody.value;
-            context.methodBuilder = builder;
-            Variable result = BuildDataProcessor.build(context);
-            if (result != null) {
-                builder.setPostBody(request, result);
-            }
+            Variable result = GlobalContext.getCurrentMethod().queryVariableOrConstant(postBody.value, xString.inst.getType(), dataProcessorBuilder);
+            restfulInterfaceBuilder.setPostBody(request, result);
         });
     }
 

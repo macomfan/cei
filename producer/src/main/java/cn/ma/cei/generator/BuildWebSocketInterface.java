@@ -1,11 +1,12 @@
 package cn.ma.cei.generator;
 
-import cn.ma.cei.exception.CEIException;
+import cn.ma.cei.generator.builder.IDataProcessorBuilder;
 import cn.ma.cei.generator.builder.IWebSocketInterfaceBuilder;
 import cn.ma.cei.generator.buildin.WebSocketCallback;
 import cn.ma.cei.model.types.xString;
 import cn.ma.cei.model.websocket.xCallback;
 import cn.ma.cei.model.websocket.xWSInterface;
+import cn.ma.cei.utils.Checker;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -41,11 +42,12 @@ public class BuildWebSocketInterface {
         }
         // Build send
         if (intf.send != null) {
+            IDataProcessorBuilder dataProcessorBuilder = Checker.checkNull(builder.createDataProcessorBuilder(), builder, "DataProcessorBuilder");
             BuildDataProcessor.Context context = new BuildDataProcessor.Context();
             context.procedure = intf.send;
             context.returnVariableName = intf.send.value;
             context.specifiedReturnType = xString.inst.getType();
-            context.methodBuilder = builder;
+            context.dataProcessorBuilder = dataProcessorBuilder;
             //Variable sendVariable = BuildUserProcedure.createValueFromProcedure(xString.inst.getType(), intf.send.value, intf.send, builder);
             Variable sendVariable = BuildDataProcessor.build(context);
             builder.send(sendVariable);

@@ -36,7 +36,7 @@ public interface IDataProcessorBuilder extends IBuilderBase {
      * @param jsonWrapper the json builder variable
      * @return the statement variable
      */
-    Variable jsonWrapperToString(Variable jsonWrapper);
+    Variable convertJsonWrapperToString(Variable jsonWrapper);
 
     /***
      * Return the statement of converting the string wrapper to string;
@@ -46,7 +46,9 @@ public interface IDataProcessorBuilder extends IBuilderBase {
      * @param stringWrapper the json builder variable
      * @return the statement variable
      */
-    Variable stringWrapperToString(Variable stringWrapper);
+    Variable convertStringWrapperToString(Variable stringWrapper);
+
+    Variable convertStringWrapperToArray(Variable stringWrapper);
 
 
     /***
@@ -78,4 +80,18 @@ public interface IDataProcessorBuilder extends IBuilderBase {
      * @return
      */
     Variable convertRestfulResponseToString(Variable response);
+
+    /***
+     *
+     *
+     * @return
+     */
+    Variable convertDecimalToString(Variable decimalVariable);
+
+    /***
+     *
+     *
+     * @return
+     */
+    Variable convertBooleanToString(Variable booleanVariable);
 }

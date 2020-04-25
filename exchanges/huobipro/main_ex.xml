@@ -228,15 +228,16 @@
                         <string name="price"/>
                     </inputs>
                     <request method="post" target="/v1/order/orders/place">
-                        <post_body value="{result}">
-                            <json_builder name="result">
+                        <pre_processor>
+                            <json_builder name="postMsg">
                                 <json_value key="account-Id" value="{accountId}"/>
                                 <json_value copy="symbol"/>
                                 <json_value key="orderType" value="{orderType}"/>
                                 <json_value copy="amount"/>
                                 <json_value copy="price"/>
                             </json_builder>
-                        </post_body>
+                        </pre_processor>
+                        <post_body value="{postMsg}"/>
                     </request>
                     <response>
                         <json_parser model="OrderID">

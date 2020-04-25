@@ -37,13 +37,18 @@ public class Python3DataProcessorBuilder implements IDataProcessorBuilder {
     }
 
     @Override
-    public Variable jsonWrapperToString(Variable jsonWrapper) {
+    public Variable convertJsonWrapperToString(Variable jsonWrapper) {
         return BuilderContext.createStatement(jsonWrapper.getDescriptor() + ".to_json_string()");
     }
 
     @Override
-    public Variable stringWrapperToString(Variable stringWrapper) {
+    public Variable convertStringWrapperToString(Variable stringWrapper) {
         return BuilderContext.createStatement(stringWrapper.getDescriptor() + ".to_string()");
+    }
+
+    @Override
+    public Variable convertStringWrapperToArray(Variable stringWrapper) {
+        return null;
     }
 
     @Override
@@ -64,6 +69,16 @@ public class Python3DataProcessorBuilder implements IDataProcessorBuilder {
     @Override
     public Variable convertRestfulResponseToString(Variable response) {
         return BuilderContext.createStatement(response.getDescriptor() + ".to_string()");
+    }
+
+    @Override
+    public Variable convertDecimalToString(Variable decimalVariable) {
+        return null;
+    }
+
+    @Override
+    public Variable convertBooleanToString(Variable booleanVariable) {
+        return null;
     }
 
     @Override

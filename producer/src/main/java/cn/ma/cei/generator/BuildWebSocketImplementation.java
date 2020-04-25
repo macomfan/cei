@@ -31,13 +31,13 @@ public class BuildWebSocketImplementation {
 
     public static void buildSendInAction(xSend send, Variable msg, IWebSocketImplementationBuilder builder) {
         Checker.isNull(builder, BuildWebSocketImplementation.class, "WebSocketImplementationBuilder");
-        //Variable sendVariable = BuildUserProcedure.createValueFromProcedure(xString.inst.getType(), send.value, send, builder);
+        IDataProcessorBuilder dataProcessorBuilder = Checker.checkNull(builder.createDataProcessorBuilder(), builder, "DataProcessorBuilder");
         BuildDataProcessor.Context context = new BuildDataProcessor.Context();
         context.defaultInput = msg;
         context.procedure = send;
         context.returnVariableName = send.value;
         context.specifiedReturnType = xString.inst.getType();
-        context.methodBuilder = builder;
+        context.dataProcessorBuilder = dataProcessorBuilder;
         Variable sendVariable = BuildDataProcessor.build(context);
 //        IDataProcessorBuilder dataProcessorBuilder = Checker.checkNull(builder.createDataProcessorBuilder(), builder, "DataProcessorBuilder");
 //        Variable sendVariable = BuildDataProcessor.build(send, msg, send.value, dataProcessorBuilder);

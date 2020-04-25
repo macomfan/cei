@@ -1,6 +1,5 @@
 package cn.ma.cei.generator.dataprocessor;
 
-import cn.ma.cei.exception.CEIErrorType;
 import cn.ma.cei.exception.CEIErrors;
 import cn.ma.cei.generator.Variable;
 import cn.ma.cei.generator.VariableType;
@@ -8,43 +7,42 @@ import cn.ma.cei.generator.builder.IDataProcessorBuilder;
 import cn.ma.cei.generator.buildin.JsonWrapper;
 import cn.ma.cei.generator.buildin.RestfulResponse;
 import cn.ma.cei.generator.buildin.StringWrapper;
-import cn.ma.cei.model.types.xInt;
-import cn.ma.cei.model.types.xString;
-import cn.ma.cei.utils.Checker;
+import cn.ma.cei.model.types.*;
+import cn.ma.cei.utils.SecondLevelMap;
 
 public class TypeConverter {
+    // From - to - converter
+    public static final SecondLevelMap<VariableType, VariableType, Func> converterMap = new SecondLevelMap<>();
+
+    @FunctionalInterface
+    interface Func {
+        Variable convert(IDataProcessorBuilder builder, Variable variable);
+    }
+
+    static {
+        converterMap.put(JsonWrapper.getType(), xString.inst.getType(), (IDataProcessorBuilder::convertJsonWrapperToString));
+        converterMap.put(StringWrapper.getType(), xString.inst.getType(), (IDataProcessorBuilder::convertStringWrapperToString));
+        converterMap.put(StringWrapper.getType(), xStringArray.inst.getType(), (IDataProcessorBuilder::convertStringWrapperToArray));
+
+        converterMap.put(xInt.inst.getType(), xString.inst.getType(), (IDataProcessorBuilder::convertIntToString));
+        converterMap.put(xBoolean.inst.getType(), xString.inst.getType(), (IDataProcessorBuilder::convertBooleanToString));
+        converterMap.put(xDecimal.inst.getType(), xString.inst.getType(), (IDataProcessorBuilder::convertDecimalToString));
+
+        converterMap.put(RestfulResponse.getType(), xString.inst.getType(), (IDataProcessorBuilder::convertRestfulResponseToString));
+    }
     public static Variable convertType(Variable input, VariableType objectType, IDataProcessorBuilder builder) {
         if (input.getType() == objectType) {
             return input;
-        } else if (input.getType() == JsonWrapper.getType()) {
-            if (objectType == xString.inst.getType()) {
-                return Checker.checkNull(builder.jsonWrapperToString(input), builder, "jsonWrapperToString");
-            } else {
-                CEIErrors.showFailure(CEIErrorType.XML, "Cannot convert JsonWrapper to %s", objectType.getDescriptor());
-            }
-        } else if (input.getType() == StringWrapper.getType()) {
-            if (objectType == xString.inst.getType()) {
-                return Checker.checkNull(builder.stringWrapperToString(input), builder, "stringWrapperToString");
-            } else {
-                CEIErrors.showFailure(CEIErrorType.XML, "Cannot convert StringWrapper to %s", objectType.getDescriptor());
-            }
-        } else if (input.getType() == xString.inst.getType()){
-            //if (objectType == xS)
-
-
-        } else if (input.getType() == xInt.inst.getType()) {
-            if (objectType == xString.inst.getType()) {
-                return Checker.checkNull(builder.convertIntToString(input), builder, "convertIntToString");
-            }
-        } else if (input.getType() == RestfulResponse.getType()) {
-            if (objectType == xString.inst.getType()) {
-                return Checker.checkNull(builder.convertRestfulResponseToString(input), builder, "convertRestfulResponseToString");
-            }
         }
-
-        else{
-            CEIErrors.showFailure(CEIErrorType.XML, "Not support converter, from: %s, to %s", input.getType().getName(), objectType.getName());
+        Func func = converterMap.get(input.getType(), objectType);
+        if (func == null) {
+            CEIErrors.showCodeFailure(TypeConverter.class,"Not support converter, from: %s, to %s", input.getType().getDescriptor(), objectType.getDescriptor());
+            return null;
         }
-        return null;
+        Variable result = func.convert(builder, input);
+        if (result == null) {
+            CEIErrors.showCodeFailure(TypeConverter.class,"Convert result is null, from: %s, to %s", input.getType().getDescriptor(), objectType.getDescriptor());
+        }
+        return result;
     }
 }
