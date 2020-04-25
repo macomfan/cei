@@ -1,12 +1,13 @@
 package cn.ma.cei.model.restful;
 
 import cn.ma.cei.model.base.xItemWithProcedure;
+import cn.ma.cei.model.xProcedure;
 
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement(name = "query")
-public class xQuery extends xItemWithProcedure {
+public class xQuery extends xProcedure {
 
     @XmlAttribute(name = "key")
     public String key;

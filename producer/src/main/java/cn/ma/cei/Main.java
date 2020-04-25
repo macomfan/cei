@@ -1,6 +1,8 @@
 package cn.ma.cei;
 
+import cn.ma.cei.exception.BuildTracer;
 import cn.ma.cei.exception.CEIErrors;
+import cn.ma.cei.exception.CEIException;
 import cn.ma.cei.finalizer.XMLDatabase;
 import cn.ma.cei.generator.BuildSDK;
 import cn.ma.cei.langs.cpp.CppFramework;
@@ -123,7 +125,20 @@ public class Main {
         BuildSDK.registerFramework(new CppFramework());
         BuildSDK.registerFramework(new Python3Framework());
         BuildSDK.registerFramework(new GoFramework());
-        BuildSDK.build("C:\\dev\\cei\\exchanges\\test", "python3", "C:\\dev\\cei\\output");
+        try {
+            BuildSDK.build("C:\\dev\\cei\\exchanges", "java", "C:\\dev\\cei\\output");
+//        } catch (CEIException e) {
+//            System.err.println(e.getMessage());
+//            System.err.println(BuildTracer.getTraceString());
+//            e.printStackTrace();
+//            return;
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
+            System.err.println(BuildTracer.getTraceString());
+            e.printStackTrace();
+            return;
+        }
+
         xSDK sdk = XMLDatabase.getSDK("debug");
         XmlToJson xmlToJson = new XmlToJson();
         Convert.doConvert(xmlToJson, sdk);

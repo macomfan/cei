@@ -68,7 +68,6 @@ public class JavaDataProcessorBuilder implements IDataProcessorBuilder {
         return BuilderContext.createStatement(method.invoke(response.getDescriptor() + ".getString"));
     }
 
-
     @Override
     public void base64(Variable output, Variable input) {
         method.addAssign(method.defineVariable(output), method.invoke("CEIUtils.base64", input));

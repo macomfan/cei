@@ -53,6 +53,6 @@ public class BuildWebSocketConnection {
             // if url is not string, convert to string
             builder.connect(url, option);
         }
-        builder.endMethod(null);
+        builder.endMethod();
     }
 }

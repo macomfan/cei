@@ -52,4 +52,10 @@ public class Python3FunctionBuilder implements IMethodBuilder {
         parent.addMethod(method);
     }
 
+    @Override
+    public void endMethod() {
+        method.endMethod();
+        parent.addMethod(method);
+    }
+
 }

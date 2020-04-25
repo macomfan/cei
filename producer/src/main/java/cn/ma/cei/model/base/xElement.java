@@ -51,10 +51,12 @@ public abstract class xElement {
     }
 
     public void doCheck() {
+        startBuilding();
         // TODO need check ElementNSImpl
         if (!this.getClass().isAnnotationPresent(XmlRootElement.class)) {
             CEIErrors.showFailure(CEIErrorType.CODE, this.getClass().getName() + " must define XmlRootElement annotation.");
         }
+
         customCheck();
         if (this.getClass().getName().equals("cn.ma.cei.model.restful.xAuthentication")) {
             int a = 0;
@@ -92,6 +94,7 @@ public abstract class xElement {
                 }
             }
         });
+        endBuilding();
 //        try {
 //            doBuild(this::customCheck);
 //        } catch (CEIException e) {

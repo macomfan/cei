@@ -25,14 +25,12 @@
                 <url target="http://127.0.0.1:8888/websocket/{Channel}"/>
                 <on_connect>
                     <send value="{login}">
-                        <procedure>
-                            <json_builder name="login">
-                                <json_value key="op" value="echo"/>
-                                <json_object key="param">
-                                    <json_value copy="Name"/>
-                                </json_object>
-                            </json_builder>
-                        </procedure>
+                        <json_builder name="login">
+                            <json_value key="op" value="echo"/>
+                            <json_object key="param">
+                                <json_value copy="Name"/>
+                            </json_object>
+                        </json_builder>
                     </send>
                 </on_connect>
             </connection>
@@ -45,17 +43,15 @@
                         <boolean name="Status"/>
                     </inputs>
                     <send value="{json}">
-                        <procedure>
-                            <json_builder name="json">
-                                <json_value key="op" value="echo"/>
-                                <json_object key="param">
-                                    <json_value key="Name" value="{Name}"/>
-                                    <json_value key="Price" value="{Price}"/>
-                                    <json_value key="Number" value="{Number}"/>
-                                    <json_value key="Status" value="{Status}"/>
-                                </json_object>
-                            </json_builder>
-                        </procedure>
+                        <json_builder name="json">
+                            <json_value key="op" value="echo"/>
+                            <json_object key="param">
+                                <json_value key="Name" value="{Name}"/>
+                                <json_value key="Price" value="{Price}"/>
+                                <json_value key="Number" value="{Number}"/>
+                                <json_value key="Status" value="{Status}"/>
+                            </json_object>
+                        </json_builder>
                     </send>
                     <callback name="onEcho" persistent="false">
                         <trigger>
@@ -79,5 +75,4 @@
             </interfaces>
         </websocket>
     </clients>
-
 </sdk>

@@ -31,11 +31,6 @@ public class CppRestfulInterfaceBuilder implements IRestfulInterfaceBuilder {
     public void invokeQuery(Variable request, Variable response) {
         
     }
-
-    @Override
-    public void returnResult(Variable returnVariable) {
-        
-    }
     
     @Override
     public void onAddReference(VariableType variableType) {
@@ -69,6 +64,11 @@ public class CppRestfulInterfaceBuilder implements IRestfulInterfaceBuilder {
     }
 
     @Override
+    public void endMethod() {
+
+    }
+
+    @Override
     public void addHeader(Variable request, Variable tag, Variable value) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
@@ -83,11 +83,6 @@ public class CppRestfulInterfaceBuilder implements IRestfulInterfaceBuilder {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-//    @Override
-//    public void setUrl(Variable request) {
-//        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-//    }
-
     @Override
     public void setRequestMethod(Variable request, Variable requestMethod) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
@@ -95,16 +90,6 @@ public class CppRestfulInterfaceBuilder implements IRestfulInterfaceBuilder {
 
     @Override
     public void setPostBody(Variable request, Variable postBody) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-//    @Override
-//    public IJsonBuilderBuilder createJsonBuilderBuilder() {
-//        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-//    }
-
-    @Override
-    public void invokeAuthentication(Variable request, String methodName) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

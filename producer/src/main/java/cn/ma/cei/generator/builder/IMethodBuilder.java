@@ -13,4 +13,6 @@ public interface IMethodBuilder extends IBuilderBase {
     IDataProcessorBuilder createDataProcessorBuilder();
 
     void endMethod(Variable returnVariable);
+
+    void endMethod();
 }

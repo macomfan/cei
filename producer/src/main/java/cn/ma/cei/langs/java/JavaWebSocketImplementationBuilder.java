@@ -25,6 +25,7 @@ public class JavaWebSocketImplementationBuilder implements IWebSocketImplementat
         return new JavaDataProcessorBuilder(method);
     }
 
+
     @Override
     public void send(Variable send) {
         method.addInvoke("connection.send", send);

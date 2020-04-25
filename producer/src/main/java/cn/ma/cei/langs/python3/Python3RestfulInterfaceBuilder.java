@@ -55,11 +55,6 @@ public class Python3RestfulInterfaceBuilder implements IRestfulInterfaceBuilder 
     }
 
     @Override
-    public void returnResult(Variable returnVariable) {
-        method.addReturn(returnVariable);
-    }
-
-    @Override
     public void onAddReference(VariableType variableType) {
         clientClass.addReference(variableType);
     }
@@ -76,6 +71,13 @@ public class Python3RestfulInterfaceBuilder implements IRestfulInterfaceBuilder 
 
     @Override
     public void endMethod(Variable returnVariable) {
+        method.addReturn(returnVariable);
+        method.endMethod();
+        clientClass.addMethod(method);
+    }
+
+    @Override
+    public void endMethod() {
         method.endMethod();
         clientClass.addMethod(method);
     }
@@ -94,11 +96,4 @@ public class Python3RestfulInterfaceBuilder implements IRestfulInterfaceBuilder 
     public void setPostBody(Variable request, Variable postBody) {
         method.addInvoke(request.getDescriptor() + ".set_post_body", postBody);
     }
-
-    @Override
-    public void invokeAuthentication(Variable request, String methodName) {
-        Variable option = BuilderContext.createStatement("self.__options");
-        method.addInvoke("Authentication." + methodName, request, option);
-    }
-
 }

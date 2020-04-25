@@ -1,5 +1,6 @@
 package cn.ma.cei.xml;
 
+import cn.ma.cei.exception.BuildTracer;
 import cn.ma.cei.exception.CEIErrorType;
 import cn.ma.cei.exception.CEIErrors;
 import cn.ma.cei.exception.CEIException;
@@ -77,6 +78,7 @@ public class JAXBWrapper {
             CEIErrors.showFailure(CEIErrorType.XML, "Load XML file error: %s \n %s", file.getPath(), e.getMessage());
         } catch (CEIException e) {
             System.err.println("Error to process XML: " + file.getPath());
+            System.err.println(BuildTracer.getTraceString());
             throw e;
         }
         return null;

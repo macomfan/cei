@@ -39,7 +39,7 @@ public class BuildJsonParser extends DataProcessorBase<xJsonParser> {
         jsonParserBuilder.defineRootJsonObject(rootJsonObject, inputVariable);
 
         if ((jsonParser.itemList == null || jsonParser.itemList.isEmpty()) && jsonParser.jsonChecker == null) {
-            CEIErrors.showXMLFailure(jsonParser, "json_parser do not have any items");
+            CEIErrors.showXMLFailure("json_parser do not have any items");
         }
 
         if (jsonParser.jsonChecker != null) {

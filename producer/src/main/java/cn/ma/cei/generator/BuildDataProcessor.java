@@ -3,28 +3,32 @@ package cn.ma.cei.generator;
 import cn.ma.cei.exception.CEIErrorType;
 import cn.ma.cei.exception.CEIErrors;
 import cn.ma.cei.generator.builder.IDataProcessorBuilder;
+import cn.ma.cei.generator.builder.IMethodBuilder;
 import cn.ma.cei.generator.dataprocessor.*;
-import cn.ma.cei.generator.dataprocessor.BuildJsonParser;
-import cn.ma.cei.model.processor.xAddQueryString;
-import cn.ma.cei.model.processor.xCombineQueryString;
-import cn.ma.cei.model.processor.xGetRequestInfo;
 import cn.ma.cei.model.base.xDataProcessorItem;
 import cn.ma.cei.model.json.xJsonBuilder;
 import cn.ma.cei.model.json.xJsonParser;
 import cn.ma.cei.model.processor.*;
 import cn.ma.cei.model.string.xStringBuilder;
+import cn.ma.cei.model.types.xString;
 import cn.ma.cei.model.xProcedure;
 import cn.ma.cei.utils.Checker;
 import cn.ma.cei.utils.NormalMap;
 import cn.ma.cei.utils.RegexHelper;
 
-
-import java.util.List;
-
 /**
  * To build each line in User Procedure.
  */
 public class BuildDataProcessor {
+
+    public static class Context {
+        public xProcedure procedure = null;
+        public String returnVariableName = null;
+        public VariableType specifiedReturnType = null;
+        public Variable defaultInput = null;
+        public IMethodBuilder methodBuilder = null;
+        public boolean requiredDefaultReturn = false;
+    }
 
     private static final NormalMap<Class<?>, DataProcessorBase<?>> processorMap = new NormalMap<>();
 
@@ -43,64 +47,99 @@ public class BuildDataProcessor {
         // processorMap.put(xInvoke.class);
     }
 
-
-    public static VariableType getResultType(List<xDataProcessorItem> items, String returnVariableName) {
-        if (items == null) {
+    public static VariableType getReturnType(xProcedure procedure, String returnVariableName) {
+        if (procedure == null || Checker.isNull(procedure.items)) {
             return null;
         }
-
-        if (items.size() == 1 && Checker.isEmpty(returnVariableName)) {
+        if (procedure.items.size() == 1 && Checker.isEmpty(returnVariableName)) {
             // Only one item in the processor list, return the only item. Do not define output name in this item.
-            if (processorMap.containsKey(items.get(0).getClass())) {
-                return processorMap.get(items.get(0).getClass()).callReturnType(items.get(0));
+            xDataProcessorItem firstItem = procedure.items.get(0);
+            if (processorMap.containsKey(firstItem.getClass())) {
+                return processorMap.get(firstItem.getClass()).callReturnType(firstItem);
             } else {
-                CEIErrors.showFailure(CEIErrorType.CODE, "Processor is not supporting %s", items.get(0).getClass().getName());
+                reportNotSupporting(firstItem);
             }
-        }
-        for (xDataProcessorItem item : items) {
-            if (processorMap.containsKey(item.getClass())) {
-                DataProcessorBase<?> processor = processorMap.get(item.getClass());
-                String resultInProcessor = processor.callResultVariableName(item);
-                if (!Checker.isEmpty(resultInProcessor))
-                if (resultInProcessor.equals(returnVariableName)) {
-                    return processor.callReturnType(item);
+        } else {
+            if (RegexHelper.isReference(returnVariableName) == null) {
+                return xString.inst.getType();
+            }
+            for (xDataProcessorItem item : procedure.items) {
+                if (processorMap.containsKey(item.getClass())) {
+                    DataProcessorBase<?> processor = processorMap.get(item.getClass());
+                    String resultInProcessor = processor.callResultVariableName(item);
+                    if (!Checker.isEmpty(resultInProcessor))
+                        if (resultInProcessor.equals(returnVariableName)) {
+                            return processor.callReturnType(item);
+                        }
+                } else {
+                    reportNotSupporting(item);
                 }
-            } else {
-                // TODO
-                CEIErrors.showFailure(CEIErrorType.CODE, "Processor is not supporting %s", items.get(0).getClass().getName());
             }
         }
         return null;
     }
 
-    public static void build(List<xDataProcessorItem> items, IDataProcessorBuilder builder) {
-        items.forEach(item -> {
-            if (item instanceof xProcedure) {
-                build(((xProcedure)item).items, builder);
-            } else {
-                processSingleItem(item, null, builder);
-            }
-        });
+    private static void reportNotSupporting(xDataProcessorItem item) {
+        CEIErrors.showFailure(CEIErrorType.CODE, "Processor is not supporting %s", item.getClass().getName());
     }
 
-    public static Variable build(List<xDataProcessorItem> items, Variable defaultInput, String resultVariableName, IDataProcessorBuilder builder) {
-        if (Checker.isEmpty(resultVariableName)){
-            if (items.size() == 1) {
+
+    public static Variable build(Context context) {
+        if (context.procedure == null || Checker.isNull(context.procedure.items)) {
+            return null;
+        }
+        IDataProcessorBuilder dataProcessorBuilder =
+                Checker.checkNull(context.methodBuilder.createDataProcessorBuilder(), context.methodBuilder, "DataProcessorBuilder");
+        Variable result = null;
+        if (Checker.isEmpty(context.returnVariableName)) {
+            if (context.procedure.items.size() == 1) {
                 // Only one item in the processor list, return the only item. Do not define output name in this item.
-                return processSingleItem(items.get(0), defaultInput, builder);
-            } else {
-                CEIErrors.showFailure(CEIErrorType.XML, "Must define result, there are multi-processor items.");
-                return null;
+                result = processSingleItem(context.procedure.items.get(0), context.defaultInput, dataProcessorBuilder);
+            }
+        } else {
+            context.procedure.items.forEach(item -> {
+                processSingleItem(item, context.defaultInput, dataProcessorBuilder);
+            });
+
+            result = GlobalContext.getCurrentMethod().queryVariableOrConstant(context.returnVariableName, dataProcessorBuilder );
+            if (result == null) {
+                CEIErrors.showFailure(CEIErrorType.XML, "Cannot find the result variable: %s", RegexHelper.isReference(context.returnVariableName));
             }
         }
-        items.forEach(item -> {
+        if (context.specifiedReturnType != null && result != null) {
+            return TypeConverter.convertType(result, context.specifiedReturnType, dataProcessorBuilder);
+        } else {
+            return result;
+        }
+    }
+
+    public static void build(xProcedure procedure, IDataProcessorBuilder builder) {
+        if (procedure != null && !Checker.isNull(procedure.items)) {
+            procedure.items.forEach(item -> {
+                processSingleItem(item, null, builder);
+            });
+        }
+    }
+
+    public static Variable build(xProcedure procedure, Variable defaultInput, String resultVariableName, IDataProcessorBuilder builder) {
+        if (procedure == null || Checker.isNull(procedure.items)) {
+            return null;
+        }
+        if (Checker.isEmpty(resultVariableName)) {
+            if (procedure.items.size() == 1) {
+                // Only one item in the processor list, return the only item. Do not define output name in this item.
+                return processSingleItem(procedure.items.get(0), defaultInput, builder);
+            } else {
+                CEIErrors.showFailure(CEIErrorType.XML, "Must define result, there are multi-processor items.");
+            }
+        }
+        procedure.items.forEach(item -> {
             processSingleItem(item, defaultInput, builder);
         });
 
         Variable result = GlobalContext.getCurrentMethod().queryVariable(resultVariableName);
         if (result == null) {
             CEIErrors.showFailure(CEIErrorType.XML, "Cannot find the result variable: %s", RegexHelper.isReference(resultVariableName));
-            return null;
         }
         return result;
     }

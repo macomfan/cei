@@ -229,15 +229,13 @@
                     </inputs>
                     <request method="post" target="/v1/order/orders/place">
                         <post_body value="{result}">
-                            <procedure>
-                                <json_builder name="result">
-                                    <json_value key="account-Id" value="{accountId}"/>
-                                    <json_value copy="symbol"/>
-                                    <json_value key="orderType" value="{orderType}"/>
-                                    <json_value copy="amount"/>
-                                    <json_value copy="price"/>
-                                </json_builder>
-                            </procedure>
+                            <json_builder name="result">
+                                <json_value key="account-Id" value="{accountId}"/>
+                                <json_value copy="symbol"/>
+                                <json_value key="orderType" value="{orderType}"/>
+                                <json_value copy="amount"/>
+                                <json_value copy="price"/>
+                            </json_builder>
                         </post_body>
                     </request>
                     <response>
@@ -299,13 +297,11 @@
                         <string name="period"/>
                     </inputs>
                     <send value="{json}">
-                        <procedure>
-                            <get_now name="ts" format="Unix_ms"/>
-                            <json_builder name="json">
-                                <json_value key="sub" value="market.{symbol}.kline.{period}"/>
-                                <json_string key="id" value="{ts}"/>
-                            </json_builder>
-                        </procedure>
+                        <get_now name="ts" format="Unix_ms"/>
+                        <json_builder name="json">
+                            <json_value key="sub" value="market.{symbol}.kline.{period}"/>
+                            <json_string key="id" value="{ts}"/>
+                        </json_builder>
                     </send>
                     <callback name="onCandlestick" persistent="true">
                         <trigger>

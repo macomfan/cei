@@ -65,12 +65,6 @@ public class GoRestfulInterfaceBuilder implements IRestfulInterfaceBuilder {
         method.addAssignAndDeclare(method.useVariable(new GoVar(response)), method.invoke("ceiimpl.RestfulQuery", new GoVar(request)));
     }
 
-    @Override
-    public void invokeAuthentication(Variable request, String methodName) {
-        Variable option = BuilderContext.createStatement("inst.options");
-        method.addInvoke(WordSplitter.getLowerCamelCase(methodName), new GoVar(request), new GoVar(option));
-    }
-
 //    @Override
 //    public void setUrl(Variable request) {
 //        Variable url = VariableFactory.createConstantVariable("inst.options.URL");
@@ -82,10 +76,6 @@ public class GoRestfulInterfaceBuilder implements IRestfulInterfaceBuilder {
         method.addInvoke(request.getDescriptor() + ".SetMethod", new GoVar(requestMethod));
     }
 
-    @Override
-    public void returnResult(Variable returnVariable) {
-        method.addReturn(new GoVar(returnVariable));
-    }
 
     @Override
     public void onAddReference(VariableType variableType) {
@@ -124,6 +114,13 @@ public class GoRestfulInterfaceBuilder implements IRestfulInterfaceBuilder {
 
     @Override
     public void endMethod(Variable returnVariable) {
+        method.addReturn(new GoVar(returnVariable));
+        method.endMethod();
+        clientStruct.addMethod(method);
+    }
+
+    @Override
+    public void endMethod() {
         method.endMethod();
         clientStruct.addMethod(method);
     }

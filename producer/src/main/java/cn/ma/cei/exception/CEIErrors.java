@@ -18,7 +18,7 @@ public class CEIErrors {
         logger.fatal(res);
     }
 
-    public static void showXMLFailure(xElement element, String message, Object... args) throws CEIException {
+    public static void showXMLFailure(String message, Object... args) throws CEIException {
         String res = String.format(message, args);
         throw new CEIException(res);
     }

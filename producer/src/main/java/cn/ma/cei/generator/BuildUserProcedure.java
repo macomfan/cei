@@ -5,11 +5,16 @@ import cn.ma.cei.generator.builder.IDataProcessorBuilder;
 import cn.ma.cei.generator.builder.IMethodBuilder;
 import cn.ma.cei.generator.dataprocessor.TypeConverter;
 import cn.ma.cei.model.base.xItemWithProcedure;
+import cn.ma.cei.model.xProcedure;
 import cn.ma.cei.utils.Checker;
 
 public class BuildUserProcedure {
 
-    public static Variable createValueFromProcedure(VariableType objType, String value, xItemWithProcedure parent, IMethodBuilder methodBuilder) {
+//    public static Variable buildUserProcedure(VariableType objType, String resultValue, xProcedure procedureItem, IMethodBuilder methodBuilder) {
+//
+//    }
+
+    public static Variable createValueFromProcedure(VariableType objType, String value, xProcedure parent, IMethodBuilder methodBuilder) {
         Checker.isNull(methodBuilder, BuildUserProcedure.class, "IMethodBuilder");
         Checker.isNull(parent, BuildUserProcedure.class, "xItemWithProcedure");
         IDataProcessorBuilder dataProcessorBuilder = Checker.checkNull(methodBuilder.createDataProcessorBuilder(), methodBuilder, "DataProcessorBuilder");
@@ -18,7 +23,7 @@ public class BuildUserProcedure {
         return TypeConverter.convertType(result, objType, dataProcessorBuilder);
     }
 
-    public static Variable createValueFromProcedure(String value, xItemWithProcedure parent, IMethodBuilder methodBuilder) {
+    public static Variable createValueFromProcedure(String value, xProcedure parent, IMethodBuilder methodBuilder) {
         Checker.isNull(methodBuilder, BuildUserProcedure.class, "IMethodBuilder");
         Checker.isNull(parent, BuildUserProcedure.class, "xItemWithProcedure");
         IDataProcessorBuilder dataProcessorBuilder = methodBuilder.createDataProcessorBuilder();
@@ -26,14 +31,14 @@ public class BuildUserProcedure {
         return innerCreateValueFromProcedure(value, parent, dataProcessorBuilder);
     }
 
-    public static Variable innerCreateValueFromProcedure(String value, xItemWithProcedure parent, IDataProcessorBuilder dataProcessorBuilder) {
+    public static Variable innerCreateValueFromProcedure(String value, xProcedure parent, IDataProcessorBuilder dataProcessorBuilder) {
         if (Checker.isEmpty(value)) {
             CEIErrors.showCodeFailure(BuildUserProcedure.class, "Value is null.");
         }
 
-        if (parent.procedure != null) {
+        if (parent.items != null) {
             // Build processor firstly.
-            BuildDataProcessor.build(parent.procedure.items, null, value, dataProcessorBuilder);
+            BuildDataProcessor.build(parent, null, value, dataProcessorBuilder);
         }
         return GlobalContext.getCurrentMethod().queryVariableOrConstant(value, dataProcessorBuilder);
     }

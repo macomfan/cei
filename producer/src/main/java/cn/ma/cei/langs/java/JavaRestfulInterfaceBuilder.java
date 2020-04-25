@@ -26,7 +26,6 @@ public class JavaRestfulInterfaceBuilder implements IRestfulInterfaceBuilder {
 
     @Override
     public void defineRequest(Variable request, Variable option) {
-        //Variable options = BuilderContext.createStatement("this.option");
         method.addAssign(method.defineVariable(request), method.newInstance(request.getType(), option));
     }
 
@@ -46,35 +45,9 @@ public class JavaRestfulInterfaceBuilder implements IRestfulInterfaceBuilder {
     }
 
     @Override
-    public void returnResult(Variable returnVariable) {
-        method.addReturn(returnVariable);
-    }
-
-    @Override
     public void onAddReference(VariableType variableType) {
         clientClass.addReference(variableType);
     }
-
-//    @Override
-//    public IJsonBuilderBuilder createJsonBuilderBuilder() {
-//        return new JavaJsonBuilderBuilder(method);
-//    }
-//
-//    @Override
-//    public IStringBuilderBuilder createStringBuilderBuilder() {
-//        return new JavaStringBuilderBuilder(method);
-//    }
-//
-//    @Override
-//    public IJsonParserBuilder createJsonParserBuilder() {
-//        return new JavaJsonParserBuilder(method);
-//    }
-
-//    @Override
-//    public void setUrl(Variable request) {
-//        Variable url = VariableFactory.createConstantVariable("this.options.url");
-//        method.addInvoke(request.getDescriptor() + ".setUrl", url);
-//    }
 
     @Override
     public void addHeader(Variable request, Variable tag, Variable value) {
@@ -93,6 +66,13 @@ public class JavaRestfulInterfaceBuilder implements IRestfulInterfaceBuilder {
 
     @Override
     public void endMethod(Variable returnVariable) {
+        method.addReturn(returnVariable);
+        method.endMethod();
+        clientClass.addMethod(method);
+    }
+
+    @Override
+    public void endMethod() {
         method.endMethod();
         clientClass.addMethod(method);
     }
@@ -100,11 +80,5 @@ public class JavaRestfulInterfaceBuilder implements IRestfulInterfaceBuilder {
     @Override
     public void setPostBody(Variable request, Variable postBody) {
         method.addInvoke(request.getDescriptor() + ".setPostBody", postBody);
-    }
-
-    @Override
-    public void invokeAuthentication(Variable request, String methodName) {
-        Variable option = BuilderContext.createStatement("this.option");
-        method.addInvoke("Authentication." + methodName, request, option);
     }
 }

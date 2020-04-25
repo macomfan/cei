@@ -38,30 +38,33 @@ public class BuildRestfulInterface {
         }
 
         builder.startMethod(returnType.get(), GlobalContext.getCurrentDescriptionConverter().getMethodDescriptor(restIf.name), inputVariableList);
-        {
-            restIf.request.doBuild(() -> {
-                Variable option = GlobalContext.getCurrentMethod().queryVariable("{option}");
-                builder.defineRequest(request, option);
-                builder.setRequestTarget(request, BuildUserProcedure.createValueFromProcedure(restIf.request.target, restIf.request, builder));
-                Variable requestMethod = GlobalContext.createStatement(Constant.requestMethod().get(restIf.request.method));
-                builder.setRequestMethod(request, requestMethod);
-            });
-            makeHeaders(restIf.request.headers, builder);
-            makeQueryString(restIf.request.queryStrings, builder);
-            makePostBody(restIf.request.postBody, request, builder);
+        restIf.request.doBuild(() -> {
+            Variable option = GlobalContext.getCurrentMethod().queryVariable("{option}");
+            builder.defineRequest(request, option);
+            BuildDataProcessor.Context context = new BuildDataProcessor.Context();
+            context.procedure = restIf.request;
+            context.specifiedReturnType = xString.inst.getType();
+            context.returnVariableName = restIf.request.target;
+            context.methodBuilder = builder;
+            //builder.setRequestTarget(request, BuildUserProcedure.createValueFromProcedure(restIf.request.target, restIf.request, builder));
+            builder.setRequestTarget(request, BuildDataProcessor.build(context));
+            Variable requestMethod = GlobalContext.createStatement(Constant.requestMethod().get(restIf.request.method));
+            builder.setRequestMethod(request, requestMethod);
+        });
+        makeHeaders(restIf.request.headers, builder);
+        makeQueryString(restIf.request.queryStrings, builder);
+        makePostBody(restIf.request.postBody, request, builder);
 
-            restIf.request.doBuild(() -> makeAuthentication(restIf.request.authentication, request, builder));
+        restIf.request.doBuild(() -> makeAuthentication(restIf.request.authentication, request, builder));
 
-            builder.onAddReference(RestfulConnection.getType());
-            VariableType finalReturnType = returnType.get();
-            restIf.response.doBuild(() -> {
-                builder.invokeQuery(response, request);
-                IDataProcessorBuilder dataProcessorBuilder = Checker.checkNull(builder.createDataProcessorBuilder(), builder, "DataProcessorBuilder");
-                Variable returnVariable = BuildResponse.build(restIf.response, response, finalReturnType, dataProcessorBuilder);
-                builder.returnResult(returnVariable);
-            });
-        }
-        builder.endMethod(null);
+        builder.onAddReference(RestfulConnection.getType());
+        VariableType finalReturnType = returnType.get();
+        restIf.response.doBuild(() -> {
+            builder.invokeQuery(response, request);
+            Variable returnVariable = BuildResponse.build(restIf.response, response, finalReturnType, builder);
+            builder.endMethod(returnVariable);
+        });
+
     }
 
     private static void makeHeaders(List<xHeader> headers, IRestfulInterfaceBuilder builder) {
@@ -91,7 +94,7 @@ public class BuildRestfulInterface {
         }
         Variable request = GlobalContext.getCurrentMethod().getVariable("request");
         queryStrings.forEach((queryString) -> queryString.doBuild(() -> {
-            Variable var = BuildUserProcedure.createValueFromProcedure(queryString.value, queryString, builder);
+            Variable var = BuildUserProcedure. createValueFromProcedure(queryString.value, queryString, builder);
             Variable key = BuildUserProcedure.createValueFromProcedure(queryString.key, queryString, builder);
             builder.addToQueryString(request, key, var);
         }));
@@ -102,7 +105,13 @@ public class BuildRestfulInterface {
             return;
         }
         postBody.doBuild(() -> {
-            Variable result = BuildUserProcedure.createValueFromProcedure(xString.inst.getType(), postBody.value, postBody, builder);
+            // Variable result = BuildUserProcedure.createValueFromProcedure(xString.inst.getType(), postBody.value, postBody, builder);
+            BuildDataProcessor.Context context = new BuildDataProcessor.Context();
+            context.procedure = postBody;
+            context.specifiedReturnType = xString.inst.getType();
+            context.returnVariableName = postBody.value;
+            context.methodBuilder = builder;
+            Variable result = BuildDataProcessor.build(context);
             if (result != null) {
                 builder.setPostBody(request, result);
             }
@@ -115,13 +124,13 @@ public class BuildRestfulInterface {
             VariableType procedureType = Procedures.getType();
             sMethod authenticationMethod = procedureType.getMethod(authentication.name);
             if (authenticationMethod == null) {
-                CEIErrors.showXMLFailure(authentication, "Cannot find method: %s", authentication.name);
+                CEIErrors.showXMLFailure("Cannot find method: %s", authentication.name);
                 return;
             }
             List<Variable> inputs = authenticationMethod.getInputVariableList();
             if (Checker.isNull(inputs) || inputs.size() < 2
                     || inputs.get(0).getType() != RestfulRequest.getType() || inputs.get(1).getType() != RestfulOptions.getType()) {
-                CEIErrors.showXMLFailure(authentication, "%s cannot be the authentication function, it must defines 2 inputs, one is RestfulRequest, another is RestfulOptions");
+                CEIErrors.showXMLFailure("%s cannot be the authentication function, it must defines 2 inputs, one is RestfulRequest, another is RestfulOptions");
             }
             Variable option = GlobalContext.getCurrentMethod().queryVariable("{option}");
 

@@ -47,9 +47,13 @@ public class JavaFunctionBuilder implements IMethodBuilder {
 
     @Override
     public void endMethod(Variable returnVariable) {
-        if (returnVariable != null) {
-            method.addReturn(returnVariable.getDescriptor());
-        }
+        method.addReturn(returnVariable.getDescriptor());
+        method.endMethod();
+        parent.addMethod(method);
+    }
+
+    @Override
+    public void endMethod() {
         method.endMethod();
         parent.addMethod(method);
     }

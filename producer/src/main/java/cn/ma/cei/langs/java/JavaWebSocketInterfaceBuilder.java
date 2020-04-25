@@ -43,6 +43,12 @@ public class JavaWebSocketInterfaceBuilder implements IWebSocketInterfaceBuilder
     }
 
     @Override
+    public void endMethod() {
+        method.endMethod();
+        clientClass.addMethod(method);
+    }
+
+    @Override
     public void send(Variable send) {
         method.addInvoke("this.connection.send", send);
     }

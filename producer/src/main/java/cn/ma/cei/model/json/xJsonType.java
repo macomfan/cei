@@ -19,7 +19,7 @@ public abstract class xJsonType extends xElement {
     public void customCheck() {
         super.customCheck();
         if (copy != null && (key != null || value != null)) {
-            CEIErrors.showXMLFailure(this, " Key, Value cannot exist with copy.");
+            CEIErrors.showXMLFailure(" Key, Value cannot exist with copy.");
         } else if (copy != null) {
             key = copy;
             value = "{" + copy + "}";

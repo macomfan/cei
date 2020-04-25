@@ -1,11 +1,9 @@
 package cn.ma.cei.generator;
 
 import cn.ma.cei.exception.CEIErrors;
-import cn.ma.cei.generator.builder.IDataProcessorBuilder;
 import cn.ma.cei.generator.builder.IMethodBuilder;
 import cn.ma.cei.model.xFunction;
 import cn.ma.cei.utils.Checker;
-import cn.ma.cei.utils.RegexHelper;
 
 public class BuildFunction {
     public static void build(xFunction function, IMethodBuilder builder) {
@@ -17,15 +15,11 @@ public class BuildFunction {
 
         VariableType returnType = null;
         if (!Checker.isEmpty(function.procedureReturn)) {
-            String returnVariableName = RegexHelper.isReference(function.procedureReturn);
-            if (Checker.isEmpty(returnVariableName)) {
-                CEIErrors.showXMLFailure(function, "Return variable should looks like {%s}", function.procedureReturn);
-            }
-            returnType = BuildDataProcessor.getResultType(function.implementation.items, returnVariableName);
+            returnType = BuildDataProcessor.getReturnType(function.implementation, function.procedureReturn);
             if (returnType == null) {
-                Variable variable = GlobalContext.getCurrentMethod().getVariable(returnVariableName);
+                Variable variable = GlobalContext.getCurrentMethod().queryVariable(function.procedureReturn);
                 if (variable == null) {
-                    CEIErrors.showXMLFailure(function, "Cannot find return variable %s", function.procedureReturn);
+                    CEIErrors.showXMLFailure("Cannot find return variable %s", function.procedureReturn);
                     return;
                 }
                 returnType = variable.getType();
@@ -36,12 +30,22 @@ public class BuildFunction {
                 GlobalContext.getCurrentMethod().getDescriptor(),
                 GlobalContext.getCurrentMethod().getInputVariableList());
 
-        IDataProcessorBuilder processorBuilder = Checker.checkNull(builder.createDataProcessorBuilder(), builder, "DataProcessorBuilder");
-        BuildDataProcessor.build(function.implementation.items, processorBuilder);
+        BuildDataProcessor.Context context = new BuildDataProcessor.Context();
+        context.procedure = function.implementation;
+        context.specifiedReturnType = returnType;
+        context.methodBuilder = builder;
+        context.returnVariableName = function.procedureReturn;
+
+        BuildDataProcessor.build(context);
         Variable returnVariable = null;
         if (!Checker.isEmpty(function.procedureReturn)) {
             returnVariable = GlobalContext.getCurrentMethod().queryVariable(function.procedureReturn);
         }
-        builder.endMethod(returnVariable);
+        if (returnVariable != null) {
+            builder.endMethod(returnVariable);
+        } else {
+            builder.endMethod();
+        }
+
     }
 }

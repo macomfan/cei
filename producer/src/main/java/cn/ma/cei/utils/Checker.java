@@ -7,17 +7,23 @@ package cn.ma.cei.utils;
 
 import cn.ma.cei.exception.CEIErrorType;
 import cn.ma.cei.exception.CEIErrors;
-import cn.ma.cei.exception.CEIException;
 import cn.ma.cei.generator.builder.IBuilderBase;
 
-import java.lang.reflect.ParameterizedType;
 import java.util.List;
 
 /**
- *
  * @author u0151316
  */
 public class Checker {
+    public static void checkVariableName(String value, String description) {
+        if (value != null) {
+            String name = RegexHelper.isReference(value);
+            if (Checker.isEmpty(name)) {
+                CEIErrors.showXMLFailure("$s variable should looks like {%s}", description, value);
+            }
+        }
+    }
+
     public static <T> T checkNull(T object, IBuilderBase builder, String description) {
         if (object == null) {
             CEIErrors.showCodeFailure(builder.getClass(), "%s is null.", description);

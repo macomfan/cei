@@ -41,10 +41,16 @@ public class BuildWebSocketInterface {
         }
         // Build send
         if (intf.send != null) {
-            Variable sendVariable = BuildUserProcedure.createValueFromProcedure(xString.inst.getType(), intf.send.value, intf.send, builder);
+            BuildDataProcessor.Context context = new BuildDataProcessor.Context();
+            context.procedure = intf.send;
+            context.returnVariableName = intf.send.value;
+            context.specifiedReturnType = xString.inst.getType();
+            context.methodBuilder = builder;
+            //Variable sendVariable = BuildUserProcedure.createValueFromProcedure(xString.inst.getType(), intf.send.value, intf.send, builder);
+            Variable sendVariable = BuildDataProcessor.build(context);
             builder.send(sendVariable);
         }
-        builder.endMethod(null);
+        builder.endMethod();
     }
 
     private static VariableType getCallbackMessageType(xCallback callback) {
