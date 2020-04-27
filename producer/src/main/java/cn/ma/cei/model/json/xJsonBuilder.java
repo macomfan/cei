@@ -5,16 +5,15 @@
  */
 package cn.ma.cei.model.json;
 
-import cn.ma.cei.model.base.xBuilder;
 import cn.ma.cei.model.base.xDataProcessorItem;
 import cn.ma.cei.xml.CEIXmlAnyElementTypes;
-import java.util.List;
+
 import javax.xml.bind.annotation.XmlAnyElement;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
+import java.util.List;
 
 /**
- *
  * @author u0151316
  */
 @XmlRootElement(name = "json_builder")
@@ -24,10 +23,12 @@ public class xJsonBuilder extends xDataProcessorItem {
     public String name;
 
     @XmlAnyElement(lax = true)
-    @CEIXmlAnyElementTypes({
-        xJsonString.class,
-        xJsonInteger.class,
-        xJsonBoolean.class,
-        xJsonDecimal.class})
+    @CEIXmlAnyElementTypes(classes = {
+            xJsonValue.class,
+            xJsonString.class,
+            xJsonInteger.class,
+            xJsonBoolean.class,
+            xJsonDecimal.class,
+    xJsonObject.class})
     public List<xJsonType> itemList;
 }

@@ -1,17 +1,21 @@
 package cn.ma.cei.model.base;
 
 
-import cn.ma.cei.exception.*;
+import cn.ma.cei.exception.BuildTracer;
+import cn.ma.cei.exception.CEIErrors;
+import cn.ma.cei.exception.CEIException;
+import cn.ma.cei.exception.CEIXmlException;
 import cn.ma.cei.utils.Checker;
 import cn.ma.cei.utils.ReflectionHelper;
+import cn.ma.cei.xml.CEIXmlAnyElementTypes;
+import cn.ma.cei.xml.CEIXmlAnyElementTypesExtension;
 
 import javax.xml.bind.annotation.XmlAnyElement;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
-import java.io.PrintWriter;
-import java.io.StringWriter;
-import java.lang.reflect.Field;
+import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 
 @XmlRootElement(name = "")
@@ -54,22 +58,18 @@ public abstract class xElement {
         startBuilding();
         // TODO need check ElementNSImpl
         if (!this.getClass().isAnnotationPresent(XmlRootElement.class)) {
-            CEIErrors.showFailure(CEIErrorType.CODE, this.getClass().getName() + " must define XmlRootElement annotation.");
+            CEIErrors.showCodeFailure(this.getClass(), "%s must define XmlRootElement annotation.", this.getClass().getName());
         }
-
         customCheck();
-        if (this.getClass().getName().equals("cn.ma.cei.model.restful.xAuthentication")) {
-            int a = 0;
-        }
-        List<Field> fff = ReflectionHelper.getAllFields(this);
         ReflectionHelper.getAllFields(this).forEach(field -> {
-            if (field.isAnnotationPresent(XmlElement.class) || field.isAnnotationPresent(XmlAnyElement.class)) {
+            if (field.isAnnotationPresent(XmlElement.class)) {
+                // Check for normal element, the element can be list or single instance.
                 if (field.getType().getName().equals(List.class.getName())) {
                     List<?> list = ReflectionHelper.getFieldValue(field, this, List.class);
                     if (list != null) {
                         list.forEach(item -> {
                             if (!(item instanceof xElement)) {
-                                CEIErrors.showFailure(CEIErrorType.CODE, item.getClass().getName() + " must inherit from xElement.");
+                                CEIErrors.showCodeFailure(this.getClass(), "%s must inherit from xElement.", item.getClass().getName());
                             } else {
                                 ((xElement) item).filename = this.filename;
                                 ((xElement) item).doCheck();
@@ -82,29 +82,47 @@ public abstract class xElement {
                         element.filename = this.filename;
                         element.doCheck();
                     }
-                } else {
-                    CEIErrors.showFailure(CEIErrorType.CODE, field.getType().getName() + " must inherit from xElement.");
+                }
+            } else if (field.isAnnotationPresent(XmlAnyElement.class)) {
+                // Check for any element, it must be list.
+                if (!field.isAnnotationPresent(CEIXmlAnyElementTypes.class)) {
+                    CEIErrors.showCodeFailure(this.getClass(), "Must define CEIXmlAnyElementTypes for %s", field.getName());
+                }
+                if (!field.getType().getName().equals(List.class.getName())) {
+                    CEIErrors.showCodeFailure(this.getClass(), "Must define as a List for %s", field.getName());
+                }
+                Class<?>[] classes1 = field.getAnnotation(CEIXmlAnyElementTypes.class).classes();
+                List<Class<?>> classesAll = new LinkedList<>();
+                Collections.addAll(classesAll, classes1);
+                if (this.getClass().isAnnotationPresent(CEIXmlAnyElementTypesExtension.class)) {
+                    CEIXmlAnyElementTypesExtension extension = this.getClass().getAnnotation(CEIXmlAnyElementTypesExtension.class);
+                    if (field.getName().equals(extension.fieldName())) {
+                        Class<?>[] classes2 = extension.classes();
+                        Collections.addAll(classesAll, classes2);
+                    }
+                }
+                List<?> list = ReflectionHelper.getFieldValue(field, this, List.class);
+                if (list != null) {
+                    list.forEach(item -> {
+                        if (!(item instanceof xElement)) {
+                            CEIErrors.showCodeFailure(this.getClass(), "%s must inherit from xElement.", item.getClass().getName());
+                        } else if (!Checker.checkInstanceOf(item, classesAll)) {
+                            CEIErrors.showCodeFailure(this.getClass(), "%s must be the class defined in CEIXmlAnyElementTypes for %s", item.getClass().getName(), field.getName());
+                        } else {
+                            ((xElement) item).filename = this.filename;
+                            ((xElement) item).doCheck();
+                        }
+                    });
                 }
             } else if (field.isAnnotationPresent(XmlAttribute.class)) {
+                // check for attribute.
                 XmlAttribute attribute = field.getAnnotation(XmlAttribute.class);
-                if (attribute.required()) {
-                    if (ReflectionHelper.getFieldValue(field, this, Object.class) == null) {
-                        CEIErrors.showFailure(CEIErrorType.XML, "\"%s\" in %s must be defined.", field.getName(), this.getClass().getName());
-                    }
+                if (attribute.required() && ReflectionHelper.getFieldValue(field, this, Object.class) == null) {
+                    CEIErrors.showXMLWarning(this, "\"%s\" in %s must be defined.", field.getName(), this.getClass().getName());
                 }
             }
         });
         endBuilding();
-//        try {
-//            doBuild(this::customCheck);
-//        } catch (CEIException e) {
-//            throw e;
-//        } catch (Exception e) {
-//            StringWriter sw = new StringWriter();
-//            PrintWriter pw = new PrintWriter(sw);
-//            e.printStackTrace(pw);
-//            CEIErrors.showFailure(CEIErrorType.UNKNOWN, "Exception: %s\n%s", e.getMessage(), sw.toString());
-//        }
     }
 
     public <T extends xElement> void checkMember(T member) {

@@ -15,6 +15,18 @@ import java.util.List;
  * @author u0151316
  */
 public class Checker {
+    public static boolean checkInstanceOf(Object object, List<Class<?>> classes) {
+        if (classes == null) {
+            return false;
+        }
+        for(Class<?> cls : classes) {
+            if (cls.isInstance(object)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public static void checkVariableName(String value, String description) {
         if (value != null) {
             String name = RegexHelper.isReference(value);

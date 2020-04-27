@@ -11,7 +11,7 @@ public abstract class xJsonWithModel extends xJsonType {
     public String model;
 
     @XmlAnyElement(lax = true)
-    @CEIXmlAnyElementTypes({
+    @CEIXmlAnyElementTypes(classes = {
             xJsonString.class,
             xJsonInteger.class,
             xJsonBoolean.class,

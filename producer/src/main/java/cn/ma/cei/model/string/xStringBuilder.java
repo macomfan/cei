@@ -15,7 +15,7 @@ public class xStringBuilder extends xDataProcessorItem {
     public String name;
 
     @XmlAnyElement(lax = true)
-    @CEIXmlAnyElementTypes({
+    @CEIXmlAnyElementTypes(classes = {
             xAddStringItem.class,
             xCombineStringItems.class})
     public List<xDataProcessorItem> items;

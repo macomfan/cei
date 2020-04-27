@@ -21,7 +21,7 @@ public class xModel extends xElement implements IDependenceNode {
     public String name;
 
     @XmlAnyElement(lax = true)
-    @CEIXmlAnyElementTypes({
+    @CEIXmlAnyElementTypes(classes = {
             xString.class,
             xBoolean.class,
             xInt.class,

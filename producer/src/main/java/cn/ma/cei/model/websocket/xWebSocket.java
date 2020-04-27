@@ -12,7 +12,7 @@ public class xWebSocket extends xElement {
     public String name;
 
     @XmlElement(name = "connection")
-    public xWSConnection connection;
+    public xWSConnect connection;
 
     @XmlElementWrapper(name = "actions")
     @XmlElement(name = "action")

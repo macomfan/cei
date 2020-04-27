@@ -1,5 +1,7 @@
 package cn.ma.cei.utils;
 
+import cn.ma.cei.exception.CEIErrors;
+
 import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.LinkedList;
@@ -10,7 +12,7 @@ public class ReflectionHelper {
         try {
             return cls.cast(field.get(obj));
         } catch (IllegalAccessException e) {
-            e.printStackTrace();
+            CEIErrors.showCodeFailure(field.getDeclaringClass(),  "%s cannot conver to %s", field.getName(), cls.getSimpleName());
         }
         return null;
     }

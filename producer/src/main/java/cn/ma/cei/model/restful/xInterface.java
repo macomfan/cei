@@ -2,6 +2,7 @@ package cn.ma.cei.model.restful;
 
 
 import cn.ma.cei.model.base.xElement;
+import cn.ma.cei.model.base.xElementWithInputs;
 import cn.ma.cei.model.base.xType;
 import cn.ma.cei.model.types.xBoolean;
 import cn.ma.cei.model.types.xDecimal;
@@ -15,15 +16,10 @@ import java.util.List;
 
 @XmlType(name = "interface_restful")
 @XmlRootElement(name = "interface")
-public class xInterface extends xElement {
+public class xInterface extends xElementWithInputs {
 
     @XmlAttribute(name = "name")
     public String name;
-
-    @XmlElementWrapper(name = "inputs")
-    @XmlAnyElement(lax = true)
-    @CEIXmlAnyElementTypes({xString.class, xBoolean.class, xInt.class, xDecimal.class})
-    public List<xType> inputList;
 
     @XmlElement(name = "request")
     public xRequest request;

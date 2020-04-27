@@ -6,14 +6,14 @@ import cn.ma.cei.generator.builder.IWebSocketInterfaceBuilder;
 import cn.ma.cei.generator.buildin.WebSocketConnection;
 import cn.ma.cei.model.types.xString;
 import cn.ma.cei.model.websocket.xAction;
-import cn.ma.cei.model.websocket.xWSConnection;
+import cn.ma.cei.model.websocket.xWSConnect;
 import cn.ma.cei.utils.Checker;
 
 import java.util.LinkedList;
 import java.util.List;
 
-public class BuildWebSocketConnection {
-    public static void build(xWSConnection connection, List<xAction> actions, IWebSocketInterfaceBuilder builder) {
+public class BuildWebSocketConnect {
+    public static void build(xWSConnect connection, List<xAction> actions, IWebSocketInterfaceBuilder builder) {
         sMethod connectMethod = GlobalContext.getCurrentMethod();
         //Variable ooo = connectMethod.getVariable("option");
         Variable option = connectMethod.getVariable("option");

@@ -20,8 +20,8 @@ import java.util.Set;
 
 public class JAXBWrapper {
 
-    private Set<Class<?>> clsForLoadingJAXB = new HashSet<>();
-    private Class<xSDK> rootClass = xSDK.class;
+    private final Set<Class<?>> clsForLoadingJAXB = new HashSet<>();
+    private final Class<xSDK> rootClass = xSDK.class;
     private Unmarshaller unmarshaller;
 
     public JAXBWrapper() {
@@ -44,9 +44,29 @@ public class JAXBWrapper {
         if (cls.getName().equals("java.lang.Object")) {
             return;
         }
+        if (cls.isAnnotationPresent(CEIXmlAnyElementTypesExtension.class)) {
+            CEIXmlAnyElementTypesExtension extension = cls.getAnnotation(CEIXmlAnyElementTypesExtension.class);
+            String extensionFieldName = extension.fieldName();
+            try {
+                Field extensionField = cls.getField(extensionFieldName);
+                if (!extensionField.isAnnotationPresent(CEIXmlAnyElementTypes.class)) {
+                    CEIErrors.showCodeFailure(cls, "Cannot extent item %s in CEIXmlAnyElementTypesExtension", extensionFieldName);
+                }
+                else {
+                    for (Class<?> c : extension.classes()) {
+                        if (!clsForLoadingJAXB.contains(c)) {
+                            clsForLoadingJAXB.add(c);
+                            checkCurrentClass(c, checkedClasses);
+                        }
+                    }
+                }
+            } catch (NoSuchFieldException ignore) {
+                CEIErrors.showCodeFailure(cls, "Do not have field %s in CEIXmlAnyElementTypesExtension", extensionFieldName);
+            }
+        }
         for (Field field : cls.getDeclaredFields()) {
             if (field.isAnnotationPresent(CEIXmlAnyElementTypes.class)) {
-                for (Class<?> c : field.getAnnotation(CEIXmlAnyElementTypes.class).value()) {
+                for (Class<?> c : field.getAnnotation(CEIXmlAnyElementTypes.class).classes()) {
                     if (!clsForLoadingJAXB.contains(c)) {
                         clsForLoadingJAXB.add(c);
                         checkCurrentClass(c, checkedClasses);

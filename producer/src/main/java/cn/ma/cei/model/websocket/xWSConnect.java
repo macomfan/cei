@@ -11,21 +11,26 @@ import cn.ma.cei.xml.CEIXmlAnyElementTypes;
 import javax.xml.bind.annotation.*;
 import java.util.List;
 
-
-@XmlType(name = "interface_websocket")
-@XmlRootElement(name = "interface")
-public class xWSInterface extends xElement {
-    @XmlAttribute(name = "name", required = true)
-    public String name;
+@XmlType(name = "connection_websocket")
+@XmlRootElement(name = "connection")
+public class xWSConnect extends xElement {
 
     @XmlElementWrapper(name = "inputs")
     @XmlAnyElement(lax = true)
     @CEIXmlAnyElementTypes(classes = {xString.class, xBoolean.class, xInt.class, xDecimal.class})
     public List<xType> inputList;
 
-    @XmlElement(name = "send")
-    public xSend send;
+    @XmlElement(name = "connection")
+    public xWSConnection connection;
 
-    @XmlElement(name = "callback")
-    public List<xCallback> callbacks;
+    @XmlElement(name = "on_connect")
+    public xOnConnect onConnect;
+
+    @XmlElement(name = "url")
+    public xUrl url;
+
+    @XmlAttribute(name = "timeout_s")
+    public Integer timeout;
+
+
 }

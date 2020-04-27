@@ -15,7 +15,7 @@ import java.util.List;
 @XmlRootElement(name = "procedure")
 public class xProcedure extends xElement {
     @XmlAnyElement(lax = true)
-    @CEIXmlAnyElementTypes({
+    @CEIXmlAnyElementTypes(classes = {
             xGZip.class,
             xBase64.class,
             xHmacSHA256.class,

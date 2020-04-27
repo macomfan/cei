@@ -22,7 +22,7 @@ public class BuildWebSocketClient {
         // Build connection
         sMethod connectMethod = GlobalContext.getCurrentModel().createMethod("connect");
         GlobalContext.setCurrentMethod(connectMethod);
-        BuildWebSocketConnection.build(client.connection, client.actions,
+        BuildWebSocketConnect.build(client.connection, client.actions,
                 Checker.checkNull(builder.createWebSocketInterfaceBuilder(),builder, "WebSocketInterfaceBuilder"));
         GlobalContext.setCurrentMethod(null);
 

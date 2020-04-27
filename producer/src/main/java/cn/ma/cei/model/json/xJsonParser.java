@@ -22,7 +22,7 @@ public class xJsonParser extends xDataProcessorItem {
     public String input;
 
     @XmlAnyElement(lax = true)
-    @CEIXmlAnyElementTypes({
+    @CEIXmlAnyElementTypes(classes = {
             xJsonString.class,
             xJsonInteger.class,
             xJsonBoolean.class,
