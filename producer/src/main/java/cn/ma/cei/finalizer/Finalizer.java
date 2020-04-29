@@ -11,7 +11,6 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class Finalizer {
-    private List<xSDK> orgSDKList = new LinkedList<>();
 
     public Finalizer() {
         XMLDatabase.reset();
@@ -23,11 +22,7 @@ public class Finalizer {
 
     public void addSDK(xSDK sdk) {
         // Register Database
-        //  - Model
-        //  - Restful
-        //  - Authentication
         XMLDatabase.registrySDK(sdk);
-        orgSDKList.add(sdk);
     }
 
     public List<xSDK> finalizeSDK() {

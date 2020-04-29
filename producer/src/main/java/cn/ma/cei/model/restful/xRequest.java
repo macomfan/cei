@@ -2,6 +2,7 @@ package cn.ma.cei.model.restful;
 
 import cn.ma.cei.model.base.xElement;
 import cn.ma.cei.model.xPreProcessor;
+import cn.ma.cei.utils.Checker;
 
 import java.util.List;
 import javax.xml.bind.annotation.XmlAttribute;
@@ -34,4 +35,15 @@ public class xRequest extends xElement {
 
     @XmlElement(name = "pre_processor")
     public xPreProcessor preProcessor;
+
+    @Override
+    public void customCheck() {
+        super.customCheck();
+        if (!Checker.isEmpty(target)) {
+            target = target.replace('\\', '/');
+            if (!target.startsWith("/")) {
+                target = "/" + target;
+            }
+        }
+    }
 }

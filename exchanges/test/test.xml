@@ -97,7 +97,7 @@
 
     <clients>
         <restful name="GetClient">
-            <connection url="http://127.0.0.1:8888"/>
+            <connection url="http://127.0.0.1:8888/"/>
             <interfaces>
                 <interface name="getSimpleInfo">
                     <request method="get" target="/restful/get/simpleInfo"/>

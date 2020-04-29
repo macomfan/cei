@@ -7,10 +7,9 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-public class Dependence<T extends IDependenceNode> {
+class Dependence<T extends IDependenceNode> {
 
     private final Map<String, Node<T>> nodeMap = new HashMap<>();
-    private final List<Node<T>> nodeList = new LinkedList<>();
 
     public void addNode(T node, T dependOn) {
         Node<T> currentNode = getOrCreateNode(node);
@@ -66,12 +65,11 @@ public class Dependence<T extends IDependenceNode> {
             newNode.node = node;
             newNode.dependenceList = new LinkedList<>();
             nodeMap.put(node.getIdentifier(), newNode);
-            nodeList.add(newNode);
         }
         return nodeMap.get(node.getIdentifier());
     }
 
-    class Node<T> {
+    static class Node<T> {
         T node = null;
         List<Node<T>> dependenceList = null;
     }

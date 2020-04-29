@@ -7,7 +7,7 @@ import cn.ma.cei.utils.DuplexMap;
 
 public class TypeAlias {
 
-    private static DuplexMap<String, String> typeMap = new DuplexMap<>();
+    private static final DuplexMap<String, String> typeMap = new DuplexMap<>();
 
     static {
         registerType(xString.class);

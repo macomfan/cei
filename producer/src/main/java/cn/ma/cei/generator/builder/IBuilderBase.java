@@ -6,8 +6,10 @@
 package cn.ma.cei.generator.builder;
 
 /**
+ * All build should inherit from IBuilderBase.
  *
- * @author U0151316
+ * No any method need be implemented.
+ *
  */
 public interface IBuilderBase {
 

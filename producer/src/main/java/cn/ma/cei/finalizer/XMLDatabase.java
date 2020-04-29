@@ -3,9 +3,12 @@ package cn.ma.cei.finalizer;
 import cn.ma.cei.exception.CEIErrorType;
 import cn.ma.cei.exception.CEIErrors;
 import cn.ma.cei.exception.CEIException;
-import cn.ma.cei.model.*;
 import cn.ma.cei.model.restful.xRestful;
 import cn.ma.cei.model.websocket.xWebSocket;
+import cn.ma.cei.model.xCustomProcedures;
+import cn.ma.cei.model.xModel;
+import cn.ma.cei.model.xSDK;
+import cn.ma.cei.model.xSDKClients;
 import cn.ma.cei.utils.NormalMap;
 
 import java.util.Collection;
@@ -15,8 +18,8 @@ import java.util.Set;
 
 
 public class XMLDatabase {
-    private static NormalMap<String, ExchangeData> sdkData = new NormalMap<>();
-    private static NormalMap<String, xSDK> sdkMap = new NormalMap<>();
+    private static final NormalMap<String, ExchangeData> sdkData = new NormalMap<>();
+    private static final NormalMap<String, xSDK> sdkMap = new NormalMap<>();
 
     public static void reset() {
         sdkData.clear();
@@ -28,7 +31,6 @@ public class XMLDatabase {
             if (!sdkData.containsKey(exchange)) {
                 CEIErrors.showFailure(CEIErrorType.CODE, "Not found");
             }
-
             return sdkData.get(exchange).getModel(modelName);
         } catch (CEIException e) {
             throw new CEIException("Cannot find model: " + modelName);
@@ -42,15 +44,14 @@ public class XMLDatabase {
     public static Set<String> getModelSet(String exchangeName) {
         ExchangeData data = sdkData.get(exchangeName);
         Set<String> models = new HashSet<>();
-        data.getModelList().forEach(model -> {
-            models.add(model.name);
-        });
+        data.getModelList().forEach(model -> models.add(model.name));
         return models;
     }
 
     public static boolean containsExchange(String exchangeName) {
         return sdkData.containsKey(exchangeName);
     }
+
     public static Set<String> getExchangeSet() {
         return sdkData.keySet();
     }

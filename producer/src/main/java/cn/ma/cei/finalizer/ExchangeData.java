@@ -5,9 +5,9 @@ import cn.ma.cei.exception.CEIErrors;
 import cn.ma.cei.model.base.xElement;
 import cn.ma.cei.model.restful.xConnection;
 import cn.ma.cei.model.restful.xInterface;
-import cn.ma.cei.model.websocket.xWSOnMessage;
 import cn.ma.cei.model.websocket.xWSConnection;
 import cn.ma.cei.model.websocket.xWSInterface;
+import cn.ma.cei.model.websocket.xWSOnMessage;
 import cn.ma.cei.model.xFunction;
 import cn.ma.cei.model.xModel;
 import cn.ma.cei.model.xSDKDefinition;
@@ -16,7 +16,7 @@ import cn.ma.cei.utils.UniqueList;
 
 import java.util.List;
 
-public class ExchangeData {
+class ExchangeData {
 
     @FunctionalInterface
     private interface GetKey<T> {
@@ -24,7 +24,7 @@ public class ExchangeData {
     }
 
     private static class ListData<T> {
-        private UniqueList<String, T> data = new UniqueList<>();
+        private final UniqueList<String, T> data = new UniqueList<>();
 
         public void append(String key, T item) {
             if (data.containsKey(key)) {
@@ -62,7 +62,7 @@ public class ExchangeData {
     }
 
     private static class InterfaceData<T> {
-        private NormalMap<String, UniqueList<String, T>> data = new NormalMap<>();
+        private final NormalMap<String, UniqueList<String, T>> data = new NormalMap<>();
 
         public void appendList(String clientName, List<T> list, GetKey<T> getKey) {
             if (list == null) {
@@ -88,22 +88,20 @@ public class ExchangeData {
         }
     }
 
-    private String name;
+    private final String name;
     private xSDKDefinition definition;
 
-    private NormalMap<String, xElement> nameMap = new NormalMap<>();
-    private ListData<xModel> modelList = new ListData<>();
-    private ListData<xConnection> restfulClientList = new ListData<>();
-    private ListData<xWSConnection> wsClientList = new ListData<>();
+    private final NormalMap<String, xElement> nameMap = new NormalMap<>();
+    private final ListData<xModel> modelList = new ListData<>();
+    private final ListData<xConnection> restfulClientList = new ListData<>();
+    private final ListData<xWSConnection> wsClientList = new ListData<>();
 
-    //    private ListData<xAuthentication> restfulAuthList = new ListData<>();
-//    private ListData<xWSAuthentication> wsAuthList = new ListData<>();
-    private ListData<xFunction> functionList = new ListData<>();
-    private NormalMap<String, xElement> authNameMap = new NormalMap<>();
+    private final ListData<xFunction> functionList = new ListData<>();
+    private final NormalMap<String, xElement> funcNameMap = new NormalMap<>();
 
-    private InterfaceData<xInterface> restfulInterfaceList = new InterfaceData<>();
-    private InterfaceData<xWSInterface> wsInterfaceList = new InterfaceData<>();
-    private InterfaceData<xWSOnMessage> wsEventList = new InterfaceData<>();
+    private final InterfaceData<xInterface> restfulInterfaceList = new InterfaceData<>();
+    private final InterfaceData<xWSInterface> wsInterfaceList = new InterfaceData<>();
+    private final InterfaceData<xWSOnMessage> wsEventList = new InterfaceData<>();
 
     public ExchangeData(String name) {
         this.name = name;
@@ -131,18 +129,8 @@ public class ExchangeData {
         modelList.appendList(list, item -> item.name);
     }
 
-//    public void appendRestfulAuth(List<xAuthentication> list) {
-//        checkAuthName(list, item -> item.name);
-//        restfulAuthList.appendList(list, item -> item.name);
-//    }
-//
-//    public void appendWSAuth(List<xWSAuthentication> list) {
-//        checkAuthName(list, item -> item.name);
-//        wsAuthList.appendList(list, item -> item.name);
-//    }
-
     public void appendFunction(List<xFunction> list) {
-        checkAuthName(list, item -> item.name);
+        checkFunctionName(list, item -> item.name);
         functionList.appendList(list, item -> item.name);
     }
 
@@ -175,14 +163,6 @@ public class ExchangeData {
     public List<xModel> getModelList() {
         return modelList.getList();
     }
-
-//    public List<xAuthentication> getRestfulAuthList() {
-//        return restfulAuthList.getList();
-//    }
-
-//    public List<xWSAuthentication> getWSAuthList() {
-//        return wsAuthList.getList();
-//    }
 
     public List<xFunction> getFunctionList() {
         return functionList.getList();
@@ -230,15 +210,15 @@ public class ExchangeData {
         nameMap.put(name, value);
     }
 
-    private <T extends xElement> void checkAuthName(List<T> list, GetKey<T> getKey) {
+    private <T extends xElement> void checkFunctionName(List<T> list, GetKey<T> getKey) {
         if (list == null) {
             return;
         }
         list.forEach(item -> {
-            if (authNameMap.containsKey(getKey.get(item))) {
+            if (funcNameMap.containsKey(getKey.get(item))) {
                 CEIErrors.showFailure(CEIErrorType.XML, "Dup");
             }
-            authNameMap.put(getKey.get(item), item);
+            funcNameMap.put(getKey.get(item), item);
         });
 
     }

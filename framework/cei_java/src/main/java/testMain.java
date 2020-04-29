@@ -12,7 +12,7 @@ public class testMain {
 //            System.err.println(echo.name);
 //        });
         huobipro.WSClient wsClient = new huobipro.WSClient();
-        wsClient.connect();
+        wsClient.open();
         wsClient.requestCandlestick("btcusdt","1min", data->{
             System.err.println(data.amount.toPlainString());
         });

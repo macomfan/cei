@@ -1,5 +1,5 @@
 # CEI
-The full name of CEI is CryptoCurrency Exchange Interface. It is a SDK set supporting many CryptoCurrency exchanges and supporting many programing languages.
+The full name of CEI is CryptoCurrency Exchange Interface. It is an SDK set supporting many CryptoCurrency exchanges and supporting many programing languages.
 
 ### Features
 * Multi programing languages.
@@ -20,5 +20,8 @@ The full name of CEI is CryptoCurrency Exchange Interface. It is a SDK set suppo
 | C# | Developing, not support yet |
 
 ### Getting Started:
+[TBD]
+
 
 ### XML Definition
+[TBD]
