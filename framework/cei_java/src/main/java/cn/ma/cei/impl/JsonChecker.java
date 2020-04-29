@@ -37,6 +37,14 @@ public class JsonChecker {
         }
     }
 
+    public void containKey(String key, JsonWrapper jsonWrapper) {
+        if (jsonWrapper.contains(key)) {
+            pass();
+        } else {
+            fail();
+        }
+    }
+
     public boolean complete() {
         return result == 1;
     }

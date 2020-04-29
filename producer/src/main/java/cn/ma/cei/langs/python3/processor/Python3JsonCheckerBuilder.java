@@ -29,6 +29,11 @@ public class Python3JsonCheckerBuilder implements IJsonCheckerBuilder {
     }
 
     @Override
+    public void setContainKey(Variable jsonChecker, Variable key, Variable jsonWrapperObject) {
+
+    }
+
+    @Override
     public void returnResult(Variable jsonChecker) {
         method.addReturn(jsonChecker.getDescriptor() + ".complete()");
     }

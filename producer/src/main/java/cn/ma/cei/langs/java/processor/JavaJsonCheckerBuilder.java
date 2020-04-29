@@ -28,6 +28,11 @@ public class JavaJsonCheckerBuilder implements IJsonCheckerBuilder {
     }
 
     @Override
+    public void setContainKey(Variable jsonChecker, Variable key, Variable jsonWrapperObject) {
+        method.addInvoke(jsonChecker.getDescriptor() + ".containKey",  key, jsonWrapperObject);
+    }
+
+    @Override
     public void returnResult(Variable jsonChecker) {
         method.addReturn(jsonChecker.getDescriptor() + ".complete()");
     }

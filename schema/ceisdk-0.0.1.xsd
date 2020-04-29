@@ -187,6 +187,7 @@
             <xs:element name="json_boolean_array" type="xJsonType"/>
             <xs:element name="json_decimal_array" type="xJsonType"/>
             <xs:element name="json_checker_equal" type="xJsonCheckerItem"/>
+            <xs:element name="json_checker_contain_key" type="xJsonCheckerItem"/>
             <xs:element name="json_checker_not_equal" type="xJsonCheckerItem"/>
         </xs:choice>
     </xs:group>

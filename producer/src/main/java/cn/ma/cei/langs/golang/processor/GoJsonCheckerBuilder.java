@@ -20,6 +20,11 @@ public class GoJsonCheckerBuilder implements IJsonCheckerBuilder {
     }
 
     @Override
+    public void setContainKey(Variable jsonChecker, Variable key, Variable jsonWrapperObject) {
+
+    }
+
+    @Override
     public void returnResult(Variable jsonChecker) {
 
     }
