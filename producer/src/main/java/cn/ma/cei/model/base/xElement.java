@@ -56,6 +56,10 @@ public abstract class xElement {
 
     public void doCheck() {
         startBuilding();
+        System.err.println(this.getClass().getName());
+        if (this.getClass().getName().equals("cn.ma.cei.model.websocket.xWSConnection")) {
+            int a = 0;
+        }
         // TODO need check ElementNSImpl
         if (!this.getClass().isAnnotationPresent(XmlRootElement.class)) {
             CEIErrors.showCodeFailure(this.getClass(), "%s must define XmlRootElement annotation.", this.getClass().getName());
@@ -118,7 +122,7 @@ public abstract class xElement {
                 // check for attribute.
                 XmlAttribute attribute = field.getAnnotation(XmlAttribute.class);
                 if (attribute.required() && ReflectionHelper.getFieldValue(field, this, Object.class) == null) {
-                    CEIErrors.showXMLWarning(this, "\"%s\" in %s must be defined.", field.getName(), this.getClass().getName());
+                    CEIErrors.showXMLFailure("%s must be defined.", field.getName());
                 }
             }
         });

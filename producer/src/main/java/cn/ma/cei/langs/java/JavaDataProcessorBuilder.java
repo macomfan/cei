@@ -1,6 +1,7 @@
 package cn.ma.cei.langs.java;
 
 import cn.ma.cei.generator.BuilderContext;
+import cn.ma.cei.generator.IMethod;
 import cn.ma.cei.generator.Variable;
 import cn.ma.cei.generator.builder.*;
 import cn.ma.cei.generator.buildin.CEIUtils;
@@ -114,13 +115,24 @@ public class JavaDataProcessorBuilder implements IDataProcessorBuilder {
     }
 
     @Override
-    public void invokeFunction(String methodName, Variable returnVariable, Variable... params) {
+    public void invokeFunction(IMethod methodInfo, Variable returnVariable, Variable... params) {
         if (returnVariable == null) {
-            method.addInvoke(Procedures.getType().getDescriptor() + "." + methodName, params);
+            method.addInvoke(Procedures.getType().getDescriptor() + "." + methodInfo.getDescriptor(), params);
         } else {
-            method.addAssign(returnVariable.getDescriptor(), method.invoke(Procedures.getType().getDescriptor() + "." +methodName, params));
+            method.addAssign(returnVariable.getDescriptor(), method.invoke(Procedures.getType().getDescriptor() + "." + methodInfo.getDescriptor(), params));
         }
     }
+
+    @Override
+    public void invokeCallback(Variable callback, Variable... params) {
+        method.addInvoke(callback.getDescriptor() + ".invoke", params);
+    }
+
+    @Override
+    public void send(Variable connection, Variable value) {
+        method.addInvoke(connection.getDescriptor() + ".send", value);
+    }
+
 
     @Override
     public void gzip(Variable output, Variable input) {

@@ -131,7 +131,10 @@ public class BuildRestfulInterface {
 
             IDataProcessorBuilder dataProcessorBuilder =
                     Checker.checkNull(builder.createDataProcessorBuilder(), builder, "DataProcessorBuilder");
-            dataProcessorBuilder.invokeFunction(authentication.name, null, request, option);
+
+            VariableType procedureModel = GlobalContext.variableType(Procedures.typeName);
+            IMethod method = procedureModel.getMethod(authentication.name);
+            dataProcessorBuilder.invokeFunction(method, null, request, option);
         }
     }
 }

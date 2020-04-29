@@ -1,6 +1,7 @@
 package cn.ma.cei.langs.java;
 
 import cn.ma.cei.generator.BuilderContext;
+import cn.ma.cei.generator.IMethod;
 import cn.ma.cei.generator.Variable;
 import cn.ma.cei.generator.VariableType;
 import cn.ma.cei.generator.builder.IRestfulClientBuilder;
@@ -8,7 +9,6 @@ import cn.ma.cei.generator.builder.IRestfulInterfaceBuilder;
 import cn.ma.cei.generator.buildin.RestfulOptions;
 import cn.ma.cei.langs.java.tools.JavaClass;
 import cn.ma.cei.langs.java.tools.JavaMethod;
-import cn.ma.cei.generator.sMethod;
 
 public class JavaRestfulClientBuilder implements IRestfulClientBuilder {
 
@@ -48,7 +48,7 @@ public class JavaRestfulClientBuilder implements IRestfulClientBuilder {
     }
 
     @Override
-    public IRestfulInterfaceBuilder createRestfulInterfaceBuilder(sMethod method) {
+    public IRestfulInterfaceBuilder createRestfulInterfaceBuilder(IMethod method) {
         return new JavaRestfulInterfaceBuilder(clientClass);
     }
 

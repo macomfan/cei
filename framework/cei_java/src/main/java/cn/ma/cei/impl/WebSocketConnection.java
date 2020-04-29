@@ -18,28 +18,33 @@ import java.util.concurrent.TimeUnit;
  */
 public class WebSocketConnection extends WebSocketListener {
 
-    private OkHttpClient client;
+    private final OkHttpClient client;
     private WebSocket webSocket = null;
-    private OnConnect onConnect = null;
-    private Status status = Status.IDEL;
+    private OnSystemEvent onConnect = null;
+    private OnSystemEvent onClose = null;
+    private Status status = Status.IDLE;
     enum Status{
-        IDEL,
+        IDLE,
         CONNECTED,
         CLOSED,
     }
 
-    private List<WebSocketAction> actions = new LinkedList<>();
+    private List<WebSocketEvent> event = new LinkedList<>();
 
     public WebSocketConnection() {
         client = new OkHttpClient.Builder().connectTimeout(5, TimeUnit.SECONDS).build();
     }
 
-    public void registerAction(WebSocketAction action) {
-        actions.add(action);
+    public void registerEvent(WebSocketEvent event) {
+        this.event.add(event);
     }
 
-    public void setOnConnect(OnConnect onConnect) {
+    public void setOnConnect(OnSystemEvent onConnect) {
         this.onConnect = onConnect;
+    }
+
+    public void setOnClose(OnSystemEvent onClose) {
+        this.onClose = onClose;
     }
 
     public boolean isConnected() {
@@ -50,7 +55,7 @@ public class WebSocketConnection extends WebSocketListener {
         //this.onConnect = onConnect;
         Request okhttpRequest = new Request.Builder().url(target).build();
         webSocket = client.newWebSocket(okhttpRequest, this);
-        while (status == Status.IDEL) {
+        while (status == Status.IDLE) {
             try {
                 Thread.sleep(100);
             } catch (InterruptedException e) {
@@ -68,7 +73,7 @@ public class WebSocketConnection extends WebSocketListener {
         super.onOpen(webSocket, response);
         System.err.println("onOpen");
         if (onConnect != null) {
-            onConnect.onConnect(this);
+            onConnect.onSystemEvent(this);
         }
         status = Status.CONNECTED;
     }
@@ -92,13 +97,13 @@ public class WebSocketConnection extends WebSocketListener {
     }
 
     private void onMessage(WebSocketMessage msg) {
-        Iterator<WebSocketAction> it = actions.iterator();
+        Iterator<WebSocketEvent> it = event.iterator();
         while (it.hasNext()) {
-            WebSocketAction cur = it.next();
+            WebSocketEvent cur = it.next();
             if (cur.check(msg)) {
-                cur.invoke(msg);
+                cur.invoke(this, msg);
                 if (!cur.isPersistence()) {
-                    actions.remove(it);
+                    event.remove(it);
                 }
             }
         }
@@ -111,6 +116,16 @@ public class WebSocketConnection extends WebSocketListener {
         status = Status.CLOSED;
     }
 
+    @Override
+    public void onClosed(WebSocket webSocket, int code, String reason) {
+        super.onClosed(webSocket, code, reason);
+        System.out.println("Closed");
+        status = Status.CLOSED;
+        if (onClose != null) {
+            onClose.onSystemEvent(this);
+        }
+    }
+
     public void send(String msg) {
         if (msg != null || !msg.isEmpty()) {
             System.out.println("Send " + msg);
@@ -119,7 +134,7 @@ public class WebSocketConnection extends WebSocketListener {
     }
 
     @FunctionalInterface
-    public interface OnConnect {
-        void onConnect(WebSocketConnection connection);
+    public interface OnSystemEvent {
+        void onSystemEvent(WebSocketConnection connection);
     }
 }

@@ -55,7 +55,7 @@ public class GoRestfulClientBuilder implements IRestfulClientBuilder {
     }
 
     @Override
-    public IRestfulInterfaceBuilder createRestfulInterfaceBuilder(sMethod method) {
+    public IRestfulInterfaceBuilder createRestfulInterfaceBuilder(IMethod method) {
         return new GoRestfulInterfaceBuilder(clientStruct);
     }
 

@@ -12,11 +12,11 @@ public class xWebSocket extends xElement {
     public String name;
 
     @XmlElement(name = "connection")
-    public xWSConnect connection;
-
-    @XmlElementWrapper(name = "actions")
-    @XmlElement(name = "action")
-    public List<xAction> actions;
+    public xWSConnection connection;
+    
+    @XmlElementWrapper(name = "events")
+    @XmlElement(name = "on_message")
+    public List<xWSOnMessage> events;
 
     @XmlElementWrapper(name = "interfaces")
     @XmlElement(name = "interface")

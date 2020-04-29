@@ -1,17 +1,23 @@
 package cn.ma.cei.generator.builder;
 
+import cn.ma.cei.generator.IMethod;
 import cn.ma.cei.generator.Variable;
-import cn.ma.cei.generator.sMethod;
 
 public interface IWebSocketInterfaceBuilder extends IMethodBuilder {
 
-    IWebSocketImplementationBuilder createOnConnectBuilder();
+    IWebSocketNestedBuilder createOnConnectBuilder();
 
-    void send(Variable send);
+    IWebSocketNestedBuilder createOnCloseBuilder();
 
-    IWebSocketActionBuilder createWebSocketActionBuilder();
+    IWebSocketEventBuilder createWebSocketEventBuilder();
 
-    void setupOnConnect(sMethod onConnect);
+    IDataProcessorBuilder createDataProcessorBuilder();
 
-    void connect(Variable url, Variable option);
+    void setupOnConnect(Variable connection, IMethod onConnect);
+
+    void connect(Variable connection, Variable target, Variable option);
+
+    void setupOnClose(Variable connection, IMethod onClose);
+
+    void close(Variable connection, Variable option);
 }

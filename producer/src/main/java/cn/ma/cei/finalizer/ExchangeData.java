@@ -5,8 +5,8 @@ import cn.ma.cei.exception.CEIErrors;
 import cn.ma.cei.model.base.xElement;
 import cn.ma.cei.model.restful.xConnection;
 import cn.ma.cei.model.restful.xInterface;
-import cn.ma.cei.model.websocket.xAction;
-import cn.ma.cei.model.websocket.xWSConnect;
+import cn.ma.cei.model.websocket.xWSOnMessage;
+import cn.ma.cei.model.websocket.xWSConnection;
 import cn.ma.cei.model.websocket.xWSInterface;
 import cn.ma.cei.model.xFunction;
 import cn.ma.cei.model.xModel;
@@ -94,7 +94,7 @@ public class ExchangeData {
     private NormalMap<String, xElement> nameMap = new NormalMap<>();
     private ListData<xModel> modelList = new ListData<>();
     private ListData<xConnection> restfulClientList = new ListData<>();
-    private ListData<xWSConnect> wsClientList = new ListData<>();
+    private ListData<xWSConnection> wsClientList = new ListData<>();
 
     //    private ListData<xAuthentication> restfulAuthList = new ListData<>();
 //    private ListData<xWSAuthentication> wsAuthList = new ListData<>();
@@ -103,7 +103,7 @@ public class ExchangeData {
 
     private InterfaceData<xInterface> restfulInterfaceList = new InterfaceData<>();
     private InterfaceData<xWSInterface> wsInterfaceList = new InterfaceData<>();
-    private InterfaceData<xAction> wsActionList = new InterfaceData<>();
+    private InterfaceData<xWSOnMessage> wsEventList = new InterfaceData<>();
 
     public ExchangeData(String name) {
         this.name = name;
@@ -151,7 +151,7 @@ public class ExchangeData {
         restfulClientList.append(name, connection);
     }
 
-    public void addWSClient(String name, xWSConnect connection) {
+    public void addWSClient(String name, xWSConnection connection) {
         checkName(name, connection);
         wsClientList.append(name, connection);
     }
@@ -164,8 +164,8 @@ public class ExchangeData {
         wsInterfaceList.appendList(clientName, list, item -> item.name);
     }
 
-    public void appendWebSocketActionList(String clientName, List<xAction> list) {
-        wsActionList.appendList(clientName, list, item -> item.name);
+    public void appendWebSocketEventList(String clientName, List<xWSOnMessage> list) {
+        wsEventList.appendList(clientName, list, item -> item.name);
     }
 
     public xSDKDefinition getDefinition() {
@@ -200,7 +200,7 @@ public class ExchangeData {
         return restfulClientList.get(clientName);
     }
 
-    public xWSConnect getWSConnection(String clientName) {
+    public xWSConnection getWSConnection(String clientName) {
         return wsClientList.get(clientName);
     }
 
@@ -212,8 +212,8 @@ public class ExchangeData {
         return wsInterfaceList.getList(clientName);
     }
 
-    public List<xAction> getWSActionList(String clientName) {
-        return wsActionList.getList(clientName);
+    public List<xWSOnMessage> getWSEventList(String clientName) {
+        return wsEventList.getList(clientName);
     }
 
     private <T extends xElement> void checkName(List<T> list, GetKey<T> getKey) {

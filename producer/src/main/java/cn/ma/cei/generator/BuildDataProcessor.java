@@ -43,6 +43,8 @@ public class BuildDataProcessor {
         processorMap.put(xURLEscape.class, new BuildURLEscape());
         processorMap.put(xGZip.class, new BuildGZip());
         // processorMap.put(xInvoke.class);
+        processorMap.put(xWebSocketCallback.class, new BuildWebSocketCallback());
+        processorMap.put(xWebSocketSend.class, new BuildWebSocketSend());
     }
 
     public static VariableType getReturnType(xProcedure procedure, String returnVariableName) {
@@ -94,6 +96,10 @@ public class BuildDataProcessor {
             if (context.procedure.items.size() == 1) {
                 // Only one item in the processor list, return the only item. Do not define output name in this item.
                 result = processSingleItem(context.procedure.items.get(0), context.defaultInput, context.dataProcessorBuilder);
+            } else {
+                context.procedure.items.forEach(item -> {
+                    processSingleItem(item, context.defaultInput, context.dataProcessorBuilder);
+                });
             }
         } else {
             context.procedure.items.forEach(item -> {

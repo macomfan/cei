@@ -21,9 +21,9 @@ public class Variable {
     public Variable parent;
     public Position position;
 
-    private VariableType type;
-    private String name;
-    private String nameDescriptor;
+    private final VariableType type;
+    private final String name;
+    private final String nameDescriptor;
 
     public String getDescriptor() {
         return nameDescriptor;

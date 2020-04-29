@@ -1,11 +1,12 @@
 package cn.ma.cei.generator;
 
 import cn.ma.cei.generator.builder.IDataProcessorBuilder;
+import cn.ma.cei.generator.builder.IWebSocketClientBuilder;
 import cn.ma.cei.generator.builder.IWebSocketInterfaceBuilder;
 import cn.ma.cei.generator.buildin.WebSocketCallback;
-import cn.ma.cei.model.types.xString;
-import cn.ma.cei.model.websocket.xCallback;
+import cn.ma.cei.model.websocket.xEvent;
 import cn.ma.cei.model.websocket.xWSInterface;
+import cn.ma.cei.model.websocket.xWSUserCallback;
 import cn.ma.cei.utils.Checker;
 
 import java.util.LinkedList;
@@ -13,7 +14,8 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class BuildWebSocketInterface {
-    public static void build(xWSInterface intf, IWebSocketInterfaceBuilder builder) {
+    public static void build(xWSInterface intf, IWebSocketClientBuilder builder) {
+        IWebSocketInterfaceBuilder interfaceBuilder = Checker.checkNull(builder.createWebSocketInterfaceBuilder(), builder, "WebSocketInterfaceBuilder");
         sMethod interfaceMethod = GlobalContext.getCurrentMethod();
         // Build input
         List<Variable> inputVariableList = new LinkedList<>();
@@ -24,44 +26,44 @@ public class BuildWebSocketInterface {
             }));
         }
 
-        if (intf.callbacks != null) {
-            intf.callbacks.forEach(callback -> {
+        // Build events
+        if (intf.events != null) {
+            intf.events.forEach(callback -> {
                 VariableType callbackType = GlobalContext.variableType(WebSocketCallback.typeName, getCallbackMessageType(callback));
-                Variable callbackParam = interfaceMethod.createInputVariable(callbackType, callback.name);
+                Variable callbackParam = interfaceMethod.createInputVariable(callbackType, callback.callback);
                 inputVariableList.add(callbackParam);
             });
         }
 
-        builder.startMethod(null, interfaceMethod.getDescriptor(), inputVariableList);
+        interfaceBuilder.startMethod(null, interfaceMethod.getDescriptor(), inputVariableList);
         // Build callback
-        if (intf.callbacks != null) {
-            intf.callbacks.forEach(callback -> {
-                VariableType callbackMessageType = getCallbackMessageType(callback);
-                BuildWebSocketAction.build(callback, callbackMessageType, builder.createWebSocketActionBuilder());
+        if (intf.events != null) {
+            intf.events.forEach(event -> {
+                VariableType callbackMessageType = getCallbackMessageType(event);
+                BuildWebSocketEvent.build(event, callbackMessageType, interfaceBuilder.createWebSocketEventBuilder());
             });
         }
-        // Build send
-        if (intf.send != null) {
-            IDataProcessorBuilder dataProcessorBuilder = Checker.checkNull(builder.createDataProcessorBuilder(), builder, "DataProcessorBuilder");
+
+        Variable connection = interfaceMethod.getVariable("connection");
+        // Build message
+        if (intf.message != null) {
+            IDataProcessorBuilder dataProcessorBuilder = Checker.checkNull(interfaceBuilder.createDataProcessorBuilder(), builder, "DataProcessorBuilder");
             BuildDataProcessor.Context context = new BuildDataProcessor.Context();
-            context.procedure = intf.send;
-            context.returnVariableName = intf.send.value;
-            context.specifiedReturnType = xString.inst.getType();
+            context.procedure = intf.message;
+            context.defaultInput = connection;
             context.dataProcessorBuilder = dataProcessorBuilder;
-            //Variable sendVariable = BuildUserProcedure.createValueFromProcedure(xString.inst.getType(), intf.send.value, intf.send, builder);
-            Variable sendVariable = BuildDataProcessor.build(context);
-            builder.send(sendVariable);
+            BuildDataProcessor.build(context);
         }
-        builder.endMethod();
+        interfaceBuilder.endMethod();
     }
 
-    private static VariableType getCallbackMessageType(xCallback callback) {
-        if (callback.response == null) {
+    private static VariableType getCallbackMessageType(xWSUserCallback callback) {
+        if (callback.handler == null) {
             return null;
         }
         AtomicReference<VariableType> returnType = new AtomicReference<>();
-        callback.response.doBuild(() -> {
-            returnType.set(BuildResponse.getReturnType(callback.response));
+        callback.handler.doBuild(() -> {
+            returnType.set(BuildResponse.getReturnType(callback.handler));
             GlobalContext.getCurrentMethod().setReturnType(returnType.get());
         });
         return returnType.get();

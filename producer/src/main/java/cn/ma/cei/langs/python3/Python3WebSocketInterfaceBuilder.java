@@ -1,14 +1,14 @@
 package cn.ma.cei.langs.python3;
 
+import cn.ma.cei.generator.IMethod;
 import cn.ma.cei.generator.Variable;
 import cn.ma.cei.generator.VariableType;
 import cn.ma.cei.generator.builder.IDataProcessorBuilder;
-import cn.ma.cei.generator.builder.IWebSocketActionBuilder;
-import cn.ma.cei.generator.builder.IWebSocketImplementationBuilder;
+import cn.ma.cei.generator.builder.IWebSocketEventBuilder;
+import cn.ma.cei.generator.builder.IWebSocketNestedBuilder;
 import cn.ma.cei.generator.builder.IWebSocketInterfaceBuilder;
 import cn.ma.cei.langs.python3.tools.Python3Class;
 import cn.ma.cei.langs.python3.tools.Python3Method;
-import cn.ma.cei.generator.sMethod;
 
 import java.util.List;
 
@@ -17,7 +17,7 @@ public class Python3WebSocketInterfaceBuilder implements IWebSocketInterfaceBuil
     Python3Class clientClass;
     Python3Method method;
 
-    Python3WebSocketImplementationBuilder onConnectBuilder = null;
+    Python3WebSocketNestedBuilder onConnectBuilder = null;
 
     public Python3WebSocketInterfaceBuilder(Python3Class clientClass) {
         this.clientClass = clientClass;
@@ -25,30 +25,21 @@ public class Python3WebSocketInterfaceBuilder implements IWebSocketInterfaceBuil
     }
 
     @Override
-    public void send(Variable send) {
-        method.addInvoke("self.send_ws", send);
+    public IWebSocketEventBuilder createWebSocketEventBuilder() {
+        return new Python3WebSocketEventBuilder(clientClass, method);
     }
 
     @Override
-    public IWebSocketActionBuilder createWebSocketActionBuilder() {
-        return new Python3WebSocketActionBuilder(clientClass, method);
-    }
-
-    @Override
-    public IWebSocketImplementationBuilder createOnConnectBuilder() {
-        onConnectBuilder = new Python3WebSocketImplementationBuilder(clientClass);
+    public IWebSocketNestedBuilder createOnConnectBuilder() {
+        onConnectBuilder = new Python3WebSocketNestedBuilder(clientClass);
         return onConnectBuilder;
     }
 
     @Override
-    public void setupOnConnect(sMethod onConnect) {
-
+    public IWebSocketNestedBuilder createOnCloseBuilder() {
+        return null;
     }
 
-    @Override
-    public void connect(Variable url, Variable option) {
-        method.addInvoke("self.connect_ws", url, option);
-    }
 
     @Override
     public void onAddReference(VariableType variableType) {
@@ -64,6 +55,27 @@ public class Python3WebSocketInterfaceBuilder implements IWebSocketInterfaceBuil
     public IDataProcessorBuilder createDataProcessorBuilder() {
         return new Python3DataProcessorBuilder(method);
     }
+
+    @Override
+    public void setupOnConnect(Variable connection, IMethod onConnect) {
+
+    }
+
+    @Override
+    public void connect(Variable connection, Variable target, Variable option) {
+        method.addInvoke("self.connect_ws", target, option);
+    }
+
+    @Override
+    public void setupOnClose(Variable connection, IMethod onClose) {
+
+    }
+
+    @Override
+    public void close(Variable connection, Variable option) {
+
+    }
+
 
     @Override
     public void endMethod(Variable returnVariable) {

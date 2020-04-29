@@ -48,7 +48,7 @@ public class JavaExchangeBuilder implements IExchangeBuilder {
         BuilderContext.setupBuildInVariableType(Procedures.typeName, "Procedures", BuilderContext.NO_REF);
 
         BuilderContext.setupBuildInVariableType(WebSocketConnection.typeName, "WebSocketConnection", "cn.ma.cei.impl.WebSocketConnection");
-        BuilderContext.setupBuildInVariableType(WebSocketAction.typeName, "WebSocketAction", "cn.ma.cei.impl.WebSocketAction");
+        BuilderContext.setupBuildInVariableType(WebSocketEvent.typeName, "WebSocketEvent", "cn.ma.cei.impl.WebSocketEvent");
         BuilderContext.setupBuildInVariableType(WebSocketMessage.typeName, "WebSocketMessage", "cn.ma.cei.impl.WebSocketMessage");
         BuilderContext.setupBuildInVariableType(WebSocketCallback.typeName, "IWebSocketCallback", "cn.ma.cei.impl.IWebSocketCallback");
         BuilderContext.setupBuildInVariableType(WebSocketOptions.typeName, "WebSocketOptions", "cn.ma.cei.impl.WebSocketOptions");

@@ -4,7 +4,7 @@ import cn.ma.cei.impl.*;
 
 public class WSClient extends WebSocketConnection {
     public void connect() {
-        WebSocketAction event = new WebSocketAction();
+        WebSocketEvent event = new WebSocketEvent();
         event.setTrigger((msg) -> {
             return true;
         });

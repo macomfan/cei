@@ -56,7 +56,7 @@ public class Python3ExchangeBuilder implements IExchangeBuilder {
         BuilderContext.setupBuildInVariableType(Procedures.typeName, "Procedures", BuilderContext.NO_REF);
 
         BuilderContext.setupBuildInVariableType(WebSocketConnection.typeName, "WebSocketConnection", "from impl.websocketconnection import WebSocketConnection");
-        BuilderContext.setupBuildInVariableType(WebSocketAction.typeName, "WebSocketAction", "from impl.websocketaction import WebSocketAction");
+        BuilderContext.setupBuildInVariableType(WebSocketEvent.typeName, "WebSocketEvent", "from impl.websocketevent import WebSocketEvent");
         BuilderContext.setupBuildInVariableType(WebSocketMessage.typeName, "WebSocketMessage", "from impl.websocketmessage import WebSocketMessage");
         BuilderContext.setupBuildInVariableType(WebSocketCallback.typeName, "IWebSocketCallback", "from impl.websocketcallback import IWebSocketCallback");
         BuilderContext.setupBuildInVariableType(WebSocketOptions.typeName, "WebSocketOptions", "from impl.websocketoptions import WebSocketOptions");

@@ -1,12 +1,6 @@
 package cn.ma.cei.model.websocket;
 
-import cn.ma.cei.model.base.xElement;
-import cn.ma.cei.model.base.xType;
-import cn.ma.cei.model.types.xBoolean;
-import cn.ma.cei.model.types.xDecimal;
-import cn.ma.cei.model.types.xInt;
-import cn.ma.cei.model.types.xString;
-import cn.ma.cei.xml.CEIXmlAnyElementTypes;
+import cn.ma.cei.model.base.xElementWithInputs;
 
 import javax.xml.bind.annotation.*;
 import java.util.List;
@@ -14,18 +8,13 @@ import java.util.List;
 
 @XmlType(name = "interface_websocket")
 @XmlRootElement(name = "interface")
-public class xWSInterface extends xElement {
+public class xWSInterface extends xElementWithInputs {
     @XmlAttribute(name = "name", required = true)
     public String name;
 
-    @XmlElementWrapper(name = "inputs")
-    @XmlAnyElement(lax = true)
-    @CEIXmlAnyElementTypes(classes = {xString.class, xBoolean.class, xInt.class, xDecimal.class})
-    public List<xType> inputList;
+    @XmlElement(name = "message")
+    public xWSMessage message;
 
-    @XmlElement(name = "send")
-    public xSend send;
-
-    @XmlElement(name = "callback")
-    public List<xCallback> callbacks;
+    @XmlElement(name = "event")
+    public List<xWSUserCallback> events;
 }

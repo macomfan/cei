@@ -1,6 +1,7 @@
 package cn.ma.cei.generator.builder;
 
 import cn.ma.cei.generator.BuilderContext;
+import cn.ma.cei.generator.IMethod;
 import cn.ma.cei.generator.Variable;
 
 public interface IDataProcessorBuilder extends IBuilderBase {
@@ -24,7 +25,27 @@ public interface IDataProcessorBuilder extends IBuilderBase {
 
     void URLEscape(Variable output, Variable input);
 
-    void invokeFunction(String methodName, Variable returnVariable, Variable... params);
+    void invokeFunction(IMethod methodInfo, Variable returnVariable, Variable... params);
+
+    /***
+     * Call the callback when the WebSocket event is triggered.
+     * e.g.
+     * callback.invoke(params)
+     *
+     * @param callback the callback variable in the input parameter
+     * @param params the response should be the input parameter of the callback function
+     */
+    void invokeCallback(Variable callback,  Variable... params);
+
+    /**
+     * Send the variable to WebSocket.
+     * e.g.
+     * connection.send(value)
+     *
+     * @param connection the variable sent to the WebSocket
+     * @param value the variable to send the WebSocket, it should string type
+     */
+    void send(Variable connection, Variable value);
 
     void gzip(Variable output, Variable input);
 

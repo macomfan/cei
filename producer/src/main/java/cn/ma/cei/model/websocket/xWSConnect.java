@@ -1,36 +1,16 @@
 package cn.ma.cei.model.websocket;
 
-import cn.ma.cei.model.base.xElement;
-import cn.ma.cei.model.base.xType;
-import cn.ma.cei.model.types.xBoolean;
-import cn.ma.cei.model.types.xDecimal;
-import cn.ma.cei.model.types.xInt;
-import cn.ma.cei.model.types.xString;
-import cn.ma.cei.xml.CEIXmlAnyElementTypes;
+import cn.ma.cei.model.base.xElementWithInputs;
+import cn.ma.cei.model.xPreProcessor;
 
 import javax.xml.bind.annotation.*;
-import java.util.List;
 
-@XmlType(name = "connection_websocket")
-@XmlRootElement(name = "connection")
-public class xWSConnect extends xElement {
+@XmlRootElement(name = "connect")
+public class xWSConnect extends xElementWithInputs {
 
-    @XmlElementWrapper(name = "inputs")
-    @XmlAnyElement(lax = true)
-    @CEIXmlAnyElementTypes(classes = {xString.class, xBoolean.class, xInt.class, xDecimal.class})
-    public List<xType> inputList;
+    @XmlAttribute
+    public String target;
 
-    @XmlElement(name = "connection")
-    public xWSConnection connection;
-
-    @XmlElement(name = "on_connect")
-    public xOnConnect onConnect;
-
-    @XmlElement(name = "url")
-    public xUrl url;
-
-    @XmlAttribute(name = "timeout_s")
-    public Integer timeout;
-
-
+    @XmlElement(name = "pre_processor")
+    public xPreProcessor preProcessor;
 }

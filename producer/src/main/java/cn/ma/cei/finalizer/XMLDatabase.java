@@ -91,7 +91,7 @@ public class XMLDatabase {
                 xWebSocket client = new xWebSocket();
                 client.name = item;
                 client.connection = data.getWSConnection(item);
-                client.actions = data.getWSActionList(item);
+                client.events = data.getWSEventList(item);
                 client.interfaces = data.getWSInterfaceList(item);
                 sdk.clients.webSocketList.add(client);
             });
@@ -125,7 +125,7 @@ public class XMLDatabase {
                     exchangeData.addWSClient(item.name, item.connection);
                 }
                 exchangeData.appendWebSocketInterfaceList(item.name, item.interfaces);
-                exchangeData.appendWebSocketActionList(item.name, item.actions);
+                exchangeData.appendWebSocketEventList(item.name, item.events);
             });
         }
     }

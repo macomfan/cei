@@ -1,15 +1,15 @@
 package cn.ma.cei.langs.cpp;
 
+import cn.ma.cei.generator.IMethod;
 import cn.ma.cei.generator.VariableType;
 import cn.ma.cei.generator.buildin.RestfulOptions;
 import cn.ma.cei.generator.builder.IRestfulClientBuilder;
 import cn.ma.cei.generator.builder.IRestfulInterfaceBuilder;
 import cn.ma.cei.langs.cpp.tools.CppClass;
-import cn.ma.cei.generator.sMethod;
 
 public class CppRestfulClientBuilder implements IRestfulClientBuilder {
     private CppClass cppClass;
-    private String exchangeName;
+    private final String exchangeName;
     
     public CppRestfulClientBuilder(String exchangeName) {
         this.exchangeName = exchangeName;
@@ -21,7 +21,7 @@ public class CppRestfulClientBuilder implements IRestfulClientBuilder {
     }
 
     @Override
-    public IRestfulInterfaceBuilder createRestfulInterfaceBuilder(sMethod method) {
+    public IRestfulInterfaceBuilder createRestfulInterfaceBuilder(IMethod method) {
         return new CppRestfulInterfaceBuilder(cppClass);
     }
 

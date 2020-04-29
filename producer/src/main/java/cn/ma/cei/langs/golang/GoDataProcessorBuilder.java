@@ -1,5 +1,6 @@
 package cn.ma.cei.langs.golang;
 
+import cn.ma.cei.generator.IMethod;
 import cn.ma.cei.generator.Variable;
 import cn.ma.cei.generator.builder.*;
 import cn.ma.cei.langs.golang.tools.GoMethod;
@@ -109,7 +110,17 @@ public class GoDataProcessorBuilder implements IDataProcessorBuilder {
     }
 
     @Override
-    public void invokeFunction(String methodName, Variable returnVariable, Variable... params) {
+    public void invokeFunction(IMethod methodInfo, Variable returnVariable, Variable... params) {
+
+    }
+
+    @Override
+    public void invokeCallback(Variable callback, Variable... params) {
+
+    }
+
+    @Override
+    public void send(Variable connection, Variable value) {
 
     }
 

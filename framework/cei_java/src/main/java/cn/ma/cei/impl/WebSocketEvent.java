@@ -8,7 +8,7 @@ package cn.ma.cei.impl;
 /**
  * @author u0151316
  */
-public class WebSocketAction {
+public class WebSocketEvent {
     private ITrigger checker;
     private ICallback callback;
     private boolean persistence = false;
@@ -17,7 +17,7 @@ public class WebSocketAction {
         this.checker = checker;
     }
 
-    public void setAction(ICallback callback) {
+    public void setEvent(ICallback callback) {
         this.callback = callback;
     }
 
@@ -33,8 +33,8 @@ public class WebSocketAction {
         return checker.check(msg);
     }
 
-    public void invoke(WebSocketMessage msg) {
-        callback.onAction(msg);
+    public void invoke(WebSocketConnection connection, WebSocketMessage msg) {
+        callback.onEvent(connection, msg);
     }
 
     @FunctionalInterface
@@ -44,6 +44,6 @@ public class WebSocketAction {
 
     @FunctionalInterface
     public interface ICallback {
-        void onAction(WebSocketMessage msg);
+        void onEvent(WebSocketConnection connection, WebSocketMessage msg);
     }
 }

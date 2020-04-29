@@ -13,16 +13,16 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.regex.Pattern;
 
-public class sMethod {
+class sMethod implements IMethod {
     public static final String SELF = "###SELF###";
 
-    private String name;
-    private UniqueList<String, Variable> variableList = new UniqueList<>();
-    private UniqueList<String, sMethod> nestedMethodList = new UniqueList<>();
+    private final String name;
+    private final UniqueList<String, Variable> variableList = new UniqueList<>();
+    private final UniqueList<String, sMethod> nestedMethodList = new UniqueList<>();
     private VariableType returnType;
     private int temporaryId = 0;
-    private VariableType parent;
-    private Variable self;
+    private final VariableType parent;
+    private final Variable self;
 
     public sMethod(VariableType parent, String name) {
         this.parent = parent;
@@ -42,6 +42,7 @@ public class sMethod {
         return method;
     }
 
+    @Override
     public VariableType getReturnType() {
         return this.returnType;
     }
@@ -54,10 +55,12 @@ public class sMethod {
         return name;
     }
 
+    @Override
     public String getDescriptor() {
         return GlobalContext.getCurrentDescriptionConverter().getMethodDescriptor(this.name);
     }
 
+    @Override
     public List<Variable> getInputVariableList() {
         List<Variable> res = new LinkedList<>();
         variableList.values().forEach(item -> {
@@ -134,6 +137,9 @@ public class sMethod {
      * @return the variable object
      */
     public Variable queryVariable(String name) {
+        if (Checker.isEmpty(name)) {
+            CEIErrors.showCodeFailure(this.getClass(), "Querying a null variable");
+        }
         String variableName = RegexHelper.isReference(name);
         if (Checker.isEmpty(variableName)) {
             CEIErrors.showFailure(CEIErrorType.XML, "%s is not a variable name", name);

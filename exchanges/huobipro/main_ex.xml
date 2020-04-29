@@ -288,8 +288,10 @@
         </restful>
 
         <websocket name="WSClient">
-            <connection>
-                <url target="wss://api.huobi.pro/ws"/>
+            <connection url="wss://api.huobi.pro/ws">
+                <open>
+                    <connect/>
+                </open>
             </connection>
             <interfaces>
                 <interface name="requestCandlestick">
@@ -297,20 +299,21 @@
                         <string name="symbol"/>
                         <string name="period"/>
                     </inputs>
-                    <send value="{json}">
+                    <message>
                         <get_now name="ts" format="Unix_ms"/>
                         <json_builder name="json">
                             <json_value key="sub" value="market.{symbol}.kline.{period}"/>
                             <json_string key="id" value="{ts}"/>
                         </json_builder>
-                    </send>
-                    <callback name="onCandlestick" persistent="true">
+                        <send value="{json}"/>
+                    </message>
+                    <event callback="onCandlestick" persistent="true">
                         <trigger>
                             <json_checker>
                                 <json_checker_equal key="ch" value="market.{symbol}.kline.{period}"/>
                             </json_checker>
                         </trigger>
-                        <response>
+                        <handler>
                             <json_parser model="CandlestickData">
                                 <json_object copy="tick">
                                     <json_value copy="id"/>
@@ -323,8 +326,8 @@
                                     <json_value copy="vol"/>
                                 </json_object>
                             </json_parser>
-                        </response>
-                    </callback>
+                        </handler>
+                    </event>
                 </interface>
             </interfaces>
         </websocket>
