@@ -6,7 +6,7 @@ import java.util.List;
 
 public class TestDependence {
     class TestNode implements IDependenceNode {
-        private String name;
+        private final String name;
 
         public TestNode(String name) {
             this.name = name;

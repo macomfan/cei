@@ -5,15 +5,12 @@
  */
 package cn.ma.cei.langs.golang;
 
-import cn.ma.cei.generator.BuilderContext;
 import cn.ma.cei.generator.Variable;
 import cn.ma.cei.generator.VariableType;
 import cn.ma.cei.generator.builder.IDataProcessorBuilder;
 import cn.ma.cei.generator.builder.IRestfulInterfaceBuilder;
 import cn.ma.cei.langs.golang.tools.*;
-import cn.ma.cei.utils.WordSplitter;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 

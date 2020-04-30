@@ -1,7 +1,7 @@
 package cn.ma.cei.finalizer;
 
 import cn.ma.cei.model.types.*;
-import cn.ma.cei.model.*;
+import cn.ma.cei.model.xModel;
 import cn.ma.cei.utils.DuplexMap;
 
 

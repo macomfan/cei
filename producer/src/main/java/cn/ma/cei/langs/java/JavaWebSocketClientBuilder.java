@@ -5,7 +5,6 @@ import cn.ma.cei.generator.Variable;
 import cn.ma.cei.generator.VariableType;
 import cn.ma.cei.generator.builder.IWebSocketClientBuilder;
 import cn.ma.cei.generator.builder.IWebSocketInterfaceBuilder;
-import cn.ma.cei.generator.buildin.RestfulOptions;
 import cn.ma.cei.generator.buildin.WebSocketConnection;
 import cn.ma.cei.generator.buildin.WebSocketOptions;
 import cn.ma.cei.langs.java.tools.JavaClass;

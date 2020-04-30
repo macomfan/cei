@@ -17,11 +17,8 @@
 package cn.ma.cei.generator;
 
 import cn.ma.cei.exception.CEIException;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.FileWriter;
+
+import java.io.*;
 import java.nio.channels.FileChannel;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -39,7 +36,7 @@ public class CEIPath {
     }
 
     private String filename = null;
-    private File io;
+    private final File io;
 
     public CEIPath(Type type, String path) {
         io = Paths.get(path).toFile();

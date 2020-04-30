@@ -10,8 +10,8 @@ import java.util.*;
 public class Python3File {
     private final String filename;
 
-    private Python3Code code = new Python3Code();
-    private Map<String, Python3Class> innerClasses = new HashMap<>();
+    private final Python3Code code = new Python3Code();
+    private final Map<String, Python3Class> innerClasses = new HashMap<>();
 
     public Python3File(String exchangeName) {
         this.filename = exchangeName;

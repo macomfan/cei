@@ -15,7 +15,7 @@ import cn.ma.cei.langs.java.tools.JavaMethod;
  */
 public class JavaJsonBuilderBuilder implements IJsonBuilderBuilder {
 
-    private JavaMethod method;
+    private final JavaMethod method;
 
     public JavaJsonBuilderBuilder(JavaMethod method) {
         this.method = method;

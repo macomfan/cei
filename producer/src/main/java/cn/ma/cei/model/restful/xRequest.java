@@ -4,11 +4,11 @@ import cn.ma.cei.model.base.xElement;
 import cn.ma.cei.model.xPreProcessor;
 import cn.ma.cei.utils.Checker;
 
-import java.util.List;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
+import java.util.List;
 
 @XmlRootElement(name = "request")
 public class xRequest extends xElement {

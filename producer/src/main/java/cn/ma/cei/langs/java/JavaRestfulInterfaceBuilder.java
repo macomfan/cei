@@ -1,18 +1,19 @@
 package cn.ma.cei.langs.java;
 
-import cn.ma.cei.generator.BuilderContext;
-import cn.ma.cei.generator.builder.*;
 import cn.ma.cei.generator.Variable;
 import cn.ma.cei.generator.VariableType;
+import cn.ma.cei.generator.builder.IDataProcessorBuilder;
+import cn.ma.cei.generator.builder.IRestfulInterfaceBuilder;
 import cn.ma.cei.langs.java.tools.JavaClass;
 import cn.ma.cei.langs.java.tools.JavaMethod;
+
 import java.util.List;
 
 public class JavaRestfulInterfaceBuilder implements IRestfulInterfaceBuilder {
 
-    private JavaClass clientClass;
+    private final JavaClass clientClass;
 
-    private JavaMethod method;
+    private final JavaMethod method;
 
     public JavaRestfulInterfaceBuilder(JavaClass javaClass) {
         this.clientClass = javaClass;

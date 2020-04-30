@@ -1,7 +1,7 @@
 package cn.ma.cei.langs.golang.processor;
 
-import cn.ma.cei.generator.builder.IJsonCheckerBuilder;
 import cn.ma.cei.generator.Variable;
+import cn.ma.cei.generator.builder.IJsonCheckerBuilder;
 
 public class GoJsonCheckerBuilder implements IJsonCheckerBuilder {
     @Override

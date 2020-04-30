@@ -3,7 +3,7 @@ package cn.ma.cei.utils;
 
 public class SecondLevelMap<Level1, Level2, Value> {
 
-    private NormalMap<Level1, NormalMap<Level2, Value>> map = new NormalMap<>();
+    private final NormalMap<Level1, NormalMap<Level2, Value>> map = new NormalMap<>();
 
     public Value tryGet(Level1 key1, Level2 key2) {
         NormalMap<Level2, Value> map2 = map.tryGet(key1);

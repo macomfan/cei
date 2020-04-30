@@ -1,7 +1,7 @@
 package cn.ma.cei.generator.buildin;
 
-import cn.ma.cei.generator.VariableType;
 import cn.ma.cei.generator.BuilderContext;
+import cn.ma.cei.generator.VariableType;
 
 public class RestfulResponse {
 

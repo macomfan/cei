@@ -3,7 +3,6 @@ package cn.ma.cei.generator;
 import cn.ma.cei.exception.CEIErrors;
 import cn.ma.cei.exception.CEIException;
 import cn.ma.cei.generator.builder.IDataProcessorBuilder;
-import cn.ma.cei.generator.builder.IMethodBuilder;
 import cn.ma.cei.generator.builder.IRestfulInterfaceBuilder;
 import cn.ma.cei.generator.buildin.*;
 import cn.ma.cei.model.restful.*;

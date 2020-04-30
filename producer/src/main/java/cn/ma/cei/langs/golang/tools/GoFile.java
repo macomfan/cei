@@ -5,15 +5,12 @@
  */
 package cn.ma.cei.langs.golang.tools;
 
-import cn.ma.cei.generator.CEIPath;
 import cn.ma.cei.generator.BuilderContext;
+import cn.ma.cei.generator.CEIPath;
 import cn.ma.cei.langs.golang.GoCode;
 import cn.ma.cei.utils.UniqueList;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+
+import java.util.*;
 
 /**
  *
@@ -21,12 +18,12 @@ import java.util.Set;
  */
 public class GoFile {
 
-    private String filename;
-    private String packageName;
-    private GoCode code = new GoCode();
+    private final String filename;
+    private final String packageName;
+    private final GoCode code = new GoCode();
 
-    private UniqueList<String, GoStruct> structList = new UniqueList<>();
-    private UniqueList<String, GoMethod> methodList = new UniqueList<>();
+    private final UniqueList<String, GoStruct> structList = new UniqueList<>();
+    private final UniqueList<String, GoMethod> methodList = new UniqueList<>();
 
     public GoFile(String filename, String packageName) {
         this.filename = filename;

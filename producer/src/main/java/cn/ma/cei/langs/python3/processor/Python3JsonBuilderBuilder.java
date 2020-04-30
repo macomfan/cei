@@ -5,8 +5,8 @@
  */
 package cn.ma.cei.langs.python3.processor;
 
-import cn.ma.cei.generator.builder.IJsonBuilderBuilder;
 import cn.ma.cei.generator.Variable;
+import cn.ma.cei.generator.builder.IJsonBuilderBuilder;
 import cn.ma.cei.langs.python3.tools.Python3Method;
 
 /**
@@ -15,7 +15,7 @@ import cn.ma.cei.langs.python3.tools.Python3Method;
  */
 public class Python3JsonBuilderBuilder implements IJsonBuilderBuilder {
 
-    private Python3Method method;
+    private final Python3Method method;
 
     public Python3JsonBuilderBuilder(Python3Method method) {
         this.method = method;

@@ -5,12 +5,13 @@
  */
 package cn.ma.cei.langs.python3;
 
-import cn.ma.cei.generator.BuilderContext;
-import cn.ma.cei.generator.builder.*;
 import cn.ma.cei.generator.Variable;
 import cn.ma.cei.generator.VariableType;
+import cn.ma.cei.generator.builder.IDataProcessorBuilder;
+import cn.ma.cei.generator.builder.IRestfulInterfaceBuilder;
 import cn.ma.cei.langs.python3.tools.Python3Class;
 import cn.ma.cei.langs.python3.tools.Python3Method;
+
 import java.util.List;
 
 /**
@@ -19,8 +20,8 @@ import java.util.List;
  */
 public class Python3RestfulInterfaceBuilder implements IRestfulInterfaceBuilder {
 
-    private Python3Method method;
-    private Python3Class clientClass;
+    private final Python3Method method;
+    private final Python3Class clientClass;
 
     public Python3RestfulInterfaceBuilder(Python3Class clientClass) {
         this.clientClass = clientClass;
@@ -42,12 +43,6 @@ public class Python3RestfulInterfaceBuilder implements IRestfulInterfaceBuilder 
     public void invokeQuery(Variable response, Variable request) {
         method.addAssign(method.defineVariable(response), method.invoke("RestfulConnection.query", request));
     }
-
-//    @Override
-//    public void setUrl(Variable request) {
-//        Variable url = VariableFactory.createConstantVariable("self.__options.url");
-//        method.addInvoke(request.getDescriptor() + ".set_url", url);
-//    }
 
     @Override
     public void setRequestMethod(Variable request, Variable requestMethod) {

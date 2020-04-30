@@ -19,7 +19,7 @@ import java.util.Set;
  */
 public class GoDescriptionConverter implements IDescriptionConverter {
 
-    private Set<String> keywords;
+    private final Set<String> keywords;
 
     public GoDescriptionConverter() {
         keywords = getKeywords();

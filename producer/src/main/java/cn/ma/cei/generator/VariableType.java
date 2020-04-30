@@ -15,8 +15,8 @@ public class VariableType {
 
     public static VariableType VOID = new VariableType();
 
-    private UniqueList<String, sMethod> methods = new UniqueList<>();
-    private UniqueList<String, Variable> members = new UniqueList<>();
+    private final UniqueList<String, sMethod> methods = new UniqueList<>();
+    private final UniqueList<String, Variable> members = new UniqueList<>();
 
     private final String typeName;
     private final List<VariableType> genericList = new LinkedList<>();

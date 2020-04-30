@@ -5,9 +5,9 @@
  */
 package cn.ma.cei.langs.cpp;
 
+import cn.ma.cei.generator.Variable;
 import cn.ma.cei.generator.builder.IJsonCheckerBuilder;
 import cn.ma.cei.generator.builder.IJsonParserBuilder;
-import cn.ma.cei.generator.Variable;
 
 /**
  *

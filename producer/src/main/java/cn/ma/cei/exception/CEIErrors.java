@@ -6,7 +6,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 public class CEIErrors {
-    private static Logger logger = LogManager.getLogger(CEIErrors.class);
+    private static final Logger logger = LogManager.getLogger(CEIErrors.class);
 
     public static void showCodeFailure(Class<?> cls, String message, Object... args) throws CEIException {
         String res = String.format(message, args);

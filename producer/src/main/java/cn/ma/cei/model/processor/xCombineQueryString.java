@@ -17,6 +17,9 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement(name = "combine_query_string")
 public class xCombineQueryString extends xDataProcessorItem {
 
+    @XmlAttribute(name = "input", required = true)
+    public String input;
+
     @XmlAttribute(name = "name", required = true)
     public String name;
     

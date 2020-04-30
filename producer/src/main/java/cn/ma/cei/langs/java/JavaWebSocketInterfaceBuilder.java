@@ -3,7 +3,10 @@ package cn.ma.cei.langs.java;
 import cn.ma.cei.generator.IMethod;
 import cn.ma.cei.generator.Variable;
 import cn.ma.cei.generator.VariableType;
-import cn.ma.cei.generator.builder.*;
+import cn.ma.cei.generator.builder.IDataProcessorBuilder;
+import cn.ma.cei.generator.builder.IWebSocketEventBuilder;
+import cn.ma.cei.generator.builder.IWebSocketInterfaceBuilder;
+import cn.ma.cei.generator.builder.IWebSocketNestedBuilder;
 import cn.ma.cei.langs.java.tools.JavaClass;
 import cn.ma.cei.langs.java.tools.JavaMethod;
 

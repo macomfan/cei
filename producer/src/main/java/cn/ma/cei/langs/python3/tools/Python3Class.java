@@ -27,10 +27,10 @@ public class Python3Class {
     }
 
     private final String className;
-    private Python3Code code = new Python3Code();
-    private UniqueList<String, Variable> memberList = new UniqueList<>();
-    private Set<String> importList = new HashSet<>();
-    private List<Python3Code> methodList = new LinkedList<>();
+    private final Python3Code code = new Python3Code();
+    private final UniqueList<String, Variable> memberList = new UniqueList<>();
+    private final Set<String> importList = new HashSet<>();
+    private final List<Python3Code> methodList = new LinkedList<>();
     private VariableType superClass = null;
     private Python3Method defaultConstructor = null;
 

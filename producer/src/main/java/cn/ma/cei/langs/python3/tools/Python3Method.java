@@ -8,6 +8,7 @@ package cn.ma.cei.langs.python3.tools;
 import cn.ma.cei.generator.Variable;
 import cn.ma.cei.generator.VariableType;
 import cn.ma.cei.langs.python3.Python3Code;
+
 import java.util.Arrays;
 import java.util.List;
 
@@ -17,8 +18,8 @@ import java.util.List;
  */
 public class Python3Method {
 
-    private Python3Code code = new Python3Code();
-    private Python3Class parent;
+    private final Python3Code code = new Python3Code();
+    private final Python3Class parent;
 
     public Python3Method(Python3Class parent) {
         this.parent = parent;

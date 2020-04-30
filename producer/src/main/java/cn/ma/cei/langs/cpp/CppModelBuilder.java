@@ -8,7 +8,7 @@ import cn.ma.cei.langs.cpp.tools.CppClass;
 public class CppModelBuilder implements IModelBuilder {
 
     private CppClass cppClass = null;
-    private String exchangeName;
+    private final String exchangeName;
     
     public CppModelBuilder(String exchangeName) {
         this.exchangeName = exchangeName;

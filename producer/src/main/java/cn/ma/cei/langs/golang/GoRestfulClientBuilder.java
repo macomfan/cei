@@ -5,7 +5,10 @@
  */
 package cn.ma.cei.langs.golang;
 
-import cn.ma.cei.generator.*;
+import cn.ma.cei.generator.BuilderContext;
+import cn.ma.cei.generator.IMethod;
+import cn.ma.cei.generator.Variable;
+import cn.ma.cei.generator.VariableType;
 import cn.ma.cei.generator.builder.IRestfulClientBuilder;
 import cn.ma.cei.generator.builder.IRestfulInterfaceBuilder;
 import cn.ma.cei.generator.buildin.RestfulOptions;
@@ -20,7 +23,7 @@ import cn.ma.cei.langs.golang.tools.GoStruct;
  */
 public class GoRestfulClientBuilder implements IRestfulClientBuilder {
 
-    private GoFile clientFile;
+    private final GoFile clientFile;
     private GoStruct clientStruct;
 
     public GoRestfulClientBuilder(GoFile clientFile) {

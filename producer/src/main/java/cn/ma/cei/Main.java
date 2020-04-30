@@ -2,7 +2,6 @@ package cn.ma.cei;
 
 import cn.ma.cei.exception.BuildTracer;
 import cn.ma.cei.exception.CEIErrors;
-import cn.ma.cei.exception.CEIException;
 import cn.ma.cei.finalizer.XMLDatabase;
 import cn.ma.cei.generator.BuildSDK;
 import cn.ma.cei.langs.cpp.CppFramework;
@@ -50,7 +49,7 @@ public class Main {
     private Integer port;
     private Boolean help;
     private Boolean version;
-    private CLI cli;
+    private final CLI cli;
 
     @Argument(argName = "xxx.xml", index = 0, required = false)
     @Description("Specify the config file, the file should be xml file.")
@@ -126,12 +125,7 @@ public class Main {
         BuildSDK.registerFramework(new Python3Framework());
         BuildSDK.registerFramework(new GoFramework());
         try {
-            BuildSDK.build("C:\\dev\\cei\\exchanges\\test", "java", "C:\\dev\\cei\\output");
-//        } catch (CEIException e) {
-//            System.err.println(e.getMessage());
-//            System.err.println(BuildTracer.getTraceString());
-//            e.printStackTrace();
-//            return;
+            BuildSDK.build("C:\\dev\\cei\\exchanges", "java|python3", "C:\\dev\\cei\\output");
         } catch (Exception e) {
             System.err.println(e.getMessage());
             System.err.println(BuildTracer.getTraceString());
@@ -139,16 +133,16 @@ public class Main {
             return;
         }
 
-        xSDK sdk = XMLDatabase.getSDK("debug");
-        XmlToJson xmlToJson = new XmlToJson();
-        Convert.doConvert(xmlToJson, sdk);
-        System.out.println(xmlToJson.toJsonString());
-        JsonToXml jsonToXml = new JsonToXml(xmlToJson.getJsonObject());
-        xSDK test = new xSDK();
-        Convert.doConvert(jsonToXml, test);
-        XmlToJson xmlToJson2 = new XmlToJson();
-        Convert.doConvert(xmlToJson2, test);
-        System.out.println(xmlToJson2.toJsonString());
+//        xSDK sdk = XMLDatabase.getSDK("debug");
+//        XmlToJson xmlToJson = new XmlToJson();
+//        Convert.doConvert(xmlToJson, sdk);
+//        System.out.println(xmlToJson.toJsonString());
+//        JsonToXml jsonToXml = new JsonToXml(xmlToJson.getJsonObject());
+//        xSDK test = new xSDK();
+//        Convert.doConvert(jsonToXml, test);
+//        XmlToJson xmlToJson2 = new XmlToJson();
+//        Convert.doConvert(xmlToJson2, test);
+//        System.out.println(xmlToJson2.toJsonString());
     }
 
     public void showHelp() {

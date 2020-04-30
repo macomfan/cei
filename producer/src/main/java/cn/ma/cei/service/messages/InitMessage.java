@@ -5,8 +5,6 @@
  */
 package cn.ma.cei.service.messages;
 
-import cn.ma.cei.service.WebSocketMessage;
-
 /**
  * @author u0151316
  */

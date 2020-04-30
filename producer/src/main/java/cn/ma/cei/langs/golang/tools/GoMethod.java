@@ -6,6 +6,7 @@
 package cn.ma.cei.langs.golang.tools;
 
 import cn.ma.cei.langs.golang.GoCode;
+
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
@@ -18,7 +19,7 @@ import java.util.Set;
 public class GoMethod {
 
     private GoStruct parent = null;
-    private GoCode code = new GoCode();
+    private final GoCode code = new GoCode();
     private String methodName;
 
     public GoMethod(GoStruct parent) {

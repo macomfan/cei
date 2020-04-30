@@ -1,6 +1,5 @@
 package cn.ma.cei.langs.python3;
 
-import cn.ma.cei.generator.BuildDataProcessor;
 import cn.ma.cei.generator.BuilderContext;
 import cn.ma.cei.generator.IMethod;
 import cn.ma.cei.generator.Variable;
@@ -64,7 +63,7 @@ public class Python3DataProcessorBuilder implements IDataProcessorBuilder {
 
     @Override
     public Variable convertIntToString(Variable intVariable) {
-        return null;
+        return BuilderContext.createStatement(method.invoke("str", intVariable));
     }
 
     @Override
@@ -74,12 +73,12 @@ public class Python3DataProcessorBuilder implements IDataProcessorBuilder {
 
     @Override
     public Variable convertDecimalToString(Variable decimalVariable) {
-        return null;
+        return BuilderContext.createStatement(method.invoke("str", decimalVariable));
     }
 
     @Override
     public Variable convertBooleanToString(Variable booleanVariable) {
-        return null;
+        return BuilderContext.createStatement(method.invoke("str", booleanVariable));
     }
 
     @Override

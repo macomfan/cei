@@ -5,8 +5,8 @@
  */
 package cn.ma.cei.langs.golang.processor;
 
-import cn.ma.cei.generator.builder.IJsonBuilderBuilder;
 import cn.ma.cei.generator.Variable;
+import cn.ma.cei.generator.builder.IJsonBuilderBuilder;
 import cn.ma.cei.langs.golang.tools.GoMethod;
 import cn.ma.cei.langs.golang.tools.GoType;
 import cn.ma.cei.langs.golang.tools.GoVar;
@@ -17,7 +17,7 @@ import cn.ma.cei.langs.golang.tools.GoVar;
  */
 public class GoJsonBuilderBuilder implements IJsonBuilderBuilder {
     
-    private GoMethod method;
+    private final GoMethod method;
     
     public GoJsonBuilderBuilder(GoMethod method) {
         this.method = method;

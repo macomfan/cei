@@ -2,7 +2,10 @@ package cn.ma.cei.model.websocket;
 
 import cn.ma.cei.model.base.xElementWithInputs;
 
-import javax.xml.bind.annotation.*;
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
 import java.util.List;
 
 

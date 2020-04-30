@@ -7,13 +7,8 @@ import cn.ma.cei.generator.Variable;
 import cn.ma.cei.generator.VariableType;
 import cn.ma.cei.langs.java.JavaCode;
 import cn.ma.cei.utils.UniqueList;
-import java.util.ArrayList;
-import java.util.Collections;
 
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class JavaClass {
 
@@ -32,12 +27,12 @@ public class JavaClass {
     private VariableType superClass = null;
     private ClassType type = ClassType.STANDARD;
 
-    private UniqueList<String, Variable> privateMemberList = new UniqueList<>();
-    private UniqueList<String, Variable> publicMemberList = new UniqueList<>();
-    private Set<String> importList = new HashSet<>();
-    private List<JavaMethod> methodList = new LinkedList<>();
+    private final UniqueList<String, Variable> privateMemberList = new UniqueList<>();
+    private final UniqueList<String, Variable> publicMemberList = new UniqueList<>();
+    private final Set<String> importList = new HashSet<>();
+    private final List<JavaMethod> methodList = new LinkedList<>();
 
-    private UniqueList<String, JavaClass> innerClasses = new UniqueList<>();
+    private final UniqueList<String, JavaClass> innerClasses = new UniqueList<>();
 
     JavaCode code = new JavaCode();
 

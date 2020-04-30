@@ -5,7 +5,9 @@
  */
 package cn.ma.cei.langs.golang;
 
-import cn.ma.cei.generator.*;
+import cn.ma.cei.generator.BuilderContext;
+import cn.ma.cei.generator.CEIPath;
+import cn.ma.cei.generator.Constant;
 import cn.ma.cei.generator.builder.*;
 import cn.ma.cei.generator.buildin.*;
 import cn.ma.cei.langs.golang.tools.GoFile;

@@ -1,16 +1,18 @@
 package cn.ma.cei.langs.cpp;
 
-import cn.ma.cei.generator.builder.*;
 import cn.ma.cei.generator.Variable;
 import cn.ma.cei.generator.VariableType;
+import cn.ma.cei.generator.builder.IDataProcessorBuilder;
+import cn.ma.cei.generator.builder.IRestfulInterfaceBuilder;
 import cn.ma.cei.langs.cpp.tools.CppClass;
 import cn.ma.cei.langs.cpp.tools.CppMethod;
+
 import java.util.List;
 
 public class CppRestfulInterfaceBuilder implements IRestfulInterfaceBuilder {
     
     private CppMethod cppMethod;
-    private CppClass cppClass;
+    private final CppClass cppClass;
     
     public CppRestfulInterfaceBuilder(CppClass cppClass) {
         this.cppClass = cppClass;

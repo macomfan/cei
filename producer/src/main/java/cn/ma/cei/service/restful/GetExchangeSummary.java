@@ -10,7 +10,7 @@ import io.vertx.core.buffer.Buffer;
 import io.vertx.core.http.HttpMethod;
 import io.vertx.core.http.HttpServerRequest;
 import io.vertx.core.json.JsonObject;
-import io.vertx.ext.web.Router;
+
 import java.util.LinkedList;
 import java.util.List;
 

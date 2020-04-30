@@ -1,11 +1,11 @@
 package cn.ma.cei.langs.java;
 
-import cn.ma.cei.generator.builder.IStringBuilderBuilder;
 import cn.ma.cei.generator.Variable;
+import cn.ma.cei.generator.builder.IStringBuilderBuilder;
 import cn.ma.cei.langs.java.tools.JavaMethod;
 
 public class JavaStringBuilderBuilder implements IStringBuilderBuilder {
-    private JavaMethod method;
+    private final JavaMethod method;
 
     public JavaStringBuilderBuilder(JavaMethod method) {
         this.method = method;

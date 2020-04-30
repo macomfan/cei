@@ -1,7 +1,7 @@
 package cn.ma.cei.langs.python3.processor;
 
-import cn.ma.cei.generator.builder.IJsonCheckerBuilder;
 import cn.ma.cei.generator.Variable;
+import cn.ma.cei.generator.builder.IJsonCheckerBuilder;
 import cn.ma.cei.langs.python3.tools.Python3Method;
 
 public class Python3JsonCheckerBuilder implements IJsonCheckerBuilder {

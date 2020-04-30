@@ -9,7 +9,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class XmlToJson implements IXmlJsonConverter {
-    private JsonObject jsonObject = new JsonObject();
+    private final JsonObject jsonObject = new JsonObject();
 
     public JsonObject getJsonObject() {
         return jsonObject;

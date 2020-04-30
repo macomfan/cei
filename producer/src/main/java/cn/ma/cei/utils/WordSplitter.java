@@ -8,10 +8,10 @@ public class WordSplitter {
     //All lowercase
     //All uppercase
 
-    private static Map<String, String> camelCaseFirstLowercaseBuffer = new HashMap<>();
-    private static Map<String, String> camelCaseFirstUppercaseBuffer = new HashMap<>();
-    private static Map<String, String> uppercaseBuffer = new HashMap<>();
-    private static Map<String, String> lowercaseBuffer = new HashMap<>();
+    private static final Map<String, String> camelCaseFirstLowercaseBuffer = new HashMap<>();
+    private static final Map<String, String> camelCaseFirstUppercaseBuffer = new HashMap<>();
+    private static final Map<String, String> uppercaseBuffer = new HashMap<>();
+    private static final Map<String, String> lowercaseBuffer = new HashMap<>();
 
     public static String getLowercase(String name, String separator) {
         if (lowercaseBuffer.containsKey(name + separator)) {
@@ -107,7 +107,7 @@ public class WordSplitter {
 
 
     private static boolean isLowercaseChar(char ch) {
-        return 'a' <= ch && ch <= 'z' ? true : false;
+        return 'a' <= ch && ch <= 'z';
     }
 
     private static String convertToFirstLowercase(String str) {

@@ -20,7 +20,7 @@ import java.util.Set;
  */
 public class Python3DescriptionConverter implements IDescriptionConverter {
 
-    private Set<String> keywords;
+    private final Set<String> keywords;
 
     public Python3DescriptionConverter() {
         keywords = getKeywords();

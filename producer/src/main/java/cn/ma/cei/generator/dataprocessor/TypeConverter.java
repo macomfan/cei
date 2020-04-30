@@ -36,12 +36,12 @@ public class TypeConverter {
         }
         Func func = converterMap.get(input.getType(), objectType);
         if (func == null) {
-            CEIErrors.showCodeFailure(TypeConverter.class,"Not support converter, from: %s, to %s", input.getType().getDescriptor(), objectType.getDescriptor());
+            CEIErrors.showCodeFailure(TypeConverter.class,"Not support converter, from: %s to %s", input.getType().getDescriptor(), objectType.getDescriptor());
             return null;
         }
         Variable result = func.convert(builder, input);
         if (result == null) {
-            CEIErrors.showCodeFailure(TypeConverter.class,"Convert result is null, from: %s, to %s", input.getType().getDescriptor(), objectType.getDescriptor());
+            CEIErrors.showCodeFailure(TypeConverter.class,"Convert result is null, from: %s to %s", input.getType().getDescriptor(), objectType.getDescriptor());
         }
         return result;
     }

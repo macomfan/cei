@@ -6,9 +6,9 @@
 package cn.ma.cei.langs.python3;
 
 import cn.ma.cei.generator.BuilderContext;
-import cn.ma.cei.generator.builder.IModelBuilder;
 import cn.ma.cei.generator.Variable;
 import cn.ma.cei.generator.VariableType;
+import cn.ma.cei.generator.builder.IModelBuilder;
 import cn.ma.cei.langs.python3.tools.Python3Class;
 import cn.ma.cei.langs.python3.tools.Python3File;
 
@@ -18,7 +18,7 @@ import cn.ma.cei.langs.python3.tools.Python3File;
  */
 public class Python3ModelBuilder implements IModelBuilder {
 
-    private Python3File mainFile;
+    private final Python3File mainFile;
     private Python3Class modelClass;
     
     public Python3ModelBuilder(Python3File mainFile) {

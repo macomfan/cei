@@ -5,7 +5,10 @@ import cn.ma.cei.exception.CEIErrors;
 import cn.ma.cei.generator.builder.IDataProcessorBuilder;
 import cn.ma.cei.generator.dataprocessor.TypeConverter;
 import cn.ma.cei.model.base.xDataProcessorItem;
+import cn.ma.cei.utils.Checker;
 import cn.ma.cei.utils.RegexHelper;
+
+import java.util.List;
 
 public abstract class DataProcessorBase<T extends xDataProcessorItem> {
     private Variable defaultInput = null;
@@ -60,6 +63,50 @@ public abstract class DataProcessorBase<T extends xDataProcessorItem> {
         return defaultInput;
     }
 
+    public Variable queryInputVariable(String inputName, String defaultInput, VariableType type) {
+        Variable result = null;
+        if (Checker.isEmpty(inputName)) {
+            if (!Checker.isEmpty(defaultInput)) {
+                result = queryVariable(defaultInput);
+            }
+            if (result == null) {
+                List<Variable> variableList = GlobalContext.getCurrentMethod().getInputVariableList();
+                int found = -1;// Not found: -1, Found: index, Multi Fount： -2
+                int index = 0;
+                for (Variable variable : variableList) {
+                    if (variable.getType() == type) {
+                        if (found == -1) {
+                            found = index;
+                        } else {
+                            found = -2;
+                        }
+                    }
+                    index++;
+                }
+                if (found == -1) {
+                    // Not found
+                    CEIErrors.showXMLFailure("Cannot found default input %s, and no any input with type %s", defaultInput, type.getDescriptor());
+                } else if (found == -2) {
+                    CEIErrors.showXMLFailure("Cannot decide input by type %s, multi-inputs are found", type.getDescriptor());
+                }
+            }
+        } else {
+            result = queryVariable(inputName);
+            if (result == null) {
+                CEIErrors.showXMLFailure("Cannot found input variable: %s", inputName);
+            }
+        }
+        if (result == null) {
+            CEIErrors.showXMLFailure("Cannot found input variable");
+        }
+        return result;
+    }
+
+    public Variable getOneInputVariableByType(VariableType type) {
+
+        return null;
+    }
+
     /***
      * See {@link DataProcessorBase#queryVariableOrConstant(String)}.
      * Not only query the variable, and also convert to the specified type.
@@ -85,7 +132,7 @@ public abstract class DataProcessorBase<T extends xDataProcessorItem> {
 
     /***
      * Query the variable from the current method.
-     * @see sMethod#queryVariable(String) 
+     * @see sMethod#queryVariable(String)
      *
      * @param name the variable name, can be {xxx} or normal string.
      * @return the variable object

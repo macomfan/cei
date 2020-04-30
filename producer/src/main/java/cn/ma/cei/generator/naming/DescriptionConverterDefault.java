@@ -2,6 +2,7 @@ package cn.ma.cei.generator.naming;
 
 import cn.ma.cei.exception.CEIException;
 import cn.ma.cei.utils.WordSplitter;
+
 import java.util.List;
 import java.util.Set;
 

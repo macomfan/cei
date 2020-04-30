@@ -4,13 +4,14 @@ import cn.ma.cei.generator.Variable;
 import cn.ma.cei.generator.VariableType;
 import cn.ma.cei.langs.cpp.CodeForCpp;
 import cn.ma.cei.langs.cpp.CodeForHpp;
+
 import java.util.List;
 
 public class CppMethod {
 
-    private CodeForHpp codeH = new CodeForHpp();
-    private CodeForCpp codeCpp = new CodeForCpp();
-    private String className;
+    private final CodeForHpp codeH = new CodeForHpp();
+    private final CodeForCpp codeCpp = new CodeForCpp();
+    private final String className;
     
     public CppMethod(String className) {
         this.className = className;

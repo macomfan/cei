@@ -1,14 +1,13 @@
 package cn.ma.cei.model;
 
-import cn.ma.cei.model.base.xElement;
 import cn.ma.cei.model.base.xElementWithInputs;
-import cn.ma.cei.model.base.xType;
-import cn.ma.cei.model.types.*;
-import cn.ma.cei.xml.CEIXmlAnyElementTypes;
+import cn.ma.cei.model.types.xRestfulOptions;
+import cn.ma.cei.model.types.xRestfulRequest;
 import cn.ma.cei.xml.CEIXmlAnyElementTypesExtension;
 
-import javax.xml.bind.annotation.*;
-import java.util.List;
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement(name = "function")
 @CEIXmlAnyElementTypesExtension(fieldName = "inputList", classes = {

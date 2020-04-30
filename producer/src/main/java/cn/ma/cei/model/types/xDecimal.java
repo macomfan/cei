@@ -9,6 +9,7 @@ import cn.ma.cei.finalizer.Alias;
 import cn.ma.cei.generator.BuilderContext;
 import cn.ma.cei.generator.VariableType;
 import cn.ma.cei.model.base.xType;
+
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**

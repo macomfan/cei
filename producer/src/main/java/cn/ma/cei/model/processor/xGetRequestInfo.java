@@ -16,6 +16,9 @@ import javax.xml.bind.annotation.XmlRootElement;
  */
 @XmlRootElement(name = "get_request_info")
 public class xGetRequestInfo extends xDataProcessorItem {
+    @XmlAttribute(name = "input")
+    public String input;
+
     @XmlAttribute(name = "info")
     public String info;
 

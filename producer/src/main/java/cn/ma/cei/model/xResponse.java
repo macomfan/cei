@@ -1,16 +1,10 @@
 package cn.ma.cei.model;
 
 import cn.ma.cei.exception.CEIErrors;
-import cn.ma.cei.model.base.xDataProcessorItem;
-import cn.ma.cei.model.base.xElement;
-import cn.ma.cei.model.json.xJsonParser;
 import cn.ma.cei.utils.Checker;
-import cn.ma.cei.xml.CEIXmlAnyElementTypes;
 
-import javax.xml.bind.annotation.XmlAnyElement;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
-import java.util.List;
 
 @XmlRootElement(name = "response")
 public class xResponse extends xProcedure {

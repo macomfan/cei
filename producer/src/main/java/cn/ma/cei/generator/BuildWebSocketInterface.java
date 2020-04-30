@@ -4,7 +4,6 @@ import cn.ma.cei.generator.builder.IDataProcessorBuilder;
 import cn.ma.cei.generator.builder.IWebSocketClientBuilder;
 import cn.ma.cei.generator.builder.IWebSocketInterfaceBuilder;
 import cn.ma.cei.generator.buildin.WebSocketCallback;
-import cn.ma.cei.model.websocket.xEvent;
 import cn.ma.cei.model.websocket.xWSInterface;
 import cn.ma.cei.model.websocket.xWSUserCallback;
 import cn.ma.cei.utils.Checker;

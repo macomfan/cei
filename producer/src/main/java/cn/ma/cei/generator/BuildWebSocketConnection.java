@@ -3,8 +3,8 @@ package cn.ma.cei.generator;
 import cn.ma.cei.exception.CEIErrors;
 import cn.ma.cei.generator.builder.IDataProcessorBuilder;
 import cn.ma.cei.generator.builder.IWebSocketClientBuilder;
-import cn.ma.cei.generator.builder.IWebSocketNestedBuilder;
 import cn.ma.cei.generator.builder.IWebSocketInterfaceBuilder;
+import cn.ma.cei.generator.builder.IWebSocketNestedBuilder;
 import cn.ma.cei.generator.buildin.WebSocketCallback;
 import cn.ma.cei.generator.buildin.WebSocketConnection;
 import cn.ma.cei.model.base.xDataProcessorItem;
@@ -105,7 +105,7 @@ public class BuildWebSocketConnection {
         {
             // Build OnClose
             IWebSocketNestedBuilder onCloseBuilder =
-                    Checker.checkNull(interfaceBuilder.createOnCloseBuilder(), interfaceBuilder, "OnConnectBuilder");
+                    Checker.checkNull(interfaceBuilder.createOnCloseBuilder(), interfaceBuilder, "OnCloseBuilder");
             sMethod callbackMethod = buildSystemCallback(closeMethod, "onClose", close.onClose, onCloseBuilder);
             if (callbackMethod != null) {
                 interfaceBuilder.setupOnClose(connection, callbackMethod);

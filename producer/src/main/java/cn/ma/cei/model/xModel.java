@@ -5,7 +5,6 @@ import cn.ma.cei.finalizer.IDependenceNode;
 import cn.ma.cei.model.base.xElement;
 import cn.ma.cei.model.base.xType;
 import cn.ma.cei.model.types.*;
-import cn.ma.cei.model.types.xObject;
 import cn.ma.cei.xml.CEIXmlAnyElementTypes;
 
 import javax.xml.bind.annotation.XmlAnyElement;

@@ -1,11 +1,11 @@
 package cn.ma.cei.langs.java.processor;
 
 import cn.ma.cei.generator.BuilderContext;
-import cn.ma.cei.generator.builder.IJsonCheckerBuilder;
 import cn.ma.cei.generator.Variable;
+import cn.ma.cei.generator.builder.IJsonCheckerBuilder;
 import cn.ma.cei.generator.builder.IJsonParserBuilder;
-import cn.ma.cei.langs.java.tools.JavaMethod;
 import cn.ma.cei.langs.java.buildin.TheLinkedList;
+import cn.ma.cei.langs.java.tools.JavaMethod;
 
 public class JavaJsonParserBuilder implements IJsonParserBuilder {
 

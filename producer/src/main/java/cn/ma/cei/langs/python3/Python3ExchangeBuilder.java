@@ -5,7 +5,9 @@
  */
 package cn.ma.cei.langs.python3;
 
-import cn.ma.cei.generator.*;
+import cn.ma.cei.generator.BuilderContext;
+import cn.ma.cei.generator.CEIPath;
+import cn.ma.cei.generator.Constant;
 import cn.ma.cei.generator.builder.*;
 import cn.ma.cei.generator.buildin.*;
 import cn.ma.cei.langs.python3.tools.Python3Class;

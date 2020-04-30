@@ -5,8 +5,8 @@ import cn.ma.cei.generator.Variable;
 import cn.ma.cei.generator.VariableType;
 import cn.ma.cei.generator.builder.IDataProcessorBuilder;
 import cn.ma.cei.generator.builder.IWebSocketEventBuilder;
-import cn.ma.cei.generator.builder.IWebSocketNestedBuilder;
 import cn.ma.cei.generator.builder.IWebSocketInterfaceBuilder;
+import cn.ma.cei.generator.builder.IWebSocketNestedBuilder;
 import cn.ma.cei.langs.python3.tools.Python3Class;
 import cn.ma.cei.langs.python3.tools.Python3Method;
 
@@ -18,6 +18,7 @@ public class Python3WebSocketInterfaceBuilder implements IWebSocketInterfaceBuil
     Python3Method method;
 
     Python3WebSocketNestedBuilder onConnectBuilder = null;
+    Python3WebSocketNestedBuilder onCloseBuilder = null;
 
     public Python3WebSocketInterfaceBuilder(Python3Class clientClass) {
         this.clientClass = clientClass;
@@ -37,7 +38,8 @@ public class Python3WebSocketInterfaceBuilder implements IWebSocketInterfaceBuil
 
     @Override
     public IWebSocketNestedBuilder createOnCloseBuilder() {
-        return null;
+        onCloseBuilder = new Python3WebSocketNestedBuilder(clientClass);
+        return onCloseBuilder;
     }
 
 

@@ -19,7 +19,7 @@ public enum CEIErrorType {
 
     private final String name;
 
-    private CEIErrorType(String name) {
+    CEIErrorType(String name) {
         this.name = name;
     }
 

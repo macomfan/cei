@@ -21,7 +21,7 @@ public class BuildStringWrapper extends DataProcessorBase<xStringBuilder> {
 
         Checker.isNull(builder, BuildJsonParser.class, "IDataProcessorBuilder");
         IStringBuilderBuilder stringBuilderBuilder =
-                Checker.checkNull(builder.createStringBuilderBuilder(), builder, "StringBuilderBuilder");;
+                Checker.checkNull(builder.createStringBuilderBuilder(), builder, "StringBuilderBuilder");
         Variable rootStringBuilder = createUserVariable(StringWrapper.getType(), stringBuilder.name);
         stringBuilderBuilder.defineStringBuilderObject(rootStringBuilder);
 

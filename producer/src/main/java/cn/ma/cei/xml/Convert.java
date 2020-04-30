@@ -6,7 +6,6 @@ import cn.ma.cei.utils.ReflectionHelper;
 
 import javax.xml.bind.annotation.XmlAnyElement;
 import javax.xml.bind.annotation.XmlAttribute;
-
 import javax.xml.bind.annotation.XmlElement;
 import java.lang.reflect.Field;
 import java.util.List;

@@ -6,10 +6,10 @@
 package cn.ma.cei.langs.python3.processor;
 
 import cn.ma.cei.generator.BuilderContext;
+import cn.ma.cei.generator.Variable;
 import cn.ma.cei.generator.builder.IJsonCheckerBuilder;
 import cn.ma.cei.generator.builder.IJsonParserBuilder;
 import cn.ma.cei.generator.buildin.TheArray;
-import cn.ma.cei.generator.Variable;
 import cn.ma.cei.langs.python3.tools.Python3Method;
 
 /**

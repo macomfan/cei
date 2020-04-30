@@ -118,14 +118,6 @@ public class BuildDataProcessor {
         }
     }
 
-    public static void build(xProcedure procedure, IDataProcessorBuilder builder) {
-        if (procedure != null && !Checker.isNull(procedure.items)) {
-            procedure.items.forEach(item -> {
-                processSingleItem(item, null, builder);
-            });
-        }
-    }
-
     public static Variable build(xProcedure procedure, Variable defaultInput, String resultVariableName, IDataProcessorBuilder builder) {
         if (procedure == null || Checker.isNull(procedure.items)) {
             return null;

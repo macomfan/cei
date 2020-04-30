@@ -6,9 +6,9 @@
 package cn.ma.cei.langs.golang;
 
 import cn.ma.cei.generator.BuilderContext;
-import cn.ma.cei.generator.builder.IModelBuilder;
 import cn.ma.cei.generator.Variable;
 import cn.ma.cei.generator.VariableType;
+import cn.ma.cei.generator.builder.IModelBuilder;
 import cn.ma.cei.langs.golang.tools.GoFile;
 import cn.ma.cei.langs.golang.tools.GoStruct;
 import cn.ma.cei.langs.golang.tools.GoVar;

@@ -1,18 +1,13 @@
 package cn.ma.cei.model.restful;
 
 
-import cn.ma.cei.model.base.xElement;
 import cn.ma.cei.model.base.xElementWithInputs;
-import cn.ma.cei.model.base.xType;
-import cn.ma.cei.model.types.xBoolean;
-import cn.ma.cei.model.types.xDecimal;
-import cn.ma.cei.model.types.xInt;
-import cn.ma.cei.model.types.xString;
 import cn.ma.cei.model.xResponse;
-import cn.ma.cei.xml.CEIXmlAnyElementTypes;
 
-import javax.xml.bind.annotation.*;
-import java.util.List;
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
 
 @XmlType(name = "interface_restful")
 @XmlRootElement(name = "interface")

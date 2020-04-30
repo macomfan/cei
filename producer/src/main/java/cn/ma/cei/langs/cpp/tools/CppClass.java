@@ -1,18 +1,18 @@
  package cn.ma.cei.langs.cpp.tools;
 
-import cn.ma.cei.generator.Variable;
-import cn.ma.cei.generator.VariableType;
-import cn.ma.cei.langs.cpp.CodeForCpp;
-import cn.ma.cei.langs.cpp.CodeForHpp;
-import cn.ma.cei.utils.UniqueList;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
+ import cn.ma.cei.generator.Variable;
+ import cn.ma.cei.generator.VariableType;
+ import cn.ma.cei.langs.cpp.CodeForCpp;
+ import cn.ma.cei.langs.cpp.CodeForHpp;
+ import cn.ma.cei.utils.UniqueList;
 
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
+ import java.io.BufferedWriter;
+ import java.io.File;
+ import java.io.FileWriter;
+ import java.util.HashSet;
+ import java.util.LinkedList;
+ import java.util.List;
+ import java.util.Set;
 
 public class CppClass {
 

@@ -7,7 +7,6 @@ package cn.ma.cei.langs.python3;
 
 import cn.ma.cei.generator.Variable;
 import cn.ma.cei.generator.VariableType;
-import cn.ma.cei.generator.builder.IBuilderBase;
 import cn.ma.cei.generator.builder.IDataProcessorBuilder;
 import cn.ma.cei.generator.builder.IMethodBuilder;
 import cn.ma.cei.generator.buildin.CEIUtils;

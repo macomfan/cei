@@ -6,9 +6,9 @@
 package cn.ma.cei.langs.golang.processor;
 
 import cn.ma.cei.generator.BuilderContext;
+import cn.ma.cei.generator.Variable;
 import cn.ma.cei.generator.builder.IJsonCheckerBuilder;
 import cn.ma.cei.generator.builder.IJsonParserBuilder;
-import cn.ma.cei.generator.Variable;
 import cn.ma.cei.langs.golang.tools.GoGetValueVar;
 import cn.ma.cei.langs.golang.tools.GoMethod;
 import cn.ma.cei.langs.golang.tools.GoType;
@@ -20,7 +20,7 @@ import cn.ma.cei.langs.golang.tools.GoVar;
  */
 public class GoJsonParserBuilder implements IJsonParserBuilder {
 
-    private GoMethod method;
+    private final GoMethod method;
 
     public GoJsonParserBuilder(GoMethod method) {
         this.method = method;

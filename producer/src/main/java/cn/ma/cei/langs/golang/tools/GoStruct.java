@@ -22,13 +22,13 @@ import java.util.Set;
  */
 public class GoStruct {
 
-    private GoCode code = new GoCode();
-    private String structName;
+    private final GoCode code = new GoCode();
+    private final String structName;
 
-    private UniqueList<String, GoVar> publicMemberList = new UniqueList<>();
-    private UniqueList<String, GoVar> privateMemberList = new UniqueList<>();
-    private Set<String> importList = new HashSet<>();
-    private List<GoMethod> methodList = new LinkedList<>();
+    private final UniqueList<String, GoVar> publicMemberList = new UniqueList<>();
+    private final UniqueList<String, GoVar> privateMemberList = new UniqueList<>();
+    private final Set<String> importList = new HashSet<>();
+    private final List<GoMethod> methodList = new LinkedList<>();
 
     public GoStruct(String structName) {
         this.structName = structName;

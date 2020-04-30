@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 public class JsonToXml implements IXmlJsonConverter {
-    private JsonObject jsonObject;
+    private final JsonObject jsonObject;
 
     public JsonToXml(JsonObject jsonObject) {
         this.jsonObject = jsonObject;

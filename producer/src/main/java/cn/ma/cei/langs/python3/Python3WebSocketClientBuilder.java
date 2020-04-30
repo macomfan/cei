@@ -9,7 +9,7 @@ import cn.ma.cei.langs.python3.tools.Python3Class;
 import cn.ma.cei.langs.python3.tools.Python3File;
 
 public class Python3WebSocketClientBuilder implements IWebSocketClientBuilder {
-    private Python3File mainFile;
+    private final Python3File mainFile;
     private Python3Class clientClass = null;
 
     public Python3WebSocketClientBuilder(Python3File mainFile) {

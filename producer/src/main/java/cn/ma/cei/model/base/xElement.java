@@ -28,11 +28,6 @@ public abstract class xElement {
         void doBuild();
     }
 
-    @FunctionalInterface
-    public interface BuildingWithReturn<T> {
-        T doBuild();
-    }
-
     public void startBuilding() {
         BuildTracer.startBuilding(this);
     }
@@ -41,26 +36,19 @@ public abstract class xElement {
         BuildTracer.endBuilding();
     }
 
-    public <T> T doBuildWithReturn(BuildingWithReturn<T> building) {
-        startBuilding();
-        T res = building.doBuild();
-        endBuilding();
-        return res;
-    }
-
     public void doBuild(Building building) {
         BuildTracer.startBuilding(this);
         building.doBuild();
         BuildTracer.endBuilding();
     }
 
+    public String getXMLName() {
+        XmlRootElement xmlRootElement = this.getClass().getAnnotation(XmlRootElement.class);
+        return xmlRootElement.name();
+    }
+
     public void doCheck() {
         startBuilding();
-        System.err.println(this.getClass().getName());
-        if (this.getClass().getName().equals("cn.ma.cei.model.websocket.xWSConnection")) {
-            int a = 0;
-        }
-        // TODO need check ElementNSImpl
         if (!this.getClass().isAnnotationPresent(XmlRootElement.class)) {
             CEIErrors.showCodeFailure(this.getClass(), "%s must define XmlRootElement annotation.", this.getClass().getName());
         }
@@ -127,12 +115,6 @@ public abstract class xElement {
             }
         });
         endBuilding();
-    }
-
-    public <T extends xElement> void checkMember(T member) {
-        if (member != null) {
-            member.doCheck();
-        }
     }
 
     public void checkMemberNotNull(String member, String memberName) {

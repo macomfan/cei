@@ -1,7 +1,8 @@
 package cn.ma.cei.generator;
 
 import cn.ma.cei.generator.builder.IExchangeBuilder;
-import cn.ma.cei.generator.buildin.*;
+import cn.ma.cei.generator.buildin.Procedures;
+import cn.ma.cei.generator.buildin.RestfulOptions;
 import cn.ma.cei.model.xSDK;
 import cn.ma.cei.utils.Checker;
 

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <sdk xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-     xsi:schemaLocation="https://github.com/macomfan/cei https://github.com/macomfan/cei/ceisdk.xsd"
+     xsi:schemaLocation="https://github.com/macomfan/cei https://macomfan.github.io/cei/schema/ceisdk-0.0.1.xsd"
      xmlns="https://github.com/macomfan/cei"
      name="test">
 
@@ -66,7 +66,7 @@
     </models>
 
     <procedures>
-        <function name="restfulAuth" return="{request}">
+        <function name="restfulAuth">
             <inputs>
                 <restful_request name="request"/>
                 <restful_options name="option"/>

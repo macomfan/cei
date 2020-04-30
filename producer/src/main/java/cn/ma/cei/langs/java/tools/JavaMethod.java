@@ -8,6 +8,7 @@ package cn.ma.cei.langs.java.tools;
 import cn.ma.cei.generator.Variable;
 import cn.ma.cei.generator.VariableType;
 import cn.ma.cei.langs.java.JavaCode;
+
 import java.util.Arrays;
 import java.util.List;
 
@@ -17,9 +18,9 @@ import java.util.List;
  */
 public class JavaMethod {
 
-    private JavaCode code = new JavaCode();
-    private JavaClass parent;
-    private String methodName = "";
+    private final JavaCode code = new JavaCode();
+    private final JavaClass parent;
+    private final String methodName = "";
     private boolean isStatic = false;
 
     public JavaMethod(JavaClass parent) {

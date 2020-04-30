@@ -6,14 +6,14 @@
 package cn.ma.cei.exception;
 
 import cn.ma.cei.utils.ReflectionHelper;
+import io.vertx.core.json.JsonObject;
+import javafx.util.Pair;
+
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlRootElement;
 import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Stack;
-
-import io.vertx.core.json.JsonObject;
-import javafx.util.Pair;
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *

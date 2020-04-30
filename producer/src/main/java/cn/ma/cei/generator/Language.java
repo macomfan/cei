@@ -5,8 +5,8 @@ import java.util.Objects;
 public class Language implements Comparable<Language> {
     public static final Language NA = new Language("", "");
 
-    private String name;
-    private String workingName;
+    private final String name;
+    private final String workingName;
 
     public Language(String name, String workingName) {
         this.name = name;

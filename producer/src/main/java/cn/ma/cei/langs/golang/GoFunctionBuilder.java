@@ -5,11 +5,16 @@
  */
 package cn.ma.cei.langs.golang;
 
-import cn.ma.cei.generator.builder.*;
 import cn.ma.cei.generator.Variable;
 import cn.ma.cei.generator.VariableType;
-import cn.ma.cei.langs.golang.tools.*;
+import cn.ma.cei.generator.builder.IDataProcessorBuilder;
+import cn.ma.cei.generator.builder.IMethodBuilder;
+import cn.ma.cei.langs.golang.tools.GoFile;
+import cn.ma.cei.langs.golang.tools.GoMethod;
+import cn.ma.cei.langs.golang.tools.GoPtrVar;
+import cn.ma.cei.langs.golang.tools.GoVar;
 import cn.ma.cei.utils.WordSplitter;
+
 import java.util.LinkedList;
 import java.util.List;
 
@@ -19,7 +24,7 @@ import java.util.List;
  */
 public class GoFunctionBuilder implements IMethodBuilder {
 
-    private GoFile mainFile;
+    private final GoFile mainFile;
     private GoMethod method;
 
     public GoFunctionBuilder(GoFile mainFile) {

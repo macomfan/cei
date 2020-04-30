@@ -6,7 +6,7 @@ import cn.ma.cei.utils.NormalMap;
 import cn.ma.cei.utils.SecondLevelMap;
 
 public class EnvironmentData<Key, Value> {
-    private SecondLevelMap<String, Language, NormalMap<Key, Value>> data = new SecondLevelMap<>();
+    private final SecondLevelMap<String, Language, NormalMap<Key, Value>> data = new SecondLevelMap<>();
 
     public boolean containsKey(Key key) {
         NormalMap<Key, Value> map = getMap(GlobalContext.getCurrentExchange(), GlobalContext.getCurrentLanguage());
