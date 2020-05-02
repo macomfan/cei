@@ -23,13 +23,14 @@ public class WebSocketConnection extends WebSocketListener {
     private OnSystemEvent onConnect = null;
     private OnSystemEvent onClose = null;
     private Status status = Status.IDLE;
-    enum Status{
+
+    enum Status {
         IDLE,
         CONNECTED,
         CLOSED,
     }
 
-    private List<WebSocketEvent> event = new LinkedList<>();
+    private final List<WebSocketEvent> event = new LinkedList<>();
 
     public WebSocketConnection() {
         client = new OkHttpClient.Builder().connectTimeout(5, TimeUnit.SECONDS).build();
@@ -53,7 +54,7 @@ public class WebSocketConnection extends WebSocketListener {
 
     public void connect(String target, WebSocketOptions option) {
         //this.onConnect = onConnect;
-        Request okhttpRequest = new Request.Builder().url(target).build();
+        Request okhttpRequest = new Request.Builder().url(option.url + target).build();
         webSocket = client.newWebSocket(okhttpRequest, this);
         while (status == Status.IDLE) {
             try {
@@ -91,28 +92,46 @@ public class WebSocketConnection extends WebSocketListener {
     @Override
     public void onMessage(WebSocket webSocket, String text) {
         super.onMessage(webSocket, text);
-        System.err.println("Receive " + text);
+        System.err.println("Receive " + text + " " + Thread.currentThread().getId());
         WebSocketMessage msg = new WebSocketMessage(text);
         onMessage(msg);
     }
 
-    private void onMessage(WebSocketMessage msg) {
+    private synchronized void check(WebSocketMessage msg) {
+        System.err.println("Check " + Thread.currentThread().getId());
+        System.out.flush();
         Iterator<WebSocketEvent> it = event.iterator();
         while (it.hasNext()) {
             WebSocketEvent cur = it.next();
             if (cur.check(msg)) {
                 cur.invoke(this, msg);
                 if (!cur.isPersistence()) {
-                    event.remove(it);
+                    System.err.println("Check remove " + Thread.currentThread().getId());
+                    System.out.flush();
+                    it.remove();
                 }
             }
         }
+        System.err.println("Check out" + Thread.currentThread().getId());
+        System.out.flush();
+    }
+
+    private void onMessage(WebSocketMessage msg) {
+        check(msg);
+    }
+
+    @Override
+    public void onClosing(WebSocket webSocket, int code, String reason) {
+        super.onClosing(webSocket, code, reason);
+        System.out.println("Closing");
+        webSocket.close(code, reason);
     }
 
     @Override
     public void onFailure(WebSocket webSocket, Throwable t, Response response) {
         super.onFailure(webSocket, t, response);
         System.out.println("Error");
+        t.printStackTrace();
         status = Status.CLOSED;
     }
 

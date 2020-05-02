@@ -40,9 +40,9 @@ public class CEIUtils {
             return Long.toString(System.currentTimeMillis() / 1000);
         }
         if (format.equals("Unix_s")) {
-            return Long.toString(System.currentTimeMillis());
-        } else if (format.equals("Unix_ms")) {
             return Long.toString(System.currentTimeMillis() / 1000);
+        } else if (format.equals("Unix_ms")) {
+            return Long.toString(System.currentTimeMillis());
         } else {
             Date now = new Date();
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat(format);

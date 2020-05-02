@@ -31,14 +31,14 @@ public class GoRestfulClientBuilder implements IRestfulClientBuilder {
     }
 
     @Override
-    public void startClient(VariableType clientType, RestfulOptions options) {
-        clientStruct = new GoStruct(clientType.getDescriptor());
-        clientStruct.addPrivateMember(new GoPtrVar(clientType.addPrivateMember(RestfulOptions.getType(), "options")));
+    public void startClient(VariableType client, RestfulOptions option, Variable optionVariable) {
+        clientStruct = new GoStruct(client.getDescriptor());
+        clientStruct.addPrivateMember(new GoPtrVar(client.addPrivateMember(RestfulOptions.getType(), "options")));
         GoMethod constructor = new GoMethod(null);
-        constructor.getCode().appendWordsln("func", "New" + clientType.getDescriptor() + "(options *" + RestfulOptions.getType().getDescriptor() + ")", "*" + clientType.getDescriptor(), "{");
+        constructor.getCode().appendWordsln("func", "New" + client.getDescriptor() + "(options *" + RestfulOptions.getType().getDescriptor() + ")", "*" + client.getDescriptor(), "{");
         constructor.getCode().newBlock(() -> {
-            constructor.getCode().appendWordsln("inst", ":=", "new(" + clientType.getDescriptor() + ")");
-            Variable url = BuilderContext.createStringConstant(options.url);
+            constructor.getCode().appendWordsln("inst", ":=", "new(" + client.getDescriptor() + ")");
+            Variable url = BuilderContext.createStringConstant(option.url);
             constructor.getCode().appendWordsln("if", "options", "!=", "nil", "{");
             constructor.getCode().newBlock(() -> {
                 constructor.getCode().appendln("inst.options = options");
@@ -46,8 +46,8 @@ public class GoRestfulClientBuilder implements IRestfulClientBuilder {
             constructor.getCode().appendln("} else {");
             constructor.getCode().newBlock(() -> {
                 constructor.getCode().appendWordsln("inst.options.URL", "=", url.getDescriptor());
-                if (options.connectionTimeout != null) {
-                    constructor.getCode().appendWordsln("inst.options.connectionTimeout", "=", options.connectionTimeout.toString());
+                if (option.connectionTimeout != null) {
+                    constructor.getCode().appendWordsln("inst.options.connectionTimeout", "=", option.connectionTimeout.toString());
                 }
             });
             constructor.getCode().appendln("}");

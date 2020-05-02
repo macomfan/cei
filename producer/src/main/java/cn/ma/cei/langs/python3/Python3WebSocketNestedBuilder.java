@@ -15,21 +15,10 @@ public class Python3WebSocketNestedBuilder implements IWebSocketNestedBuilder {
 
     @Override
     public void onAddReference(VariableType variableType) {
-
     }
 
     @Override
     public IDataProcessorBuilder createDataProcessorBuilder() {
         return new Python3DataProcessorBuilder(method);
     }
-
-//    @Override
-//    public void send(Variable send) {
-//        method.addInvoke("self.send_ws", send);
-//    }
-//
-//    @Override
-//    public void callback(Variable callbackVariable, Variable response) {
-//        method.addInvoke(callbackVariable.getDescriptor() + ".invoke", response);
-//    }
 }

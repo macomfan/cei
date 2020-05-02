@@ -7,6 +7,7 @@ import cn.ma.cei.generator.VariableType;
 import cn.ma.cei.generator.builder.IRestfulClientBuilder;
 import cn.ma.cei.generator.builder.IRestfulInterfaceBuilder;
 import cn.ma.cei.generator.buildin.RestfulOptions;
+import cn.ma.cei.generator.buildin.WebSocketOptions;
 import cn.ma.cei.langs.java.tools.JavaClass;
 import cn.ma.cei.langs.java.tools.JavaMethod;
 
@@ -20,19 +21,16 @@ public class JavaRestfulClientBuilder implements IRestfulClientBuilder {
     }
 
     @Override
-    public void startClient(VariableType clientType, RestfulOptions options) {
-        clientClass = new JavaClass(clientType.getDescriptor());
-        clientClass.addMemberVariable(JavaClass.AccessType.PRIVATE, clientType.getMember("option"));
+    public void startClient(VariableType client, RestfulOptions option, Variable optionVariable) {
+        clientClass = new JavaClass(client.getDescriptor());
+        clientClass.addMemberVariable(JavaClass.AccessType.PRIVATE, client.getMember("option"));
 
         JavaMethod defaultConstructor = new JavaMethod(clientClass);
         defaultConstructor.startConstructor("");
         {
-            defaultConstructor.getCode().appendJavaLine("this.option", "=", "new", RestfulOptions.getType().getDescriptor() + "()");
-            Variable url = BuilderContext.createStringConstant(options.url);
-            defaultConstructor.getCode().appendJavaLine("this.option.url", "=", url.getDescriptor());
-            if (options.connectionTimeout != null) {
-                defaultConstructor.getCode().appendJavaLine("this.option.connectionTimeout", "=", options.connectionTimeout.toString());
-            }
+            defaultConstructor.addAssign(defaultConstructor.useVariable(optionVariable), defaultConstructor.newInstance(optionVariable.getType()));
+            Variable url = optionVariable.getMember("url");
+            defaultConstructor.addAssign(url.getDescriptor(), BuilderContext.createStringConstant(option.url).getDescriptor());
         }
         defaultConstructor.endMethod();
         clientClass.addMethod(defaultConstructor);
@@ -40,8 +38,8 @@ public class JavaRestfulClientBuilder implements IRestfulClientBuilder {
         JavaMethod optionConstructor = new JavaMethod(clientClass);
         optionConstructor.startConstructor(RestfulOptions.getType().getDescriptor() + " option");
         {
-            optionConstructor.getCode().appendJavaLine("this()");
-            optionConstructor.getCode().appendJavaLine("this.option.setFrom(option)");
+            optionConstructor.addInvoke("this");
+            optionConstructor.addInvoke(optionVariable.getDescriptor() + ".setFrom", BuilderContext.createStatement("option"));
         }
         optionConstructor.endMethod();
         clientClass.addMethod(optionConstructor);

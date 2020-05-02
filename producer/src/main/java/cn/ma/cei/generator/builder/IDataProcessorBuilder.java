@@ -170,6 +170,13 @@ public interface IDataProcessorBuilder extends IBuilderBase {
      *
      * @return
      */
+    Variable convertWebSocketMessageToString(Variable msg);
+
+    /***
+     *
+     *
+     * @return
+     */
     Variable convertDecimalToString(Variable decimalVariable);
 
     /***
@@ -178,4 +185,11 @@ public interface IDataProcessorBuilder extends IBuilderBase {
      * @return
      */
     Variable convertBooleanToString(Variable booleanVariable);
+
+    /***
+     *
+     *
+     * @return
+     */
+    Variable convertStringToDecimal(Variable stringVariable);
 }

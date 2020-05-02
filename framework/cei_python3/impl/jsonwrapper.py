@@ -9,20 +9,22 @@ class JsonWrapper:
         return JsonWrapper(json.loads(text))
 
     def __init__(self, json_object):
-        if isinstance(json_object,list):
-            self.__is_array = True
+        if isinstance(json_object, list):
+            self.__json_array = json_object
         else:
-            self.__is_array = False
-        self.__json_object = json_object
+            self.__json_object = json_object
 
-    def contains_key(self, name):
+    def __get_index_key(self, key: str):
+        pass
+
+    def contains(self, name):
         if name in self.__json_object:
             return True
         else:
             return False
 
     def __check_mandatory_field(self, key):
-        if not self.contains_key(key):
+        if not self.contains(key):
             raise CEIException()
 
     def get_string(self, key):
@@ -50,4 +52,3 @@ class JsonWrapper:
         for item in json_array:
             items.append(JsonWrapper(item))
         return items
-

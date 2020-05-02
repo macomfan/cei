@@ -30,23 +30,23 @@ public class Python3RestfulClientBuilder implements IRestfulClientBuilder {
     }
 
     @Override
-    public void startClient(VariableType clientType, RestfulOptions options) {
-        clientClass = new Python3Class(clientType.getDescriptor());
-        Python3Method defaultConstructor = new Python3Method(clientClass);
+    public void startClient(VariableType client, RestfulOptions option, Variable optionVariable) {
+        clientClass = new Python3Class(client.getDescriptor());
+        clientClass.addMemberVariable(client.getMember("option"));
 
-        defaultConstructor.getCode().appendln("def __init__(self, option=None):");
-        defaultConstructor.getCode().newBlock(() -> {
-            clientClass.attachDefaultConstructor(defaultConstructor);
-            defaultConstructor.getCode().appendWordsln("self.__option", "=", RestfulOptions.getType().getDescriptor() + "()");
-            Variable url = BuilderContext.createStringConstant(options.url);
-            defaultConstructor.getCode().appendWordsln("self.__option.url", "=", url.getDescriptor());
-            if (options.connectionTimeout != null) {
-                defaultConstructor.getCode().appendWordsln("self.__option.connectionTimeout", "=", options.connectionTimeout.toString());
-            }
-            defaultConstructor.getCode().appendln("if options is not None:");
-            defaultConstructor.getCode().newBlock(() -> defaultConstructor.getCode().appendln("self.__options.set_from(option)"));
-        });
-        clientClass.addReference(RestfulOptions.getType());
+        Python3Method defaultConstructor = new Python3Method(clientClass);
+        clientClass.attachDefaultConstructor(defaultConstructor);
+        defaultConstructor.startConstructor("self, option");
+        {
+            defaultConstructor.addAssign(optionVariable.getDescriptor(), defaultConstructor.newInstance(optionVariable.getType()));
+            Variable url = optionVariable.getMember("url");
+            defaultConstructor.addAssign(defaultConstructor.useVariable(url), BuilderContext.createStringConstant(option.url).getDescriptor());
+            defaultConstructor.getCode().appendln("if option is not None:");
+            defaultConstructor.getCode().newBlock(() -> {
+                defaultConstructor.addInvoke(optionVariable.getDescriptor() + ".set_from", BuilderContext.createStatement("option"));
+            });
+        }
+        defaultConstructor.endMethod();
     }
 
     @Override

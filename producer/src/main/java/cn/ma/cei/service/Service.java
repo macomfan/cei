@@ -46,6 +46,11 @@ public class Service {
         return this;
     }
 
+    public Service registerWebSocketNotification(String notificationName, WebSocketNotification notification) {
+        websocketService.registerNotification(notificationName, notification);
+        return this;
+    }
+
     public void start(int port) {
 
         HttpServer httpServer = vertx.createHttpServer().requestHandler(router);

@@ -78,6 +78,11 @@ public class Python3Method {
         return method + "(" + invokeParamString(tmp) + ")";
     }
 
+    public void startConstructor(String params) {
+        code.appendWordsln("def", "__init__(" + params + "):");
+        code.startBlock();
+    }
+
     public void startMethod(VariableType returnType, String methodName, List<Variable> params) {
         String paramString = defineParamString(params);
         if (paramString.isEmpty()) {

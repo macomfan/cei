@@ -8,7 +8,7 @@ class WebSocketConnection:
         self.__event_list = list()
         pass
 
-    def connect_ws(self, url, option):
+    def connect(self, url, option):
         print(option.a)
 
     def on_connect(self):
@@ -26,5 +26,5 @@ class WebSocketConnection:
                 event.invoke(msg)
         pass
 
-    def send_ws(self, what):
+    def send(self, what):
         pass

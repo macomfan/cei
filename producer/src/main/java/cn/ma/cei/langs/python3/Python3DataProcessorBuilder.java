@@ -53,7 +53,7 @@ public class Python3DataProcessorBuilder implements IDataProcessorBuilder {
 
     @Override
     public Variable stringReplacement(Variable... items) {
-        return BuilderContext.createStatement(method.invoke("StringBuilder.replace", items));
+        return BuilderContext.createStatement(method.invoke("StringWrapper.replace", items));
     }
 
     @Override
@@ -72,6 +72,11 @@ public class Python3DataProcessorBuilder implements IDataProcessorBuilder {
     }
 
     @Override
+    public Variable convertWebSocketMessageToString(Variable msg) {
+        return null;
+    }
+
+    @Override
     public Variable convertDecimalToString(Variable decimalVariable) {
         return BuilderContext.createStatement(method.invoke("str", decimalVariable));
     }
@@ -79,6 +84,11 @@ public class Python3DataProcessorBuilder implements IDataProcessorBuilder {
     @Override
     public Variable convertBooleanToString(Variable booleanVariable) {
         return BuilderContext.createStatement(method.invoke("str", booleanVariable));
+    }
+
+    @Override
+    public Variable convertStringToDecimal(Variable stringVariable) {
+        return null;
     }
 
     @Override

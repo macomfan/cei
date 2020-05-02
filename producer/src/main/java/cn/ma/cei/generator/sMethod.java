@@ -106,6 +106,9 @@ class sMethod implements IMethod {
      * @return the variable object
      */
     public Variable getVariable(String variableName) {
+        if (Checker.isEmpty(name)) {
+            CEIErrors.showCodeFailure(this.getClass(), "Getting a null variable");
+        }
         if (variableList.containsKey(variableName)) {
             return variableList.get(variableName);
         } else {
@@ -143,23 +146,37 @@ class sMethod implements IMethod {
         String variableName = RegexHelper.isReference(name);
         if (Checker.isEmpty(variableName)) {
             CEIErrors.showFailure(CEIErrorType.XML, "%s is not a variable name", name);
+            return null;
         }
         return innerQueryVariable(variableName);
     }
 
     /**
-     * Query the variable from the current method. the name should only be the variable name format, like {xxxx}.
-     * If the name is not like {xxx}, report the error.
-     * If the name cannot be found, report the error.
+     * Query the variable from the current method. the variableName should only be the variable variableName format, like {xxxx}.
+     * If the variableName is not like {xxx}, report the error.
+     * If the variableName cannot be found, report the error.
      * After the query successfully, convert to the specified type.
      *
-     * @param name
+     * @param variableName
      * @param specType
      * @param dataProcessorBuilder
      * @return
      */
-    public Variable queryVariable(String name, VariableType specType, IDataProcessorBuilder dataProcessorBuilder) {
-        Variable res = queryVariable(name);
+    public Variable queryVariable(String variableName, VariableType specType, IDataProcessorBuilder dataProcessorBuilder) {
+        Variable res = queryVariable(variableName);
+        return TypeConverter.convertType(res, specType, dataProcessorBuilder);
+    }
+
+    public Variable tryQueryVariable(String variableName) {
+        Variable res = queryVariable(variableName);
+        if (res == null) {
+            CEIErrors.showFailure(CEIErrorType.XML, "Cannot find variable: %s in method: %s", variableName, name);
+        }
+        return res;
+    }
+
+    public Variable tryQueryVariable(String variableName, VariableType specType, IDataProcessorBuilder dataProcessorBuilder) {
+        Variable res = tryQueryVariable(variableName);
         return TypeConverter.convertType(res, specType, dataProcessorBuilder);
     }
 
@@ -221,7 +238,10 @@ class sMethod implements IMethod {
             // TODO
             // error case
         }
-        Variable result = GlobalContext.getCurrentMethod().tryGetVariable(variableNames[0]);
+        Variable result = GlobalContext.getCurrentMethod().getVariable(variableNames[0]);
+        if (result == null) {
+            return null;
+        }
         for (int i = 1; i < variableNames.length; i++) {
             result = result.tryGetMember(variableNames[i]);
         }

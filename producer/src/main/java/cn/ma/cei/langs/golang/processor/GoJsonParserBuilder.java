@@ -27,53 +27,58 @@ public class GoJsonParserBuilder implements IJsonParserBuilder {
     }
 
     @Override
-    public void getJsonString(Variable to, Variable jsonObject, Variable itemName) {
-        method.addAssign(method.useVariable(new GoVar(to)), method.invoke(jsonObject.getDescriptor() + ".GetString", new GoVar(itemName)));
+    public void getJsonString(Variable value, Variable jsonObject, Variable key, boolean optional) {
+        method.addAssign(method.useVariable(new GoVar(value)), method.invoke(jsonObject.getDescriptor() + ".GetString", new GoVar(key)));
     }
 
     @Override
-    public void getJsonInteger(Variable to, Variable jsonObject, Variable itemName) {
-        method.addAssign(method.useVariable(new GoVar(to)), method.invoke(jsonObject.getDescriptor() + ".GetInt64", new GoVar(itemName)));
+    public void getJsonInteger(Variable value, Variable jsonObject, Variable key, boolean optional) {
+        method.addAssign(method.useVariable(new GoVar(value)), method.invoke(jsonObject.getDescriptor() + ".GetInt64", new GoVar(key)));
     }
 
     @Override
-    public void getJsonBoolean(Variable to, Variable jsonObject, Variable itemName) {
-        method.addAssign(method.useVariable(new GoVar(to)), method.invoke(jsonObject.getDescriptor() + ".GetBool", new GoVar(itemName)));
+    public void getJsonBoolean(Variable value, Variable jsonObject, Variable key, boolean optional) {
+        method.addAssign(method.useVariable(new GoVar(value)), method.invoke(jsonObject.getDescriptor() + ".GetBool", new GoVar(key)));
     }
 
     @Override
-    public void getJsonDecimal(Variable to, Variable jsonObject, Variable itemName) {
-        method.addAssign(method.useVariable(new GoVar(to)), method.invoke(jsonObject.getDescriptor() + ".GetFloat64", new GoVar(itemName)));
+    public void getJsonDecimal(Variable value, Variable jsonObject, Variable key, boolean optional) {
+        method.addAssign(method.useVariable(new GoVar(value)), method.invoke(jsonObject.getDescriptor() + ".GetFloat64", new GoVar(key)));
     }
 
     @Override
-    public void assignJsonStringArray(Variable to, Variable jsonObject, Variable itemName) {
-        method.addAssign(method.useVariable(new GoVar(to)), method.invoke(jsonObject.getDescriptor() + ".GetStringArray", new GoVar(itemName)));
+    public void assignJsonStringArray(Variable value, Variable jsonObject, Variable key, boolean optional) {
+        method.addAssign(method.useVariable(new GoVar(value)), method.invoke(jsonObject.getDescriptor() + ".GetStringArray", new GoVar(key)));
     }
 
     @Override
-    public void assignJsonDecimalArray(Variable to, Variable jsonObject, Variable itemName) {
-
-    }
-
-    @Override
-    public void assignJsonBooleanArray(Variable to, Variable jsonObject, Variable itemName) {
+    public void assignJsonDecimalArray(Variable value, Variable jsonObject, Variable key, boolean optional) {
 
     }
 
     @Override
-    public void assignJsonIntArray(Variable to, Variable jsonObject, Variable itemName) {
+    public void assignJsonBooleanArray(Variable value, Variable jsonObject, Variable key, boolean optional) {
 
     }
 
     @Override
-    public void getJsonArray(Variable jsonWrapperObject, Variable jsonObject, Variable itemName) {
+    public void assignJsonIntArray(Variable value, Variable jsonObject, Variable key, boolean optional) {
 
     }
 
     @Override
-    public void defineJsonObject(Variable jsonObject, Variable parentJsonObject, Variable itemName) {
-        method.addAssignAndDeclare(method.useVariable(new GoVar(jsonObject)), method.invoke(parentJsonObject.getDescriptor() + ".GetObject", new GoVar(itemName)));
+    public void getJsonArray(Variable jsonWrapperObject, Variable jsonObject, Variable key) {
+
+    }
+
+    @Override
+    public void defineJsonObject(Variable jsonObject, Variable parentJsonObject, Variable key, boolean optional) {
+        method.addAssignAndDeclare(method.useVariable(new GoVar(jsonObject)), method.invoke(parentJsonObject.getDescriptor() + ".GetObject", new GoVar(key)));
+    }
+
+    @Override
+    public void defineJsonArray(Variable jsonObject, Variable parentJsonObject, Variable key) {
+        method.addAssignAndDeclare(method.useVariable(new GoVar(jsonObject)), method.invoke(parentJsonObject.getDescriptor() + ".GetArray", new GoVar(key)));
     }
 
     @Override
@@ -89,8 +94,8 @@ public class GoJsonParserBuilder implements IJsonParserBuilder {
     }
 
     @Override
-    public void endJsonObjectArray(Variable to, Variable model) {
-        method.addAssign(method.useVariable(new GoVar(to)), method.invoke("append", new GoVar(to), new GoGetValueVar(model)));
+    public void endJsonObjectArray(Variable value, Variable model) {
+        method.addAssign(method.useVariable(new GoVar(value)), method.invoke("append", new GoVar(value), new GoGetValueVar(model)));
         method.endFor();
     }
 
@@ -100,8 +105,8 @@ public class GoJsonParserBuilder implements IJsonParserBuilder {
     }
 
     @Override
-    public void defineRootJsonObject(Variable jsonObject, Variable responseVariable) {
-        Variable value = BuilderContext.createStatement(responseVariable.getDescriptor() + ".GetJson()");
+    public void defineRootJsonObject(Variable jsonObject, Variable stringVariable) {
+        Variable value = BuilderContext.createStatement(stringVariable.getDescriptor() + ".GetJson()");
         method.addAssignAndDeclare(method.useVariable(new GoVar(jsonObject)), method.useVariable(new GoVar(value)));
     }
 

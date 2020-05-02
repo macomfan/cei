@@ -65,7 +65,7 @@ public class Python3WebSocketInterfaceBuilder implements IWebSocketInterfaceBuil
 
     @Override
     public void connect(Variable connection, Variable target, Variable option) {
-        method.addInvoke("self.connect_ws", target, option);
+        method.addInvoke(connection.getDescriptor() + ".connect", target, option);
     }
 
     @Override

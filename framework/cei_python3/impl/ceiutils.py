@@ -1,12 +1,67 @@
 import time
+import hmac
+import hashlib
+import base64
+import urllib.parse
+
+from impl.restfulrequest import RestfulRequest
+
 
 class CEIUtils:
+    class Constant:
+        ASC = "asc",
+        DSC = "dsc",
+        HOST = "host",
+        METHOD = "method",
+        TARGET = "target",
+        UPPERCASE = "uppercase",
+        LOWERCASE = "lowercase",
+        NONE = "none"
 
     @staticmethod
-    def get_now(format: 'str'):
+    def get_request_info(request: RestfulRequest, method: Constant, convert: Constant):
+        result = ""
+        if method is None:
+            # TODO
+            return result
+        if method == CEIUtils.Constant.HOST:
+            result = urllib.parse.urlparse(request.get_url()).hostname
+        elif method == CEIUtils.Constant.TARGET:
+            result = request.get_target()
+        elif method == CEIUtils.Constant.METHOD:
+            result = request.get_method()
+        else:
+            # TODO
+            pass
+        if convert is None:
+            return result
+        if convert == CEIUtils.Constant.UPPERCASE:
+            return result.upper()
+        elif convert == CEIUtils.Constant.LOWERCASE:
+            return result.lower()
+        elif convert == CEIUtils.Constant.NONE:
+            return result
+        else:
+            # TODO
+            return result
+
+
+    @staticmethod
+    def base64(input_value):
+        return base64.b64encode(input_value).decode()
+
+    @staticmethod
+    def hmacsha256(input_value, key: str):
+        if key is None:
+            raise CEIException("key is None")
+        return hmac.new(key.encode('utf-8'), msg=input_value.encode('utf-8'), digestmod=hashlib.sha256).digest()
+
+    @staticmethod
+    def get_now(time_format: 'str'):
         """
         Convert current date/time in UTC to string
 
+        :param time_format:
         :param format The format of the output string, following below rules:
         %Y The 4 characters year code. like 2019.
         %M The 2 characters month in year. range is 01 - 12.
@@ -20,14 +75,14 @@ class CEIUtils:
 
         :return The time string.
         """
-        if format is None or format == "":
+        if time_format is None or time_format == "":
             return str(round(time.time() * 1000))
-        if format == "Unix_s":
+        if time_format == "Unix_s":
             return str(round(time.time()))
-        elif format == "Unix_ms":
+        elif time_format == "Unix_ms":
             return str(round(time.time() * 1000))
         else:
-            items = format.split("%")
+            items = time_format.split("%")
             formatString = ""
             for i in range(0, len(items)):
                 if (i == 0):

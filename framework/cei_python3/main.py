@@ -1,23 +1,52 @@
 from impl.restfulrequest import RestfulRequest
 from impl.restfulconnection import RestfulConnection
-from impl.signaturetool import SignatureTool
-from exchanges.cei import *
 
-from exchanges.huobipro import *
-from exchanges.test import *
+from impl.jsonwrapper import JsonWrapper
+
+# from exchanges.huobipro import *
 
 if __name__ == '__main__':
+    data = '''
+        {
+      "status": "ok",
+      "ch": "market.ethusdt.depth.step0",
+      "ts": 1550218546616,
+      "tick": {
+        "bids": [
+          [
+            122.920000000000000000,
+            2.746800000000000000
+          ],
+    	  [
+            120.300000000000000000,
+            494.745900000000000000
+          ]
+        ],
+        "asks": [
+          [
+            122.940000000000000000,
+            67.554900000000000000
+          ],
+    	  [
+            124.620000000000000000,
+            50.000000000000000000
+          ]
+        ],
+        "ts": 1550218546020,
+        "version": 100416549839
+      }
+    }
+    '''
+    json = JsonWrapper.parse_from_string(data)
 
+    # ws = TestWSClient()
 
+    # def suf(msg):
+    #     print("callback " + msg)
 
-    ws = TestWSClient()
-
-    def suf(msg):
-        print("callback " + msg)
-
-    ws.sub("aaa", suf)
-    ws.start()
-    ws.send("mmmmmm")
+    # ws.sub("aaa", suf)
+    # ws.start()
+    # ws.send("mmmmmm")
 
     # option = RestfulOptions()
     # marketClient = MarketClient()

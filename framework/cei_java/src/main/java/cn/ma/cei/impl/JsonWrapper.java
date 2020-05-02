@@ -6,11 +6,13 @@
 package cn.ma.cei.impl;
 
 import cn.ma.cei.exception.CEIException;
+import cn.ma.cei.exception.CEILog;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONException;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.util.TypeUtils;
+
 import java.math.BigDecimal;
 import java.util.LinkedList;
 import java.util.List;
@@ -18,20 +20,9 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- *
  * @author u0151316
  */
 public class JsonWrapper {
-
-    private Integer getIndexKey(String key) {
-        String pattern = "^\\[[0-9]*\\]$";
-        Pattern r = Pattern.compile(pattern);
-        Matcher m = r.matcher(key);
-        if (m.find()) {
-            return Integer.parseInt(key.substring(m.start() + 1, m.end() - 1));
-        }
-        return null;
-    }
 
     private JSONObject jsonObject = null;
     private JSONArray jsonArray = null;
@@ -40,21 +31,41 @@ public class JsonWrapper {
         try {
             Object tmp = JSON.parse(text);
             if (tmp instanceof JSONObject) {
-                return new JsonWrapper((JSONObject)tmp);
+                return new JsonWrapper((JSONObject) tmp);
             } else if (tmp instanceof JSONArray) {
-                return new JsonWrapper((JSONArray)tmp);
+                return new JsonWrapper((JSONArray) tmp);
             } else {
-                throw new CEIException("[Json] Unknown error when parse: " + text);
+                throw new CEIException("Type error");
             }
         } catch (JSONException e) {
-            throw new CEIException("[Json] Fail to parse json: " + text);
+            CEILog.showFailure("[Json] Fail to parse json: %s", e.getMessage());
         } catch (Exception e) {
-            throw new CEIException("[Json] " + e.getMessage());
+            CEILog.showFailure("[Json] Unknown error when parse: %s", e.getMessage());
         }
+        return new JsonWrapper();
     }
 
     public JsonWrapper() {
-        this.jsonObject = new JSONObject();
+    }
+
+    /**
+     * If the key is [x] return x, else return null.
+     * If the key is [], it is used for add value to json array, the return will be -1.
+     *
+     * @param key the key.
+     * @return the index or null.
+     */
+    private Integer getIndexKey(String key) {
+        String pattern = "^\\[[0-9]*]$";
+        Pattern r = Pattern.compile(pattern);
+        Matcher m = r.matcher(key);
+        if (m.find()) {
+            if ("[]".equals(key)) {
+                return -1;
+            }
+            return Integer.parseInt(key.substring(m.start() + 1, m.end() - 1));
+        }
+        return null;
     }
 
     public JsonWrapper(JSONObject jsonObject) {
@@ -65,129 +76,189 @@ public class JsonWrapper {
         this.jsonArray = jsonArray;
     }
 
-    private void shouldBeObject() {
-        if (jsonObject == null || jsonArray != null) {
-            throw new CEIException("[Json] Should be object");
+    private void initializeAsObject() {
+        if (jsonObject == null && jsonArray == null) {
+            jsonObject = new JSONObject();
+        } else if (jsonArray != null) {
+            CEILog.showFailure("[Json] Cannot create json array");
         }
     }
 
-    private void shouldBeArray() {
-        if (jsonObject != null || jsonArray == null) {
-            throw new CEIException("[Json] Should be array");
+    private void initializeAsArray() {
+        if (jsonObject == null && jsonArray == null) {
+            jsonArray = new JSONArray();
+        } else if (jsonObject != null) {
+            CEILog.showFailure("[Json] Cannot create json object");
         }
     }
 
-    public boolean contains(String name) {
-        if (jsonObject != null) {
-            return jsonObject.containsKey(name);
+    public boolean contains(String key) {
+        Integer index = getIndexKey(key);
+        if (index != null && jsonArray != null) {
+            return index < jsonArray.size() && index > 0;
+        } else if (jsonObject != null) {
+            return jsonObject.containsKey(key);
         }
         return false;
     }
 
-    public void addJsonString(String name, String value) {
-        if (value == null) {
-            return;
-        }
-        jsonObject.put(name, value);
-    }
-
-    public void addJsonNumber(String name, Long value) {
-        if (value == null) {
-            return;
-        }
-        jsonObject.put(name, value);
-    }
-
-    public void addJsonBoolean(String name, Boolean value) {
-        if (value == null) {
-            return;
-        }
-        jsonObject.put(name, value);
-    }
-
-    public void addJsonNumber(String name, BigDecimal value) {
-        if (value == null) {
-            return;
-        }
-        jsonObject.put(name, value);
-    }
-
-    public void addJsonObject(String name, JsonWrapper jsonWrapper) {
-        if (jsonWrapper.jsonObject == null && jsonWrapper.jsonArray == null) {
-            throw new CEIException("Cannot add a null object to json object");
-        }
-        if (jsonObject != null) {
-            jsonObject.put(name, jsonWrapper.jsonObject);
+    private void addJsonValue(String name, Object object) {
+        Integer index = getIndexKey(name);
+        if (index == null) {
+            initializeAsObject();
+            jsonObject.put(name, object);
+        } else if (index == -1) {
+            initializeAsArray();
+            jsonArray.add(object);
+        } else {
+            CEILog.showFailure("Cannot specify thd detail index to insert a item to array");
         }
     }
 
-    private Object checkMandatoryField(String name) {
+    public void addJsonString(String key, String value) {
+        addJsonValue(key, value);
+    }
+
+    public void addJsonNumber(String key, Long value) {
+        addJsonValue(key, value);
+    }
+
+    public void addJsonBoolean(String key, Boolean value) {
+        addJsonValue(key, value);
+    }
+
+    public void addJsonNumber(String key, BigDecimal value) {
+        addJsonValue(key, value);
+    }
+
+    public void addJsonObject(String key, JsonWrapper jsonWrapper) {
+        if (jsonWrapper.jsonObject != null) {
+            addJsonValue(key, jsonWrapper.jsonObject);
+        } else if (jsonWrapper.jsonArray != null) {
+            addJsonValue(key, jsonWrapper.jsonArray);
+        } else {
+            CEILog.showFailure("Cannot add a null object to json object");
+        }
+    }
+
+    private Object getByKey(String key) {
         Object obj = null;
-        if (jsonObject != null) {
-            obj = this.jsonObject.get(name);
-        }
-        else if (jsonArray != null) {
-            Integer index = getIndexKey(name);
-            if (index == null) {
-                throw new CEIException("[Json] Cannot get: " + name + " from json array");
+        Integer index = getIndexKey(key);
+        if (index == null) {
+            if (jsonObject != null) {
+                obj = jsonObject.get(key);
             }
-            obj = jsonArray.get(index.intValue());
-        }
-        if (obj == null) {
-            throw new CEIException("[Json] Get json item field: " + name + " does not exist");
+        } else {
+            if (jsonArray != null && 0 <= index && index < jsonArray.size()) {
+                obj = jsonArray.get(index);
+            }
         }
         return obj;
     }
 
-    public String getString(String itemName) {
-        Object obj = checkMandatoryField(itemName);
+    private <T> T checkMandatoryField(String Key, T value) {
+        if (value == null) {
+            CEILog.showFailure("[Json] Get json item field: %s, does not exist", Key);
+        }
+        return value;
+    }
+
+    private JsonWrapper checkMandatoryObject(String Key, JsonWrapper value) {
+        if (value == null) {
+            CEILog.showFailure("[Json] The JsonWrapper is null");
+        } else if (value.jsonArray == null && value.jsonObject == null) {
+            CEILog.showFailure("[Json] Get json object: %s, does not exist", Key);
+        } else if (value.jsonObject != null && value.jsonArray != null) {
+            CEILog.showFailure("[Json] The JsonWrapper is invalid", Key);
+        }
+        return value;
+    }
+
+    @FunctionalInterface
+    private interface Cast<T> {
+        T castTo(Object value);
+    }
+
+    private <T> T caseTo(Object value, Cast<T> caseMethod, Class<T> cls) {
         try {
-            return TypeUtils.castToString(obj);
+            return caseMethod.castTo(value);
         } catch (Exception e) {
-            throw new CEIException("[Json] Get item error: " + itemName + " " + e.getMessage());
+            CEILog.showWarning("[Json] Failed to convert to %s", cls.getSimpleName());
+            return null;
         }
     }
 
-    public Long getLong(String itemName) {
-        Object obj = checkMandatoryField(itemName);
-        try {
-            return TypeUtils.castToLong(obj);
-        } catch (Exception e) {
-            throw new CEIException("[Json] Get item error: " + itemName + " " + e.getMessage());
+    public String getString(String key) {
+        String value = getStringOrNull(key);
+        return checkMandatoryField(key, value);
+    }
+
+    public String getStringOrNull(String key) {
+        Object value = getByKey(key);
+        return caseTo(value, TypeUtils::castToString, String.class);
+    }
+
+    public Long getLong(String key) {
+        Long value = getLongOrNull(key);
+        return checkMandatoryField(key, value);
+    }
+
+    public Long getLongOrNull(String key) {
+        Object value = getByKey(key);
+        return caseTo(value, TypeUtils::castToLong, Long.class);
+    }
+
+    public BigDecimal getDecimalOrNull(String key) {
+        Object value = getByKey(key);
+        return caseTo(value, TypeUtils::castToBigDecimal, BigDecimal.class);
+    }
+
+    public BigDecimal getDecimal(String key) {
+        BigDecimal value = getDecimalOrNull(key);
+        return checkMandatoryField(key, value);
+    }
+
+    public Boolean getBooleanOrNull(String key) {
+        Object value = getByKey(key);
+        return caseTo(value, TypeUtils::castToBoolean, Boolean.class);
+    }
+
+    public Boolean getBoolean(String key) {
+        Boolean value = getBooleanOrNull(key);
+        return checkMandatoryField(key, value);
+    }
+
+    public JsonWrapper getObject(String key) {
+        JsonWrapper value = getObjectOrNull(key);
+        return checkMandatoryObject(key, value);
+    }
+
+    public JsonWrapper getObjectOrNull(String key) {
+        Object obj = getByKey(key);
+        if (obj == null) {
+            return new JsonWrapper();
+        }
+        if (obj instanceof JSONObject) {
+            return new JsonWrapper((JSONObject) obj);
+        } else if (obj instanceof JSONArray) {
+            return new JsonWrapper((JSONArray) obj);
+        } else {
+            CEILog.showWarning("[Json] Failed to get Object, type error");
+            return new JsonWrapper();
         }
     }
 
-    public BigDecimal getDecimal(String itemName) {
-        Object obj = checkMandatoryField(itemName);
-        try {
-            return TypeUtils.castToBigDecimal(obj);
-        } catch (Exception e) {
-            throw new CEIException("[Json] Get item error: " + itemName + " " + e.getMessage());
-        }
+    public JsonWrapper getArray(String key) {
+        JsonWrapper value = getObjectOrNull(key);
+        return checkMandatoryObject(key, value);
     }
 
-    public Boolean getBoolean(String itemName) {
-        Object obj = checkMandatoryField(itemName);
-        try {
-            return TypeUtils.castToBoolean(obj);
-        } catch (Exception e) {
-            throw new CEIException("[Json] Get item error: " + itemName + " " + e.getMessage());
+    public JsonWrapper getArrayOrNull(String key) {
+        Object obj = getByKey(key);
+        if (obj instanceof JSONArray) {
+            return new JsonWrapper((JSONArray) obj);
         }
-    }
-
-    public JsonWrapper getObject(String itemName) {
-        Object obj = checkMandatoryField(itemName);
-        try {
-            if (obj instanceof JSONObject) {
-                return new JsonWrapper((JSONObject)obj);
-            } else if (obj instanceof JSONArray) {
-                return new JsonWrapper((JSONArray)obj);
-            } else {
-                throw new CEIException("[Json] Get object: " + itemName + " error, it is neither object or array");
-            }
-        } catch (Exception e) {
-            throw new CEIException("[Json] Get object: " + itemName + " error");
-        }
+        return new JsonWrapper();
     }
 
     @FunctionalInterface
@@ -196,54 +267,72 @@ public class JsonWrapper {
     }
 
     public void forEach(ForEachHandler handler) {
-        shouldBeArray();
+        if (jsonObject != null || jsonArray == null) {
+            return;
+        }
         jsonArray.forEach(item -> {
             if (item instanceof JSONObject) {
-                handler.process(new JsonWrapper((JSONObject)item));
+                handler.process(new JsonWrapper((JSONObject) item));
             } else if (item instanceof JSONArray) {
-                handler.process(new JsonWrapper((JSONArray)item));
+                handler.process(new JsonWrapper((JSONArray) item));
             } else {
-                throw new CEIException("[Json] the item is neither object or array");
+                handler.process(new JsonWrapper());
             }
         });
     }
 
-    public List<String> getStringArray(String itemName) {
-        Object obj = checkMandatoryField(itemName);
+    private <T> List<T> getArrayByKey(String key, Cast<T> castMethod, Class<T> cls) {
+        Object obj = getByKey(key);
         if (!(obj instanceof JSONArray)) {
-            throw new CEIException("[Json] Get array: " + itemName + " error");
+            return null;
         }
-        List<String> res = new LinkedList<>();
-        JSONArray array = (JSONArray)obj;
-        array.forEach((object) -> {
-            if (!(object instanceof String)) {
-                throw new CEIException("[Json] Parse array error in forEachAsString");
-            }
-            res.add((String) object);
-        });
+        List<T> res = new LinkedList<>();
+        JSONArray array = (JSONArray) obj;
+        array.forEach((item) -> res.add(castMethod.castTo(item)));
         return res;
     }
 
-    public List<BigDecimal> getDecimalArray(String itemName) {
-        Object obj = checkMandatoryField(itemName);
-        if (!(obj instanceof JSONArray)) {
-            throw new CEIException("[Json] Get array: " + itemName + " error");
-        }
-        List<BigDecimal> res = new LinkedList<>();
-        JSONArray array = (JSONArray)obj;
-        array.forEach((object) -> {
-            if (!(object instanceof BigDecimal)) {
-                throw new CEIException("[Json] Parse array error in forEachAsBigDecimal");
-            }
-            res.add((BigDecimal) object);
-        });
-        return res;
+    public List<String> getStringArray(String key) {
+        List<String> value = getStringArray(key);
+        return checkMandatoryField(key, value);
     }
+
+    public List<String> getStringArrayOrNull(String key) {
+        return getArrayByKey(key, TypeUtils::castToString, String.class);
+    }
+
+    public List<Long> getLongArray(String key) {
+        List<Long> value = getLongArrayOrNull(key);
+        return checkMandatoryField(key, value);
+    }
+
+    public List<Long> getLongArrayOrNull(String key) {
+        return getArrayByKey(key, TypeUtils::castToLong, Long.class);
+    }
+
+    public List<BigDecimal> getDecimalArray(String key) {
+        List<BigDecimal> value = getDecimalArrayOrNull(key);
+        return checkMandatoryField(key, value);
+    }
+
+    public List<BigDecimal> getDecimalArrayOrNull(String key) {
+        return getArrayByKey(key, TypeUtils::castToBigDecimal, BigDecimal.class);
+    }
+
+    public List<Boolean> getBooleanArray(String key) {
+        List<Boolean> value = getBooleanArrayOrNull(key);
+        return checkMandatoryField(key, value);
+    }
+
+    public List<Boolean> getBooleanArrayOrNull(String key) {
+        return getArrayByKey(key, TypeUtils::castToBoolean, Boolean.class);
+    }
+
 
     public byte[] toBytes() {
         return JSON.toJSONBytes(jsonObject);
     }
-    
+
     public String toJsonString() {
         return JSON.toJSONString(jsonObject);
     }

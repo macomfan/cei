@@ -8,15 +8,7 @@ from impl.restfulrequest import RestfulRequest
 
 
 class SignatureTool:
-    class Constant:
-        ASC = "asc",
-        DSC = "dsc",
-        HOST = "host",
-        METHOD = "method",
-        TARGET = "target",
-        UPPERCASE = "uppercase",
-        LOWERCASE = "lowercase",
-        NONE = "none"
+
 
     @staticmethod
     def combine_string_array(string_list: list, separator: str):
@@ -29,15 +21,8 @@ class SignatureTool:
                 res += item
         return res
 
-    @staticmethod
-    def hmacsha256(input_value, key: str):
-        if key is None:
-            raise CEIException("key is None")
-        return hmac.new(key.encode('utf-8'), msg=input_value.encode('utf-8'), digestmod=hashlib.sha256).digest()
 
-    @staticmethod
-    def base64(input_value):
-        return base64.b64encode(input_value).decode()
+
 
     @staticmethod
     def add_string_array(input_list: list, value: str):
@@ -81,29 +66,3 @@ class SignatureTool:
     def append_to_string(obj: str, value: str):
         return obj + value
 
-    @staticmethod
-    def get_request_info(request: RestfulRequest, method: Constant, convert: Constant):
-        result = ""
-        if method is None:
-            # TODO
-            return result
-        if method == SignatureTool.Constant.HOST:
-            result = urllib.parse.urlparse(request.get_url()).hostname
-        elif method == SignatureTool.Constant.TARGET:
-            result = request.get_target()
-        elif method == SignatureTool.Constant.METHOD:
-            result = request.get_method()
-        else:
-            # TODO
-            pass
-        if convert is None:
-            return result
-        if convert == SignatureTool.Constant.UPPERCASE:
-            return result.upper()
-        elif convert == SignatureTool.Constant.LOWERCASE:
-            return result.lower()
-        elif convert == SignatureTool.Constant.NONE:
-            return result
-        else:
-            # TODO
-            return result

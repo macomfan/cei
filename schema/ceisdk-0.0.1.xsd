@@ -172,6 +172,7 @@
         <xs:attribute name="key" type="xs:string"/>
         <xs:attribute name="copy" type="xs:string"/>
         <xs:attribute name="value" type="xs:string"/>
+        <xs:attribute name="optional" type="xs:boolean"/>
     </xs:complexType>
 
     <xs:group name="CommonJsonSubItem">
@@ -180,6 +181,7 @@
             <xs:element name="json_string" type="xJsonType"/>
             <xs:element name="json_boolean" type="xJsonType"/>
             <xs:element name="json_decimal" type="xJsonType"/>
+            <xs:element name="json_int" type="xJsonType"/>
             <xs:element name="json_object_for_each" type="xJsonTypeWithModel"/>
             <xs:element name="json_object" type="xJsonTypeWithModel"/>
             <xs:element name="json_string_array" type="xJsonType"/>
@@ -213,6 +215,7 @@
                 <xs:attribute name="key" type="xs:string"/>
                 <xs:attribute name="copy" type="xs:string"/>
                 <xs:attribute name="value" type="xs:string"/>
+                <xs:attribute name="optional" type="xs:boolean"/>
                 <xs:attribute name="model" type="nameType"/>
             </xs:extension>
         </xs:complexContent>
@@ -304,7 +307,7 @@
         <xs:attribute name="format" type="xs:string" use="required"/>
     </xs:complexType>
     <xs:complexType name="xAddQueryString">
-        <xs:attribute name="input" type="variableType" use="required"/>
+        <xs:attribute name="input" type="variableType"/>
         <xs:attribute name="key" type="xs:string"/>
         <xs:attribute name="value" type="xs:string"/>
     </xs:complexType>

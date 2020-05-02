@@ -11,10 +11,10 @@ import cn.ma.cei.model.types.xString;
 public class BuildAddQueryString extends DataProcessorBase<xAddQueryString> {
     @Override
     public Variable build(xAddQueryString item, IDataProcessorBuilder builder) {
-        Variable requestVariable = queryInputVariable(item.input, "{request}", RestfulRequest.getType());
+        Variable input = queryInputVariable(item.input, "{request}", RestfulRequest.getType());
         Variable variable = queryVariableOrConstant(item.value, xString.inst.getType());
         Variable key = queryVariableOrConstant(item.key, xString.inst.getType());
-        builder.addQueryString(requestVariable, key, variable);
+        builder.addQueryString(input, key, variable);
         return null;
     }
 

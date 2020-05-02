@@ -124,7 +124,7 @@ public class BuildRestfulInterface {
             List<Variable> inputs = authenticationMethod.getInputVariableList();
             if (Checker.isNull(inputs) || inputs.size() < 2
                     || inputs.get(0).getType() != RestfulRequest.getType() || inputs.get(1).getType() != RestfulOptions.getType()) {
-                CEIErrors.showXMLFailure("%s cannot be the authentication function, it must defines 2 inputs, one is RestfulRequest, another is RestfulOptions");
+                CEIErrors.showXMLFailure("%s cannot be the authentication function, it must defines 2 inputs, RestfulRequest and RestfulOptions respectively.", authenticationMethod.getName());
             }
             Variable option = GlobalContext.getCurrentMethod().queryVariable("{option}");
 

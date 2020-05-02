@@ -14,7 +14,7 @@ public class WebSocketMessage {
         this.byteString = byteString;
     }
 
-    public JsonWrapper getJson() {
-        return JsonWrapper.parseFromString(text);
+    public String getString() {
+        return text;
     }
 }

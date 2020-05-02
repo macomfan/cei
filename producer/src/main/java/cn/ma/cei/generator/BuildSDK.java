@@ -47,7 +47,6 @@ public class BuildSDK {
         finalizer.addSDK(sdks);
         List<xSDK> finalSDKs = finalizer.finalizeSDK();
 
-
         List<String> languages;
         if (language.trim().equals("*")) {
             CEIErrors.showInfo("Start to build all supported language.");
@@ -55,8 +54,9 @@ public class BuildSDK {
         } else {
             languages = Arrays.asList(language.split("\\|"));
             languages.forEach(item -> {
-                if (!frameworks.containsKey(item)) {
-                    CEIErrors.showInputFailure("The language: %s is not supported.", item);
+                String itemTrim = item.trim();
+                if (!frameworks.containsKey(itemTrim)) {
+                    CEIErrors.showInputFailure("The language: %s is not supported.", itemTrim);
                 }
             });
         }

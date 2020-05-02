@@ -60,15 +60,16 @@ public class BuildDataProcessor {
                 reportNotSupporting(firstItem);
             }
         } else {
-            if (RegexHelper.isReference(returnVariableName) == null) {
-                return xString.inst.getType();
+            String returnName = RegexHelper.isReference(returnVariableName);
+            if (returnName == null) {
+                CEIErrors.showXMLFailure("return value must be {xxx}");
             }
             for (xDataProcessorItem item : procedure.items) {
                 if (processorMap.containsKey(item.getClass())) {
                     DataProcessorBase<?> processor = processorMap.get(item.getClass());
                     String resultInProcessor = processor.callResultVariableName(item);
                     if (!Checker.isEmpty(resultInProcessor))
-                        if (resultInProcessor.equals(returnVariableName)) {
+                        if (resultInProcessor.equals(returnName)) {
                             return processor.callReturnType(item);
                         }
                 } else {

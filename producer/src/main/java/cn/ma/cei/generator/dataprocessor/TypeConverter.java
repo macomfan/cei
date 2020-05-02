@@ -7,6 +7,7 @@ import cn.ma.cei.generator.builder.IDataProcessorBuilder;
 import cn.ma.cei.generator.buildin.JsonWrapper;
 import cn.ma.cei.generator.buildin.RestfulResponse;
 import cn.ma.cei.generator.buildin.StringWrapper;
+import cn.ma.cei.generator.buildin.WebSocketMessage;
 import cn.ma.cei.model.types.*;
 import cn.ma.cei.utils.SecondLevelMap;
 
@@ -28,7 +29,10 @@ public class TypeConverter {
         converterMap.put(xBoolean.inst.getType(), xString.inst.getType(), (IDataProcessorBuilder::convertBooleanToString));
         converterMap.put(xDecimal.inst.getType(), xString.inst.getType(), (IDataProcessorBuilder::convertDecimalToString));
 
+        converterMap.put(xString.inst.getType(), xDecimal.inst.getType(), (IDataProcessorBuilder::convertStringToDecimal));
+
         converterMap.put(RestfulResponse.getType(), xString.inst.getType(), (IDataProcessorBuilder::convertRestfulResponseToString));
+        converterMap.put(WebSocketMessage.getType(), xString.inst.getType(), (IDataProcessorBuilder::convertRestfulResponseToString));
     }
     public static Variable convertType(Variable input, VariableType objectType, IDataProcessorBuilder builder) {
         if (input.getType() == objectType) {

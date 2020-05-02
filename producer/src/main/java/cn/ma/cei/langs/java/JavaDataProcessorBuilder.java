@@ -10,6 +10,7 @@ import cn.ma.cei.langs.java.processor.JavaGetNowBuilder;
 import cn.ma.cei.langs.java.processor.JavaJsonBuilderBuilder;
 import cn.ma.cei.langs.java.processor.JavaJsonParserBuilder;
 import cn.ma.cei.langs.java.tools.JavaMethod;
+import cn.ma.cei.model.types.xDecimal;
 
 public class JavaDataProcessorBuilder implements IDataProcessorBuilder {
     JavaMethod method;
@@ -75,6 +76,11 @@ public class JavaDataProcessorBuilder implements IDataProcessorBuilder {
     }
 
     @Override
+    public Variable convertWebSocketMessageToString(Variable msg) {
+        return BuilderContext.createStatement(method.invoke(msg.getDescriptor() + ".getString"));
+    }
+
+    @Override
     public Variable convertDecimalToString(Variable decimalVariable) {
         return BuilderContext.createStatement(method.invoke(decimalVariable.getDescriptor() + ".toString"));
     }
@@ -82,6 +88,11 @@ public class JavaDataProcessorBuilder implements IDataProcessorBuilder {
     @Override
     public Variable convertBooleanToString(Variable booleanVariable) {
         return BuilderContext.createStatement(method.invoke(booleanVariable.getDescriptor() + ".toString"));
+    }
+
+    @Override
+    public Variable convertStringToDecimal(Variable stringVariable) {
+        return BuilderContext.createStatement(method.newInstance(xDecimal.inst.getType(), stringVariable));
     }
 
     @Override
