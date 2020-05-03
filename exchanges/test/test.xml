@@ -209,7 +209,7 @@
             <interfaces>
                 <interface name="postInputs">
                     <inputs>
-                        <string name="Name"/>
+                        <string name="this"/>
                         <decimal name="Price"/>
                         <int name="Number"/>
                         <boolean name="Status"/>
@@ -217,7 +217,7 @@
                     <request method="post" target="/restful/post/echo/{postMsg}">
                         <pre_processor>
                             <json_builder name="postMsg">
-                                <json_value copy="Name"/>
+                                <json_value key="Name" value="{this}"/>
                                 <json_value copy="Price"/>
                                 <json_value copy="Number"/>
                                 <json_value key="Status_1" value="{Status}"/>
@@ -342,6 +342,30 @@
                                     <json_value copy="Price"/>
                                     <json_value copy="Status"/>
                                 </json_object>
+                            </json_parser>
+                        </handler>
+                    </event>
+                </interface>
+                <interface name="subscribeSecond1">
+                    <message>
+                        <json_builder name="jsonResult">
+                            <json_value key="op" value="sub"/>
+                            <json_value key="name" value="Second1"/>
+                        </json_builder>
+                        <send value="{jsonResult}"/>
+                    </message>
+                    <event callback="onSecond1" persistent="true">
+                        <trigger>
+                            <json_checker>
+                                <json_checker_equal key="ch" value="Second1"/>
+                            </json_checker>
+                        </trigger>
+                        <handler>
+                            <json_parser model="SimpleInfo">
+                                <json_value copy="Name"/>
+                                <json_value copy="Number"/>
+                                <json_value copy="Price"/>
+                                <json_value copy="Status"/>
                             </json_parser>
                         </handler>
                     </event>

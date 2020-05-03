@@ -34,7 +34,7 @@ public class Python3DescriptionConverter implements IDescriptionConverter {
 
     private String checkKeyword(String name) {
         if (keywords.contains(name)) {
-            throw new CEIException(name + " is keyword in Java");
+            return name + "_u";
         }
         return name;
     }
@@ -137,6 +137,75 @@ public class Python3DescriptionConverter implements IDescriptionConverter {
         keywords.add("while");
         keywords.add("with");
         keywords.add("yield");
+        keywords.add("abs");
+        keywords.add("delattr");
+        keywords.add("hash");
+        keywords.add("memoryview");
+        keywords.add("set");
+        keywords.add("all");
+        keywords.add("dict");
+        keywords.add("help");
+        keywords.add("min");
+        keywords.add("setattr");
+        keywords.add("any");
+        keywords.add("dir");
+        keywords.add("hex");
+        keywords.add("next");
+        keywords.add("slice");
+        keywords.add("ascii");
+        keywords.add("divmod");
+        keywords.add("id");
+        keywords.add("object");
+        keywords.add("sorted");
+        keywords.add("bin");
+        keywords.add("enumerate");
+        keywords.add("input");
+        keywords.add("oct");
+        keywords.add("staticmethod");
+        keywords.add("bool");
+        keywords.add("eval");
+        keywords.add("int");
+        keywords.add("open");
+        keywords.add("str");
+        keywords.add("breakpoint");
+        keywords.add("exec");
+        keywords.add("isinstance");
+        keywords.add("ord");
+        keywords.add("sum");
+        keywords.add("bytearray");
+        keywords.add("filter");
+        keywords.add("issubclass");
+        keywords.add("pow");
+        keywords.add("super");
+        keywords.add("bytes");
+        keywords.add("float");
+        keywords.add("iter");
+        keywords.add("print");
+        keywords.add("tuple");
+        keywords.add("callable");
+        keywords.add("format");
+        keywords.add("len");
+        keywords.add("property");
+        keywords.add("type");
+        keywords.add("chr");
+        keywords.add("frozenset");
+        keywords.add("list");
+        keywords.add("range");
+        keywords.add("vars");
+        keywords.add("classmethod");
+        keywords.add("getattr");
+        keywords.add("locals");
+        keywords.add("repr");
+        keywords.add("zip");
+        keywords.add("compile");
+        keywords.add("globals");
+        keywords.add("map");
+        keywords.add("reversed");
+        keywords.add("__import__");
+        keywords.add("complex");
+        keywords.add("hasattr");
+        keywords.add("max");
+        keywords.add("round");
         return keywords;
     }
 }

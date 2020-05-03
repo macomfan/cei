@@ -23,5 +23,10 @@ public class testMain {
         wsClient.requestEcho("abc", new BigDecimal("123.123"), 123L, false, (data -> {
             System.out.println("On Echo3");
         }));
+
+        wsClient.subscribeSecond1(data -> {
+            System.out.println("On Second1");
+        });
+
     }
 }

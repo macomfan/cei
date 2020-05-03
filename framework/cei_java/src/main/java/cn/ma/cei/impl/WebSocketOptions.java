@@ -13,6 +13,7 @@ public class WebSocketOptions {
     public String url;
     public String apiKey = null;
     public String secretKey = null;
+    public int connectTimeout_s = 10;
 
     public void setFrom(WebSocketOptions options) {
         if (options.url != null) {

@@ -37,12 +37,7 @@ public class EventHandler implements IWebSocketHandler {
             }
             case "sub": {
                 SubscribeMessage subscribeMessage = new SubscribeMessage();
-                JsonObject param = jsonObject.getJsonObject("param");
-                if (param == null) {
-                    client.send(ErrorMessageFormat);
-                    return WebSocketService.MessageResult.ignore();
-                }
-                subscribeMessage.name = param.getString("name");
+                subscribeMessage.name = jsonObject.getString("name");
                 return WebSocketService.MessageResult.normal(subscribeMessage, SUBSCRIBE_PROCESSOR);
             }
             case "pong": {

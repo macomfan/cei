@@ -31,7 +31,7 @@ public class BuildResponse {
             }
         } else {
             VariableType returnType = BuildDataProcessor.getReturnType(response, response.result);
-            if (returnType == null) {
+            if (returnType == null && !Checker.isNull(response.items)) {
                 if (response.items.size() == 1) {
                     CEIErrors.showXMLFailure("Cannot get the return type");
                 } else {
@@ -55,6 +55,9 @@ public class BuildResponse {
         } else if ("binary".equals(response.type)) {
             return TypeConverter.convertType(responseVariable, TheStream.getType(), dataProcessorBuilder);
         } else {
+            if (Checker.isNull(response.items)) {
+                return null;
+            }
             response.items.forEach(item -> {
                 if (item instanceof xJsonParser) {
                     if (((xJsonParser) item).jsonChecker != null)

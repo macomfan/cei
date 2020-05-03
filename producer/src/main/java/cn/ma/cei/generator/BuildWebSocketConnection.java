@@ -32,7 +32,6 @@ public class BuildWebSocketConnection {
         IWebSocketInterfaceBuilder interfaceBuilder = Checker.checkNull(builder.createWebSocketInterfaceBuilder(), builder, "WebSocketInterfaceBuilder");
         sMethod openMethod = GlobalContext.getCurrentModel().createMethod("open");
         GlobalContext.setCurrentMethod(openMethod);
-        Variable option = openMethod.getVariable("option");
         Variable connection = openMethod.getVariable("connection");
         // Build input
         List<Variable> inputVariableList = new LinkedList<>();
@@ -76,9 +75,9 @@ public class BuildWebSocketConnection {
             // Connect
             if (!Checker.isEmpty(open.connect.target)) {
                 Variable target = GlobalContext.getCurrentMethod().queryVariableOrConstant(open.connect.target, xString.inst.getType(), dataProcessorBuilder);
-                interfaceBuilder.connect(connection, target, option);
+                interfaceBuilder.connect(connection, target);
             } else {
-                interfaceBuilder.connect(connection, GlobalContext.createStringConstant(""), option);
+                interfaceBuilder.connect(connection, GlobalContext.createStringConstant(""));
             }
 
         }
@@ -94,7 +93,6 @@ public class BuildWebSocketConnection {
         sMethod closeMethod = GlobalContext.getCurrentModel().createMethod("close");
         GlobalContext.setCurrentMethod(closeMethod);
         Variable connection = closeMethod.getVariable("connection");
-        Variable option = closeMethod.getVariable("option");
         List<Variable> inputVariableList = new LinkedList<>();
         if (close.onClose != null && !Checker.isEmpty(close.onClose.callback)) {
             VariableType callbackType = GlobalContext.variableType(WebSocketCallback.typeName, WebSocketConnection.getType());
@@ -111,7 +109,7 @@ public class BuildWebSocketConnection {
                 interfaceBuilder.setupOnClose(connection, callbackMethod);
             }
             // Close
-            interfaceBuilder.close(connection, option);
+            interfaceBuilder.close(connection);
         }
         interfaceBuilder.endMethod();
         GlobalContext.setCurrentMethod(null);

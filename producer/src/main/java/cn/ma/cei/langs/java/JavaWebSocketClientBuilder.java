@@ -1,7 +1,6 @@
 package cn.ma.cei.langs.java;
 
 import cn.ma.cei.generator.BuilderContext;
-import cn.ma.cei.generator.IMethod;
 import cn.ma.cei.generator.Variable;
 import cn.ma.cei.generator.VariableType;
 import cn.ma.cei.generator.builder.IWebSocketClientBuilder;
@@ -32,7 +31,7 @@ public class JavaWebSocketClientBuilder implements IWebSocketClientBuilder {
             defaultConstructor.addAssign(defaultConstructor.useVariable(optionVariable), defaultConstructor.newInstance(optionVariable.getType()));
             Variable url = optionVariable.getMember("url");
             defaultConstructor.addAssign(url.getDescriptor(), BuilderContext.createStringConstant(option.url).getDescriptor());
-            defaultConstructor.addAssign(defaultConstructor.useVariable(connectionVariable), defaultConstructor.newInstance(connectionVariable.getType()));
+            defaultConstructor.addAssign(defaultConstructor.useVariable(connectionVariable), defaultConstructor.newInstance(connectionVariable.getType(), optionVariable));
         }
         defaultConstructor.endMethod();
         clientClass.addMethod(defaultConstructor);

@@ -1,6 +1,6 @@
 from impl.restfulrequest import RestfulRequest
 from impl.restfulconnection import RestfulConnection
-
+import re
 from impl.jsonwrapper import JsonWrapper
 
 # from exchanges.huobipro import *
@@ -35,10 +35,17 @@ if __name__ == '__main__':
         "ts": 1550218546020,
         "version": 100416549839
       }
-    }
+    } 
     '''
-    json = JsonWrapper.parse_from_string(data)
-
+    key = "[1]"
+    m = re.match("^\\[[0-9]*]$", key)
+    if m is not None:
+        key = key[m.pos + 1:m.endpos - 1]
+    json1 = JsonWrapper()
+    key_aa = json1.get_array_or_none("aa")
+    json2 = JsonWrapper.parse_from_string(data)
+    print(json2.get_string("ts"))
+    print(json2.to_json_string())
     # ws = TestWSClient()
 
     # def suf(msg):
@@ -55,8 +62,6 @@ if __name__ == '__main__':
     #
     # data = marketClient.get_last_trade("btcusdt")
     # print(data)
-
-
 
     # asyncio.run(main())
     # place_order(None, None)

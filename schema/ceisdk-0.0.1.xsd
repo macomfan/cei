@@ -393,7 +393,7 @@
                                 <xs:sequence>
                                     <xs:element name="inputs" minOccurs="0" type="xInputs"/>
                                     <xs:element name="message" minOccurs="0" type="xWSMessage"/>
-                                    <xs:element name="event" type="xWSUserEvent" maxOccurs="unbounded"/>
+                                    <xs:element name="event" type="xWSUserEvent" maxOccurs="unbounded" minOccurs="0"/>
                                 </xs:sequence>
                                 <xs:attribute name="name" use="required" type="nameType"/>
                             </xs:complexType>
@@ -427,6 +427,8 @@
             <xs:group ref="CommonProcessor"/>
             <xs:element name="send" type="xSend"/>
         </xs:choice>
+        <xs:attribute name="result" type="variableType"/>
+        <xs:attribute name="type" type="ResponseType"/>
     </xs:complexType>
     <xs:complexType name="xWSTrigger">
         <xs:choice>

@@ -55,7 +55,7 @@ public class JsonWrapper {
      * @param key the key.
      * @return the index or null.
      */
-    private Integer getIndexKey(String key) {
+    private static Integer getIndexkey(String key) {
         String pattern = "^\\[[0-9]*]$";
         Pattern r = Pattern.compile(pattern);
         Matcher m = r.matcher(key);
@@ -80,7 +80,7 @@ public class JsonWrapper {
         if (jsonObject == null && jsonArray == null) {
             jsonObject = new JSONObject();
         } else if (jsonArray != null) {
-            CEILog.showFailure("[Json] Cannot create json array");
+            CEILog.showFailure("[Json] Cannot create json object");
         }
     }
 
@@ -88,12 +88,12 @@ public class JsonWrapper {
         if (jsonObject == null && jsonArray == null) {
             jsonArray = new JSONArray();
         } else if (jsonObject != null) {
-            CEILog.showFailure("[Json] Cannot create json object");
+            CEILog.showFailure("[Json] Cannot create json array");
         }
     }
 
     public boolean contains(String key) {
-        Integer index = getIndexKey(key);
+        Integer index = getIndexkey(key);
         if (index != null && jsonArray != null) {
             return index < jsonArray.size() && index > 0;
         } else if (jsonObject != null) {
@@ -103,7 +103,7 @@ public class JsonWrapper {
     }
 
     private void addJsonValue(String name, Object object) {
-        Integer index = getIndexKey(name);
+        Integer index = getIndexkey(name);
         if (index == null) {
             initializeAsObject();
             jsonObject.put(name, object);
@@ -111,7 +111,7 @@ public class JsonWrapper {
             initializeAsArray();
             jsonArray.add(object);
         } else {
-            CEILog.showFailure("Cannot specify thd detail index to insert a item to array");
+            CEILog.showFailure("[Json] Cannot specify thd detail index to insert a item to array");
         }
     }
 
@@ -141,9 +141,9 @@ public class JsonWrapper {
         }
     }
 
-    private Object getByKey(String key) {
+    private Object getBykey(String key) {
         Object obj = null;
-        Integer index = getIndexKey(key);
+        Integer index = getIndexkey(key);
         if (index == null) {
             if (jsonObject != null) {
                 obj = jsonObject.get(key);
@@ -156,20 +156,20 @@ public class JsonWrapper {
         return obj;
     }
 
-    private <T> T checkMandatoryField(String Key, T value) {
+    private <T> T checkMandatoryField(String key, T value) {
         if (value == null) {
-            CEILog.showFailure("[Json] Get json item field: %s, does not exist", Key);
+            CEILog.showFailure("[Json] Get json item field: %s, does not exist", key);
         }
         return value;
     }
 
-    private JsonWrapper checkMandatoryObject(String Key, JsonWrapper value) {
+    private JsonWrapper checkMandatoryObject(String key, JsonWrapper value) {
         if (value == null) {
             CEILog.showFailure("[Json] The JsonWrapper is null");
         } else if (value.jsonArray == null && value.jsonObject == null) {
-            CEILog.showFailure("[Json] Get json object: %s, does not exist", Key);
+            CEILog.showFailure("[Json] Get json object: %s, does not exist", key);
         } else if (value.jsonObject != null && value.jsonArray != null) {
-            CEILog.showFailure("[Json] The JsonWrapper is invalid", Key);
+            CEILog.showFailure("[Json] The JsonWrapper is invalid", key);
         }
         return value;
     }
@@ -194,7 +194,7 @@ public class JsonWrapper {
     }
 
     public String getStringOrNull(String key) {
-        Object value = getByKey(key);
+        Object value = getBykey(key);
         return caseTo(value, TypeUtils::castToString, String.class);
     }
 
@@ -204,12 +204,12 @@ public class JsonWrapper {
     }
 
     public Long getLongOrNull(String key) {
-        Object value = getByKey(key);
+        Object value = getBykey(key);
         return caseTo(value, TypeUtils::castToLong, Long.class);
     }
 
     public BigDecimal getDecimalOrNull(String key) {
-        Object value = getByKey(key);
+        Object value = getBykey(key);
         return caseTo(value, TypeUtils::castToBigDecimal, BigDecimal.class);
     }
 
@@ -219,7 +219,7 @@ public class JsonWrapper {
     }
 
     public Boolean getBooleanOrNull(String key) {
-        Object value = getByKey(key);
+        Object value = getBykey(key);
         return caseTo(value, TypeUtils::castToBoolean, Boolean.class);
     }
 
@@ -234,7 +234,7 @@ public class JsonWrapper {
     }
 
     public JsonWrapper getObjectOrNull(String key) {
-        Object obj = getByKey(key);
+        Object obj = getBykey(key);
         if (obj == null) {
             return new JsonWrapper();
         }
@@ -254,7 +254,7 @@ public class JsonWrapper {
     }
 
     public JsonWrapper getArrayOrNull(String key) {
-        Object obj = getByKey(key);
+        Object obj = getBykey(key);
         if (obj instanceof JSONArray) {
             return new JsonWrapper((JSONArray) obj);
         }
@@ -281,8 +281,8 @@ public class JsonWrapper {
         });
     }
 
-    private <T> List<T> getArrayByKey(String key, Cast<T> castMethod, Class<T> cls) {
-        Object obj = getByKey(key);
+    private <T> List<T> getArrayBykey(String key, Cast<T> castMethod, Class<T> cls) {
+        Object obj = getBykey(key);
         if (!(obj instanceof JSONArray)) {
             return null;
         }
@@ -298,7 +298,7 @@ public class JsonWrapper {
     }
 
     public List<String> getStringArrayOrNull(String key) {
-        return getArrayByKey(key, TypeUtils::castToString, String.class);
+        return getArrayBykey(key, TypeUtils::castToString, String.class);
     }
 
     public List<Long> getLongArray(String key) {
@@ -307,7 +307,7 @@ public class JsonWrapper {
     }
 
     public List<Long> getLongArrayOrNull(String key) {
-        return getArrayByKey(key, TypeUtils::castToLong, Long.class);
+        return getArrayBykey(key, TypeUtils::castToLong, Long.class);
     }
 
     public List<BigDecimal> getDecimalArray(String key) {
@@ -316,7 +316,7 @@ public class JsonWrapper {
     }
 
     public List<BigDecimal> getDecimalArrayOrNull(String key) {
-        return getArrayByKey(key, TypeUtils::castToBigDecimal, BigDecimal.class);
+        return getArrayBykey(key, TypeUtils::castToBigDecimal, BigDecimal.class);
     }
 
     public List<Boolean> getBooleanArray(String key) {
@@ -325,7 +325,7 @@ public class JsonWrapper {
     }
 
     public List<Boolean> getBooleanArrayOrNull(String key) {
-        return getArrayByKey(key, TypeUtils::castToBoolean, Boolean.class);
+        return getArrayBykey(key, TypeUtils::castToBoolean, Boolean.class);
     }
 
 

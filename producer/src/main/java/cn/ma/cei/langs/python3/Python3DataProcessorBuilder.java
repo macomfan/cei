@@ -88,7 +88,7 @@ public class Python3DataProcessorBuilder implements IDataProcessorBuilder {
 
     @Override
     public Variable convertStringToDecimal(Variable stringVariable) {
-        return null;
+        return BuilderContext.createStatement(method.invoke("float", stringVariable));
     }
 
     @Override
