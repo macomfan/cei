@@ -37,13 +37,8 @@ public class JavaWebSocketEventBuilder implements IWebSocketEventBuilder {
     }
 
     @Override
-    public void newEvent(Variable event) {
-        method.addAssign(method.defineVariable(event), method.newInstance(event.getType()));
-    }
-
-    @Override
-    public void setAsPersistentEvent(Variable event) {
-        method.addInvoke(event.getDescriptor() + ".setPersistent", BuilderContext.createStatement("true"));
+    public void newEvent(Variable event, Variable isPersistent) {
+        method.addAssign(method.defineVariable(event), method.newInstance(event.getType(), isPersistent));
     }
 
     @Override

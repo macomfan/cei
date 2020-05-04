@@ -1,10 +1,9 @@
 import json
 import re
 from exception.ceilog import CEILog
-from exception.ceiexception import CEIException
 
 
-class JsonWrapper:
+class JsonWrapper(object):
 
     @staticmethod
     def parse_from_string(text: str):
@@ -41,13 +40,15 @@ class JsonWrapper:
             CEILog.show_failure("[Json] Get json object: %s, does not exist" % key)
         elif (value.__json_object is not None) and (value.__json_array is not None):
             CEILog.show_failure("[Json] The JsonWrapper is invalid" % key)
-        return value;
+        return value
 
     def __init__(self, json_object=None):
         if isinstance(json_object, list):
             self.__json_array = json_object
+            self.__json_object = None
         elif isinstance(json_object, dict):
             self.__json_object = json_object
+            self.__json_array = None
         else:
             self.__json_object = None
             self.__json_array = None
@@ -86,20 +87,25 @@ class JsonWrapper:
     def add_json_string(self, key, value: str):
         self.__add_json_value(key, value)
 
-    def add_json_number(self, key, value: int):
-        self.__add_json_value(key, value)
-
-    def add_json_number(self, key, value: float):
+    def add_json_number(self, key, value):
         self.__add_json_value(key, value)
 
     def add_json_boolean(self, key, value: bool):
         self.__add_json_value(key, value)
 
+    def add_json_object(self, key, value: "JsonWrapper"):
+        if value.__json_object is not None:
+            self.__add_json_value(key, value.__json_object)
+        elif value.__json_array is not None:
+            self.__add_json_value(key, value.__json_array)
+        else:
+            CEILog.show_failure("[Json] Cannot add a null object to json object")
+
     def __get_by_key(self, key):
         obj = None
         index = self.__get_index_key(key)
         if index is None:
-            if self.__json_object is not None:
+            if self.__json_object is not None and key in self.__json_object:
                 obj = self.__json_object[key]
         else:
             if (self.__json_array is not None) and 0 < index < len(self.__json_array):
@@ -130,19 +136,19 @@ class JsonWrapper:
         value = self.__get_by_key(key)
         return self.__cast_to(value, lambda v: float(v))
 
-    def get_boolean(self, key):
-        value = self.get_boolean_or_none(key)
+    def get_bool(self, key):
+        value = self.get_bool_or_none(key)
         return self.__check_mandatory_field(key, value)
 
-    def get_boolean_or_none(self, key):
+    def get_bool_or_none(self, key):
         value = self.__get_by_key(key)
         return self.__cast_to(value, lambda v: bool(v))
 
     def get_object(self, key):
-        value = self.get_object_or_null(key)
+        value = self.get_object_or_none(key)
         return self.__check_mandatory_object(key, value)
 
-    def get_object_or_null(self, key):
+    def get_object_or_none(self, key):
         obj = self.__get_by_key(key)
         if obj is None:
             return JsonWrapper()

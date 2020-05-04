@@ -137,11 +137,11 @@ public class JsonWrapper {
         } else if (jsonWrapper.jsonArray != null) {
             addJsonValue(key, jsonWrapper.jsonArray);
         } else {
-            CEILog.showFailure("Cannot add a null object to json object");
+            CEILog.showFailure("[Json] Cannot add a null object to json object");
         }
     }
 
-    private Object getBykey(String key) {
+    private Object getByKey(String key) {
         Object obj = null;
         Integer index = getIndexkey(key);
         if (index == null) {
@@ -194,7 +194,7 @@ public class JsonWrapper {
     }
 
     public String getStringOrNull(String key) {
-        Object value = getBykey(key);
+        Object value = getByKey(key);
         return caseTo(value, TypeUtils::castToString, String.class);
     }
 
@@ -204,12 +204,12 @@ public class JsonWrapper {
     }
 
     public Long getLongOrNull(String key) {
-        Object value = getBykey(key);
+        Object value = getByKey(key);
         return caseTo(value, TypeUtils::castToLong, Long.class);
     }
 
     public BigDecimal getDecimalOrNull(String key) {
-        Object value = getBykey(key);
+        Object value = getByKey(key);
         return caseTo(value, TypeUtils::castToBigDecimal, BigDecimal.class);
     }
 
@@ -219,7 +219,7 @@ public class JsonWrapper {
     }
 
     public Boolean getBooleanOrNull(String key) {
-        Object value = getBykey(key);
+        Object value = getByKey(key);
         return caseTo(value, TypeUtils::castToBoolean, Boolean.class);
     }
 
@@ -234,7 +234,7 @@ public class JsonWrapper {
     }
 
     public JsonWrapper getObjectOrNull(String key) {
-        Object obj = getBykey(key);
+        Object obj = getByKey(key);
         if (obj == null) {
             return new JsonWrapper();
         }
@@ -254,7 +254,7 @@ public class JsonWrapper {
     }
 
     public JsonWrapper getArrayOrNull(String key) {
-        Object obj = getBykey(key);
+        Object obj = getByKey(key);
         if (obj instanceof JSONArray) {
             return new JsonWrapper((JSONArray) obj);
         }
@@ -282,7 +282,7 @@ public class JsonWrapper {
     }
 
     private <T> List<T> getArrayBykey(String key, Cast<T> castMethod, Class<T> cls) {
-        Object obj = getBykey(key);
+        Object obj = getByKey(key);
         if (!(obj instanceof JSONArray)) {
             return null;
         }

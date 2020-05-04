@@ -5,6 +5,7 @@
  */
 package cn.ma.cei.service;
 
+import io.vertx.core.buffer.Buffer;
 import io.vertx.core.http.ServerWebSocket;
 import io.vertx.core.json.JsonObject;
 

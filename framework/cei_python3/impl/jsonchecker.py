@@ -1,16 +1,16 @@
 from impl.jsonwrapper import JsonWrapper
 
 
-class JsonChecker:
+class JsonChecker(object):
     def __init__(self):
-        self.result = -1
+        self.__result = None
 
     def pass_result(self):
-        if self.result == -1:
-            self.result = 1
+        if self.__result is None:
+            self.__result = True
 
     def fail(self):
-        self.result = 0
+        self.__result = False
 
     def check_equal(self, key: str, value: str, json_wrapper: JsonWrapper):
         if json_wrapper.contains(key):
@@ -35,7 +35,7 @@ class JsonChecker:
             self.fail()
 
     def complete(self):
-        return self.result
+        return self.__result
 
     def report_error(self):
         pass

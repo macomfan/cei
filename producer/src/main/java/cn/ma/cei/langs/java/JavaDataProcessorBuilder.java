@@ -9,6 +9,7 @@ import cn.ma.cei.generator.buildin.Procedures;
 import cn.ma.cei.langs.java.processor.JavaGetNowBuilder;
 import cn.ma.cei.langs.java.processor.JavaJsonBuilderBuilder;
 import cn.ma.cei.langs.java.processor.JavaJsonParserBuilder;
+import cn.ma.cei.langs.java.processor.JavaStringBuilderBuilder;
 import cn.ma.cei.langs.java.tools.JavaMethod;
 import cn.ma.cei.model.types.xDecimal;
 
@@ -71,13 +72,13 @@ public class JavaDataProcessorBuilder implements IDataProcessorBuilder {
     }
 
     @Override
-    public Variable convertRestfulResponseToString(Variable response) {
+    public Variable convertResponseToString(Variable response) {
         return BuilderContext.createStatement(method.invoke(response.getDescriptor() + ".getString"));
     }
 
     @Override
-    public Variable convertWebSocketMessageToString(Variable msg) {
-        return BuilderContext.createStatement(method.invoke(msg.getDescriptor() + ".getString"));
+    public Variable convertResponseToStream(Variable msg) {
+        return BuilderContext.createStatement(method.invoke(msg.getDescriptor() + ".getBytes"));
     }
 
     @Override
@@ -93,6 +94,11 @@ public class JavaDataProcessorBuilder implements IDataProcessorBuilder {
     @Override
     public Variable convertStringToDecimal(Variable stringVariable) {
         return BuilderContext.createStatement(method.newInstance(xDecimal.inst.getType(), stringVariable));
+    }
+
+    @Override
+    public void upgradeWebSocketMessage(Variable messageVariable, Variable valueVariable) {
+        method.addInvoke(messageVariable.getDescriptor() + ".upgrade", valueVariable);
     }
 
     @Override

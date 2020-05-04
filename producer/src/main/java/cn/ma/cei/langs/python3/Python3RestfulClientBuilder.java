@@ -36,7 +36,7 @@ public class Python3RestfulClientBuilder implements IRestfulClientBuilder {
 
         Python3Method defaultConstructor = new Python3Method(clientClass);
         clientClass.attachDefaultConstructor(defaultConstructor);
-        defaultConstructor.startConstructor("self, option");
+        defaultConstructor.startConstructor("self, option=None");
         {
             defaultConstructor.addAssign(optionVariable.getDescriptor(), defaultConstructor.newInstance(optionVariable.getType()));
             Variable url = optionVariable.getMember("url");

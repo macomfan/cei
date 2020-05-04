@@ -172,4 +172,9 @@ public class GoDescriptionConverter implements IDescriptionConverter {
         keywords.add("uintptr");
         return keywords;
     }
+
+    @Override
+    public Set<String> getBuildIn() {
+        return null;
+    }
 }

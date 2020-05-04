@@ -3,6 +3,7 @@ package cn.ma.cei.generator;
 import cn.ma.cei.generator.builder.IDataProcessorBuilder;
 import cn.ma.cei.generator.builder.IJsonCheckerBuilder;
 import cn.ma.cei.generator.builder.IWebSocketNestedBuilder;
+import cn.ma.cei.generator.buildin.Keyword;
 import cn.ma.cei.model.json.xJsonParser;
 import cn.ma.cei.model.processor.xWebSocketCallback;
 import cn.ma.cei.model.websocket.xTrigger;
@@ -25,6 +26,8 @@ public class BuildWebSocketNested {
             procedure.items = new LinkedList<>();
             procedure.items.add(jsonParser);
             BuildDataProcessor.build(procedure, msg, "", dataProcessorBuilder);
+        } else if (trigger.nullChecker != null) {
+            builder.endMethod(BuilderContext.createStatement(Constant.keyword().get(Keyword.TRUE)));
         }
     }
 

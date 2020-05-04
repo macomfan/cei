@@ -26,47 +26,70 @@ public class JavaJsonParserBuilder implements IJsonParserBuilder {
 
     @Override
     public void getJsonInteger(Variable value, Variable jsonObject, Variable key, boolean optional) {
-        method.addAssign(method.useVariable(value), method.invoke(jsonObject.getDescriptor() + ".getLong", key));
+        if (optional) {
+            method.addAssign(method.useVariable(value), method.invoke(jsonObject.getDescriptor() + ".getLongOrNull", key));
+        }
+        else {
+            method.addAssign(method.useVariable(value), method.invoke(jsonObject.getDescriptor() + ".getLong", key));
+        }
     }
 
     @Override
     public void assignJsonStringArray(Variable value, Variable jsonObject, Variable key, boolean optional) {
-        method.addAssign(method.useVariable(value), method.invoke(jsonObject.getDescriptor() + ".getStringArray", key));
-    }
-
-    @Override
-    public void assignJsonDecimalArray(Variable value, Variable jsonObject, Variable key, boolean optional) {
-        method.addAssign(method.useVariable(value), method.invoke(jsonObject.getDescriptor() + ".getDecimalArray", key));
-    }
-
-    @Override
-    public void assignJsonBooleanArray(Variable value, Variable jsonObject, Variable key, boolean optional) {
-        method.addAssign(method.useVariable(value), method.invoke(jsonObject.getDescriptor() + ".getBooleanArray", key));
-    }
-
-    @Override
-    public void assignJsonIntArray(Variable value, Variable jsonObject, Variable key, boolean optional) {
-        method.addAssign(method.useVariable(value), method.invoke(jsonObject.getDescriptor() + ".getIntArray", key));
-    }
-
-    @Override
-    public void getJsonArray(Variable jsonWrapperObject, Variable jsonObject, Variable key) {
-        method.addAssign(method.defineVariable(jsonWrapperObject), method.invoke(jsonObject.getDescriptor() + ".getArray", key));
-    }
-
-    @Override
-    public void defineJsonObject(Variable jsonObject, Variable parentJsonObject, Variable key, boolean optional) {
         if (optional) {
-            method.addAssign(method.defineVariable(jsonObject), method.invoke(parentJsonObject.getDescriptor() + ".getObjectOrNull", key));
+            method.addAssign(method.useVariable(value), method.invoke(jsonObject.getDescriptor() + ".getStringArrayOrNull", key));
         } else {
-            method.addAssign(method.defineVariable(jsonObject), method.invoke(parentJsonObject.getDescriptor() + ".getObject", key));
+            method.addAssign(method.useVariable(value), method.invoke(jsonObject.getDescriptor() + ".getStringArray", key));
         }
 
     }
 
     @Override
-    public void defineJsonArray(Variable jsonObject, Variable parentJsonObject, Variable key) {
-        method.addAssign(method.defineVariable(jsonObject), method.invoke(parentJsonObject.getDescriptor() + ".getArray", key));
+    public void assignJsonDecimalArray(Variable value, Variable jsonObject, Variable key, boolean optional) {
+        if (optional) {
+            method.addAssign(method.useVariable(value), method.invoke(jsonObject.getDescriptor() + ".getDecimalArrayOrNull", key));
+        } else {
+            method.addAssign(method.useVariable(value), method.invoke(jsonObject.getDescriptor() + ".getDecimalArray", key));
+        }
+
+    }
+
+    @Override
+    public void assignJsonBooleanArray(Variable value, Variable jsonObject, Variable key, boolean optional) {
+        if (optional) {
+            method.addAssign(method.useVariable(value), method.invoke(jsonObject.getDescriptor() + ".getBooleanArray", key));
+        } else {
+            method.addAssign(method.useVariable(value), method.invoke(jsonObject.getDescriptor() + ".getBooleanArrayOrNull", key));
+        }
+
+    }
+
+    @Override
+    public void assignJsonIntArray(Variable value, Variable jsonObject, Variable key, boolean optional) {
+        if (optional) {
+            method.addAssign(method.useVariable(value), method.invoke(jsonObject.getDescriptor() + ".getIntArray", key));
+        } else {
+            method.addAssign(method.useVariable(value), method.invoke(jsonObject.getDescriptor() + ".getIntArrayOrNull", key));
+        }
+
+    }
+
+    @Override
+    public void getJsonArray(Variable jsonObject, Variable parentJsonObject, Variable key, boolean optional) {
+        if (optional) {
+            method.addAssign(method.defineVariable(jsonObject), method.invoke(parentJsonObject.getDescriptor() + ".getArrayOrNull", key));
+        } else {
+            method.addAssign(method.defineVariable(jsonObject), method.invoke(parentJsonObject.getDescriptor() + ".getArray", key));
+        }
+    }
+
+    @Override
+    public void getJsonObject(Variable jsonObject, Variable parentJsonObject, Variable key, boolean optional) {
+        if (optional) {
+            method.addAssign(method.defineVariable(jsonObject), method.invoke(parentJsonObject.getDescriptor() + ".getObjectOrNull", key));
+        } else {
+            method.addAssign(method.defineVariable(jsonObject), method.invoke(parentJsonObject.getDescriptor() + ".getObject", key));
+        }
     }
 
     @Override
@@ -102,12 +125,22 @@ public class JavaJsonParserBuilder implements IJsonParserBuilder {
 
     @Override
     public void getJsonBoolean(Variable value, Variable jsonObject, Variable key, boolean optional) {
-        method.addAssign(method.useVariable(value), method.invoke(jsonObject.getDescriptor() + ".getBoolean", key));
+        if (optional) {
+            method.addAssign(method.useVariable(value), method.invoke(jsonObject.getDescriptor() + ".getBooleanOrNull", key));
+        } else {
+            method.addAssign(method.useVariable(value), method.invoke(jsonObject.getDescriptor() + ".getBoolean", key));
+        }
+
     }
 
     @Override
     public void getJsonDecimal(Variable value, Variable jsonObject, Variable key, boolean optional) {
-        method.addAssign(method.useVariable(value), method.invoke(jsonObject.getDescriptor() + ".getDecimal", key));
+        if (optional) {
+            method.addAssign(method.useVariable(value), method.invoke(jsonObject.getDescriptor() + ".getDecimalOrNull", key));
+        }
+        else {
+            method.addAssign(method.useVariable(value), method.invoke(jsonObject.getDescriptor() + ".getDecimal", key));
+        }
     }
 
     @Override

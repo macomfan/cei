@@ -16,9 +16,9 @@ public class BuildCombineQueryString extends DataProcessorBase<xCombineQueryStri
 
         Variable sort;
         if (!Checker.isEmpty(item.sort)) {
-            sort = BuilderContext.createStatement(Constant.authenticationMethod().tryGet(item.sort));
+            sort = BuilderContext.createStatement(Constant.requestInfo().tryGet(item.sort));
         } else {
-            sort = BuilderContext.createStatement(Constant.authenticationMethod().tryGet(CEIUtils.Constant.NONE));
+            sort = BuilderContext.createStatement(Constant.requestInfo().tryGet(CEIUtils.Constant.NONE));
         }
         Variable separator = BuilderContext.createStringConstant(item.separator);
         builder.combineQueryString(requestVariable, output, sort, separator);

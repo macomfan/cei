@@ -167,4 +167,8 @@ public class JavaDescriptionConverter implements IDescriptionConverter {
         return keywords;
     }
 
+    @Override
+    public Set<String> getBuildIn() {
+        return null;
+    }
 }

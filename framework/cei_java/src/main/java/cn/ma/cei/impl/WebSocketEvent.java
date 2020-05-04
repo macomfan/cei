@@ -11,7 +11,11 @@ package cn.ma.cei.impl;
 public class WebSocketEvent {
     private ITrigger checker;
     private ICallback callback;
-    private boolean persistence = false;
+    private boolean persistence;
+
+    public WebSocketEvent(boolean persistence) {
+        this.persistence = persistence;
+    }
 
     public void setTrigger(ITrigger checker) {
         this.checker = checker;
@@ -23,10 +27,6 @@ public class WebSocketEvent {
 
     public boolean isPersistence() {
         return persistence;
-    }
-
-    public void setPersistent(boolean persistence) {
-        this.persistence = persistence;
     }
 
     public boolean check(WebSocketMessage msg) {

@@ -4,9 +4,11 @@ import cn.ma.cei.generator.BuilderContext;
 import cn.ma.cei.generator.IMethod;
 import cn.ma.cei.generator.Variable;
 import cn.ma.cei.generator.builder.*;
+import cn.ma.cei.generator.buildin.Procedures;
 import cn.ma.cei.langs.python3.processor.Python3GetNowBuilder;
 import cn.ma.cei.langs.python3.processor.Python3JsonBuilderBuilder;
 import cn.ma.cei.langs.python3.processor.Python3JsonParserBuilder;
+import cn.ma.cei.langs.python3.processor.Python3StringBuilderBuilder;
 import cn.ma.cei.langs.python3.tools.Python3Method;
 
 public class Python3DataProcessorBuilder implements IDataProcessorBuilder {
@@ -53,7 +55,7 @@ public class Python3DataProcessorBuilder implements IDataProcessorBuilder {
 
     @Override
     public Variable stringReplacement(Variable... items) {
-        return BuilderContext.createStatement(method.invoke("StringWrapper.replace", items));
+        return BuilderContext.createStatement(method.invoke("CEIUtils.string_replace", items));
     }
 
     @Override
@@ -67,13 +69,13 @@ public class Python3DataProcessorBuilder implements IDataProcessorBuilder {
     }
 
     @Override
-    public Variable convertRestfulResponseToString(Variable response) {
-        return BuilderContext.createStatement(response.getDescriptor() + ".to_string()");
+    public Variable convertResponseToString(Variable response) {
+        return BuilderContext.createStatement(method.invoke(response.getDescriptor() +".get_string"));
     }
 
     @Override
-    public Variable convertWebSocketMessageToString(Variable msg) {
-        return null;
+    public Variable convertResponseToStream(Variable response) {
+        return BuilderContext.createStatement(method.invoke(response.getDescriptor() +".get_bytes"));
     }
 
     @Override
@@ -89,6 +91,11 @@ public class Python3DataProcessorBuilder implements IDataProcessorBuilder {
     @Override
     public Variable convertStringToDecimal(Variable stringVariable) {
         return BuilderContext.createStatement(method.invoke("float", stringVariable));
+    }
+
+    @Override
+    public void upgradeWebSocketMessage(Variable messageVariable, Variable valueVariable) {
+        method.addInvoke(messageVariable.getDescriptor() + ".upgrade", valueVariable);
     }
 
     @Override
@@ -124,21 +131,25 @@ public class Python3DataProcessorBuilder implements IDataProcessorBuilder {
 
     @Override
     public void invokeFunction(IMethod methodInfo, Variable returnVariable, Variable... params) {
-
+        if (returnVariable == null) {
+            method.addInvoke(Procedures.getType().getDescriptor() + "." + methodInfo.getDescriptor(), params);
+        } else {
+            method.addAssign(returnVariable.getDescriptor(), method.invoke(Procedures.getType().getDescriptor() + "." + methodInfo.getDescriptor(), params));
+        }
     }
 
     @Override
     public void invokeCallback(Variable callback, Variable... params) {
-
+        method.addInvoke(callback.getDescriptor(), params);
     }
 
     @Override
     public void send(Variable connection, Variable value) {
-
+        method.addInvoke(connection.getDescriptor() + ".send", value);
     }
 
     @Override
     public void gzip(Variable output, Variable input) {
-
+        method.addAssign(method.defineVariable(output), method.invoke("CEIUtils.gzip", input));
     }
 }

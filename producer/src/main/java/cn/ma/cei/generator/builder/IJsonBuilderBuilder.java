@@ -12,8 +12,6 @@ import cn.ma.cei.generator.Variable;
  */
 public interface IJsonBuilderBuilder extends IBuilderBase {
 
-    void defineRootJsonObject(Variable jsonObject);
-
     /**
      * For create new json object
      * e.g.

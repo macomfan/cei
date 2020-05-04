@@ -298,6 +298,7 @@
             <xs:element name="combine_query_string" type="xCombineQueryString"/>
             <xs:element name="get_request_info" type="xGetRequestInfo"/>
             <xs:element name="invoke" type="xInvoke"/>
+            <xs:element name="gzip" type="xGzip"/>
         </xs:choice>
     </xs:group>
 
@@ -312,24 +313,24 @@
         <xs:attribute name="value" type="xs:string"/>
     </xs:complexType>
     <xs:complexType name="xCombineQueryString">
-        <xs:attribute name="input" type="variableType" use="required"/>
-        <xs:attribute name="name" type="nameType"/>
+        <xs:attribute name="input" type="variableType"/>
+        <xs:attribute name="name" type="nameType" use="required"/>
         <xs:attribute name="sort"/>
         <xs:attribute name="separator"/>
     </xs:complexType>
     <xs:complexType name="xGetRequestInfo">
-        <xs:attribute name="input" type="variableType" use="required"/>
-        <xs:attribute name="name" type="nameType"/>
+        <xs:attribute name="input" type="variableType"/>
+        <xs:attribute name="name" type="nameType" use="required"/>
         <xs:attribute name="info"/>
         <xs:attribute name="convert"/>
     </xs:complexType>
     <xs:complexType name="xHmacsha256">
-        <xs:attribute name="name" type="nameType"/>
+        <xs:attribute name="name" type="nameType" use="required"/>
         <xs:attribute name="input"/>
         <xs:attribute name="key"/>
     </xs:complexType>
     <xs:complexType name="xBase64">
-        <xs:attribute name="name" type="nameType"/>
+        <xs:attribute name="name" type="nameType" use="required"/>
         <xs:attribute name="input"/>
     </xs:complexType>
     <xs:complexType name="xStringBuilder">
@@ -351,9 +352,20 @@
         <xs:attribute name="arguments" type="xs:string"/>
     </xs:complexType>
     <xs:complexType name="xURLEscape">
-        <xs:attribute name="name" type="nameType"/>
+        <xs:attribute name="name" type="nameType" use="required"/>
         <xs:attribute name="input" type="variableType"/>
     </xs:complexType>
+    <xs:complexType name="xGzip">
+        <xs:attribute name="name" type="nameType" use="required"/>
+        <xs:attribute name="input" type="variableType"/>
+        <xs:attribute name="type" type="GzipType"/>
+    </xs:complexType>
+    <xs:simpleType name="GzipType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="compress"/>
+            <xs:enumeration value="decompress"/>
+        </xs:restriction>
+    </xs:simpleType>
     <!--======== Common Processor End =========-->
 
 
@@ -426,6 +438,7 @@
         <xs:choice minOccurs="0" maxOccurs="unbounded">
             <xs:group ref="CommonProcessor"/>
             <xs:element name="send" type="xSend"/>
+            <xs:element name="upgrade_websocket_message" type="xWebSocketMessageUpgrade"/>
         </xs:choice>
         <xs:attribute name="result" type="variableType"/>
         <xs:attribute name="type" type="ResponseType"/>
@@ -433,6 +446,7 @@
     <xs:complexType name="xWSTrigger">
         <xs:choice>
             <xs:element name="json_checker" type="xJsonWithSubItems"/>
+            <xs:element name="null_checker"/>
         </xs:choice>
         <xs:attribute name="timeout_s" type="xs:integer"/>
         <xs:attribute name="interval_s" type="xs:integer"/>
@@ -485,6 +499,10 @@
     <xs:complexType name="xSend">
         <xs:attribute name="connection" type="variableType"/>
         <xs:attribute name="value" type="xs:string"/>
+    </xs:complexType>
+    <xs:complexType name="xWebSocketMessageUpgrade">
+        <xs:attribute name="message" type="variableType"/>
+        <xs:attribute name="value" type="variableType" use="required"/>
     </xs:complexType>
     <!--======== WebSocket End =========-->
 

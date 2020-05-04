@@ -67,18 +67,15 @@ public class GoJsonParserBuilder implements IJsonParserBuilder {
     }
 
     @Override
-    public void getJsonArray(Variable jsonWrapperObject, Variable jsonObject, Variable key) {
-
+    public void getJsonArray(Variable jsonObject, Variable parentJsonObject, Variable key, boolean optional) {
+        method.addAssignAndDeclare(method.useVariable(new GoVar(parentJsonObject)), method.invoke(parentJsonObject.getDescriptor() + ".GetArray", new GoVar(key)));
     }
 
+
+
     @Override
-    public void defineJsonObject(Variable jsonObject, Variable parentJsonObject, Variable key, boolean optional) {
+    public void getJsonObject(Variable jsonObject, Variable parentJsonObject, Variable key, boolean optional) {
         method.addAssignAndDeclare(method.useVariable(new GoVar(jsonObject)), method.invoke(parentJsonObject.getDescriptor() + ".GetObject", new GoVar(key)));
-    }
-
-    @Override
-    public void defineJsonArray(Variable jsonObject, Variable parentJsonObject, Variable key) {
-        method.addAssignAndDeclare(method.useVariable(new GoVar(jsonObject)), method.invoke(parentJsonObject.getDescriptor() + ".GetArray", new GoVar(key)));
     }
 
     @Override

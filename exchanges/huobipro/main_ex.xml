@@ -293,6 +293,17 @@
                     <connect/>
                 </open>
             </connection>
+            <events>
+                <on_message name="onAnyMessage">
+                    <trigger>
+                        <null_checker/>
+                    </trigger>
+                    <handler>
+                        <gzip name="decoded" input="{msg}" type="decompress"/>
+                        <upgrade_websocket_message value="{decoded}"/>
+                    </handler>
+                </on_message>
+            </events>
             <interfaces>
                 <interface name="requestCandlestick">
                     <inputs>

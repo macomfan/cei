@@ -39,7 +39,7 @@ public class TestMode {
         Simulation simulation = new Simulation();
         simulation.second1 = second1;
         simulation.second2 = second2;
-        simulation.initialize();;
+        simulation.initialize();
         service.start(port);
     }
 }

@@ -21,9 +21,6 @@ class SignatureTool:
                 res += item
         return res
 
-
-
-
     @staticmethod
     def add_string_array(input_list: list, value: str):
         input_list.append(value)
@@ -33,34 +30,7 @@ class SignatureTool:
     def get_now(format: str):
         return "2019-12-31T02%3A23%3A25"
 
-    @staticmethod
-    def combine_query_string(request: RestfulRequest, sort: Constant, separator: str):
-        query_string = list()
-        query_string.extend(request.get_query_string())
 
-        def get_key(tmp):
-            return tmp[0]
-
-        if sort is not None:
-            if sort == SignatureTool.Constant.ASC:
-                query_string = sorted(query_string, key=lambda tmp: tmp[0])
-            elif sort == SignatureTool.Constant.DSC:
-                query_string = sorted(query_string, key=lambda tmp: tmp[0], reverse=True)
-            elif sort == SignatureTool.Constant.NONE:
-                pass
-            else:
-                # TODO
-                pass
-
-        result = ""
-        for item in query_string:
-            if len(result) != 0:
-                if separator is not None:
-                    result += separator
-            result += item[0]
-            result += "="
-            result += urllib.parse.quote(item[1], "utf-8")
-        return result
 
     @staticmethod
     def append_to_string(obj: str, value: str):

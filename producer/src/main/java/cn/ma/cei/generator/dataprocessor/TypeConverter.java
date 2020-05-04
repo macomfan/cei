@@ -4,10 +4,7 @@ import cn.ma.cei.exception.CEIErrors;
 import cn.ma.cei.generator.Variable;
 import cn.ma.cei.generator.VariableType;
 import cn.ma.cei.generator.builder.IDataProcessorBuilder;
-import cn.ma.cei.generator.buildin.JsonWrapper;
-import cn.ma.cei.generator.buildin.RestfulResponse;
-import cn.ma.cei.generator.buildin.StringWrapper;
-import cn.ma.cei.generator.buildin.WebSocketMessage;
+import cn.ma.cei.generator.buildin.*;
 import cn.ma.cei.model.types.*;
 import cn.ma.cei.utils.SecondLevelMap;
 
@@ -31,8 +28,9 @@ public class TypeConverter {
 
         converterMap.put(xString.inst.getType(), xDecimal.inst.getType(), (IDataProcessorBuilder::convertStringToDecimal));
 
-        converterMap.put(RestfulResponse.getType(), xString.inst.getType(), (IDataProcessorBuilder::convertRestfulResponseToString));
-        converterMap.put(WebSocketMessage.getType(), xString.inst.getType(), (IDataProcessorBuilder::convertRestfulResponseToString));
+        converterMap.put(RestfulResponse.getType(), xString.inst.getType(), (IDataProcessorBuilder::convertResponseToString));
+        converterMap.put(WebSocketMessage.getType(), xString.inst.getType(), (IDataProcessorBuilder::convertResponseToString));
+        converterMap.put(WebSocketMessage.getType(), TheStream.getType(), (IDataProcessorBuilder::convertResponseToStream));
     }
     public static Variable convertType(Variable input, VariableType objectType, IDataProcessorBuilder builder) {
         if (input.getType() == objectType) {

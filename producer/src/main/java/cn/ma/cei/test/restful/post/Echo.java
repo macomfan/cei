@@ -15,6 +15,7 @@ public class Echo implements IRestfulHandler {
 
     @Override
     public String handle(HttpServerRequest request, Buffer body) {
+        System.err.println("Process echo " + body.toJsonObject().toString());
         return body.toJsonObject().toString();
     }
 }

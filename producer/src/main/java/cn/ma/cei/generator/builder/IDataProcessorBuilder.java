@@ -163,14 +163,14 @@ public interface IDataProcessorBuilder extends IBuilderBase {
      *
      * @return
      */
-    Variable convertRestfulResponseToString(Variable response);
+    Variable convertResponseToString(Variable response);
 
     /***
      *
      *
      * @return
      */
-    Variable convertWebSocketMessageToString(Variable msg);
+    Variable convertResponseToStream(Variable msg);
 
     /***
      *
@@ -192,4 +192,6 @@ public interface IDataProcessorBuilder extends IBuilderBase {
      * @return
      */
     Variable convertStringToDecimal(Variable stringVariable);
+
+    void upgradeWebSocketMessage(Variable messageVariable, Variable valueVariable);
 }

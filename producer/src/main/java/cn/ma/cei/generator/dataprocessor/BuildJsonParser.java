@@ -209,7 +209,7 @@ public class BuildJsonParser extends DataProcessorBase<xJsonParser> {
         Variable key = getKeyVariable(jsonWithModel.key);
         Variable newJsonObject = defineJsonObject(context);
         Variable newModel = defineModel(context);
-        context.jsonParserBuilder.defineJsonObject(newJsonObject, context.currentJsonObject, key, jsonWithModel.optional);
+        context.jsonParserBuilder.getJsonObject(newJsonObject, context.currentJsonObject, key, jsonWithModel.optional);
 
         jsonWithModel.itemList.forEach(item -> item.doBuild(() -> {
             JsonItemContext newContext = new JsonItemContext();
@@ -231,7 +231,7 @@ public class BuildJsonParser extends DataProcessorBase<xJsonParser> {
         Variable newJsonObject = defineJsonObject(context);
         if (!Checker.isEmpty(jsonWithModel.key)) {
             Variable key = getKeyVariable(jsonWithModel.key);
-            context.jsonParserBuilder.defineJsonArray(newJsonObject, context.currentJsonObject, key);
+            context.jsonParserBuilder.getJsonArray(newJsonObject, context.currentJsonObject, key, jsonWithModel.optional);
         }
         Variable eachItemJsonObject = createTempVariable(JsonWrapper.getType(), "item");
         context.jsonParserBuilder.startJsonObjectArray(eachItemJsonObject, newJsonObject);

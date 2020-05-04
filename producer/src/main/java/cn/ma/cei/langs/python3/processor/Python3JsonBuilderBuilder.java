@@ -22,13 +22,8 @@ public class Python3JsonBuilderBuilder implements IJsonBuilderBuilder {
     }
 
     @Override
-    public void defineRootJsonObject(Variable jsonObject) {
-        method.addAssign(method.defineVariable(jsonObject), method.newInstance(jsonObject.getType()));
-    }
-
-    @Override
     public void defineJsonObject(Variable jsonObject) {
-
+        method.addAssign(method.defineVariable(jsonObject), method.newInstance(jsonObject.getType()));
     }
 
     @Override
@@ -73,6 +68,6 @@ public class Python3JsonBuilderBuilder implements IJsonBuilderBuilder {
 
     @Override
     public void addJsonObject(Variable value, Variable jsonObject, Variable key) {
-
+        method.addInvoke(jsonObject.getDescriptor() + ".add_json_object", key, value);
     }
 }

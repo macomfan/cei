@@ -43,9 +43,7 @@ public class RestfulConnection {
 
     private static Headers buildHeaders(RestfulRequest restfulRequest) {
         Headers.Builder builder = new Headers.Builder();
-        restfulRequest.getHeaders().forEach((item) -> {
-            builder.add(item.getKey(), item.getValue());
-        });
+        restfulRequest.getHeaders().forEach(builder::add);
         return builder.build();
     }
 }

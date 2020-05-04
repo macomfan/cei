@@ -36,4 +36,6 @@ public interface IDescriptionConverter {
      * @return Set of keywords.
      */
     Set<String> getKeywords();
+
+    Set<String> getBuildIn();
 }

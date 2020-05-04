@@ -1,4 +1,4 @@
-package cn.ma.cei.langs.java;
+package cn.ma.cei.langs.java.processor;
 
 import cn.ma.cei.generator.Variable;
 import cn.ma.cei.generator.builder.IStringBuilderBuilder;

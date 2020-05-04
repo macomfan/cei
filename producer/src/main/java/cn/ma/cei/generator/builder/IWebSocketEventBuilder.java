@@ -10,9 +10,7 @@ public interface IWebSocketEventBuilder extends IBuilderBase {
 
     IWebSocketNestedBuilder createNestedBuilderForResponse();
 
-    void newEvent(Variable event);
-
-    void setAsPersistentEvent(Variable event);
+    void newEvent(Variable event, Variable isPersistent);
 
     void registerEvent(Variable event);
 

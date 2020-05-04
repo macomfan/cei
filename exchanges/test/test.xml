@@ -214,7 +214,7 @@
                         <int name="Number"/>
                         <boolean name="Status"/>
                     </inputs>
-                    <request method="post" target="/restful/post/echo/{postMsg}">
+                    <request method="post" target="/restful/post/echo">
                         <pre_processor>
                             <json_builder name="postMsg">
                                 <json_value key="Name" value="{this}"/>
@@ -223,7 +223,7 @@
                                 <json_value key="Status_1" value="{Status}"/>
                             </json_builder>
                         </pre_processor>
-                        <post_body value="aa{postMsg}"/>
+                        <post_body value="{postMsg}"/>
                     </request>
                     <response>
                         <json_parser model="SimpleInfo">

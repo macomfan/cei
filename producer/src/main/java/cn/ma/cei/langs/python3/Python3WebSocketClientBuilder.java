@@ -28,16 +28,16 @@ public class Python3WebSocketClientBuilder implements IWebSocketClientBuilder {
 
         Python3Method defaultConstructor = new Python3Method(clientClass);
         clientClass.attachDefaultConstructor(defaultConstructor);
-        defaultConstructor.startConstructor("self, option");
+        defaultConstructor.startConstructor("self, option=None");
         {
             defaultConstructor.addAssign(optionVariable.getDescriptor(), defaultConstructor.newInstance(optionVariable.getType()));
             Variable url = optionVariable.getMember("url");
             defaultConstructor.addAssign(defaultConstructor.useVariable(url), BuilderContext.createStringConstant(option.url).getDescriptor());
-            defaultConstructor.addAssign(connectionVariable.getDescriptor(), defaultConstructor.newInstance(connectionVariable.getType()));
             defaultConstructor.getCode().appendln("if option is not None:");
             defaultConstructor.getCode().newBlock(() -> {
                 defaultConstructor.addInvoke(optionVariable.getDescriptor() + ".set_from", BuilderContext.createStatement("option"));
             });
+            defaultConstructor.addAssign(connectionVariable.getDescriptor(), defaultConstructor.newInstance(connectionVariable.getType(), optionVariable));
         }
         defaultConstructor.endMethod();
     }

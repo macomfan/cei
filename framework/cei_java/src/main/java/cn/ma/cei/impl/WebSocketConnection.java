@@ -24,17 +24,16 @@ public class WebSocketConnection extends WebSocketListener {
     private OnSystemEvent onConnect = null;
     private OnSystemEvent onClose = null;
     private Status status = Status.IDLE;
-    private int id = 0;
+    private static int id = 0;
     private final WebSocketOptions option;
     private final Object connectedNotification = new Object();
+    private final CopyOnWriteArrayList<WebSocketEvent> event = new CopyOnWriteArrayList<>();
 
     enum Status {
         IDLE,
         CONNECTED,
         CLOSED,
     }
-
-    private final CopyOnWriteArrayList<WebSocketEvent> event = new CopyOnWriteArrayList<>();
 
     public WebSocketConnection(WebSocketOptions option) {
         id = ClientID++;
@@ -55,23 +54,27 @@ public class WebSocketConnection extends WebSocketListener {
     }
 
     public void connect(String target) {
+        if (status == Status.CONNECTED) {
+            return;
+        }
         Request okhttpRequest = new Request.Builder().url(option.url + target).build();
         webSocket = client.newWebSocket(okhttpRequest, this);
 
         synchronized (connectedNotification) {
             try {
                 connectedNotification.wait(option.connectTimeout_s * 1000);
+                if (status != Status.CONNECTED) {
+                    CEILog.showFailure("WS[%d] Connect failed", id);
+                }
             } catch (Exception e) {
                 System.err.println("ERROR wait");
             }
-
         }
-
     }
 
 
     public void close() {
-
+        webSocket.close(1000, "");
     }
 
     @Override
@@ -90,16 +93,13 @@ public class WebSocketConnection extends WebSocketListener {
     @Override
     public void onMessage(WebSocket webSocket, ByteString bytes) {
         super.onMessage(webSocket, bytes);
-        String s = CEIUtils.gzip(bytes.toByteArray());
-        System.err.println("Receive bytes " + s);
-        WebSocketMessage msg = new WebSocketMessage(s);
+        WebSocketMessage msg = new WebSocketMessage(bytes);
         onMessage(msg);
     }
 
     @Override
     public void onMessage(WebSocket webSocket, String text) {
         super.onMessage(webSocket, text);
-        System.err.println("Receive " + text + " " + Thread.currentThread().getId());
         WebSocketMessage msg = new WebSocketMessage(text);
         onMessage(msg);
     }
@@ -142,7 +142,7 @@ public class WebSocketConnection extends WebSocketListener {
     }
 
     public void send(String msg) {
-        if (msg != null || !msg.isEmpty()) {
+        if (msg != null && !msg.isEmpty()) {
             System.out.println("Send " + msg);
             webSocket.send(msg);
         }

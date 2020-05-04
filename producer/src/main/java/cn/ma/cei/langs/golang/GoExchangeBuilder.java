@@ -29,14 +29,14 @@ public class GoExchangeBuilder implements IExchangeBuilder {
         Constant.requestMethod().tryPut(RestfulRequest.RequestMethod.GET, "ceiimpl.GET");
         Constant.requestMethod().tryPut(RestfulRequest.RequestMethod.POST, "ceiimpl.POST");
 
-        Constant.authenticationMethod().tryPut(CEIUtils.Constant.ASC, "authentication.ASC");
-        Constant.authenticationMethod().tryPut(CEIUtils.Constant.DSC, "authentication.DSC");
-        Constant.authenticationMethod().tryPut(CEIUtils.Constant.HOST, "authentication.HOST");
-        Constant.authenticationMethod().tryPut(CEIUtils.Constant.METHOD, "authentication.METHOD");
-        Constant.authenticationMethod().tryPut(CEIUtils.Constant.TARGET, "authentication.TARGET");
-        Constant.authenticationMethod().tryPut(CEIUtils.Constant.UPPERCASE, "authentication.UPPERCASE");
-        Constant.authenticationMethod().tryPut(CEIUtils.Constant.LOWERCASE, "authentication.LOWERCASE");
-        Constant.authenticationMethod().tryPut(CEIUtils.Constant.NONE, "authentication.NONE");
+        Constant.requestInfo().tryPut(CEIUtils.Constant.ASC, "authentication.ASC");
+        Constant.requestInfo().tryPut(CEIUtils.Constant.DSC, "authentication.DSC");
+        Constant.requestInfo().tryPut(CEIUtils.Constant.HOST, "authentication.HOST");
+        Constant.requestInfo().tryPut(CEIUtils.Constant.METHOD, "authentication.METHOD");
+        Constant.requestInfo().tryPut(CEIUtils.Constant.TARGET, "authentication.TARGET");
+        Constant.requestInfo().tryPut(CEIUtils.Constant.UPPERCASE, "authentication.UPPERCASE");
+        Constant.requestInfo().tryPut(CEIUtils.Constant.LOWERCASE, "authentication.LOWERCASE");
+        Constant.requestInfo().tryPut(CEIUtils.Constant.NONE, "authentication.NONE");
 
         BuilderContext.setupBuildInVariableType(xString.typeName, "string", BuilderContext.NO_REF);
         BuilderContext.setupBuildInVariableType(xBoolean.typeName, "bool", BuilderContext.NO_REF);

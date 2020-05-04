@@ -45,6 +45,7 @@ public class BuildDataProcessor {
         // processorMap.put(xInvoke.class);
         processorMap.put(xWebSocketCallback.class, new BuildWebSocketCallback());
         processorMap.put(xWebSocketSend.class, new BuildWebSocketSend());
+        processorMap.put(xWebSocketMessageUpgrade.class, new BuildWebSocketMessageUpgrade());
     }
 
     public static VariableType getReturnType(xProcedure procedure, String returnVariableName) {
@@ -147,7 +148,7 @@ public class BuildDataProcessor {
             return processorMap.get(item.getClass()).callBuild(item, defaultInput, builder);
         } else {
             // TODO
-            CEIErrors.showFailure(CEIErrorType.CODE, "not supported");
+            CEIErrors.showCodeFailure(BuildDataProcessor.class, "Not supported %s ", item.getClass().getSimpleName());
             return null;
         }
     }

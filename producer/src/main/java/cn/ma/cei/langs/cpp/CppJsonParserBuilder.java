@@ -61,17 +61,13 @@ public class CppJsonParserBuilder implements IJsonParserBuilder {
     }
 
     @Override
-    public void getJsonArray(Variable jsonWrapperObject, Variable jsonObject, Variable key) {
+    public void getJsonArray(Variable jsonObject, Variable parentJsonObject, Variable key, boolean optional) {
 
     }
 
-    @Override
-    public void defineJsonObject(Variable jsonObject, Variable parentJsonObject, Variable key, boolean optional) {
-
-    }
 
     @Override
-    public void defineJsonArray(Variable jsonObject, Variable parentJsonObject, Variable key) {
+    public void getJsonObject(Variable jsonObject, Variable parentJsonObject, Variable key, boolean optional) {
 
     }
 

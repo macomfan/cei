@@ -1,6 +1,6 @@
 class WebSocketOptions:
     url = None
-    connection_timeout = None
+    connection_timeout = 5
     api_key = None
     secret_key = None
 

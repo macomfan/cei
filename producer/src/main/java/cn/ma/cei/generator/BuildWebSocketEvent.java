@@ -3,6 +3,7 @@ package cn.ma.cei.generator;
 import cn.ma.cei.generator.builder.IDataProcessorBuilder;
 import cn.ma.cei.generator.builder.IWebSocketEventBuilder;
 import cn.ma.cei.generator.builder.IWebSocketNestedBuilder;
+import cn.ma.cei.generator.buildin.Keyword;
 import cn.ma.cei.generator.buildin.WebSocketConnection;
 import cn.ma.cei.generator.buildin.WebSocketEvent;
 import cn.ma.cei.generator.buildin.WebSocketMessage;
@@ -51,10 +52,14 @@ public class BuildWebSocketEvent {
         eventBuilder.startEvent();
 
         Variable eventVariable = interfaceMethod.createTempVariable(WebSocketEvent.getType(), context.name + "Event");
-        eventBuilder.newEvent(eventVariable);
+        String isPersistent;
         if (context.persistent) {
-            eventBuilder.setAsPersistentEvent(eventVariable);
+            isPersistent = Constant.keyword().get(Keyword.TRUE);
+        } else {
+            isPersistent = Constant.keyword().get(Keyword.FALSE);
         }
+        Constant.keyword().tryGet(Keyword.TRUE);
+        eventBuilder.newEvent(eventVariable, GlobalContext.createStatement(isPersistent));
         if (context.trigger != null) {
             sMethod trigger = interfaceMethod.createNestedMethod(context.name + "Trigger");
             GlobalContext.setCurrentMethod(trigger);

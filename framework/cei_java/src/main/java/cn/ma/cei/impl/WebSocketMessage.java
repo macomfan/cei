@@ -17,4 +17,12 @@ public class WebSocketMessage {
     public String getString() {
         return text;
     }
+
+    public void upgrade(String value) {
+        this.text = value;
+    }
+
+    public byte[] getBytes() {
+        return byteString.toByteArray();
+    }
 }

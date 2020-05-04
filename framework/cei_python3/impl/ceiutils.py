@@ -1,5 +1,6 @@
 import time
 import hmac
+import gzip
 import hashlib
 import base64
 import urllib.parse
@@ -45,6 +46,34 @@ class CEIUtils:
             # TODO
             return result
 
+    @staticmethod
+    def combine_query_string(request: RestfulRequest, sort: Constant, separator: str):
+        query_string = list()
+        query_string.extend(request.get_query_string())
+
+        def get_key(tmp):
+            return tmp[0]
+
+        if sort is not None:
+            if sort == CEIUtils.Constant.ASC:
+                query_string = sorted(query_string, key=lambda tmp: tmp[0])
+            elif sort == CEIUtils.Constant.DSC:
+                query_string = sorted(query_string, key=lambda tmp: tmp[0], reverse=True)
+            elif sort == CEIUtils.Constant.NONE:
+                pass
+            else:
+                # TODO
+                pass
+
+        result = ""
+        for item in query_string:
+            if len(result) != 0:
+                if separator is not None:
+                    result += separator
+            result += item[0]
+            result += "="
+            result += urllib.parse.quote(item[1], "utf-8")
+        return result
 
     @staticmethod
     def base64(input_value):
@@ -55,6 +84,14 @@ class CEIUtils:
         if key is None:
             raise CEIException("key is None")
         return hmac.new(key.encode('utf-8'), msg=input_value.encode('utf-8'), digestmod=hashlib.sha256).digest()
+
+    @staticmethod
+    def string_replace(format_string: str, *args):
+        return format_string.format(*args)
+
+    @staticmethod
+    def gzip(message: bytes):
+        return gzip.decompress(message).decode("utf-8")
 
     @staticmethod
     def get_now(time_format: 'str'):

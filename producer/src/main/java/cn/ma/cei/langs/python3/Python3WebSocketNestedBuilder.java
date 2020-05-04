@@ -1,5 +1,6 @@
 package cn.ma.cei.langs.python3;
 
+import cn.ma.cei.generator.Variable;
 import cn.ma.cei.generator.VariableType;
 import cn.ma.cei.generator.builder.IDataProcessorBuilder;
 import cn.ma.cei.generator.builder.IWebSocketNestedBuilder;
@@ -20,5 +21,10 @@ public class Python3WebSocketNestedBuilder implements IWebSocketNestedBuilder {
     @Override
     public IDataProcessorBuilder createDataProcessorBuilder() {
         return new Python3DataProcessorBuilder(method);
+    }
+
+    @Override
+    public void endMethod(Variable returnVariable) {
+        method.addReturn(returnVariable);
     }
 }

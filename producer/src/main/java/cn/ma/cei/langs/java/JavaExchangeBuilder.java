@@ -23,14 +23,17 @@ public class JavaExchangeBuilder implements IExchangeBuilder {
         Constant.requestMethod().tryPut(RestfulRequest.RequestMethod.GET, "RestfulRequest.Method.GET");
         Constant.requestMethod().tryPut(RestfulRequest.RequestMethod.POST, "RestfulRequest.Method.POST");
 
-        Constant.authenticationMethod().tryPut(CEIUtils.Constant.ASC, "CEIUtils.Constant.ASC");
-        Constant.authenticationMethod().tryPut(CEIUtils.Constant.DSC, "CEIUtils.Constant.DSC");
-        Constant.authenticationMethod().tryPut(CEIUtils.Constant.HOST, "CEIUtils.Constant.HOST");
-        Constant.authenticationMethod().tryPut(CEIUtils.Constant.METHOD, "CEIUtils.Constant.METHOD");
-        Constant.authenticationMethod().tryPut(CEIUtils.Constant.TARGET, "CEIUtils.Constant.TARGET");
-        Constant.authenticationMethod().tryPut(CEIUtils.Constant.UPPERCASE, "CEIUtils.Constant.UPPERCASE");
-        Constant.authenticationMethod().tryPut(CEIUtils.Constant.LOWERCASE, "CEIUtils.Constant.LOWERCASE");
-        Constant.authenticationMethod().tryPut(CEIUtils.Constant.NONE, "CEIUtils.Constant.NONE");
+        Constant.requestInfo().tryPut(CEIUtils.Constant.ASC, "CEIUtils.Constant.ASC");
+        Constant.requestInfo().tryPut(CEIUtils.Constant.DSC, "CEIUtils.Constant.DSC");
+        Constant.requestInfo().tryPut(CEIUtils.Constant.HOST, "CEIUtils.Constant.HOST");
+        Constant.requestInfo().tryPut(CEIUtils.Constant.METHOD, "CEIUtils.Constant.METHOD");
+        Constant.requestInfo().tryPut(CEIUtils.Constant.TARGET, "CEIUtils.Constant.TARGET");
+        Constant.requestInfo().tryPut(CEIUtils.Constant.UPPERCASE, "CEIUtils.Constant.UPPERCASE");
+        Constant.requestInfo().tryPut(CEIUtils.Constant.LOWERCASE, "CEIUtils.Constant.LOWERCASE");
+        Constant.requestInfo().tryPut(CEIUtils.Constant.NONE, "CEIUtils.Constant.NONE");
+
+        Constant.keyword().tryPut(Keyword.TRUE, "true");
+        Constant.keyword().tryPut(Keyword.FALSE, "false");
 
         BuilderContext.setupBuildInVariableType(xString.typeName, "String", BuilderContext.NO_REF);
         BuilderContext.setupBuildInVariableType(xBoolean.typeName, "Boolean", BuilderContext.NO_REF);

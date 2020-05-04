@@ -27,7 +27,15 @@ public interface IJsonParserBuilder extends IBuilderBase {
 
     void assignJsonIntArray(Variable value, Variable jsonObject, Variable key, boolean optional);
 
-    void getJsonArray(Variable jsonWrapperObject, Variable jsonObject, Variable key);
+    /**
+     * parentJsonObject = parentJsonObject.getArray( key )
+     *
+     * @param jsonObject
+     * @param parentJsonObject
+     * @param key
+     * @param optional
+     */
+    void getJsonArray(Variable jsonObject, Variable parentJsonObject, Variable key, boolean optional);
 
     /***
      * jsonObject = parentJsonObject.getObject( key )
@@ -36,16 +44,7 @@ public interface IJsonParserBuilder extends IBuilderBase {
      * @param parentJsonObject
      * @param key
      */
-    void defineJsonObject(Variable jsonObject, Variable parentJsonObject, Variable key, boolean optional);
-
-    /***
-     * jsonObject = parentJsonObject.getArray( key )
-     *
-     * @param jsonObject
-     * @param parentJsonObject
-     * @param key
-     */
-    void defineJsonArray(Variable jsonObject, Variable parentJsonObject, Variable key);
+    void getJsonObject(Variable jsonObject, Variable parentJsonObject, Variable key, boolean optional);
 
     /***
      * value = parentModel

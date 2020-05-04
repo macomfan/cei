@@ -38,7 +38,7 @@ public class BuildJsonBuilder extends DataProcessorBase<xJsonBuilder> {
             jsonObject = createUserVariable(JsonWrapper.getType(), jsonBuilder.name);
         }
 
-        jsonBuilderBuilder.defineRootJsonObject(jsonObject);
+        jsonBuilderBuilder.defineJsonObject(jsonObject);
         jsonBuilder.itemList.forEach(item -> item.doBuild(() -> {
             JsonItemContext newContext = new JsonItemContext(
                     item,
@@ -193,11 +193,14 @@ public class BuildJsonBuilder extends DataProcessorBase<xJsonBuilder> {
     }
 
     private Variable getValueVariable(xJsonType jsonItem) {
-        if (!Checker.isEmpty(jsonItem.value)) {
-            return queryVariableOrConstant(jsonItem.value);
-        } else {
+        if (Checker.isEmpty(jsonItem.value)) {
             return null;
         }
+        Variable value = queryVariableOrConstant(jsonItem.value);
+        if (value == null) {
+            CEIErrors.showXMLFailure("Cannot define the value: %s", jsonItem.value);
+        }
+        return value;
     }
 
     private Variable defineJsonObject(JsonItemContext context) {

@@ -67,12 +67,12 @@ public class GoDataProcessorBuilder implements IDataProcessorBuilder {
     }
 
     @Override
-    public Variable convertRestfulResponseToString(Variable response) {
+    public Variable convertResponseToString(Variable response) {
         return null;
     }
 
     @Override
-    public Variable convertWebSocketMessageToString(Variable msg) {
+    public Variable convertResponseToStream(Variable msg) {
         return null;
     }
 
@@ -89,6 +89,11 @@ public class GoDataProcessorBuilder implements IDataProcessorBuilder {
     @Override
     public Variable convertStringToDecimal(Variable stringVariable) {
         return null;
+    }
+
+    @Override
+    public void upgradeWebSocketMessage(Variable messageVariable, Variable valueVariable) {
+
     }
 
     @Override

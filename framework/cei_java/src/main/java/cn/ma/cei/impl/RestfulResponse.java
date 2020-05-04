@@ -4,8 +4,6 @@ import cn.ma.cei.exception.CEIException;
 import okhttp3.Response;
 
 public class RestfulResponse {
-//    final int code;
-//    final String message;
     private final Response response;
     
     public RestfulResponse(Response response) {
@@ -21,9 +19,5 @@ public class RestfulResponse {
             throw new CEIException("Cannot get string");
         }
         return res;
-    }
-    
-    public JsonWrapper getJson() {
-        return JsonWrapper.parseFromString(getString());
     }
 }

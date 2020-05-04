@@ -38,7 +38,7 @@ public class SecondLevelMap<Level1, Level2, Value> {
         if (map2 == null) {
             return null;
         }
-        return map2.tryGet(key2);
+        return map2.get(key2);
     }
 
     /***
