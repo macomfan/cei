@@ -228,7 +228,11 @@ class sMethod implements IMethod {
             variables.add(0, GlobalContext.createStringConstant(formatString));
             Variable[] params = new Variable[variables.size()];
             variables.toArray(params);
-            return builder.stringReplacement(params);
+            Variable stringReplacement = builder.stringReplacement(params);
+            if (stringReplacement == null) {
+                CEIErrors.showCodeFailure(this.getClass(), "stringReplacement return null");
+            }
+            return stringReplacement;
         }
     }
 

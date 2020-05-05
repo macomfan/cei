@@ -1,4 +1,4 @@
-package ceiimpl
+package impl
 
 type WebSocketEvent struct {
 	when func(message *WebsocketMessage) bool

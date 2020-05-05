@@ -5,6 +5,7 @@
  */
 package cn.ma.cei.langs.golang.tools;
 
+import cn.ma.cei.generator.VariableType;
 import cn.ma.cei.langs.golang.GoCode;
 
 import java.util.Arrays;
@@ -61,6 +62,14 @@ public class GoMethod {
 
     public void addInvoke(String method, GoVar... params) {
         code.appendln(invoke(method, params));
+    }
+
+    public void addReference(VariableType type) {
+        parent.addReference(type);
+    }
+
+    public void addReference(String type) {
+        parent.addReference(type);
     }
 
     public String invoke(String method, GoVar... params) {

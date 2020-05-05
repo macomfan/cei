@@ -1,7 +1,7 @@
-package ceiimpl
+package impl
 
 import (
-	"ceiimpl/utils"
+	"impl/utils"
 )
 
 type Method string

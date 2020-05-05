@@ -46,7 +46,7 @@ public class Python3WebSocketInterfaceBuilder implements IWebSocketInterfaceBuil
 
     @Override
     public void onAddReference(VariableType variableType) {
-
+        clientClass.addReference(variableType);
     }
 
     @Override

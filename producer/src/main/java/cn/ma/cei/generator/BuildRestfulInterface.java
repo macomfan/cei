@@ -47,7 +47,6 @@ public class BuildRestfulInterface {
             context.defaultInput = request;
             context.dataProcessorBuilder = dataProcessorBuilder;
             BuildDataProcessor.build(context);
-            //builder.setRequestTarget(request, BuildUserProcedure.createValueFromProcedure(restIf.request.target, restIf.request, builder));
             builder.setRequestTarget(request, GlobalContext.getCurrentMethod().queryVariableOrConstant(restIf.request.target, dataProcessorBuilder));
             Variable requestMethod = GlobalContext.createStatement(Constant.requestMethod().get(restIf.request.method));
             builder.setRequestMethod(request, requestMethod);

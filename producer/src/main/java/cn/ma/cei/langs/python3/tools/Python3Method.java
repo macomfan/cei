@@ -39,6 +39,10 @@ public class Python3Method {
         return type.getDescriptor() + "(" + invokeParamString(tmp) + ")";
     }
 
+    public void addReference(VariableType type) {
+        parent.addReference(type);
+    }
+
     public void addReturn(String string) {
         code.appendWordsln("return", string);
     }

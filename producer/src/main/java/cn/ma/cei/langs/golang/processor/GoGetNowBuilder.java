@@ -15,7 +15,7 @@ public class GoGetNowBuilder implements IGetNowBuilder {
 
     @Override
     public String convertToStringFormat(String format) {
-        return null;
+        return format;
     }
 
     @Override

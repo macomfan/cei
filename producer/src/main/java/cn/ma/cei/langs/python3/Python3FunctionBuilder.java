@@ -30,7 +30,7 @@ public class Python3FunctionBuilder implements IMethodBuilder {
 
     @Override
     public void onAddReference(VariableType variableType) {
-        parent.addReference(xStringArray.inst.getType());
+        parent.addReference(variableType);
     }
 
     @Override

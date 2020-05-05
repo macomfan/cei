@@ -43,17 +43,18 @@ public class BuildSDK {
         CEIErrors.showInfo("Loading XML configuration files...");
         List<xSDK> sdks = (new JAXBWrapper()).loadFromFolder(inputFolder);
         CEIErrors.showInfo("Load completed");
+
         Finalizer finalizer = new Finalizer();
         finalizer.addSDK(sdks);
         List<xSDK> finalSDKs = finalizer.finalizeSDK();
 
-        List<String> languages;
+        List<String> objectLanguages;
         if (language.trim().equals("*")) {
             CEIErrors.showInfo("Start to build all supported language.");
-            languages = new LinkedList<>(frameworks.keySet());
+            objectLanguages = new LinkedList<>(frameworks.keySet());
         } else {
-            languages = Arrays.asList(language.split("\\|"));
-            languages.forEach(item -> {
+            objectLanguages = Arrays.asList(language.split("\\|"));
+            objectLanguages.forEach(item -> {
                 String itemTrim = item.trim();
                 if (!frameworks.containsKey(itemTrim)) {
                     CEIErrors.showInputFailure("The language: %s is not supported.", itemTrim);
@@ -77,7 +78,7 @@ public class BuildSDK {
         CEIPath buildFolder = new CEIPath(CEIPath.Type.FOLDER, "C:\\dev\\cei\\framework");
         buildFolder.mkdirs();
 
-        languages.forEach(item -> {
+        objectLanguages.forEach(item -> {
             CEIErrors.showInfo("Building %s ...", item);
             IFramework framework = frameworks.get2(item);
             GlobalContext.setWorkingFolder(CEIPath.appendPath(buildFolder, frameworks.get1(item).getWorkingName()));

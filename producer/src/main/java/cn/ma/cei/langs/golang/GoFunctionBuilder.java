@@ -19,7 +19,6 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- *
  * @author U0151316
  */
 public class GoFunctionBuilder implements IMethodBuilder {
@@ -63,7 +62,7 @@ public class GoFunctionBuilder implements IMethodBuilder {
 
     @Override
     public void onAddReference(VariableType variableType) {
-
+        method.addReference(variableType);
     }
 
     @Override
@@ -78,7 +77,7 @@ public class GoFunctionBuilder implements IMethodBuilder {
 
     @Override
     public IDataProcessorBuilder createDataProcessorBuilder() {
-        return null;
+        return new GoDataProcessorBuilder(method);
     }
 
     @Override

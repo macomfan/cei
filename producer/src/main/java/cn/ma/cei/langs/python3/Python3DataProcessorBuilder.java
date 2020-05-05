@@ -3,6 +3,7 @@ package cn.ma.cei.langs.python3;
 import cn.ma.cei.generator.BuilderContext;
 import cn.ma.cei.generator.IMethod;
 import cn.ma.cei.generator.Variable;
+import cn.ma.cei.generator.VariableType;
 import cn.ma.cei.generator.builder.*;
 import cn.ma.cei.generator.buildin.Procedures;
 import cn.ma.cei.langs.python3.processor.Python3GetNowBuilder;
@@ -16,6 +17,11 @@ public class Python3DataProcessorBuilder implements IDataProcessorBuilder {
 
     public Python3DataProcessorBuilder(Python3Method method) {
         this.method = method;
+    }
+
+    @Override
+    public void onAddReference(VariableType variableType) {
+        method.addReference(variableType);
     }
 
     @Override
@@ -89,7 +95,7 @@ public class Python3DataProcessorBuilder implements IDataProcessorBuilder {
     }
 
     @Override
-    public Variable convertStringToDecimal(Variable stringVariable) {
+    public Variable convertNativeToDecimal(Variable stringVariable) {
         return BuilderContext.createStatement(method.invoke("float", stringVariable));
     }
 

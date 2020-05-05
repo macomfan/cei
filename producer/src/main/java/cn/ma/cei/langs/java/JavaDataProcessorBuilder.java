@@ -3,6 +3,7 @@ package cn.ma.cei.langs.java;
 import cn.ma.cei.generator.BuilderContext;
 import cn.ma.cei.generator.IMethod;
 import cn.ma.cei.generator.Variable;
+import cn.ma.cei.generator.VariableType;
 import cn.ma.cei.generator.builder.*;
 import cn.ma.cei.generator.buildin.CEIUtils;
 import cn.ma.cei.generator.buildin.Procedures;
@@ -18,6 +19,11 @@ public class JavaDataProcessorBuilder implements IDataProcessorBuilder {
 
     public JavaDataProcessorBuilder(JavaMethod method) {
         this.method = method;
+    }
+
+    @Override
+    public void onAddReference(VariableType variableType) {
+        method.addReference(variableType);
     }
 
     @Override
@@ -92,7 +98,7 @@ public class JavaDataProcessorBuilder implements IDataProcessorBuilder {
     }
 
     @Override
-    public Variable convertStringToDecimal(Variable stringVariable) {
+    public Variable convertNativeToDecimal(Variable stringVariable) {
         return BuilderContext.createStatement(method.newInstance(xDecimal.inst.getType(), stringVariable));
     }
 

@@ -2,6 +2,7 @@ package cn.ma.cei.generator;
 
 import cn.ma.cei.generator.builder.IDataProcessorBuilder;
 import cn.ma.cei.generator.builder.IWebSocketClientBuilder;
+import cn.ma.cei.generator.builder.IWebSocketEventBuilder;
 import cn.ma.cei.generator.builder.IWebSocketInterfaceBuilder;
 import cn.ma.cei.generator.buildin.WebSocketCallback;
 import cn.ma.cei.model.websocket.xWSInterface;
@@ -39,7 +40,8 @@ public class BuildWebSocketInterface {
         if (intf.events != null) {
             intf.events.forEach(event -> {
                 VariableType callbackMessageType = getCallbackMessageType(event);
-                BuildWebSocketEvent.build(event, callbackMessageType, interfaceBuilder.createWebSocketEventBuilder());
+                IWebSocketEventBuilder eventBuilder = Checker.checkNull(interfaceBuilder.createWebSocketEventBuilder(), interfaceBuilder, "WebSocketEventBuilder");
+                BuildWebSocketEvent.build(event, callbackMessageType, eventBuilder);
             });
         }
 

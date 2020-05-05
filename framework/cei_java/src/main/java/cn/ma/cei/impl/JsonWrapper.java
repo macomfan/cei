@@ -55,14 +55,14 @@ public class JsonWrapper {
      * @param key the key.
      * @return the index or null.
      */
-    private static Integer getIndexkey(String key) {
+    private static Integer getIndexKey(String key) {
+        if ("[]".equals(key)) {
+            return -1;
+        }
         String pattern = "^\\[[0-9]*]$";
         Pattern r = Pattern.compile(pattern);
         Matcher m = r.matcher(key);
         if (m.find()) {
-            if ("[]".equals(key)) {
-                return -1;
-            }
             return Integer.parseInt(key.substring(m.start() + 1, m.end() - 1));
         }
         return null;
@@ -93,7 +93,7 @@ public class JsonWrapper {
     }
 
     public boolean contains(String key) {
-        Integer index = getIndexkey(key);
+        Integer index = getIndexKey(key);
         if (index != null && jsonArray != null) {
             return index < jsonArray.size() && index > 0;
         } else if (jsonObject != null) {
@@ -103,7 +103,7 @@ public class JsonWrapper {
     }
 
     private void addJsonValue(String name, Object object) {
-        Integer index = getIndexkey(name);
+        Integer index = getIndexKey(name);
         if (index == null) {
             initializeAsObject();
             jsonObject.put(name, object);
@@ -142,18 +142,17 @@ public class JsonWrapper {
     }
 
     private Object getByKey(String key) {
-        Object obj = null;
-        Integer index = getIndexkey(key);
+        Integer index = getIndexKey(key);
         if (index == null) {
             if (jsonObject != null) {
-                obj = jsonObject.get(key);
+                return jsonObject.get(key);
             }
         } else {
             if (jsonArray != null && 0 <= index && index < jsonArray.size()) {
-                obj = jsonArray.get(index);
+                return jsonArray.get(index);
             }
         }
-        return obj;
+        return null;
     }
 
     private <T> T checkMandatoryField(String key, T value) {
@@ -281,7 +280,7 @@ public class JsonWrapper {
         });
     }
 
-    private <T> List<T> getArrayBykey(String key, Cast<T> castMethod, Class<T> cls) {
+    private <T> List<T> getArrayByKey(String key, Cast<T> castMethod, Class<T> cls) {
         Object obj = getByKey(key);
         if (!(obj instanceof JSONArray)) {
             return null;
@@ -293,12 +292,12 @@ public class JsonWrapper {
     }
 
     public List<String> getStringArray(String key) {
-        List<String> value = getStringArray(key);
+        List<String> value = getStringArrayOrNull(key);
         return checkMandatoryField(key, value);
     }
 
     public List<String> getStringArrayOrNull(String key) {
-        return getArrayBykey(key, TypeUtils::castToString, String.class);
+        return getArrayByKey(key, TypeUtils::castToString, String.class);
     }
 
     public List<Long> getLongArray(String key) {
@@ -307,7 +306,7 @@ public class JsonWrapper {
     }
 
     public List<Long> getLongArrayOrNull(String key) {
-        return getArrayBykey(key, TypeUtils::castToLong, Long.class);
+        return getArrayByKey(key, TypeUtils::castToLong, Long.class);
     }
 
     public List<BigDecimal> getDecimalArray(String key) {
@@ -316,7 +315,7 @@ public class JsonWrapper {
     }
 
     public List<BigDecimal> getDecimalArrayOrNull(String key) {
-        return getArrayBykey(key, TypeUtils::castToBigDecimal, BigDecimal.class);
+        return getArrayByKey(key, TypeUtils::castToBigDecimal, BigDecimal.class);
     }
 
     public List<Boolean> getBooleanArray(String key) {
@@ -325,7 +324,7 @@ public class JsonWrapper {
     }
 
     public List<Boolean> getBooleanArrayOrNull(String key) {
-        return getArrayBykey(key, TypeUtils::castToBoolean, Boolean.class);
+        return getArrayByKey(key, TypeUtils::castToBoolean, Boolean.class);
     }
 
 
@@ -334,6 +333,11 @@ public class JsonWrapper {
     }
 
     public String toJsonString() {
-        return JSON.toJSONString(jsonObject);
+        if (jsonObject != null) {
+            return JSON.toJSONString(jsonObject);
+        } else if (jsonArray != null){
+            return JSON.toJSONString(jsonArray);
+        }
+        return "";
     }
 }

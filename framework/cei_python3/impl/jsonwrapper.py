@@ -11,10 +11,10 @@ class JsonWrapper(object):
 
     @staticmethod
     def __get_index_key(key: str):
+        if key == "[]":
+            return -1
         m = re.search("^\\[[0-9]*]$", key)
         if m is not None:
-            if key == "[]":
-                return -1
             return int(key[m.pos + 1:m.endpos - 1])
         return None
 
@@ -23,7 +23,10 @@ class JsonWrapper(object):
         if value is None:
             return None
         else:
-            return cast(value)
+            try:
+                return cast(value)
+            except BaseException as e:
+                CEILog.show_warning("Cannot convert %s" % e)
 
     @staticmethod
     def __check_mandatory_field(key, value):

@@ -8,7 +8,7 @@ class CEILog:
         print(message)
 
     @staticmethod
-    def show_warning():
+    def show_warning(message):
         pass
 
     @staticmethod

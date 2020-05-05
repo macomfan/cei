@@ -2,6 +2,7 @@ package cn.ma.cei.generator.builder;
 
 import cn.ma.cei.generator.IMethod;
 import cn.ma.cei.generator.Variable;
+import cn.ma.cei.generator.VariableType;
 
 /**
  * To implement the method to call the user defined processor.
@@ -10,6 +11,8 @@ import cn.ma.cei.generator.Variable;
  *
  */
 public interface IDataProcessorBuilder extends IBuilderBase {
+
+    void onAddReference(VariableType variableType);
 
     /**
      * Create the JsonBuilderBuilder, it will be created for each <json_builder></json_builder>
@@ -191,7 +194,7 @@ public interface IDataProcessorBuilder extends IBuilderBase {
      *
      * @return
      */
-    Variable convertStringToDecimal(Variable stringVariable);
+    Variable convertNativeToDecimal(Variable stringVariable);
 
     void upgradeWebSocketMessage(Variable messageVariable, Variable valueVariable);
 }

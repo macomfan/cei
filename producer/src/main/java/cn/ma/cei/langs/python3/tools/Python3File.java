@@ -4,6 +4,7 @@ import cn.ma.cei.exception.CEIException;
 import cn.ma.cei.generator.BuilderContext;
 import cn.ma.cei.generator.CEIPath;
 import cn.ma.cei.langs.python3.Python3Code;
+import cn.ma.cei.utils.UniqueList;
 
 import java.util.*;
 
@@ -11,7 +12,7 @@ public class Python3File {
     private final String filename;
 
     private final Python3Code code = new Python3Code();
-    private final Map<String, Python3Class> innerClasses = new HashMap<>();
+    private final UniqueList<String, Python3Class> innerClasses = new UniqueList<>();
 
     public Python3File(String exchangeName) {
         this.filename = exchangeName;

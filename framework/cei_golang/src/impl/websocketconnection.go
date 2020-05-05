@@ -1,4 +1,4 @@
-package ceiimpl
+package impl
 
 import (
 	_ "github.com/gorilla/websocket"

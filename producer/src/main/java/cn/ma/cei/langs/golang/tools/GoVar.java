@@ -7,6 +7,9 @@ package cn.ma.cei.langs.golang.tools;
 
 import cn.ma.cei.generator.Variable;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  *
  * @author U0151316
@@ -29,5 +32,13 @@ public class GoVar {
     
     public String getTypeDescriptor() {
         return this.variable.getTypeDescriptor();
+    }
+
+    public static GoVar[] toArray(Variable... items) {
+        List<GoVar> list = new ArrayList<>();
+        for (Variable item : items) {
+            list.add(new GoVar(item));
+        }
+        return list.toArray(new GoVar[0]);
     }
 }

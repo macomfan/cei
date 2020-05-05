@@ -28,12 +28,6 @@ public class GoRestfulInterfaceBuilder implements IRestfulInterfaceBuilder {
 
     @Override
     public void setRequestTarget(Variable request, Variable target) {
-//        List<GoVar> paramList = new ArrayList<>();
-//        for (Variable variable : targets) {
-//            paramList.add(new GoVar(target));
-//        }
-//        GoVar[] params = new GoVar[paramList.size()];
-//        paramList.toArray(params);
         method.addInvoke(request.getDescriptor() + ".SetTarget", new GoVar(target));
     }
 
@@ -44,7 +38,7 @@ public class GoRestfulInterfaceBuilder implements IRestfulInterfaceBuilder {
 
     @Override
     public void defineRequest(Variable request, Variable option) {
-        method.addAssignAndDeclare(method.useVariable(new GoVar(request)), "ceiimpl.NewRestfulRequest(inst.options)");
+        method.addAssignAndDeclare(method.useVariable(new GoVar(request)), "impl.NewRestfulRequest(inst.options)");
     }
 
     @Override
@@ -59,14 +53,8 @@ public class GoRestfulInterfaceBuilder implements IRestfulInterfaceBuilder {
 
     @Override
     public void invokeQuery(Variable response, Variable request) {
-        method.addAssignAndDeclare(method.useVariable(new GoVar(response)), method.invoke("ceiimpl.RestfulQuery", new GoVar(request)));
+        method.addAssignAndDeclare(method.useVariable(new GoVar(response)), method.invoke("impl.RestfulQuery", new GoVar(request)));
     }
-
-//    @Override
-//    public void setUrl(Variable request) {
-//        Variable url = VariableFactory.createConstantVariable("inst.options.URL");
-//        method.addInvoke(request.getDescriptor() + ".SetURL", new GoVar(url));
-//    }
 
     @Override
     public void setRequestMethod(Variable request, Variable requestMethod) {
@@ -78,21 +66,6 @@ public class GoRestfulInterfaceBuilder implements IRestfulInterfaceBuilder {
     public void onAddReference(VariableType variableType) {
         clientStruct.addReference(variableType);
     }
-
-//    @Override
-//    public IJsonBuilderBuilder createJsonBuilderBuilder() {
-//        return new GoJsonBuilderBuilder(method);
-//    }
-//
-//    @Override
-//    public IStringBuilderBuilder createStringBuilderBuilder() {
-//        return null;
-//    }
-//
-//    @Override
-//    public IJsonParserBuilder createJsonParserBuilder() {
-//        return new GoJsonParserBuilder(method);
-//    }
 
     @Override
     public void startMethod(VariableType returnType, String methodDescriptor, List<Variable> params) {
@@ -106,7 +79,7 @@ public class GoRestfulInterfaceBuilder implements IRestfulInterfaceBuilder {
 
     @Override
     public IDataProcessorBuilder createDataProcessorBuilder() {
-        return null;
+        return new GoDataProcessorBuilder(method);
     }
 
     @Override
@@ -121,5 +94,4 @@ public class GoRestfulInterfaceBuilder implements IRestfulInterfaceBuilder {
         method.endMethod();
         clientStruct.addMethod(method);
     }
-
 }

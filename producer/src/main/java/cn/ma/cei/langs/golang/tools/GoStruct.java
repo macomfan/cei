@@ -17,7 +17,6 @@ import java.util.List;
 import java.util.Set;
 
 /**
- *
  * @author U0151316
  */
 public class GoStruct {
@@ -63,6 +62,10 @@ public class GoStruct {
 
     public void addReference(VariableType type) {
         importList.addAll(type.getReferences());
+    }
+
+    public void addReference(String type) {
+        importList.add(type);
     }
 
     public Set<String> getImportList() {

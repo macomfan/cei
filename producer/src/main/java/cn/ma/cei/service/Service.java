@@ -60,12 +60,6 @@ public class Service {
     public void start(int port) {
 
         HttpServer httpServer = vertx.createHttpServer().requestHandler(router);
-//        WebSocketService.registerProcessor(new InitProcessor());
-//        WebSocketService.registerProcessor(new ExchangeInfoProcessor());
-//        WebSocketService.registerProcessor(new ModelTestProcessor());
-//        WebSocketService.registerProcessor(new ExchangeQueryProcessor());
-//        WebSocketService.registerProcessor(new ModelUpdateProcessor());
-
         websocketService.startService(httpServer);
         httpServer.listen(port);
         System.out.println(String.format("Server started on port %d", port));

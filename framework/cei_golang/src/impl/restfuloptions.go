@@ -1,4 +1,4 @@
-package ceiimpl
+package impl
 
 type RestfulOptions struct {
 	URL               string

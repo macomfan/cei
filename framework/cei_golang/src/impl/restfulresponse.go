@@ -1,4 +1,4 @@
-package ceiimpl
+package impl
 
 import (
 	"fmt"
@@ -17,14 +17,14 @@ func newRestfulResponse(response *http.Response) *RestfulResponse {
 }
 
 
-func (inst *RestfulResponse) GetJson() *JsonWrapper {
+func (inst *RestfulResponse) GetString() string {
 	var body []byte
 	defer inst.response.Body.Close()
 	body, err := ioutil.ReadAll(inst.response.Body)
 	if err != nil {
 		fmt.Println(err)
-		return nil
+		return ""
 	}
 	json := ParseFromString(string(body))
-	return json
+	return ""
 }

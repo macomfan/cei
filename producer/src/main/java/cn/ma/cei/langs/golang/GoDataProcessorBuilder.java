@@ -1,8 +1,14 @@
 package cn.ma.cei.langs.golang;
 
+import cn.ma.cei.generator.BuilderContext;
 import cn.ma.cei.generator.IMethod;
 import cn.ma.cei.generator.Variable;
+import cn.ma.cei.generator.VariableType;
 import cn.ma.cei.generator.builder.*;
+import cn.ma.cei.langs.golang.processor.GoGetNowBuilder;
+import cn.ma.cei.langs.golang.processor.GoJsonBuilderBuilder;
+import cn.ma.cei.langs.golang.processor.GoJsonParserBuilder;
+import cn.ma.cei.langs.golang.processor.GoStringBuilderBuilder;
 import cn.ma.cei.langs.golang.tools.GoMethod;
 import cn.ma.cei.langs.golang.tools.GoVar;
 
@@ -15,35 +21,39 @@ public class GoDataProcessorBuilder implements IDataProcessorBuilder {
     }
 
     @Override
+    public void onAddReference(VariableType variableType) {
+        method.addReference(variableType);
+    }
+
+    @Override
     public IJsonBuilderBuilder createJsonBuilderBuilder() {
-        return null;
+        return new GoJsonBuilderBuilder(method);
     }
 
     @Override
     public IStringBuilderBuilder createStringBuilderBuilder() {
-        return null;
+        return new GoStringBuilderBuilder(method);
     }
 
     @Override
     public IJsonParserBuilder createJsonParserBuilder() {
-        return null;
+        return new GoJsonParserBuilder(method);
     }
 
     @Override
     public IGetNowBuilder createGetNowBuilder() {
-        return null;
+        return new GoGetNowBuilder(method);
     }
-
 
 
     @Override
     public Variable convertJsonWrapperToString(Variable jsonWrapper) {
-        return null;
+        return BuilderContext.createStatement(jsonWrapper.getDescriptor() + ".ToJsonString()");
     }
 
     @Override
     public Variable convertStringWrapperToString(Variable stringWrapper) {
-        return null;
+        return BuilderContext.createStatement(stringWrapper.getDescriptor() + ".ToNormalString()");
     }
 
     @Override
@@ -53,42 +63,52 @@ public class GoDataProcessorBuilder implements IDataProcessorBuilder {
 
     @Override
     public Variable stringReplacement(Variable... items) {
-        return null;
+        method.addReference("fmt");
+        return BuilderContext.createStatement(method.invoke("fmt.format", GoVar.toArray(items)));
     }
 
     @Override
     public String getStringFormatEntity(int index, Variable item) {
-        return null;
+        return "%s";
     }
 
     @Override
     public Variable convertIntToString(Variable intVariable) {
-        return null;
+        method.addReference("strconv");
+        return BuilderContext.createStatement(method.invoke("strconv.FormatUint",
+                new GoVar(intVariable),
+                new GoVar(BuilderContext.createStatement("10"))));
     }
 
     @Override
     public Variable convertResponseToString(Variable response) {
-        return null;
+        return BuilderContext.createStatement(method.invoke(response.getDescriptor() + ".GetString"));
     }
 
     @Override
     public Variable convertResponseToStream(Variable msg) {
-        return null;
+        return BuilderContext.createStatement(method.invoke(msg.getDescriptor() + ".GetBytes"));
     }
 
     @Override
     public Variable convertDecimalToString(Variable decimalVariable) {
-        return null;
+        method.addReference("strconv");
+        return BuilderContext.createStatement(method.invoke("strconv.FormatFloat",
+                new GoVar(decimalVariable),
+                new GoVar(BuilderContext.createStatement("10"))));
     }
 
     @Override
     public Variable convertBooleanToString(Variable booleanVariable) {
-        return null;
+        method.addReference("strconv");
+        return BuilderContext.createStatement(method.invoke("strconv.FormatBool",
+                new GoVar(booleanVariable),
+                new GoVar(BuilderContext.createStatement("10"))));
     }
 
     @Override
-    public Variable convertStringToDecimal(Variable stringVariable) {
-        return null;
+    public Variable convertNativeToDecimal(Variable stringVariable) {
+        return stringVariable;
     }
 
     @Override
