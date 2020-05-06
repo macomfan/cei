@@ -14,7 +14,7 @@ import cn.ma.cei.generator.builder.IRestfulInterfaceBuilder;
 import cn.ma.cei.generator.buildin.RestfulOptions;
 import cn.ma.cei.langs.golang.tools.GoFile;
 import cn.ma.cei.langs.golang.tools.GoMethod;
-import cn.ma.cei.langs.golang.tools.GoPtrVar;
+import cn.ma.cei.langs.golang.vars.GoPtrVar;
 import cn.ma.cei.langs.golang.tools.GoStruct;
 
 /**
@@ -33,7 +33,7 @@ public class GoRestfulClientBuilder implements IRestfulClientBuilder {
     @Override
     public void startClient(VariableType client, RestfulOptions option, Variable optionVariable) {
         clientStruct = new GoStruct(client.getDescriptor());
-        clientStruct.addPrivateMember(new GoPtrVar(client.addPrivateMember(RestfulOptions.getType(), "options")));
+        clientStruct.addPrivateMember(clientStruct.varPtr(client.addPrivateMember(RestfulOptions.getType(), "options")));
         GoMethod constructor = new GoMethod(null);
         constructor.getCode().appendWordsln("func", "New" + client.getDescriptor() + "(options *" + RestfulOptions.getType().getDescriptor() + ")", "*" + client.getDescriptor(), "{");
         constructor.getCode().newBlock(() -> {

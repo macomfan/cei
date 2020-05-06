@@ -6,8 +6,10 @@
 package cn.ma.cei.langs.golang.tools;
 
 import cn.ma.cei.exception.CEIException;
+import cn.ma.cei.generator.Variable;
 import cn.ma.cei.generator.VariableType;
 import cn.ma.cei.langs.golang.GoCode;
+import cn.ma.cei.langs.golang.vars.GoVar;
 import cn.ma.cei.utils.UniqueList;
 import cn.ma.cei.utils.WordSplitter;
 
@@ -19,7 +21,7 @@ import java.util.Set;
 /**
  * @author U0151316
  */
-public class GoStruct {
+public class GoStruct extends GoVarMgr {
 
     private final GoCode code = new GoCode();
     private final String structName;
@@ -44,7 +46,6 @@ public class GoStruct {
         publicMemberList.put(memberVariable.getName(), memberVariable);
     }
 
-    // TODO to be removed, use Variable.PRIVATE instead of
     public void addPrivateMember(GoVar memberVariable) {
         if (publicMemberList.containsKey(memberVariable.getName())) {
             throw new CEIException("Duplicate member in GoStruct");
@@ -87,21 +88,21 @@ public class GoStruct {
         int maxMemberLen = 0;
 
         for (GoVar member : publicMemberList.values()) {
-            if (member.getNameDescriptor().length() > maxMemberLen) {
-                maxMemberLen = member.getNameDescriptor().length();
+            if (member.getDescriptor().length() > maxMemberLen) {
+                maxMemberLen = member.getDescriptor().length();
             }
         }
         for (GoVar member : privateMemberList.values()) {
-            if (member.getNameDescriptor().length() > maxMemberLen) {
-                maxMemberLen = member.getNameDescriptor().length();
+            if (member.getDescriptor().length() > maxMemberLen) {
+                maxMemberLen = member.getDescriptor().length();
             }
         }
         maxMemberLen++;
         for (GoVar member : publicMemberList.values()) {
-            code.addMemberln(member.getNameDescriptor(), member.getTypeDescriptor(), maxMemberLen);
+            code.addMemberln(member.getDescriptor(), member.getTypeDescriptor(), maxMemberLen);
         }
         for (GoVar member : privateMemberList.values()) {
-            code.addMemberln(WordSplitter.getLowerCamelCase(member.getNameDescriptor()), member.getTypeDescriptor(), maxMemberLen);
+            code.addMemberln(WordSplitter.getLowerCamelCase(member.getDescriptor()), member.getTypeDescriptor(), maxMemberLen);
         }
     }
 
@@ -110,6 +111,11 @@ public class GoStruct {
             code.endln();
         }
         methodList.forEach(method -> {
+            if (method.getInputStruct() != null) {
+                method.getInputStruct().build();
+                code.appendCode(method.getInputStruct().getCode());
+            }
+
             code.appendCode(method.getCode());
             code.endln();
         });

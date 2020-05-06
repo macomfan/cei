@@ -1,13 +1,25 @@
 import json
 import re
+import decimal
 from exception.ceilog import CEILog
+
+
+def parse_float(value):
+    return value
+
+
+class DecimalEncoder(json.JSONEncoder):
+    def default(self, o):
+        if isinstance(o, decimal.Decimal):
+            return float(o)
+        super(DecimalEncoder, self).default(o)
 
 
 class JsonWrapper(object):
 
     @staticmethod
     def parse_from_string(text: str):
-        return JsonWrapper(json.loads(text))
+        return JsonWrapper(json.loads(text, parse_float=parse_float))
 
     @staticmethod
     def __get_index_key(key: str):
@@ -111,7 +123,7 @@ class JsonWrapper(object):
             if self.__json_object is not None and key in self.__json_object:
                 obj = self.__json_object[key]
         else:
-            if (self.__json_array is not None) and 0 < index < len(self.__json_array):
+            if (self.__json_array is not None) and 0 <= index < len(self.__json_array):
                 obj = self.__json_array[index]
         return obj
 
@@ -160,6 +172,15 @@ class JsonWrapper(object):
         else:
             # TODO
             pass
+
+    def array(self):
+        if self.__json_array is not None:
+            res = list()
+            for item in self.__json_array:
+                res.append(JsonWrapper(item))
+            return res
+        else:
+            return []
 
     def get_array(self, key):
         obj = self.get_array_or_none(key)
@@ -210,8 +231,8 @@ class JsonWrapper(object):
 
     def to_json_string(self):
         if self.__json_object is not None:
-            return json.dumps(self.__json_object)
+            return json.dumps(self.__json_object, cls=DecimalEncoder)
         elif self.__json_array is not None:
-            return json.dumps(self.__json_array)
+            return json.dumps(self.__json_array, cls=DecimalEncoder)
         else:
             return None

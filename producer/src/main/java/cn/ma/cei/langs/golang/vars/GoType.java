@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package cn.ma.cei.langs.golang.tools;
+package cn.ma.cei.langs.golang.vars;
 
 import cn.ma.cei.generator.VariableType;
 

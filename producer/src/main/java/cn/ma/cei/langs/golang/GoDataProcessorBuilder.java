@@ -10,7 +10,7 @@ import cn.ma.cei.langs.golang.processor.GoJsonBuilderBuilder;
 import cn.ma.cei.langs.golang.processor.GoJsonParserBuilder;
 import cn.ma.cei.langs.golang.processor.GoStringBuilderBuilder;
 import cn.ma.cei.langs.golang.tools.GoMethod;
-import cn.ma.cei.langs.golang.tools.GoVar;
+import cn.ma.cei.langs.golang.vars.GoVar;
 
 public class GoDataProcessorBuilder implements IDataProcessorBuilder {
 
@@ -53,7 +53,7 @@ public class GoDataProcessorBuilder implements IDataProcessorBuilder {
 
     @Override
     public Variable convertStringWrapperToString(Variable stringWrapper) {
-        return BuilderContext.createStatement(stringWrapper.getDescriptor() + ".ToNormalString()");
+        return BuilderContext.createStatement(stringWrapper.getDescriptor() + ".ToString()");
     }
 
     @Override
@@ -64,7 +64,7 @@ public class GoDataProcessorBuilder implements IDataProcessorBuilder {
     @Override
     public Variable stringReplacement(Variable... items) {
         method.addReference("fmt");
-        return BuilderContext.createStatement(method.invoke("fmt.format", GoVar.toArray(items)));
+        return BuilderContext.createStatement(method.invoke("fmt.Sprintf", method.varListToArray(items)));
     }
 
     @Override
@@ -74,10 +74,9 @@ public class GoDataProcessorBuilder implements IDataProcessorBuilder {
 
     @Override
     public Variable convertIntToString(Variable intVariable) {
-        method.addReference("strconv");
-        return BuilderContext.createStatement(method.invoke("strconv.FormatUint",
-                new GoVar(intVariable),
-                new GoVar(BuilderContext.createStatement("10"))));
+        method.addReference("../../impl");
+        return BuilderContext.createStatement(method.invoke("impl.ToString",
+                method.var(intVariable)));
     }
 
     @Override
@@ -92,18 +91,16 @@ public class GoDataProcessorBuilder implements IDataProcessorBuilder {
 
     @Override
     public Variable convertDecimalToString(Variable decimalVariable) {
-        method.addReference("strconv");
-        return BuilderContext.createStatement(method.invoke("strconv.FormatFloat",
-                new GoVar(decimalVariable),
-                new GoVar(BuilderContext.createStatement("10"))));
+        method.addReference("../../impl");
+        return BuilderContext.createStatement(method.invoke("impl.ToFloat64",
+                method.var(decimalVariable)));
     }
 
     @Override
     public Variable convertBooleanToString(Variable booleanVariable) {
-        method.addReference("strconv");
-        return BuilderContext.createStatement(method.invoke("strconv.FormatBool",
-                new GoVar(booleanVariable),
-                new GoVar(BuilderContext.createStatement("10"))));
+        method.addReference("../../impl");
+        return BuilderContext.createStatement(method.invoke("impl.ToBool",
+                method.var(booleanVariable)));
     }
 
     @Override
@@ -118,29 +115,29 @@ public class GoDataProcessorBuilder implements IDataProcessorBuilder {
 
     @Override
     public void base64(Variable output, Variable input) {
-        method.addAssignAndDeclare(method.useVariable(new GoVar(output)), method.invoke("authentication.Base64", new GoVar(input)));
+        method.addAssignAndDeclare(method.useVariable(method.var(output)), method.invoke("impl.Base64Encode", method.var(input)));
     }
 
     @Override
     public void hmacsha265(Variable output, Variable input, Variable key) {
-        method.addAssignAndDeclare(method.useVariable(new GoVar(output)), method.invoke("authentication,hmacsha256", new GoVar(input), new GoVar(key)));
+        method.addAssignAndDeclare(method.useVariable(method.var(output)), method.invoke("impl.HMACSHA256", method.var(input), method.var(key)));
     }
 
     @Override
     public void combineQueryString(Variable requestVariable, Variable output, Variable sort, Variable separator) {
-        method.addAssignAndDeclare(method.useVariable(new GoVar(output)),
-                method.invoke("authentication.CombineQueryString", new GoVar(requestVariable), new GoVar(sort), new GoVar(separator)));
+        method.addAssignAndDeclare(method.useVariable(method.var(output)),
+                method.invoke("impl.CombineQueryString", method.var(requestVariable), method.var(sort), method.var(separator)));
     }
 
     @Override
     public void getRequestInfo(Variable requestVariable, Variable output, Variable info, Variable convert) {
-        method.addAssignAndDeclare(method.useVariable(new GoVar(output)),
-                method.invoke("authentication.GetRequestInfo", new GoVar(requestVariable), new GoVar(info), new GoVar(convert)));
+        method.addAssignAndDeclare(method.useVariable(method.var(output)),
+                method.invoke("impl.GetRequestInfo", method.var(requestVariable), method.var(info), method.var(convert)));
     }
 
     @Override
     public void URLEscape(Variable output, Variable input) {
-        method.addAssignAndDeclare(method.useVariable(new GoVar(output)), method.invoke("ceiutils.url_escape", new GoVar(input)));
+        method.addAssignAndDeclare(method.useVariable(method.var(output)), method.invoke("impl.url_escape", method.var(input)));
 
     }
 
@@ -166,6 +163,6 @@ public class GoDataProcessorBuilder implements IDataProcessorBuilder {
 
     @Override
     public void addQueryString(Variable requestVariable, Variable key, Variable value) {
-        method.addInvoke(requestVariable.getDescriptor() + ".AddQueryString", new GoVar(key), new GoVar(value));
+        method.addInvoke(requestVariable.getDescriptor() + ".AddQueryString", method.var(key), method.var(value));
     }
 }

@@ -11,8 +11,9 @@ import cn.ma.cei.generator.builder.IDataProcessorBuilder;
 import cn.ma.cei.generator.builder.IMethodBuilder;
 import cn.ma.cei.langs.golang.tools.GoFile;
 import cn.ma.cei.langs.golang.tools.GoMethod;
-import cn.ma.cei.langs.golang.tools.GoPtrVar;
-import cn.ma.cei.langs.golang.tools.GoVar;
+import cn.ma.cei.langs.golang.vars.GoPtrVar;
+import cn.ma.cei.langs.golang.vars.GoType;
+import cn.ma.cei.langs.golang.vars.GoVar;
 import cn.ma.cei.utils.WordSplitter;
 
 import java.util.LinkedList;
@@ -70,9 +71,13 @@ public class GoFunctionBuilder implements IMethodBuilder {
         method = new GoMethod(null);
         List<GoVar> tmp = new LinkedList<>();
         params.forEach(item -> {
-            tmp.add(new GoPtrVar(item));
+            tmp.add(method.varPtr(item));
         });
-        method.startMethod(null, WordSplitter.getLowerCamelCase(methodDescriptor), tmp);
+        GoType type = null;
+        if (returnType != null) {
+            type = new GoType(returnType);
+        }
+        method.startMethod(type, WordSplitter.getLowerCamelCase(methodDescriptor), tmp);
     }
 
     @Override
@@ -82,7 +87,7 @@ public class GoFunctionBuilder implements IMethodBuilder {
 
     @Override
     public void endMethod(Variable returnVariable) {
-        method.addReturn(new GoVar(returnVariable));
+        method.addReturn(method.var(returnVariable));
         method.endMethod();
         mainFile.addMethod(method);
     }

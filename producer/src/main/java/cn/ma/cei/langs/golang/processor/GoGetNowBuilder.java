@@ -3,7 +3,7 @@ package cn.ma.cei.langs.golang.processor;
 import cn.ma.cei.generator.Variable;
 import cn.ma.cei.generator.builder.IGetNowBuilder;
 import cn.ma.cei.langs.golang.tools.GoMethod;
-import cn.ma.cei.langs.golang.tools.GoVar;
+import cn.ma.cei.langs.golang.vars.GoVar;
 
 public class GoGetNowBuilder implements IGetNowBuilder {
 
@@ -20,6 +20,6 @@ public class GoGetNowBuilder implements IGetNowBuilder {
 
     @Override
     public void getNow(Variable output, Variable format) {
-        method.addAssignAndDeclare(method.useVariable(new GoVar(output)), method.invoke("authentication.GetNow", new GoVar(format)));
+        method.addAssignAndDeclare(method.useVariable(method.var(output)), method.invoke("impl.GetNow", method.var(format)));
     }
 }

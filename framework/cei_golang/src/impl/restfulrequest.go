@@ -1,9 +1,5 @@
 package impl
 
-import (
-	"impl/utils"
-)
-
 type Method string
 
 const (
@@ -25,12 +21,12 @@ func NewRestfulRequest(options *RestfulOptions) *RestfulRequest {
 	return instance
 }
 
-func (inst *RestfulRequest) SetTarget(target string, args ...interface{}) {
-	inst.target, _ = utils.FillString(target, args)
+func (inst *RestfulRequest) SetTarget(target string) {
+	inst.target = target
 }
 
-func (inst *RestfulRequest) SetPostBody(json *JsonWrapper) {
-	inst.requestBody = json.ToBytes()
+func (inst *RestfulRequest) SetPostBody(value string) {
+	inst.requestBody = []byte(value)
 }
 
 func (inst *RestfulRequest) GetTarget() string {
@@ -54,11 +50,11 @@ func (inst *RestfulRequest) GetQueryString() [][]string {
 }
 
 func (inst *RestfulRequest) AddHeader(key string, value interface{}) {
-	inst.headers[key] = utils.ToString(value)
+	inst.headers[key] = ToStringOrDefault(value)
 }
 
 func (inst *RestfulRequest) AddQueryString(key string, value interface{}) {
-	item := []string{key, utils.ToString(value)}
+	item := []string{key, ToStringOrDefault(value)}
 	inst.queryStrings = append(inst.queryStrings, item)
 }
 

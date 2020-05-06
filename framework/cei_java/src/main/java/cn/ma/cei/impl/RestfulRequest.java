@@ -42,7 +42,7 @@ public class RestfulRequest {
         this.method = method;
     }
 
-    public void setTarget(String target, Object... params) {
+    public void setTarget(String target) {
         this.target = target;
     }
 

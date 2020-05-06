@@ -1,25 +1,10 @@
-package utils
+package impl
 
 import (
-	"errors"
-	"regexp"
 	"strconv"
 )
 
-var paramNotMatch = errors.New("param not match")
 
-func findReferenceStrings(objStr string) []string {
-	r := regexp.MustCompile("\\{.*?}")
-	return r.FindAllString(objStr, -1)
-}
-
-func ToStringOrDefault(value interface{}) string {
-	if value == nil {
-		return ""
-	} else {
-		return ToString(value).(string)
-	}
-}
 
 func ToString(value interface{}) interface{} {
 	if value == nil {
@@ -38,6 +23,26 @@ func ToString(value interface{}) interface{} {
 		return strconv.FormatFloat(v, 'f', -1, 64)
 	default:
 		return nil
+	}
+}
+
+func ToStringOrDefault(value interface{}) string {
+	if value == nil {
+		return ""
+	}
+	switch v := value.(type) {
+	case string:
+		return v
+	case bool:
+		return strconv.FormatBool(v)
+	case uint64:
+		return strconv.FormatUint(v, 10)
+	case int64:
+		return strconv.FormatInt(v, 10)
+	case float64:
+		return strconv.FormatFloat(v, 'f', -1, 64)
+	default:
+		return ""
 	}
 }
 

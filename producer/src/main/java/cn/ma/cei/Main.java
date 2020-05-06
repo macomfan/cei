@@ -105,7 +105,7 @@ public class Main {
                 runUI();
                 return;
             } else if (testMode) {
-                //runTest();
+                runTest();
                 return;
             }
         }

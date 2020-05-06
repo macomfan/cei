@@ -7,8 +7,9 @@ package cn.ma.cei.langs.golang.processor;
 
 import cn.ma.cei.generator.Variable;
 import cn.ma.cei.generator.builder.IJsonBuilderBuilder;
+import cn.ma.cei.generator.buildin.JsonWrapper;
 import cn.ma.cei.langs.golang.tools.GoMethod;
-import cn.ma.cei.langs.golang.tools.GoVar;
+import cn.ma.cei.langs.golang.vars.GoVar;
 
 /**
  *
@@ -24,28 +25,28 @@ public class GoJsonBuilderBuilder implements IJsonBuilderBuilder {
 
     @Override
     public void defineJsonObject(Variable jsonObject) {
-
+        method.addAssignAndDeclare(jsonObject.getDescriptor(), method.createInstance(JsonWrapper.getType()));
     }
 
     @Override
     public void addJsonString(Variable from, Variable jsonObject, Variable key) {
-        method.addInvoke(jsonObject.getDescriptor() + ".AddJsonString", new GoVar(key), new GoVar(from));
+        method.addInvoke(jsonObject.getDescriptor() + ".AddJsonString", method.var(key), method.var(from));
     }
 
     @Override
     public void addJsonDecimal(Variable value, Variable jsonObject, Variable key) {
-        method.addInvoke(jsonObject.getDescriptor() + ".AddJsonNumber", new GoVar(key), new GoVar(value));
+        method.addInvoke(jsonObject.getDescriptor() + ".AddJsonFloat64", method.var(key), method.var(value));
     }
 
 
     @Override
     public void addJsonBoolean(Variable value, Variable jsonObject, Variable key) {
-        method.addInvoke(jsonObject.getDescriptor() + ".AddJsonBoolean", new GoVar(key), new GoVar(value));
+        method.addInvoke(jsonObject.getDescriptor() + ".AddJsonBool", method.var(key), method.var(value));
     }
 
     @Override
     public void addJsonInt(Variable value, Variable jsonObject, Variable key) {
-
+        method.addInvoke(jsonObject.getDescriptor() + ".AddJsonInt64", method.var(key), method.var(value));
     }
 
     @Override

@@ -133,7 +133,7 @@ public class Python3JsonParserBuilder implements IJsonParserBuilder {
 
     @Override
     public void startJsonObjectArray(Variable eachItemJsonObject, Variable jsonObject) {
-        method.startFor(eachItemJsonObject, jsonObject.getDescriptor() + ":");
+        method.startFor(eachItemJsonObject, jsonObject.getDescriptor() + ".array()" + ":");
     }
 
     @Override

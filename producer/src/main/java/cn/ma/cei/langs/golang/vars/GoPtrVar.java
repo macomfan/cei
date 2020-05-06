@@ -3,9 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package cn.ma.cei.langs.golang.tools;
+package cn.ma.cei.langs.golang.vars;
 
 import cn.ma.cei.generator.Variable;
+import cn.ma.cei.langs.golang.tools.GoVarMgr;
 
 /**
  *
@@ -13,8 +14,8 @@ import cn.ma.cei.generator.Variable;
  */
 public class GoPtrVar extends GoVar {
 
-    public GoPtrVar(Variable variable) {
-        super(variable);
+    public GoPtrVar(Variable variable, GoVarMgr method) {
+        super(variable, method);
         super.isPtr = true;
     }
 

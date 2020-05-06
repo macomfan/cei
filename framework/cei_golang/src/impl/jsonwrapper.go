@@ -13,7 +13,7 @@ type JsonWrapper struct {
 	array  []interface{}
 }
 
-func ParseFromString(data string) *JsonWrapper {
+func ParseJsonFromString(data string) *JsonWrapper {
 	instance := new(JsonWrapper)
 	var jsonObject interface{}
 	_ = json.Unmarshal([]byte(data), &jsonObject)
@@ -87,7 +87,7 @@ func (inst *JsonWrapper) getByKey(key string) interface{} {
 			}
 		}
 	} else {
-		if inst.array != nil && 0 < index.(int) && index.(int) < len(inst.array) {
+		if inst.array != nil && 0 <= index.(int) && index.(int) < len(inst.array) {
 			return inst.array[index.(int)]
 		}
 	}
@@ -123,23 +123,23 @@ func (inst *JsonWrapper) addJsonValue(key string, value interface{}) {
 	}
 }
 
-func (inst *JsonWrapper) AddJsonString(key string, value string)  {
+func (inst *JsonWrapper) AddJsonString(key string, value string) {
 	inst.addJsonValue(key, value)
 }
 
-func (inst *JsonWrapper) AddJsonInt64(key string, value int64)  {
+func (inst *JsonWrapper) AddJsonInt64(key string, value int64) {
 	inst.addJsonValue(key, value)
 }
 
-func (inst *JsonWrapper) AddJsonFloat64(key string, value float64)  {
+func (inst *JsonWrapper) AddJsonFloat64(key string, value float64) {
 	inst.addJsonValue(key, value)
 }
 
-func (inst *JsonWrapper) AddJsonBool(key string, value bool)  {
+func (inst *JsonWrapper) AddJsonBool(key string, value bool) {
 	inst.addJsonValue(key, value)
 }
 
-func (inst *JsonWrapper) AddJsonObject(key string, jsonWrapper *JsonWrapper)  {
+func (inst *JsonWrapper) AddJsonObject(key string, jsonWrapper *JsonWrapper) {
 	if jsonWrapper.object != nil {
 		inst.addJsonValue(key, jsonWrapper.object)
 	} else if jsonWrapper.array != nil {
@@ -157,37 +157,37 @@ func (inst *JsonWrapper) GetString(key string) string {
 
 func (inst *JsonWrapper) GetStringOrDefault(key string) string {
 	value := inst.getByKey(key)
-	return utils.ToStringOrDefault(value)
+	return ToStringOrDefault(value)
 }
 
 func (inst *JsonWrapper) GetInt64(key string) int64 {
 	value := inst.getByKey(key)
-	return inst.checkMandatoryField(key, utils.ToInt64(value)).(int64)
+	return inst.checkMandatoryField(key, ToInt64(value)).(int64)
 }
 
 func (inst *JsonWrapper) GetInt64OrDefault(key string) int64 {
 	value := inst.getByKey(key)
-	return utils.ToInt64OrDefault(value)
+	return ToInt64OrDefault(value)
 }
 
 func (inst *JsonWrapper) GetFloat64(key string) float64 {
 	value := inst.getByKey(key)
-	return inst.checkMandatoryField(key, utils.ToFloat64(value)).(float64)
+	return inst.checkMandatoryField(key, ToFloat64(value)).(float64)
 }
 
 func (inst *JsonWrapper) GetFloat64OrDefault(key string) float64 {
 	value := inst.getByKey(key)
-	return utils.ToFloat64OrDefault(value)
+	return ToFloat64OrDefault(value)
 }
 
 func (inst *JsonWrapper) GetBool(key string) bool {
 	value := inst.getByKey(key)
-	return inst.checkMandatoryField(key, utils.ToBool(value)).(bool)
+	return inst.checkMandatoryField(key, ToBool(value)).(bool)
 }
 
 func (inst *JsonWrapper) GetBoolOrDefault(key string) bool {
 	value := inst.getByKey(key)
-	return utils.ToBoolOrDefault(value)
+	return ToBoolOrDefault(value)
 }
 
 func (inst *JsonWrapper) GetObject(key string) *JsonWrapper {
@@ -224,6 +224,22 @@ func (inst *JsonWrapper) GetArrayOrNil(key string) *JsonWrapper {
 	return NewJsonWrapper()
 }
 
+func (inst *JsonWrapper) Array() []*JsonWrapper {
+	res := make([]*JsonWrapper, 0)
+	if inst.array != nil {
+		for _, item := range inst.array {
+			if arr, ok := item.([]interface{}); ok {
+				res = append(res, newArrayJsonWrapper(arr))
+			} else if obj, ok := item.(map[string]interface{}); ok {
+				res = append(res, newObjectJsonWrapper(obj))
+			} else {
+				res = append(res, NewJsonWrapper())
+			}
+		}
+	}
+	return res
+}
+
 func (inst *JsonWrapper) GetStringArray(key string) []string {
 	value := inst.GetStringArrayOrNull(key)
 	return inst.checkMandatoryField(key, value).([]string)
@@ -234,7 +250,7 @@ func (inst *JsonWrapper) GetStringArrayOrNull(key string) []string {
 	if obj, ok := value.([]interface{}); ok {
 		res := make([]string, 0)
 		for _, item := range obj {
-			res = append(res, utils.ToStringOrDefault(item))
+			res = append(res, ToStringOrDefault(item))
 		}
 		return res
 	} else {
@@ -252,7 +268,7 @@ func (inst *JsonWrapper) GetInt64ArrayOrNull(key string) []int64 {
 	if obj, ok := value.([]interface{}); ok {
 		res := make([]int64, 0)
 		for _, item := range obj {
-			res = append(res, utils.ToInt64OrDefault(item))
+			res = append(res, ToInt64OrDefault(item))
 		}
 		return res
 	} else {
@@ -270,7 +286,7 @@ func (inst *JsonWrapper) GetFloat64ArrayOrNull(key string) []float64 {
 	if obj, ok := value.([]interface{}); ok {
 		res := make([]float64, 0)
 		for _, item := range obj {
-			res = append(res, utils.ToFloat64OrDefault(item))
+			res = append(res, ToFloat64OrDefault(item))
 		}
 		return res
 	} else {
@@ -288,7 +304,7 @@ func (inst *JsonWrapper) GetBool64ArrayOrNull(key string) []bool {
 	if obj, ok := value.([]interface{}); ok {
 		res := make([]bool, 0)
 		for _, item := range obj {
-			res = append(res, utils.ToBoolOrDefault(item))
+			res = append(res, ToBoolOrDefault(item))
 		}
 		return res
 	} else {

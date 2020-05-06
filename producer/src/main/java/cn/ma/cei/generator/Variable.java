@@ -53,20 +53,22 @@ public class Variable {
         if ((name == null || name.equals("")) && position != Position.STRING) {
             throw new CEIException("[Variable] name is null");
         }
-        this.name = name;
         if (position == null) {
             throw new CEIException("[Variable] position is null");
         }
         switch (position) {
             case MEMBER:
                 this.nameDescriptor = GlobalContext.getCurrentDescriptionConverter().getMemberVariableDescriptor(name);
+                this.name = name;
                 break;
             case PRIVATE:
                 this.nameDescriptor = GlobalContext.getCurrentDescriptionConverter().getPrivateMemberDescriptor(name);
+                this.name = name;
                 break;
             case REFER:
                 // TODO
                 this.nameDescriptor = parentVariable.nameDescriptor + "." + GlobalContext.getCurrentDescriptionConverter().getMemberVariableDescriptor(name);
+                this.name = name;
                 break;
             //case THIS:
             //TODO
@@ -80,12 +82,15 @@ public class Variable {
                 } else {
                     this.nameDescriptor = GlobalContext.getCurrentDescriptionConverter().getVariableDescriptor(name);
                 }
+                this.name = name;
                 break;
             case CONSTANT:
                 this.nameDescriptor = name;
+                this.name = "##CONST##_" + name;
                 break;
             case STRING:
                 this.nameDescriptor = GlobalContext.getCurrentDescriptionConverter().toStringDescriptor(name);
+                this.name = "##STR##_" + name;
                 break;
             default:
                 throw new CEIException("[Variable] position is not suppotrd");

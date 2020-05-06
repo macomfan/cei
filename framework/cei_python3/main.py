@@ -2,6 +2,7 @@ from impl.restfulrequest import RestfulRequest
 from impl.restfulconnection import RestfulConnection
 import re
 from impl.jsonwrapper import JsonWrapper
+import decimal
 from impl.restfuloptions import RestfulOptions
 from exchanges import test
 
@@ -28,7 +29,7 @@ if __name__ == '__main__':
       "tick": {
         "bids": [
           [
-            122.920000000000000000,
+            122.920000000001230000,
             2.746800000000000000
           ],
     	  [
@@ -54,52 +55,55 @@ if __name__ == '__main__':
 
     client = test.GetClient()
     info = client.get_simple_info()
+    info = client.get_price_list()
+    print(info)
 
-    option = RestfulOptions()
-    option.apiKey = "AAA"
-    option.secretKey = "aaa"
-
-    postClient = test.PostClient()
-    simpleInfo = postClient.post_inputs(111, 333.333, 123, False)
-    print(simpleInfo.name)
-
-    ws_client = test.WSClient()
-
-
-    def on_connect(connection):
-        print("onconnect callback")
+    # option = RestfulOptions()
+    # option.apiKey = "AAA"
+    # option.secretKey = "aaa"
+    #
+    # postClient = test.PostClient()
+    # simpleInfo = postClient.post_inputs(111, 333.333, 123, False)
+    # print(simpleInfo.name)
+    #
+    # ws_client = test.WSClient()
 
 
-    ws_client.open("event", "test", on_connect)
-
-
-    def on_echo1(data):
-        print("echo1")
-
-
-    ws_client.request_echo("abc", 123.123, 123, False, on_echo1)
-
-
-    def on_echo2(data):
-        print("echo2")
-
-
-    ws_client.request_echo("abc", 123.123, 123, False, on_echo2)
-
-
-    def on_echo3(data):
-        print("echo3")
-
-
-    ws_client.request_echo("abc", 123.123, 123, False, on_echo3)
-
-
-    def on_second1(data):
-        print("on_second1")
-
-
-    ws_client.subscribe_second1(on_second1)
-
+    # def on_connect(connection):
+    #     print("onconnect callback")
+    #
+    #
+    # ws_client.open("event", "test", on_connect)
+    #
+    #
+    # def on_echo1(data):
+    #     print("echo1")
+    #
+    #
+    # ws_client.request_echo("abc", 123.123, 123, False, on_echo1)
+    #
+    #
+    # def on_echo2(data):
+    #     print("echo2")
+    #
+    #
+    # ws_client.request_echo("abc", 123.123, 123, False, on_echo2)
+    #
+    #
+    # def on_echo3(data):
+    #     print("echo3")
+    #
+    #
+    # ws_client.request_echo("abc", 123.123, 123, False, on_echo3)
+    #
+    #
+    # def on_second1(data):
+    #     print("on_second1")
+    #
+    #
+    # ws_client.subscribe_second1(on_second1)
+    vvv = str(None)
+    print(vvv)
     key = "[1]"
     m = re.match("^\\[[0-9]*]$", key)
     if m is not None:
@@ -107,11 +111,11 @@ if __name__ == '__main__':
     json1 = JsonWrapper()
     key_aa = json1.get_array_or_none("aa")
     json2 = JsonWrapper.parse_from_string(data)
-    print(json2.get_string("ts"))
+    print(json2.get_int("ts"))
     print(json2.to_json_string())
     new_json = JsonWrapper()
     new_json.add_json_string("aa", "aa")
-    new_json.add_json_number("bb", 111.222)
+    new_json.add_json_number("bb", decimal.Decimal("123.0000000456891234567"))
     new_json2 = JsonWrapper()
     new_json2.add_json_string("aa", "aa")
     new_json2.add_json_number("bb", 111.222)
