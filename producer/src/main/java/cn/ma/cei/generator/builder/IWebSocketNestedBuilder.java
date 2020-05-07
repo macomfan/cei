@@ -9,7 +9,7 @@ public interface IWebSocketNestedBuilder extends IMethodBuilder {
 
     default void startMethod(VariableType returnType, String methodDescriptor, List<Variable> params) {}
 
-    default void endMethod(Variable returnVariable) {}
+    void endMethod(Variable returnVariable);
 
     default void endMethod() {}
 }

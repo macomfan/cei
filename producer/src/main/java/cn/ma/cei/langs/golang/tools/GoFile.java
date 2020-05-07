@@ -23,6 +23,7 @@ public class GoFile {
     private final GoCode code = new GoCode();
 
     private final UniqueList<String, GoStruct> structList = new UniqueList<>();
+    private final UniqueList<String, GoStruct> argsList = new UniqueList<>();
     private final UniqueList<String, GoMethod> methodList = new UniqueList<>();
 
     public GoFile(String filename, String packageName) {

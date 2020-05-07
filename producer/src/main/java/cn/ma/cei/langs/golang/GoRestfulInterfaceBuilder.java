@@ -10,6 +10,10 @@ import cn.ma.cei.generator.VariableType;
 import cn.ma.cei.generator.builder.IDataProcessorBuilder;
 import cn.ma.cei.generator.builder.IRestfulInterfaceBuilder;
 import cn.ma.cei.langs.golang.tools.*;
+import cn.ma.cei.langs.golang.vars.GoMergedInputVar;
+import cn.ma.cei.langs.golang.vars.GoPtrType;
+import cn.ma.cei.langs.golang.vars.GoType;
+import cn.ma.cei.langs.golang.vars.GoVar;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -28,49 +32,37 @@ public class GoRestfulInterfaceBuilder implements IRestfulInterfaceBuilder {
 
     @Override
     public void setRequestTarget(Variable request, Variable target) {
-//        List<GoVar> paramList = new ArrayList<>();
-//        for (Variable variable : targets) {
-//            paramList.add(new GoVar(target));
-//        }
-//        GoVar[] params = new GoVar[paramList.size()];
-//        paramList.toArray(params);
-        method.addInvoke(request.getDescriptor() + ".SetTarget", new GoVar(target));
+        method.addInvoke(request.getDescriptor() + ".SetTarget", method.var(target));
     }
 
     @Override
     public void addHeader(Variable request, Variable tag, Variable value) {
-        method.addInvoke(request.getDescriptor() + ".AddHeader", new GoVar(tag), new GoVar(value));
+        method.addInvoke(request.getDescriptor() + ".AddHeader", method.var(tag), method.var(value));
     }
 
     @Override
     public void defineRequest(Variable request, Variable option) {
-        method.addAssignAndDeclare(method.useVariable(new GoVar(request)), "ceiimpl.NewRestfulRequest(inst.options)");
+        method.addAssignAndDeclare(method.useVariable(method.var(request)), "impl.NewRestfulRequest(inst.option)");
     }
 
     @Override
     public void addToQueryString(Variable request, Variable queryStringName, Variable variable) {
-        method.addInvoke(request.getDescriptor() + ".AddQueryString", new GoVar(queryStringName), new GoVar(variable));
+        method.addInvoke(request.getDescriptor() + ".AddQueryString", method.var(queryStringName), method.var(variable));
     }
 
     @Override
     public void setPostBody(Variable request, Variable postBody) {
-        method.addInvoke(request.getDescriptor() + ".SetPostBody", new GoVar(postBody));
+        method.addInvoke(request.getDescriptor() + ".SetPostBody", method.var(postBody));
     }
 
     @Override
     public void invokeQuery(Variable response, Variable request) {
-        method.addAssignAndDeclare(method.useVariable(new GoVar(response)), method.invoke("ceiimpl.RestfulQuery", new GoVar(request)));
+        method.addAssignAndDeclare(method.useVariable(method.var(response)), method.invoke("impl.RestfulQuery", method.var(request)));
     }
-
-//    @Override
-//    public void setUrl(Variable request) {
-//        Variable url = VariableFactory.createConstantVariable("inst.options.URL");
-//        method.addInvoke(request.getDescriptor() + ".SetURL", new GoVar(url));
-//    }
 
     @Override
     public void setRequestMethod(Variable request, Variable requestMethod) {
-        method.addInvoke(request.getDescriptor() + ".SetMethod", new GoVar(requestMethod));
+        method.addInvoke(request.getDescriptor() + ".SetMethod", method.var(requestMethod));
     }
 
 
@@ -79,39 +71,24 @@ public class GoRestfulInterfaceBuilder implements IRestfulInterfaceBuilder {
         clientStruct.addReference(variableType);
     }
 
-//    @Override
-//    public IJsonBuilderBuilder createJsonBuilderBuilder() {
-//        return new GoJsonBuilderBuilder(method);
-//    }
-//
-//    @Override
-//    public IStringBuilderBuilder createStringBuilderBuilder() {
-//        return null;
-//    }
-//
-//    @Override
-//    public IJsonParserBuilder createJsonParserBuilder() {
-//        return new GoJsonParserBuilder(method);
-//    }
-
     @Override
     public void startMethod(VariableType returnType, String methodDescriptor, List<Variable> params) {
         method = new GoMethod(clientStruct);
         List<GoVar> tmp = new LinkedList<>();
         params.forEach(item -> {
-            tmp.add(new GoInterfaceVar(item));
+            tmp.add(method.var(item));
         });
-        method.startMethod(new GoPtrType(returnType), methodDescriptor, tmp);
+        method.startInterface(new GoType(returnType), methodDescriptor, tmp);
     }
 
     @Override
     public IDataProcessorBuilder createDataProcessorBuilder() {
-        return null;
+        return new GoDataProcessorBuilder(method);
     }
 
     @Override
     public void endMethod(Variable returnVariable) {
-        method.addReturn(new GoVar(returnVariable));
+        method.addReturn(method.var(returnVariable));
         method.endMethod();
         clientStruct.addMethod(method);
     }
@@ -121,5 +98,4 @@ public class GoRestfulInterfaceBuilder implements IRestfulInterfaceBuilder {
         method.endMethod();
         clientStruct.addMethod(method);
     }
-
 }

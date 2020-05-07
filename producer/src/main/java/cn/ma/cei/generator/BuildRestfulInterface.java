@@ -47,7 +47,6 @@ public class BuildRestfulInterface {
             context.defaultInput = request;
             context.dataProcessorBuilder = dataProcessorBuilder;
             BuildDataProcessor.build(context);
-            //builder.setRequestTarget(request, BuildUserProcedure.createValueFromProcedure(restIf.request.target, restIf.request, builder));
             builder.setRequestTarget(request, GlobalContext.getCurrentMethod().queryVariableOrConstant(restIf.request.target, dataProcessorBuilder));
             Variable requestMethod = GlobalContext.createStatement(Constant.requestMethod().get(restIf.request.method));
             builder.setRequestMethod(request, requestMethod);
@@ -124,7 +123,7 @@ public class BuildRestfulInterface {
             List<Variable> inputs = authenticationMethod.getInputVariableList();
             if (Checker.isNull(inputs) || inputs.size() < 2
                     || inputs.get(0).getType() != RestfulRequest.getType() || inputs.get(1).getType() != RestfulOptions.getType()) {
-                CEIErrors.showXMLFailure("%s cannot be the authentication function, it must defines 2 inputs, one is RestfulRequest, another is RestfulOptions");
+                CEIErrors.showXMLFailure("%s cannot be the authentication function, it must defines 2 inputs, RestfulRequest and RestfulOptions respectively.", authenticationMethod.getName());
             }
             Variable option = GlobalContext.getCurrentMethod().queryVariable("{option}");
 

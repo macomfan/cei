@@ -16,15 +16,15 @@ public class BuildGetRequestInfo extends DataProcessorBase<xGetRequestInfo> {
 
         Variable info;
         if (!Checker.isEmpty(item.info)) {
-            info = BuilderContext.createStatement(Constant.authenticationMethod().tryGet(item.info));
+            info = BuilderContext.createStatement(Constant.requestInfo().tryGet(item.info));
         } else {
-            info = BuilderContext.createStatement(Constant.authenticationMethod().tryGet(CEIUtils.Constant.NONE));
+            info = BuilderContext.createStatement(Constant.requestInfo().tryGet(CEIUtils.Constant.NONE));
         }
         Variable convert;
         if (!Checker.isEmpty(item.convert)) {
-            convert = BuilderContext.createStatement(Constant.authenticationMethod().tryGet(item.convert));
+            convert = BuilderContext.createStatement(Constant.requestInfo().tryGet(item.convert));
         } else {
-            convert = BuilderContext.createStatement(Constant.authenticationMethod().tryGet(CEIUtils.Constant.NONE));
+            convert = BuilderContext.createStatement(Constant.requestInfo().tryGet(CEIUtils.Constant.NONE));
         }
         builder.getRequestInfo(requestVariable, output, info, convert);
         return output;

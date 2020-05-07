@@ -15,9 +15,17 @@ import cn.ma.cei.utils.Checker;
 
 public class BuildJsonBuilder extends DataProcessorBase<xJsonBuilder> {
     static class JsonItemContext {
-        xJsonType currentItem = null;
-        Variable currentJsonObject = null;
-        IJsonBuilderBuilder jsonBuilderBuilder = null;
+        xJsonType currentItem;
+        Variable currentJsonObject;
+        IJsonBuilderBuilder jsonBuilderBuilder;
+        IDataProcessorBuilder dataProcessorBuilder;
+
+        public JsonItemContext(xJsonType currentItem, Variable currentJsonObject, IJsonBuilderBuilder jsonBuilderBuilder, IDataProcessorBuilder dataProcessorBuilder) {
+            this.currentItem = currentItem;
+            this.currentJsonObject = currentJsonObject;
+            this.jsonBuilderBuilder = jsonBuilderBuilder;
+            this.dataProcessorBuilder = dataProcessorBuilder;
+        }
     }
 
     @Override
@@ -30,12 +38,13 @@ public class BuildJsonBuilder extends DataProcessorBase<xJsonBuilder> {
             jsonObject = createUserVariable(JsonWrapper.getType(), jsonBuilder.name);
         }
 
-        jsonBuilderBuilder.defineRootJsonObject(jsonObject);
+        jsonBuilderBuilder.defineJsonObject(jsonObject);
         jsonBuilder.itemList.forEach(item -> item.doBuild(() -> {
-            JsonItemContext newContext = new JsonItemContext();
-            newContext.currentItem = item;
-            newContext.currentJsonObject = jsonObject;
-            newContext.jsonBuilderBuilder = jsonBuilderBuilder;
+            JsonItemContext newContext = new JsonItemContext(
+                    item,
+                    jsonObject,
+                    jsonBuilderBuilder,
+                    builder);
             processJsonItem(newContext);
         }));
 
@@ -107,10 +116,11 @@ public class BuildJsonBuilder extends DataProcessorBase<xJsonBuilder> {
         context.jsonBuilderBuilder.defineJsonObject(newJsonObject);
 
         jsonWithModel.itemList.forEach(item -> item.doBuild(() -> {
-            JsonItemContext newContext = new JsonItemContext();
-            newContext.currentItem = item;
-            newContext.currentJsonObject = newJsonObject;
-            newContext.jsonBuilderBuilder = context.jsonBuilderBuilder;
+            JsonItemContext newContext = new JsonItemContext(
+                    item,
+                    newJsonObject,
+                    context.jsonBuilderBuilder,
+                    context.dataProcessorBuilder);
             processJsonItem(newContext);
         }));
 
@@ -140,18 +150,23 @@ public class BuildJsonBuilder extends DataProcessorBase<xJsonBuilder> {
     }
 
     private void assignJsonString(Variable value, JsonItemContext context) {
-        context.jsonBuilderBuilder.addJsonString(value, context.currentJsonObject, getKeyVariable(context.currentItem.key));
+        Variable result = TypeConverter.convertType(value, xString.inst.getType(), context.dataProcessorBuilder);
+        context.jsonBuilderBuilder.addJsonString(result, context.currentJsonObject, getKeyVariable(context.currentItem.key));
     }
+
     private void assignJsonInt(Variable value, JsonItemContext context) {
-        context.jsonBuilderBuilder.addJsonInt(value, context.currentJsonObject, getKeyVariable(context.currentItem.key));
+        Variable result = TypeConverter.convertType(value, xInt.inst.getType(), context.dataProcessorBuilder);
+        context.jsonBuilderBuilder.addJsonInt(result, context.currentJsonObject, getKeyVariable(context.currentItem.key));
     }
 
     private void assignJsonDecimal(Variable value, JsonItemContext context) {
-        context.jsonBuilderBuilder.addJsonDecimal(value, context.currentJsonObject, getKeyVariable(context.currentItem.key));
+        Variable result = TypeConverter.convertType(value, xDecimal.inst.getType(), context.dataProcessorBuilder);
+        context.jsonBuilderBuilder.addJsonDecimal(result, context.currentJsonObject, getKeyVariable(context.currentItem.key));
     }
 
     private void assignJsonBoolean(Variable value, JsonItemContext context) {
-        context.jsonBuilderBuilder.addJsonBoolean(value, context.currentJsonObject, getKeyVariable(context.currentItem.key));
+        Variable result = TypeConverter.convertType(value, xBoolean.inst.getType(), context.dataProcessorBuilder);
+        context.jsonBuilderBuilder.addJsonBoolean(result, context.currentJsonObject, getKeyVariable(context.currentItem.key));
     }
 
     private void assignJsonStringArray(Variable value, JsonItemContext context) {
@@ -178,11 +193,14 @@ public class BuildJsonBuilder extends DataProcessorBase<xJsonBuilder> {
     }
 
     private Variable getValueVariable(xJsonType jsonItem) {
-        if (!Checker.isEmpty(jsonItem.value)) {
-            return queryVariableOrConstant(jsonItem.value);
-        } else {
+        if (Checker.isEmpty(jsonItem.value)) {
             return null;
         }
+        Variable value = queryVariableOrConstant(jsonItem.value);
+        if (value == null) {
+            CEIErrors.showXMLFailure("Cannot define the value: %s", jsonItem.value);
+        }
+        return value;
     }
 
     private Variable defineJsonObject(JsonItemContext context) {

@@ -19,12 +19,7 @@ public class JavaJsonBuilderBuilder implements IJsonBuilderBuilder {
 
     public JavaJsonBuilderBuilder(JavaMethod method) {
         this.method = method;
-    }
-
-    @Override
-    public void defineRootJsonObject(Variable jsonObject) {
         method.addReference(JsonWrapper.getType());
-        method.addAssign(method.defineVariable(jsonObject), method.newInstance(jsonObject.getType()));
     }
 
     @Override

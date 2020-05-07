@@ -16,6 +16,13 @@ public class Service {
     private final Router router = Router.router(vertx);
     private final WebSocketService websocketService = new WebSocketService();
 
+
+    private void sendResponse(RoutingContext routingContext, String response) {
+        if (Checker.isEmpty(response)) {
+            return;
+        }
+        routingContext.response().putHeader("Access-Control-Allow-Origin", "*").end(response);
+    }
     public Service registerRestful(String path, IRestfulHandler handler) {
         if (Checker.isEmpty(path)) {
             CEIErrors.showCodeFailure(handler.getClass(), "Cannot be register to the restful interface, path is null");
@@ -24,13 +31,12 @@ public class Service {
             final String[] response = new String[1];
             if (routingContext.request().method() == HttpMethod.GET) {
                 response[0] = handler.handle(routingContext.request(), null);
-            } else {
+                sendResponse(routingContext, response[0]);
+            } else if (routingContext.request().method() == HttpMethod.POST){
                 routingContext.request().bodyHandler(body -> {
                     response[0] = handler.handle(routingContext.request(), body);
+                    sendResponse(routingContext, response[0]);
                 });
-            }
-            if (response[0] != null) {
-                routingContext.response().putHeader("Access-Control-Allow-Origin", "*").end(response[0]);
             }
         };
         if (handler.httpMethod() != null) {
@@ -46,15 +52,14 @@ public class Service {
         return this;
     }
 
+    public Service registerWebSocketNotification(String notificationName, WebSocketNotification notification) {
+        websocketService.registerNotification(notificationName, notification);
+        return this;
+    }
+
     public void start(int port) {
 
         HttpServer httpServer = vertx.createHttpServer().requestHandler(router);
-//        WebSocketService.registerProcessor(new InitProcessor());
-//        WebSocketService.registerProcessor(new ExchangeInfoProcessor());
-//        WebSocketService.registerProcessor(new ModelTestProcessor());
-//        WebSocketService.registerProcessor(new ExchangeQueryProcessor());
-//        WebSocketService.registerProcessor(new ModelUpdateProcessor());
-
         websocketService.startService(httpServer);
         httpServer.listen(port);
         System.out.println(String.format("Server started on port %d", port));

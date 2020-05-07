@@ -15,9 +15,9 @@ public interface IWebSocketInterfaceBuilder extends IMethodBuilder {
 
     void setupOnConnect(Variable connection, IMethod onConnect);
 
-    void connect(Variable connection, Variable target, Variable option);
+    void connect(Variable connection, Variable target);
 
     void setupOnClose(Variable connection, IMethod onClose);
 
-    void close(Variable connection, Variable option);
+    void close(Variable connection);
 }

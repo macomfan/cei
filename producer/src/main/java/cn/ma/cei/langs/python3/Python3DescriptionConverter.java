@@ -15,15 +15,16 @@ import java.util.List;
 import java.util.Set;
 
 /**
- *
  * @author u0151316
  */
 public class Python3DescriptionConverter implements IDescriptionConverter {
 
     private final Set<String> keywords;
+    private final Set<String> buildIn;
 
     public Python3DescriptionConverter() {
         keywords = getKeywords();
+        buildIn = getBuildIn();
     }
 
     private void checkInput(String name) {
@@ -32,9 +33,16 @@ public class Python3DescriptionConverter implements IDescriptionConverter {
         }
     }
 
-    private String checkKeyword(String name) {
+    private String checkKeyword(String name, String suffix) {
         if (keywords.contains(name)) {
-            throw new CEIException(name + " is keyword in Java");
+            return name + suffix;
+        }
+        return name;
+    }
+
+    private String checkKeyWordAndBuildIn(String name, String suffix) {
+        if (buildIn.contains(name) || keywords.contains(name)) {
+            return name + suffix;
         }
         return name;
     }
@@ -42,43 +50,43 @@ public class Python3DescriptionConverter implements IDescriptionConverter {
     @Override
     public String getFileDescriptor(String name) {
         checkInput(name);
-        return checkKeyword(WordSplitter.getLowercase(name));
+        return checkKeyword(WordSplitter.getLowercase(name), "");
     }
 
     @Override
     public String getModelDescriptor(String name) {
         checkInput(name);
-        return checkKeyword(WordSplitter.getUpperCamelCase(name));
+        return checkKeyword(WordSplitter.getUpperCamelCase(name), "Model");
     }
 
     @Override
     public String getClientDescriptor(String name) {
         checkInput(name);
-        return checkKeyword(WordSplitter.getUpperCamelCase(name));
+        return checkKeyword(WordSplitter.getUpperCamelCase(name), "Model");
     }
 
     @Override
     public String getVariableDescriptor(String name) {
         checkInput(name);
-        return checkKeyword(WordSplitter.getLowercase(name, "_"));
+        return checkKeyWordAndBuildIn(WordSplitter.getLowercase(name, "_"), "_u");
     }
 
     @Override
     public String getMemberVariableDescriptor(String name) {
         checkInput(name);
-        return checkKeyword(WordSplitter.getLowercase(name, "_"));
+        return checkKeyword(WordSplitter.getLowercase(name, "_"), "_u");
     }
 
     @Override
     public String getPrivateMemberDescriptor(String name) {
         checkInput(name);
-        return "__" + checkKeyword(WordSplitter.getLowercase(name, "_"));
+        return "__" + checkKeyword(WordSplitter.getLowercase(name, "_"),"_u");
     }
 
     @Override
     public String getMethodDescriptor(String name) {
         checkInput(name);
-        return checkKeyword(WordSplitter.getLowercase(name, "_"));
+        return checkKeyword(WordSplitter.getLowercase(name, "_"), "_func");
     }
 
     @Override
@@ -99,6 +107,80 @@ public class Python3DescriptionConverter implements IDescriptionConverter {
     @Override
     public String getGenericTypeDescriptor(String baseName, List<String> subNames) {
         return baseName;
+    }
+
+    public Set<String> getBuildIn() {
+        Set<String> buildIn = new HashSet<>();
+        buildIn.add("abs");
+        buildIn.add("delattr");
+        buildIn.add("hash");
+        buildIn.add("memoryview");
+        buildIn.add("set");
+        buildIn.add("all");
+        buildIn.add("dict");
+        buildIn.add("help");
+        buildIn.add("min");
+        buildIn.add("setattr");
+        buildIn.add("any");
+        buildIn.add("dir");
+        buildIn.add("hex");
+        buildIn.add("next");
+        buildIn.add("slice");
+        buildIn.add("ascii");
+        buildIn.add("divmod");
+        buildIn.add("id");
+        buildIn.add("object");
+        buildIn.add("sorted");
+        buildIn.add("bin");
+        buildIn.add("enumerate");
+        buildIn.add("input");
+        buildIn.add("oct");
+        buildIn.add("staticmethod");
+        buildIn.add("bool");
+        buildIn.add("eval");
+        buildIn.add("int");
+        buildIn.add("open");
+        buildIn.add("str");
+        buildIn.add("breakpoint");
+        buildIn.add("exec");
+        buildIn.add("isinstance");
+        buildIn.add("ord");
+        buildIn.add("sum");
+        buildIn.add("bytearray");
+        buildIn.add("filter");
+        buildIn.add("issubclass");
+        buildIn.add("pow");
+        buildIn.add("super");
+        buildIn.add("bytes");
+        buildIn.add("float");
+        buildIn.add("iter");
+        buildIn.add("print");
+        buildIn.add("tuple");
+        buildIn.add("callable");
+        buildIn.add("format");
+        buildIn.add("len");
+        buildIn.add("property");
+        buildIn.add("type");
+        buildIn.add("chr");
+        buildIn.add("frozenset");
+        buildIn.add("list");
+        buildIn.add("range");
+        buildIn.add("vars");
+        buildIn.add("classmethod");
+        buildIn.add("getattr");
+        buildIn.add("locals");
+        buildIn.add("repr");
+        buildIn.add("zip");
+        buildIn.add("compile");
+        buildIn.add("globals");
+        buildIn.add("map");
+        buildIn.add("reversed");
+        buildIn.add("__import__");
+        buildIn.add("complex");
+        buildIn.add("hasattr");
+        buildIn.add("max");
+        buildIn.add("round");
+        return buildIn;
     }
 
     @Override

@@ -11,12 +11,16 @@ public class BuildWebSocketClient {
         GlobalContext.getCurrentModel().addPrivateMember(WebSocketOptions.getType(), "option");
         GlobalContext.getCurrentModel().addPrivateMember(WebSocketConnection.getType(), "connection");
 
-        WebSocketOptions options = new WebSocketOptions();
+        WebSocketOptions option = new WebSocketOptions();
         if (client.connection.timeout != null) {
-            options.connectionTimeout = client.connection.timeout;
+            option.connectionTimeout = client.connection.timeout;
         }
-        options.url = client.connection.url;
-        builder.startClient(GlobalContext.getCurrentModel(), options);
+        option.url = client.connection.url;
+        VariableType clientModel = GlobalContext.getCurrentModel();
+        sMethod defaultConstructor = clientModel.createMethod(clientModel.getName() + "DefaultConstructor");
+
+        builder.startClient(GlobalContext.getCurrentModel(), option,
+                defaultConstructor.getVariable("connection"), defaultConstructor.getVariable("option"));
 
         // Build connection and events
         BuildWebSocketConnection.build(client.connection, client.events, builder);

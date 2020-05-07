@@ -34,7 +34,7 @@ public class JavaDescriptionConverter implements IDescriptionConverter {
 
     private String checkKeyword(String name) {
         if (keywords.contains(name)) {
-            throw new CEIException(name + " is keyword in Java");
+            return name + "_U";
         }
         return name;
     }
@@ -167,4 +167,8 @@ public class JavaDescriptionConverter implements IDescriptionConverter {
         return keywords;
     }
 
+    @Override
+    public Set<String> getBuildIn() {
+        return null;
+    }
 }

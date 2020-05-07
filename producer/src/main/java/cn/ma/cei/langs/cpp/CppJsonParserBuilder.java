@@ -16,12 +16,12 @@ import cn.ma.cei.generator.builder.IJsonParserBuilder;
 public class CppJsonParserBuilder implements IJsonParserBuilder {
 
     @Override
-    public void getJsonString(Variable to, Variable jsonObject, Variable itemName) {
+    public void getJsonString(Variable value, Variable jsonObject, Variable key, boolean optional) {
         //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void getJsonInteger(Variable to, Variable jsonObject, Variable itemName) {
+    public void getJsonInteger(Variable value, Variable jsonObject, Variable key, boolean optional) {
         //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
@@ -31,7 +31,7 @@ public class CppJsonParserBuilder implements IJsonParserBuilder {
     }
 
     @Override
-    public void defineRootJsonObject(Variable jsonObject, Variable responseVariable) {
+    public void defineRootJsonObject(Variable jsonObject, Variable stringVariable) {
         //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
@@ -41,32 +41,33 @@ public class CppJsonParserBuilder implements IJsonParserBuilder {
     }
 
     @Override
-    public void assignJsonStringArray(Variable to, Variable jsonObject, Variable itemName) {
+    public void assignJsonStringArray(Variable value, Variable jsonObject, Variable key, boolean optional) {
         //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void assignJsonDecimalArray(Variable to, Variable jsonObject, Variable itemName) {
+    public void assignJsonDecimalArray(Variable value, Variable jsonObject, Variable key, boolean optional) {
 
     }
 
     @Override
-    public void assignJsonBooleanArray(Variable to, Variable jsonObject, Variable itemName) {
+    public void assignJsonBooleanArray(Variable value, Variable jsonObject, Variable key, boolean optional) {
 
     }
 
     @Override
-    public void assignJsonIntArray(Variable to, Variable jsonObject, Variable itemName) {
+    public void assignJsonIntArray(Variable value, Variable jsonObject, Variable key, boolean optional) {
 
     }
 
     @Override
-    public void getJsonArray(Variable jsonWrapperObject, Variable jsonObject, Variable itemName) {
+    public void getJsonArray(Variable jsonObject, Variable parentJsonObject, Variable key, boolean optional) {
 
     }
 
+
     @Override
-    public void defineJsonObject(Variable jsonObject, Variable parentJsonObject, Variable itemName) {
+    public void getJsonObject(Variable jsonObject, Variable parentJsonObject, Variable key, boolean optional) {
 
     }
 
@@ -81,17 +82,17 @@ public class CppJsonParserBuilder implements IJsonParserBuilder {
     }
 
     @Override
-    public void endJsonObjectArray(Variable to, Variable model) {
+    public void endJsonObjectArray(Variable value, Variable model) {
 
     }
 
     @Override
-    public void getJsonBoolean(Variable to, Variable jsonObject, Variable itemName) {
+    public void getJsonBoolean(Variable value, Variable jsonObject, Variable key, boolean optional) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void getJsonDecimal(Variable to, Variable jsonObject, Variable itemName) {
+    public void getJsonDecimal(Variable value, Variable jsonObject, Variable key, boolean optional) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

@@ -1,5 +1,6 @@
 package cn.ma.cei.langs.java;
 
+import cn.ma.cei.generator.Variable;
 import cn.ma.cei.generator.VariableType;
 import cn.ma.cei.generator.builder.IDataProcessorBuilder;
 import cn.ma.cei.generator.builder.IWebSocketNestedBuilder;
@@ -22,6 +23,11 @@ public class JavaWebSocketNestedBuilder implements IWebSocketNestedBuilder {
     @Override
     public IDataProcessorBuilder createDataProcessorBuilder() {
         return new JavaDataProcessorBuilder(method);
+    }
+
+    @Override
+    public void endMethod(Variable returnVariable) {
+        method.addReturn(returnVariable);
     }
 
 

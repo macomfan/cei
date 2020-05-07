@@ -109,14 +109,14 @@ public class Python3Class {
             }
             defaultConstructor.getCode().endBlock();
         }
-        else {
-            if (superClass != null) {
-                defaultConstructor.getCode().appendWordsln("super().__init__()");
-            }
-            memberList.values().forEach(item -> {
-                defaultConstructor.getCode().appendWordsln("self." + item.getDescriptor(), "=", "None");
-            });
-        }
+//        else {
+//            if (superClass != null) {
+//                defaultConstructor.getCode().appendWordsln("super().__init__()");
+//            }
+//            memberList.values().forEach(item -> {
+//                defaultConstructor.getCode().appendWordsln("self." + item.getDescriptor(), "=", "None");
+//            });
+//        }
 
 
     }

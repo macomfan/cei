@@ -45,6 +45,7 @@ public class BuildDataProcessor {
         // processorMap.put(xInvoke.class);
         processorMap.put(xWebSocketCallback.class, new BuildWebSocketCallback());
         processorMap.put(xWebSocketSend.class, new BuildWebSocketSend());
+        processorMap.put(xWebSocketMessageUpgrade.class, new BuildWebSocketMessageUpgrade());
     }
 
     public static VariableType getReturnType(xProcedure procedure, String returnVariableName) {
@@ -60,15 +61,16 @@ public class BuildDataProcessor {
                 reportNotSupporting(firstItem);
             }
         } else {
-            if (RegexHelper.isReference(returnVariableName) == null) {
-                return xString.inst.getType();
+            String returnName = RegexHelper.isReference(returnVariableName);
+            if (returnName == null) {
+                CEIErrors.showXMLFailure("return value must be {xxx}");
             }
             for (xDataProcessorItem item : procedure.items) {
                 if (processorMap.containsKey(item.getClass())) {
                     DataProcessorBase<?> processor = processorMap.get(item.getClass());
                     String resultInProcessor = processor.callResultVariableName(item);
                     if (!Checker.isEmpty(resultInProcessor))
-                        if (resultInProcessor.equals(returnVariableName)) {
+                        if (resultInProcessor.equals(returnName)) {
                             return processor.callReturnType(item);
                         }
                 } else {
@@ -146,7 +148,7 @@ public class BuildDataProcessor {
             return processorMap.get(item.getClass()).callBuild(item, defaultInput, builder);
         } else {
             // TODO
-            CEIErrors.showFailure(CEIErrorType.CODE, "not supported");
+            CEIErrors.showCodeFailure(BuildDataProcessor.class, "Not supported %s ", item.getClass().getSimpleName());
             return null;
         }
     }

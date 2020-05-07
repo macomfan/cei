@@ -1,6 +1,5 @@
 package cn.ma.cei.langs.java;
 
-import cn.ma.cei.generator.BuilderContext;
 import cn.ma.cei.generator.IMethod;
 import cn.ma.cei.generator.Variable;
 import cn.ma.cei.generator.builder.IWebSocketEventBuilder;
@@ -37,18 +36,13 @@ public class JavaWebSocketEventBuilder implements IWebSocketEventBuilder {
     }
 
     @Override
-    public void newEvent(Variable event) {
-        method.addAssign(method.defineVariable(event), method.newInstance(event.getType()));
+    public void newEvent(Variable event, Variable isPersistent) {
+        method.addAssign(method.defineVariable(event), method.newInstance(event.getType(), isPersistent));
     }
 
     @Override
-    public void setAsPersistentEvent(Variable event) {
-        method.addInvoke(event.getDescriptor() + ".setPersistent", BuilderContext.createStatement("true"));
-    }
-
-    @Override
-    public void registerEvent(Variable event) {
-        method.addInvoke("this.connection.registerEvent", event);
+    public void registerEvent(Variable connection, Variable event) {
+        method.addInvoke(connection.getDescriptor() + ".registerEvent", event);
     }
 
     @Override

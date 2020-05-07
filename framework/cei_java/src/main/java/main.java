@@ -6,6 +6,8 @@ import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.annotation.JSONField;
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 //import cn.ma.cei.sdk.exchanges.binance.models.ExchangeInfo;
 //import cn.ma.cei.sdk.exchanges.bittrex.models.Markets;
@@ -29,7 +31,23 @@ public class main {
         void fun();
     }
 
+    private static Integer getIndexKey(String key) {
+        String pattern = "^\\[[0-9]*]$";
+        Pattern r = Pattern.compile(pattern);
+        Matcher m = r.matcher(key);
+        if (m.find()) {
+            if ("[]".equals(key)) {
+                return -1;
+            }
+            else {
+                return Integer.parseInt(key.substring(m.start() + 1, m.end() - 1));
+            }
+        }
+        return null;
+    }
+
     public static void main(String[] args) throws InterruptedException {
+        Integer index = getIndexKey("[-5]");
 //        huobipro.MarketClient client = new huobipro.MarketClient();
 //        huobipro.BestQuote bq = client.getBestQuote("btcusdt");
 //        System.out.println(bq.toString());
@@ -69,6 +87,7 @@ public class main {
 //      + "    }\n"
 //      + "  ]\n"
 //      + "}";
+
         String data = "{\n"
                 + "	\"name\": \"jqw\",\n"
                 + "	\"age\": 18,\n"
@@ -88,13 +107,7 @@ public class main {
         JsonWrapper currentJsonWrapper = JsonWrapper.parseFromString(data);
         JsonWrapper arr = currentJsonWrapper.getObject("array");
         String index0 = arr.getString("[0]");
-        //JsonWrapper.JsonPath jsp = new JsonWrapper.JsonPath(currentJsonWrapper, "\\ch\\data\\[0]\\id");
-        try {
-            JsonWrapper a = currentJsonWrapper.getObject("\\data");
-            System.err.println("got");
-        } catch (Exception e) {
-            System.err.println(e.getMessage());
-        }
+
 
 //        RestfulOptions options = new RestfulOptions();
 //        RestfulRequest request = new RestfulRequest(options);

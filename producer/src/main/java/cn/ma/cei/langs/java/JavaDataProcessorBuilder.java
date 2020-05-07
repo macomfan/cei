@@ -3,19 +3,27 @@ package cn.ma.cei.langs.java;
 import cn.ma.cei.generator.BuilderContext;
 import cn.ma.cei.generator.IMethod;
 import cn.ma.cei.generator.Variable;
+import cn.ma.cei.generator.VariableType;
 import cn.ma.cei.generator.builder.*;
 import cn.ma.cei.generator.buildin.CEIUtils;
 import cn.ma.cei.generator.buildin.Procedures;
 import cn.ma.cei.langs.java.processor.JavaGetNowBuilder;
 import cn.ma.cei.langs.java.processor.JavaJsonBuilderBuilder;
 import cn.ma.cei.langs.java.processor.JavaJsonParserBuilder;
+import cn.ma.cei.langs.java.processor.JavaStringBuilderBuilder;
 import cn.ma.cei.langs.java.tools.JavaMethod;
+import cn.ma.cei.model.types.xDecimal;
 
 public class JavaDataProcessorBuilder implements IDataProcessorBuilder {
     JavaMethod method;
 
     public JavaDataProcessorBuilder(JavaMethod method) {
         this.method = method;
+    }
+
+    @Override
+    public void onAddReference(VariableType variableType) {
+        method.addReference(variableType);
     }
 
     @Override
@@ -70,8 +78,13 @@ public class JavaDataProcessorBuilder implements IDataProcessorBuilder {
     }
 
     @Override
-    public Variable convertRestfulResponseToString(Variable response) {
+    public Variable convertResponseToString(Variable response) {
         return BuilderContext.createStatement(method.invoke(response.getDescriptor() + ".getString"));
+    }
+
+    @Override
+    public Variable convertResponseToStream(Variable msg) {
+        return BuilderContext.createStatement(method.invoke(msg.getDescriptor() + ".getBytes"));
     }
 
     @Override
@@ -82,6 +95,16 @@ public class JavaDataProcessorBuilder implements IDataProcessorBuilder {
     @Override
     public Variable convertBooleanToString(Variable booleanVariable) {
         return BuilderContext.createStatement(method.invoke(booleanVariable.getDescriptor() + ".toString"));
+    }
+
+    @Override
+    public Variable convertNativeToDecimal(Variable stringVariable) {
+        return BuilderContext.createStatement(method.newInstance(xDecimal.inst.getType(), stringVariable));
+    }
+
+    @Override
+    public void upgradeWebSocketMessage(Variable messageVariable, Variable valueVariable) {
+        method.addInvoke(messageVariable.getDescriptor() + ".upgrade", valueVariable);
     }
 
     @Override

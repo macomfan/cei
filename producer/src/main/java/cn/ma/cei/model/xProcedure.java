@@ -27,6 +27,7 @@ public class xProcedure extends xElement {
             xAddQueryString.class,
             xCombineQueryString.class,
             xGetRequestInfo.class,
-            xInvoke.class})
+            xInvoke.class,
+            xGZip.class})
     public List<xDataProcessorItem> items;
 }

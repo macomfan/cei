@@ -45,6 +45,18 @@ public class Checker {
         return null;
     }
 
+    public static boolean valueIn(String value, String... args) {
+        if (args.length == 0) {
+            return false;
+        }
+        for (String item : args) {
+            if (!item.equals(value)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     public static boolean isEmpty(String value) {
         return (value == null || "".equals(value));
     }

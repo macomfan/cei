@@ -3,6 +3,7 @@ package cn.ma.cei.generator;
 import cn.ma.cei.generator.builder.IExchangeBuilder;
 import cn.ma.cei.generator.buildin.Procedures;
 import cn.ma.cei.generator.buildin.RestfulOptions;
+import cn.ma.cei.generator.buildin.WebSocketOptions;
 import cn.ma.cei.model.xSDK;
 import cn.ma.cei.utils.Checker;
 
@@ -11,6 +12,7 @@ public class BuildExchange {
     public static void build(xSDK sdk, IExchangeBuilder builder) {
         builder.startExchange(sdk.name);
         RestfulOptions.registryMember();
+        WebSocketOptions.registryMember();
 
         if (sdk.modelList != null) {
             sdk.modelList.forEach((model) -> model.doBuild(() -> {

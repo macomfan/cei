@@ -39,6 +39,10 @@ public class Python3Method {
         return type.getDescriptor() + "(" + invokeParamString(tmp) + ")";
     }
 
+    public void addReference(VariableType type) {
+        parent.addReference(type);
+    }
+
     public void addReturn(String string) {
         code.appendWordsln("return", string);
     }
@@ -76,6 +80,11 @@ public class Python3Method {
     public String invoke(String method, Variable... params) {
         List<Variable> tmp = Arrays.asList(params);
         return method + "(" + invokeParamString(tmp) + ")";
+    }
+
+    public void startConstructor(String params) {
+        code.appendWordsln("def", "__init__(" + params + "):");
+        code.startBlock();
     }
 
     public void startMethod(VariableType returnType, String methodName, List<Variable> params) {

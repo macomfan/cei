@@ -5,6 +5,7 @@
  */
 package cn.ma.cei.service;
 
+import io.vertx.core.buffer.Buffer;
 import io.vertx.core.http.ServerWebSocket;
 import io.vertx.core.json.JsonObject;
 
@@ -16,11 +17,17 @@ public class WebSocketClient {
 
     private final ServerWebSocket ws;
     private final String clientID;
+    private final WebSocketService.NotificationRegister notificationRegister;
 
 
-    public WebSocketClient(String clientID, ServerWebSocket ws) {
+    public WebSocketClient(String clientID, ServerWebSocket ws, WebSocketService.NotificationRegister notificationRegister) {
         this.ws = ws;
         this.clientID = clientID;
+        this.notificationRegister = notificationRegister;
+    }
+
+    public String id() {
+        return clientID;
     }
 
     public void send(JsonObject json) {
@@ -34,7 +41,15 @@ public class WebSocketClient {
         ws.writeTextMessage(text);
     }
 
-    public void onClose() {
+    public boolean registerNotification(String notificationName) {
+        return notificationRegister.registerNotification(notificationName, this);
+    }
 
+    public boolean unregisterNotification(String notificationName) {
+        return notificationRegister.unregisterNotification(notificationName, this);
+    }
+
+    public void onClose() {
+        notificationRegister.unregisterAll(this);
     }
 }

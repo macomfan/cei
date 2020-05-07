@@ -5,12 +5,11 @@
  */
 package cn.ma.cei.impl;
 
+import cn.ma.cei.exception.CEILog;
 import okhttp3.*;
 import okio.ByteString;
 
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -18,21 +17,28 @@ import java.util.concurrent.TimeUnit;
  */
 public class WebSocketConnection extends WebSocketListener {
 
+    private static int ClientID = 0;
+
     private final OkHttpClient client;
     private WebSocket webSocket = null;
     private OnSystemEvent onConnect = null;
     private OnSystemEvent onClose = null;
     private Status status = Status.IDLE;
-    enum Status{
+    private static int id = 0;
+    private final WebSocketOptions option;
+    private final Object connectedNotification = new Object();
+    private final CopyOnWriteArrayList<WebSocketEvent> event = new CopyOnWriteArrayList<>();
+
+    enum Status {
         IDLE,
         CONNECTED,
         CLOSED,
     }
 
-    private List<WebSocketEvent> event = new LinkedList<>();
-
-    public WebSocketConnection() {
-        client = new OkHttpClient.Builder().connectTimeout(5, TimeUnit.SECONDS).build();
+    public WebSocketConnection(WebSocketOptions option) {
+        id = ClientID++;
+        client = new OkHttpClient.Builder().connectTimeout(option.connectTimeout_s, TimeUnit.SECONDS).build();
+        this.option = option;
     }
 
     public void registerEvent(WebSocketEvent event) {
@@ -47,72 +53,81 @@ public class WebSocketConnection extends WebSocketListener {
         this.onClose = onClose;
     }
 
-    public boolean isConnected() {
-        return true;
-    }
-
-    public void connect(String target, WebSocketOptions option) {
-        //this.onConnect = onConnect;
-        Request okhttpRequest = new Request.Builder().url(target).build();
+    public void connect(String target) {
+        if (status == Status.CONNECTED) {
+            return;
+        }
+        Request okhttpRequest = new Request.Builder().url(option.url + target).build();
         webSocket = client.newWebSocket(okhttpRequest, this);
-        while (status == Status.IDLE) {
+
+        synchronized (connectedNotification) {
             try {
-                Thread.sleep(100);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+                connectedNotification.wait(option.connectTimeout_s * 1000);
+                if (status != Status.CONNECTED) {
+                    CEILog.showFailure("WS[%d] Connect failed", id);
+                }
+            } catch (Exception e) {
+                System.err.println("ERROR wait");
             }
         }
     }
 
-    public void close(WebSocketOptions option) {
 
+    public void close() {
+        webSocket.close(1000, "");
     }
 
     @Override
     public void onOpen(WebSocket webSocket, Response response) {
         super.onOpen(webSocket, response);
-        System.err.println("onOpen");
+        CEILog.showInfo("");
+        status = Status.CONNECTED;
         if (onConnect != null) {
             onConnect.onSystemEvent(this);
         }
-        status = Status.CONNECTED;
+        synchronized (connectedNotification) {
+            connectedNotification.notify();
+        }
     }
 
     @Override
     public void onMessage(WebSocket webSocket, ByteString bytes) {
         super.onMessage(webSocket, bytes);
-
-        String s = CEIUtils.gzip(bytes.toByteArray());
-        System.err.println("Receive bytes " + s);
-        WebSocketMessage msg = new WebSocketMessage(s);
+        WebSocketMessage msg = new WebSocketMessage(bytes);
         onMessage(msg);
     }
 
     @Override
     public void onMessage(WebSocket webSocket, String text) {
         super.onMessage(webSocket, text);
-        System.err.println("Receive " + text);
         WebSocketMessage msg = new WebSocketMessage(text);
         onMessage(msg);
     }
 
+
     private void onMessage(WebSocketMessage msg) {
-        Iterator<WebSocketEvent> it = event.iterator();
-        while (it.hasNext()) {
-            WebSocketEvent cur = it.next();
-            if (cur.check(msg)) {
-                cur.invoke(this, msg);
-                if (!cur.isPersistence()) {
-                    event.remove(it);
+        event.forEach(item -> {
+            if (item.check(msg)) {
+                item.invoke(this, msg);
+                if (!item.isPersistence()) {
+                    event.remove(item);
                 }
             }
-        }
+        });
+    }
+
+    @Override
+    public void onClosing(WebSocket webSocket, int code, String reason) {
+        super.onClosing(webSocket, code, reason);
+        System.out.println("Closing");
+        webSocket.close(code, reason);
     }
 
     @Override
     public void onFailure(WebSocket webSocket, Throwable t, Response response) {
         super.onFailure(webSocket, t, response);
         System.out.println("Error");
+        t.printStackTrace();
         status = Status.CLOSED;
     }
 
@@ -127,7 +142,7 @@ public class WebSocketConnection extends WebSocketListener {
     }
 
     public void send(String msg) {
-        if (msg != null || !msg.isEmpty()) {
+        if (msg != null && !msg.isEmpty()) {
             System.out.println("Send " + msg);
             webSocket.send(msg);
         }

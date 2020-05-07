@@ -1,7 +1,6 @@
 package cn.ma.cei.impl;
 
 import cn.ma.cei.exception.CEIException;
-import javafx.util.Pair;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
@@ -40,9 +39,9 @@ public class CEIUtils {
             return Long.toString(System.currentTimeMillis() / 1000);
         }
         if (format.equals("Unix_s")) {
-            return Long.toString(System.currentTimeMillis());
-        } else if (format.equals("Unix_ms")) {
             return Long.toString(System.currentTimeMillis() / 1000);
+        } else if (format.equals("Unix_ms")) {
+            return Long.toString(System.currentTimeMillis());
         } else {
             Date now = new Date();
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat(format);
@@ -52,18 +51,13 @@ public class CEIUtils {
     }
 
     public static String combineQueryString(RestfulRequest request, Constant sort, String separator) {
-        List<Pair<String, String>> queryString = new LinkedList<>(request.getQueryString());
+        Map<String, String> queryString = new TreeMap<>(request.getQueryString());
         if (sort != null) {
             switch (sort) {
                 case ASC:
-                    queryString.sort((o1, o2) -> {
-                        return o1.getKey().compareTo(o2.getKey());
-                    });
                     break;
                 case DSC:
-                    queryString.sort((o1, o2) -> {
-                        return -o1.getKey().compareTo(o2.getKey());
-                    });
+                    queryString = ((TreeMap<String, String>) queryString).descendingMap();
                     break;
                 case NONE:
                     // Do nothing
@@ -72,17 +66,16 @@ public class CEIUtils {
                     throw new CEIException(sort.toString());
             }
         }
-
         StringBuilder builder = new StringBuilder();
-        queryString.forEach((item) -> {
+        queryString.forEach((key, value) -> {
             if (!("").equals(builder.toString())) {
                 if (separator != null && !separator.equals("")) {
                     builder.append(separator);
                 }
             }
-            builder.append(item.getKey());
+            builder.append(key);
             builder.append("=");
-            builder.append(urlEscape(item.getValue()));
+            builder.append(urlEscape(value));
         });
         return builder.toString();
     }

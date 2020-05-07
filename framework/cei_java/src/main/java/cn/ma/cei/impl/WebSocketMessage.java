@@ -14,7 +14,15 @@ public class WebSocketMessage {
         this.byteString = byteString;
     }
 
-    public JsonWrapper getJson() {
-        return JsonWrapper.parseFromString(text);
+    public String getString() {
+        return text;
+    }
+
+    public void upgrade(String value) {
+        this.text = value;
+    }
+
+    public byte[] getBytes() {
+        return byteString.toByteArray();
     }
 }

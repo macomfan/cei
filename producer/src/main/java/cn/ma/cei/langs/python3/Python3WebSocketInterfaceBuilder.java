@@ -1,5 +1,6 @@
 package cn.ma.cei.langs.python3;
 
+import cn.ma.cei.generator.BuilderContext;
 import cn.ma.cei.generator.IMethod;
 import cn.ma.cei.generator.Variable;
 import cn.ma.cei.generator.VariableType;
@@ -45,7 +46,7 @@ public class Python3WebSocketInterfaceBuilder implements IWebSocketInterfaceBuil
 
     @Override
     public void onAddReference(VariableType variableType) {
-
+        clientClass.addReference(variableType);
     }
 
     @Override
@@ -60,22 +61,36 @@ public class Python3WebSocketInterfaceBuilder implements IWebSocketInterfaceBuil
 
     @Override
     public void setupOnConnect(Variable connection, IMethod onConnect) {
-
+        Python3Method nestedMethod = new Python3Method(clientClass);
+        method.getCode().endln();
+        nestedMethod.startNestedMethod(null, onConnect.getDescriptor() + "_event", onConnect.getInputVariableList());
+        nestedMethod.getCode().appendCode(onConnectBuilder.method.getCode());
+        nestedMethod.endMethod();
+        method.getCode().appendCode(nestedMethod.getCode());
+        method.addInvoke(connection.getDescriptor() + ".set_on_connect",
+                BuilderContext.createStatement(onConnect.getDescriptor() + "_event"));
     }
 
     @Override
-    public void connect(Variable connection, Variable target, Variable option) {
-        method.addInvoke("self.connect_ws", target, option);
+    public void connect(Variable connection, Variable target) {
+        method.addInvoke(connection.getDescriptor() + ".connect", target);
     }
 
     @Override
     public void setupOnClose(Variable connection, IMethod onClose) {
-
+        Python3Method nestedMethod = new Python3Method(clientClass);
+        method.getCode().endln();
+        nestedMethod.startNestedMethod(null, onClose.getDescriptor() + "_event", onClose.getInputVariableList());
+        nestedMethod.getCode().appendCode(onCloseBuilder.method.getCode());
+        nestedMethod.endMethod();
+        method.getCode().appendCode(nestedMethod.getCode());
+        method.addInvoke(connection.getDescriptor() + ".set_on_close",
+                BuilderContext.createStatement(onClose.getDescriptor() + "_event"));
     }
 
     @Override
-    public void close(Variable connection, Variable option) {
-
+    public void close(Variable connection) {
+        method.addInvoke(connection.getDescriptor() + ".close");
     }
 
 

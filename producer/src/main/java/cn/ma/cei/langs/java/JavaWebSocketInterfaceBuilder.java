@@ -48,8 +48,8 @@ public class JavaWebSocketInterfaceBuilder implements IWebSocketInterfaceBuilder
     }
 
     @Override
-    public void connect(Variable connection, Variable target, Variable option) {
-        method.addInvoke(connection.getDescriptor() + ".connect", target, option);
+    public void connect(Variable connection, Variable target) {
+        method.addInvoke(connection.getDescriptor() + ".connect", target);
     }
 
     @Override
@@ -60,8 +60,8 @@ public class JavaWebSocketInterfaceBuilder implements IWebSocketInterfaceBuilder
     }
 
     @Override
-    public void close(Variable connection, Variable option) {
-        method.addInvoke(connection.getDescriptor() + ".close", option);
+    public void close(Variable connection) {
+        method.addInvoke(connection.getDescriptor() + ".close");
     }
 
     @Override

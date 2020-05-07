@@ -63,42 +63,41 @@ public abstract class DataProcessorBase<T extends xDataProcessorItem> {
         return defaultInput;
     }
 
-    public Variable queryInputVariable(String inputName, String defaultInput, VariableType type) {
+    public Variable queryInputVariable(String inputName, String defaultInputName, VariableType type) {
         Variable result = null;
-        if (Checker.isEmpty(inputName)) {
-            if (!Checker.isEmpty(defaultInput)) {
-                result = queryVariable(defaultInput);
+        if (!Checker.isEmpty(inputName)) {
+            return tryQueryVariable(inputName, type);
+        }
+        if (!Checker.isEmpty(defaultInputName)) {
+            result = queryVariable(defaultInputName);
+            if (result != null) {
+                return result;
             }
-            if (result == null) {
-                List<Variable> variableList = GlobalContext.getCurrentMethod().getInputVariableList();
-                int found = -1;// Not found: -1, Found: index, Multi Fount： -2
-                int index = 0;
-                for (Variable variable : variableList) {
-                    if (variable.getType() == type) {
-                        if (found == -1) {
-                            found = index;
-                        } else {
-                            found = -2;
-                        }
-                    }
-                    index++;
-                }
+        }
+        if (getDefaultInput() != null) {
+            return TypeConverter.convertType(getDefaultInput(), type, builder);
+        }
+        List<Variable> variableList = GlobalContext.getCurrentMethod().getInputVariableList();
+        int found = -1;// Not found: -1, Found: i, Multi Fount： -2
+        int i = 0;
+        for (Variable variable : variableList) {
+            if (variable.getType() == type) {
                 if (found == -1) {
-                    // Not found
-                    CEIErrors.showXMLFailure("Cannot found default input %s, and no any input with type %s", defaultInput, type.getDescriptor());
-                } else if (found == -2) {
-                    CEIErrors.showXMLFailure("Cannot decide input by type %s, multi-inputs are found", type.getDescriptor());
+                    found = i;
+                } else {
+                    found = -2;
                 }
             }
+            i++;
+        }
+        if (found == -1) {
+            CEIErrors.showXMLFailure("Cannot found default input %s, and no any input with type %s", defaultInputName, type.getDescriptor());
+        } else if (found == -2) {
+            CEIErrors.showXMLFailure("Cannot decide input by type %s, multi-inputs are found", type.getDescriptor());
         } else {
-            result = queryVariable(inputName);
-            if (result == null) {
-                CEIErrors.showXMLFailure("Cannot found input variable: %s", inputName);
-            }
+            result = variableList.get(found);
         }
-        if (result == null) {
-            CEIErrors.showXMLFailure("Cannot found input variable");
-        }
+
         return result;
     }
 
@@ -160,7 +159,11 @@ public abstract class DataProcessorBase<T extends xDataProcessorItem> {
      * @return the variable object
      */
     public Variable tryQueryVariable(String name, VariableType specType) {
-        return GlobalContext.getCurrentMethod().queryVariable(name, specType, builder);
+        return GlobalContext.getCurrentMethod().tryQueryVariable(name, specType, builder);
+    }
+
+    public Variable tryQueryVariable(String name) {
+        return GlobalContext.getCurrentMethod().tryQueryVariable(name);
     }
 
     public abstract Variable build(T item, IDataProcessorBuilder builder);

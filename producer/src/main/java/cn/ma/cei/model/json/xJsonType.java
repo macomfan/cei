@@ -15,6 +15,9 @@ public abstract class xJsonType extends xElement {
     @XmlAttribute(name = "value")
     public String value;
 
+    @XmlAttribute(name = "optional")
+    public Boolean optional;
+
     @Override
     public void customCheck() {
         super.customCheck();
@@ -24,6 +27,9 @@ public abstract class xJsonType extends xElement {
             key = copy;
             value = "{" + copy + "}";
             copy = null;
+        }
+        if (optional == null) {
+            optional = false;
         }
     }
 }

@@ -1,13 +1,11 @@
 package cn.ma.cei.impl;
 
 import cn.ma.cei.exception.CEIException;
-import java.io.UnsupportedEncodingException;
-import java.math.BigDecimal;
-import java.net.URLEncoder;
-import javafx.util.Pair;
 
-import java.util.LinkedList;
-import java.util.List;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 public class RestfulRequest {
 
@@ -16,8 +14,8 @@ public class RestfulRequest {
     private Method method;
     private RestfulOptions options;
     private byte[] requestBody_ = null;
-    private List<Pair<String, String>> queryString_ = new LinkedList<>();
-    private List<Pair<String, String>> headers_ = new LinkedList<>();
+    private final Map<String, String> queryString_ = new LinkedHashMap<>();
+    private final Map<String, String> headers_ = new LinkedHashMap<>();
 
     public RestfulRequest(RestfulOptions options) {
         this.options = options;
@@ -44,59 +42,41 @@ public class RestfulRequest {
         this.method = method;
     }
 
-    public void setTarget(String target, Object... params) {
+    public void setTarget(String target) {
         this.target = target;
     }
 
     public void addHeader(String name, String value) {
-        headers_.add(new Pair<>(name, value));
+        headers_.put(name, value);
     }
 
     public void addQueryString(String name, String value) {
         if (value == null) {
             return;
         }
-        queryString_.add(new Pair<>(name, value));
-    }
-
-    public void addQueryString(String name, Long value) {
-        if (value == null) {
-            return;
-        }
-        queryString_.add(new Pair<>(name, value.toString()));
-    }
-
-    public void addQueryString(String name, BigDecimal value) {
-        if (value == null) {
-            return;
-        }
-        queryString_.add(new Pair<>(name, value.stripTrailingZeros().toPlainString()));
-    }
-
-    public void addQueryString(String name, Boolean value) {
-        addQueryString(name, value.toString());
+        queryString_.put(name, value);
     }
 
     public String buildQueryString() {
         StringBuilder builder = new StringBuilder();
-        queryString_.forEach((item) -> {
+        queryString_.forEach((key, value) -> {
             if (!("").equals(builder.toString())) {
                 builder.append('&');
             } else {
                 builder.append('?');
             }
-            builder.append(item.getKey());
+            builder.append(key);
             builder.append("=");
-            builder.append(urlEncode(item.getValue()));
+            builder.append(urlEncode(value));
         });
         return builder.toString();
     }
 
-    public List<Pair<String, String>> getQueryString() {
+    public Map<String, String> getQueryString() {
         return queryString_;
     }
 
-    public List<Pair<String, String>> getHeaders() {
+    public Map<String, String> getHeaders() {
         return headers_;
     }
 

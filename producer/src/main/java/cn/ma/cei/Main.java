@@ -125,7 +125,7 @@ public class Main {
         BuildSDK.registerFramework(new Python3Framework());
         BuildSDK.registerFramework(new GoFramework());
         try {
-            BuildSDK.build("C:\\dev\\cei\\exchanges", "java|python3", "C:\\dev\\cei\\output");
+            BuildSDK.build("C:\\dev\\cei\\exchanges\\huobipro", "java|golang|python3", "C:\\dev\\cei\\output");
         } catch (Exception e) {
             System.err.println(e.getMessage());
             System.err.println(BuildTracer.getTraceString());
@@ -174,8 +174,6 @@ public class Main {
         service.registerRestful("/api/getExchangeSummary", new GetExchangeSummary())
                 .registerRestful("/*", new StaticPage("C:/dev/cei/webroot"));
         service.registerWebSocket("/ws", new OperationHandler());
-        ExchangeInfoMessage.setProcessor(new ExchangeInfoProcessor());
-        ExchangeQueryMessage.setProcessor(new ExchangeQueryProcessor());
         service.start(8090);
     }
 

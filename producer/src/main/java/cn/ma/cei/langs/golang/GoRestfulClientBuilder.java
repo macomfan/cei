@@ -14,7 +14,7 @@ import cn.ma.cei.generator.builder.IRestfulInterfaceBuilder;
 import cn.ma.cei.generator.buildin.RestfulOptions;
 import cn.ma.cei.langs.golang.tools.GoFile;
 import cn.ma.cei.langs.golang.tools.GoMethod;
-import cn.ma.cei.langs.golang.tools.GoPtrVar;
+import cn.ma.cei.langs.golang.vars.GoPtrVar;
 import cn.ma.cei.langs.golang.tools.GoStruct;
 
 /**
@@ -31,23 +31,23 @@ public class GoRestfulClientBuilder implements IRestfulClientBuilder {
     }
 
     @Override
-    public void startClient(VariableType clientType, RestfulOptions options) {
-        clientStruct = new GoStruct(clientType.getDescriptor());
-        clientStruct.addPrivateMember(new GoPtrVar(clientType.addPrivateMember(RestfulOptions.getType(), "options")));
+    public void startClient(VariableType client, RestfulOptions option, Variable optionVariable) {
+        clientStruct = new GoStruct(client.getDescriptor());
+        clientStruct.addPrivateMember(clientStruct.varPtr(client.getMember("option")));
         GoMethod constructor = new GoMethod(null);
-        constructor.getCode().appendWordsln("func", "New" + clientType.getDescriptor() + "(options *" + RestfulOptions.getType().getDescriptor() + ")", "*" + clientType.getDescriptor(), "{");
+        constructor.getCode().appendWordsln("func", "New" + client.getDescriptor() + "(option *" + RestfulOptions.getType().getDescriptor() + ")", "*" + client.getDescriptor(), "{");
         constructor.getCode().newBlock(() -> {
-            constructor.getCode().appendWordsln("inst", ":=", "new(" + clientType.getDescriptor() + ")");
-            Variable url = BuilderContext.createStringConstant(options.url);
-            constructor.getCode().appendWordsln("if", "options", "!=", "nil", "{");
+            constructor.getCode().appendWordsln("inst", ":=", "new(" + client.getDescriptor() + ")");
+            Variable url = BuilderContext.createStringConstant(option.url);
+            constructor.getCode().appendWordsln("if", "option", "!=", "nil", "{");
             constructor.getCode().newBlock(() -> {
-                constructor.getCode().appendln("inst.options = options");
+                constructor.getCode().appendln("inst.option = option");
             });
             constructor.getCode().appendln("} else {");
             constructor.getCode().newBlock(() -> {
-                constructor.getCode().appendWordsln("inst.options.URL", "=", url.getDescriptor());
-                if (options.connectionTimeout != null) {
-                    constructor.getCode().appendWordsln("inst.options.connectionTimeout", "=", options.connectionTimeout.toString());
+                constructor.getCode().appendWordsln("inst.option.Url", "=", url.getDescriptor());
+                if (option.connectionTimeout != null) {
+                    constructor.getCode().appendWordsln("inst.option.connectionTimeout", "=", option.connectionTimeout.toString());
                 }
             });
             constructor.getCode().appendln("}");

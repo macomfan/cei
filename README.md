@@ -24,4 +24,6 @@ The full name of CEI is CryptoCurrency Exchange Interface. It is an SDK set supp
 
 
 ### XML Definition
-[TBD]
+
+#### \<SDK>
+The SDK is the root element in the CEI XML. It is used fo define the exchange name, and XML schema.

@@ -49,6 +49,12 @@ class RestfulRequest:
         if value is not None:
             self.__queryString.append([key, value])
 
+    def set_post_body(self, body):
+        self.__post_body = body
+
+    def get_post_body(self):
+        return self.__post_body
+
     def get_query_string(self):
         return self.__queryString
 

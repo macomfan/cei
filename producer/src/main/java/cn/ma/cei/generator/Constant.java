@@ -12,13 +12,18 @@ package cn.ma.cei.generator;
 public class Constant {
 
     private static final EnvironmentData<String, String> requestMethod = new EnvironmentData<>();
-    private static final EnvironmentData<String, String> authenticationMethod = new EnvironmentData<>();
+    private static final EnvironmentData<String, String> requestInfo = new EnvironmentData<>();
+    private static final EnvironmentData<String, String> keyword = new EnvironmentData<>();
 
     public static EnvironmentData<String, String> requestMethod() {
         return requestMethod;
     }
 
-    public static EnvironmentData<String, String> authenticationMethod() {
-        return authenticationMethod;
+    public static EnvironmentData<String, String> keyword() {
+        return keyword;
+    }
+
+    public static EnvironmentData<String, String> requestInfo() {
+        return requestInfo;
     }
 }

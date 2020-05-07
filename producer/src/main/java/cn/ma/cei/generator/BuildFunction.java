@@ -17,14 +17,14 @@ public class BuildFunction {
         VariableType returnType = null;
         if (!Checker.isEmpty(function.procedureReturn)) {
             returnType = BuildDataProcessor.getReturnType(function.implementation, function.procedureReturn);
-            if (returnType == null) {
-                Variable variable = GlobalContext.getCurrentMethod().queryVariable(function.procedureReturn);
-                if (variable == null) {
-                    CEIErrors.showXMLFailure("Cannot find return variable %s", function.procedureReturn);
-                    return;
-                }
-                returnType = variable.getType();
-            }
+//            if (returnType == null) {
+//                Variable variable = GlobalContext.getCurrentMethod().queryVariable(function.procedureReturn);
+//                if (variable == null) {
+//                    CEIErrors.showXMLFailure("Cannot find return variable %s", function.procedureReturn);
+//                    return;
+//                }
+//                returnType = variable.getType();
+//            }
         }
 
         builder.startMethod(returnType,

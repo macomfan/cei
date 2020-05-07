@@ -5,38 +5,46 @@ import cn.ma.cei.generator.Variable;
 public interface IJsonParserBuilder extends IBuilderBase {
 
     /***
-     * Should be [ to.nameDescriptor = jsonObject.nameDescriptor.getString(itemName) ]
-     * 
-     * @param to
+     * Should be [ value.nameDescriptor = jsonObject.nameDescriptor.getString(key) ]
+     *  @param value
      * @param jsonObject
-     * @param itemName 
+     * @param key
+     * @param optional
      */    
-    void getJsonString(Variable to, Variable jsonObject, Variable itemName);
+    void getJsonString(Variable value, Variable jsonObject, Variable key, boolean optional);
 
-    void getJsonInteger(Variable to, Variable jsonObject, Variable itemName);
+    void getJsonInteger(Variable value, Variable jsonObject, Variable key, boolean optional);
 
-    void getJsonBoolean(Variable to, Variable jsonObject, Variable itemName);
+    void getJsonBoolean(Variable value, Variable jsonObject, Variable key, boolean optional);
     
-    void getJsonDecimal(Variable to, Variable jsonObject, Variable itemName);
+    void getJsonDecimal(Variable value, Variable jsonObject, Variable key, boolean optional);
     
-    void assignJsonStringArray(Variable to, Variable jsonObject, Variable itemName);
+    void assignJsonStringArray(Variable value, Variable jsonObject, Variable key, boolean optional);
 
-    void assignJsonDecimalArray(Variable to, Variable jsonObject, Variable itemName);
+    void assignJsonDecimalArray(Variable value, Variable jsonObject, Variable key, boolean optional);
 
-    void assignJsonBooleanArray(Variable to, Variable jsonObject, Variable itemName);
+    void assignJsonBooleanArray(Variable value, Variable jsonObject, Variable key, boolean optional);
 
-    void assignJsonIntArray(Variable to, Variable jsonObject, Variable itemName);
+    void assignJsonIntArray(Variable value, Variable jsonObject, Variable key, boolean optional);
 
-    void getJsonArray(Variable jsonWrapperObject, Variable jsonObject, Variable itemName);
-
-    /***
-     * jsonObject = parentJsonObject.getObject( itemName )
+    /**
+     * parentJsonObject = parentJsonObject.getArray( key )
      *
      * @param jsonObject
      * @param parentJsonObject
-     * @param itemName 
+     * @param key
+     * @param optional
      */
-    void defineJsonObject(Variable jsonObject, Variable parentJsonObject, Variable itemName);
+    void getJsonArray(Variable jsonObject, Variable parentJsonObject, Variable key, boolean optional);
+
+    /***
+     * jsonObject = parentJsonObject.getObject( key )
+     *
+     * @param jsonObject
+     * @param parentJsonObject
+     * @param key
+     */
+    void getJsonObject(Variable jsonObject, Variable parentJsonObject, Variable key, boolean optional);
 
     /***
      * value = parentModel
@@ -55,16 +63,16 @@ public interface IJsonParserBuilder extends IBuilderBase {
     void startJsonObjectArray(Variable eachItemJsonObject, Variable jsonObject);
 
     /***
-     * parentModel.to.add(model)
+     * parentModel.value.add(model)
      *
-     * @param to
+     * @param value
      * @param model
      */
-    void endJsonObjectArray(Variable to, Variable model);
+    void endJsonObjectArray(Variable value, Variable model);
 
     void defineModel(Variable model);
 
-    void defineRootJsonObject(Variable jsonObject, Variable responseVariable);
+    void defineRootJsonObject(Variable jsonObject, Variable stringVariable);
 
     IJsonCheckerBuilder createJsonCheckerBuilder();
 }

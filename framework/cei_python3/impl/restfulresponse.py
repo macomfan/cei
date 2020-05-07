@@ -7,6 +7,3 @@ class RestfulResponse:
 
     def get_string(self):
         return self.__response.text
-
-    def get_json(self):
-        return JsonWrapper.parse_from_string(self.get_string())

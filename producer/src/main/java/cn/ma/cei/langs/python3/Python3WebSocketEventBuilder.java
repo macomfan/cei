@@ -38,18 +38,14 @@ public class Python3WebSocketEventBuilder implements IWebSocketEventBuilder {
     }
 
     @Override
-    public void newEvent(Variable event) {
-        method.addAssign(method.defineVariable(event), method.newInstance(event.getType()));
+    public void newEvent(Variable event, Variable isPersistent) {
+        method.addAssign(method.defineVariable(event), method.newInstance(event.getType(), isPersistent));
     }
 
     @Override
-    public void setAsPersistentEvent(Variable event) {
-        method.addInvoke(event.getDescriptor() + ".set_persistent", BuilderContext.createStatement("True"));
-    }
-
-    @Override
-    public void registerEvent(Variable event) {
-        method.addInvoke("self.register_event", event);
+    public void registerEvent(Variable connection, Variable event) {
+        method.addInvoke(connection.getDescriptor() + ".register_event", event);
+        //method.addInvoke("self.__connection.register_event", event);
     }
 
 

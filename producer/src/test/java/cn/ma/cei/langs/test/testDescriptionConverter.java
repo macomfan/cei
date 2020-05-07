@@ -69,4 +69,9 @@ public class testDescriptionConverter implements IDescriptionConverter {
     public Set<String> getKeywords() {
         return null;
     }
+
+    @Override
+    public Set<String> getBuildIn() {
+        return null;
+    }
 }
