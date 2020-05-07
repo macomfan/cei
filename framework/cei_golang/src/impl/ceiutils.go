@@ -32,7 +32,7 @@ func GetNow(format string) string {
 	} else if format == "Unix_ms" {
 		return ToString(time.Now().UnixNano() / 1000).(string)
 	}
-	now := time.Now()
+	now := time.Now().UTC()
 	timeStr := format
 	timeStr = strings.Replace(timeStr, "%Y", fmt.Sprintf("%d", now.Year()), -1)
 	timeStr = strings.Replace(timeStr, "%M", fmt.Sprintf("%02d", now.Month()), -1)

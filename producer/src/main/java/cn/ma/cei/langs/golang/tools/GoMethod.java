@@ -91,6 +91,15 @@ public class GoMethod extends GoVarMgr {
         return method + "(" + invokeParamString(tmp) + ")";
     }
 
+//    public void startInterface(GoType returnType, String methodName, List<GoVar> params) {
+//        if (!Checker.isNull(params) && params.size() > 1) {
+//            List<GoVar> vars = mergeInputVar(params);
+//            inputStruct = new GoStruct("Args" + methodName);
+//            vars.forEach(item -> inputStruct.addPublicMember(item));
+//        }
+//        startMethod(returnType, methodName, params);
+//    }
+
     public void startInterface(GoType returnType, String methodName, List<GoVar> params) {
         if (!Checker.isNull(params) && params.size() > 1) {
             List<GoVar> vars = mergeInputVar(params);

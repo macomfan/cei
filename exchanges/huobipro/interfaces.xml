@@ -212,7 +212,7 @@
                         </json_parser>
                     </response>
                 </interface>
-                
+
                 <interface name="getLatestAggregatedTicker">
                     <inputs>
                         <string name="symbol"/>
@@ -336,9 +336,24 @@
                         <upgrade_websocket_message value="{decoded}"/>
                     </handler>
                 </on_message>
+                <on_message name="onPing">
+                    <trigger>
+                        <json_checker>
+                            <json_checker_equal key="op" value="ping"/>
+                        </json_checker>
+                    </trigger>
+                    <handler>
+                        <get_now name="ts" format="Unix_ms"/>
+                        <json_builder name="jsonResult">
+                            <json_value key="op" value="pong"/>
+                            <json_value key="ts" value="{ts}"/>
+                        </json_builder>
+                        <send value="{jsonResult}"/>
+                    </handler>
+                </on_message>
             </events>
             <interfaces>
-                <interface name="requestCandlestick">
+                <interface name="subscriptCandlestick">
                     <inputs>
                         <string name="symbol"/>
                         <string name="period"/>
@@ -351,7 +366,7 @@
                         </json_builder>
                         <send value="{json}"/>
                     </message>
-                    <event callback="onCandlestick" persistent="true">
+                    <event callback="onCandlestick" persistent="false">
                         <trigger>
                             <json_checker>
                                 <json_checker_equal key="ch" value="market.{symbol}.kline.{period}"/>
@@ -359,7 +374,7 @@
                         </trigger>
                         <handler>
                             <json_parser model="CandlestickData">
-                                <json_object copy="tick">
+                                <json_object key="tick">
                                     <json_value copy="id"/>
                                     <json_value copy="amount"/>
                                     <json_value copy="count"/>
@@ -368,6 +383,190 @@
                                     <json_value copy="low"/>
                                     <json_value copy="high"/>
                                     <json_value copy="vol"/>
+                                </json_object>
+                            </json_parser>
+                        </handler>
+                    </event>
+                </interface>
+                <interface name="requestCandlestick">
+                    <inputs>
+                        <string name="symbol"/>
+                        <string name="period"/>
+                    </inputs>
+                    <message>
+                        <get_now name="ts" format="Unix_ms"/>
+                        <json_builder name="json">
+                            <json_value key="req" value="market.{symbol}.kline.{period}"/>
+                            <json_string key="id" value="{ts}"/>
+                        </json_builder>
+                        <send value="{json}"/>
+                    </message>
+                    <event callback="onCandlestick" persistent="false">
+                        <trigger>
+                            <json_checker>
+                                <json_checker_equal key="ch" value="market.{symbol}.kline.{period}"/>
+                            </json_checker>
+                        </trigger>
+                        <handler>
+                            <json_parser model="CandlestickData">
+                                <json_object key="tick">
+                                    <json_value copy="id"/>
+                                    <json_value copy="amount"/>
+                                    <json_value copy="count"/>
+                                    <json_value copy="open"/>
+                                    <json_value copy="close"/>
+                                    <json_value copy="low"/>
+                                    <json_value copy="high"/>
+                                    <json_value copy="vol"/>
+                                </json_object>
+                            </json_parser>
+                        </handler>
+                    </event>
+                </interface>
+
+                <interface name="subscriptMarketDepth">
+                    <inputs>
+                        <string name="symbol"/>
+                        <string name="type"/>
+                    </inputs>
+                    <message>
+                        <get_now name="ts" format="Unix_ms"/>
+                        <json_builder name="json">
+                            <json_value key="sub" value="market.{symbol}.depth.{type}"/>
+                            <json_string key="id" value="{ts}"/>
+                        </json_builder>
+                        <send value="{json}"/>
+                    </message>
+                    <event callback="onDepth" persistent="true">
+                        <trigger>
+                            <json_checker>
+                                <json_checker_equal key="ch" value="market.{symbol}.depth.{type}"/>
+                            </json_checker>
+                        </trigger>
+                        <handler>
+                            <json_parser model="Depth">
+                                <json_value copy="ch"/>
+                                <json_object key="tick">
+                                    <json_object_for_each copy="bids" model="Quote">
+                                        <json_value key="[0]" value="{price}"/>
+                                        <json_value key="[1]" value="{amount}"/>
+                                    </json_object_for_each>
+                                    <json_object_for_each copy="asks" model="Quote">
+                                        <json_value key="[0]" value="{price}"/>
+                                        <json_value key="[1]" value="{amount}"/>
+                                    </json_object_for_each>
+                                </json_object>
+                            </json_parser>
+                        </handler>
+                    </event>
+                </interface>
+                <interface name="requestDepth">
+                    <inputs>
+                        <string name="symbol"/>
+                        <string name="type"/>
+                    </inputs>
+                    <message>
+                        <get_now name="ts" format="Unix_ms"/>
+                        <json_builder name="json">
+                            <json_value key="sub" value="market.{symbol}.depth.{type}"/>
+                            <json_string key="id" value="{ts}"/>
+                        </json_builder>
+                        <send value="{json}"/>
+                    </message>
+                    <event callback="onDepth" persistent="true">
+                        <trigger>
+                            <json_checker>
+                                <json_checker_equal key="ch" value="market.{symbol}.depth.{type}"/>
+                            </json_checker>
+                        </trigger>
+                        <handler>
+                            <json_parser model="Depth">
+                                <json_value copy="ch"/>
+                                <json_object key="tick">
+                                    <json_object_for_each copy="bids" model="Quote">
+                                        <json_value key="[0]" value="{price}"/>
+                                        <json_value key="[1]" value="{amount}"/>
+                                    </json_object_for_each>
+                                    <json_object_for_each copy="asks" model="Quote">
+                                        <json_value key="[0]" value="{price}"/>
+                                        <json_value key="[1]" value="{amount}"/>
+                                    </json_object_for_each>
+                                </json_object>
+                            </json_parser>
+                        </handler>
+                    </event>
+                </interface>
+            </interfaces>
+        </websocket>
+        <websocket name="AssetChannelClient">
+            <connection url="wss://api.huobi.pro/ws/v2">
+                <open>
+                    <connect/>
+                    <on_connect>
+
+                    </on_connect>
+                </open>
+            </connection>
+            <events>
+                <on_message name="onPing">
+                    <trigger>
+                        <json_checker>
+                            <json_checker_equal key="action" value="ping"/>
+                        </json_checker>
+                    </trigger>
+                    <handler>
+                        <json_parser model="Timestamp" name="ts">
+                            <json_object key="data">
+                                <json_value key="ts" value="{timestamp}"/>
+                            </json_object>
+                        </json_parser>
+                        <json_builder name="jsonResult">
+                            <json_value key="op" value="pong"/>
+                            <json_value key="ts" value="{ts.timestamp}"/>
+                        </json_builder>
+                        <send value="{jsonResult}"/>
+                    </handler>
+                </on_message>
+            </events>
+            <interfaces>
+                <interface name="subscriptOrder">
+                    <inputs>
+                        <string name="symbol"/>
+                    </inputs>
+                    <message>
+                        <json_builder name="json">
+                            <json_string key="action" value="sub"/>
+                            <json_string key="ch" value="orders#{symbol}"/>
+                        </json_builder>
+                        <send value="{json}"/>
+                    </message>
+                    <event callback="onOrder" persistent="true">
+                        <trigger>
+                            <json_checker>
+                                <json_checker_equal key="action" value="push"/>
+                                <json_checker_equal key="ch" value="orders#{symbol}"/>
+                            </json_checker>
+                        </trigger>
+                        <handler>
+                            <json_parser model="OrderUpdate">
+                                <json_object key="data">
+                                    <json_value copy="eventType" optional="true"/>
+                                    <json_value copy="symbol" optional="true"/>
+                                    <json_value copy="orderId" optional="true"/>
+                                    <json_value copy="clientOrderId" optional="true"/>
+                                    <json_value copy="type" optional="true"/>
+                                    <json_value copy="orderPrice" optional="true"/>
+                                    <json_value copy="orderSize" optional="true"/>
+                                    <json_value copy="type" optional="true"/>
+                                    <json_value copy="orderStatus" optional="true"/>
+                                    <json_value copy="orderCreateTime" optional="true"/>
+                                    <json_value copy="tradePrice" optional="true"/>
+                                    <json_value copy="tradeVolume" optional="true"/>
+                                    <json_value copy="tradeId" optional="true"/>
+                                    <json_value copy="tradeTime" optional="true"/>
+                                    <json_value copy="aggressor" optional="true"/>
+                                    <json_value copy="remainAmt" optional="true"/>
+                                    <json_value copy="lastActTime" optional="true"/>
                                 </json_object>
                             </json_parser>
                         </handler>

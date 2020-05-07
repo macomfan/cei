@@ -8,8 +8,8 @@ type RestfulOptions struct {
 }
 
 func (inst *RestfulOptions) SetFrom(option *RestfulOptions) {
-	if option.URL != inst.URL {
-		inst.URL = option.URL
+	if option.Url != inst.Url {
+		inst.Url = option.Url
 	}
 	if option.ConnectionTimeout != inst.ConnectionTimeout {
 		inst.ConnectionTimeout = option.ConnectionTimeout

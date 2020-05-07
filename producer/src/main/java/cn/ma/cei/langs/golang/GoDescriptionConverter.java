@@ -34,7 +34,7 @@ public class GoDescriptionConverter implements IDescriptionConverter {
 
     private String checkKeyword(String name) {
         if (keywords.contains(name)) {
-            throw new CEIException(name + " is keyword in Go");
+            return name + "U";
         }
         return name;
     }

@@ -1,6 +1,7 @@
 package main
 
 import (
+	"./impl"
 	"encoding/json"
 	"fmt"
 	"sort"
@@ -30,16 +31,9 @@ func (s IntSlice) Len() int           { return len(s) }
 func (s IntSlice) Swap(i, j int)      { s[i], s[j] = s[j], s[i] }
 func (s IntSlice) Less(i, j int) bool { return s[i][0] < s[j][0] }
 
-func myprint(f float64) {
-	if f == float64(nil) {
-		print("nil")
-	} else {
-		print(f)
-	}
-}
 
 func main() {
-	myprint(float64(nil))
+	fmt.Println(impl.GetNow("%Y:%M:%DT%h:%m:%s"))
 
 	var queryString [][]string
 	queryString = append(queryString, []string{"symbol", "symbol"})

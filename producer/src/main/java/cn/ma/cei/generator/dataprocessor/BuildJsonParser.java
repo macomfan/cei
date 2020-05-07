@@ -51,7 +51,13 @@ public class BuildJsonParser extends DataProcessorBase<xJsonParser> {
             return null;
         }
         VariableType outputModelType = BuilderContext.variableType(jsonParser.model);
-        Variable model = createTempVariable(outputModelType, outputModelType.getDescriptor() + "Var");
+
+        Variable model;
+        if (Checker.isEmpty(jsonParser.name)) {
+            model = createTempVariable(outputModelType, outputModelType.getDescriptor() + "Var");
+        } else {
+            model = createTempVariable(outputModelType, jsonParser.name);
+        }
         jsonParserBuilder.defineModel(model);
 
         jsonParser.itemList.forEach(item -> item.doBuild(() -> {
@@ -72,7 +78,7 @@ public class BuildJsonParser extends DataProcessorBase<xJsonParser> {
 
     @Override
     public String resultVariableName(xJsonParser item) {
-        return null;
+        return item.name;
     }
 
 
@@ -85,11 +91,7 @@ public class BuildJsonParser extends DataProcessorBase<xJsonParser> {
     }
 
     private Variable defineRootJsonObject(xJsonParser jsonParser) {
-        if (Checker.isEmpty(jsonParser.name)) {
-            return createTempVariable(JsonWrapper.getType(), "rootObj");
-        } else {
-            return createUserVariable(JsonWrapper.getType(), jsonParser.name);
-        }
+        return createTempVariable(JsonWrapper.getType(), "rootObj");
     }
 
     private void buildJsonChecker(
@@ -276,7 +278,7 @@ public class BuildJsonParser extends DataProcessorBase<xJsonParser> {
             if (variableName == null) {
                 CEIErrors.showXMLFailure("[BuildJsonParser] Value must be Variable");
             }
-            return parentModel.getMember(variableName);
+            return parentModel.tryGetMember(variableName);
         } else {
             return null;
         }

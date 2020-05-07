@@ -121,5 +121,24 @@
             <decimal name="askPrice"/>
             <decimal name="askSize"/>
         </model>
+
+        <model name="OrderUpdate">
+            <string name="eventType"/>
+            <string name="symbol"/>
+            <int name="orderId"/>
+            <string name="clientOrderId"/>
+            <string name="orderPrice"/>
+            <string name="orderSize"/>
+            <string name="type"/>
+            <string name="orderStatus"/>
+            <int name="orderCreateTime"/>
+            <string name="tradePrice"/>
+            <string name="tradeVolume"/>
+            <int name="tradeId"/>
+            <int name="tradeTime"/>
+            <boolean name="aggressor"/>
+            <string name="remainAmt"/>
+            <string name="lastActTime"/>
+        </model>
     </models>
 </sdk>

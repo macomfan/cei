@@ -16,7 +16,6 @@ func newRestfulResponse(response *http.Response) *RestfulResponse {
 	return instance
 }
 
-
 func (inst *RestfulResponse) GetString() string {
 	var body []byte
 	defer inst.response.Body.Close()
@@ -25,6 +24,5 @@ func (inst *RestfulResponse) GetString() string {
 		fmt.Println(err)
 		return ""
 	}
-	json := ParseFromString(string(body))
-	return ""
+	return string(body)
 }
