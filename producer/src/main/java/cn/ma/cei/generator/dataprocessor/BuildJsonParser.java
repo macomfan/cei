@@ -274,7 +274,7 @@ public class BuildJsonParser extends DataProcessorBase<xJsonParser> {
         if (!Checker.isEmpty(jsonItem.value)) {
             String variableName = RegexHelper.isReference(jsonItem.value);
             if (variableName == null) {
-                throw new CEIException("[BuildJsonParser] To must be Variable");
+                CEIErrors.showXMLFailure("[BuildJsonParser] Value must be Variable");
             }
             return parentModel.getMember(variableName);
         } else {

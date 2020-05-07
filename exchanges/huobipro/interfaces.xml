@@ -212,6 +212,39 @@
                         </json_parser>
                     </response>
                 </interface>
+                
+                <interface name="getLatestAggregatedTicker">
+                    <inputs>
+                        <string name="symbol"/>
+                    </inputs>
+                    <request method="get" target="/market/detail/merged">
+                        <query_strings>
+                            <query key="symbol" value="{symbol}"/>
+                        </query_strings>
+                    </request>
+                    <response>
+                        <json_parser model="AggregatedMarketData">
+                            <json_object key="data">
+                                <json_value copy="id"/>
+                                <json_value copy="amount"/>
+                                <json_value copy="count"/>
+                                <json_value copy="open"/>
+                                <json_value copy="close"/>
+                                <json_value copy="low"/>
+                                <json_value copy="high"/>
+                                <json_value copy="vol"/>
+                                <json_object key="bid">
+                                    <json_value key="[0]" value="{bidPrice}"/>
+                                    <json_value key="[1]" value="{bidSize}"/>
+                                </json_object>
+                                <json_object key="ask">
+                                    <json_value key="[0]" value="{askPrice}"/>
+                                    <json_value key="[1]" value="{askSize}"/>
+                                </json_object>
+                            </json_object>
+                        </json_parser>
+                    </response>
+                </interface>
             </interfaces>
 
         </restful>
@@ -287,7 +320,7 @@
             </interfaces>
         </restful>
 
-        <websocket name="WSClient">
+        <websocket name="MarketChannelClient">
             <connection url="wss://api.huobi.pro/ws">
                 <open>
                     <connect/>

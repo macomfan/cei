@@ -7,14 +7,18 @@ import cn.ma.cei.generator.builder.IDataProcessorBuilder;
 import cn.ma.cei.generator.builder.IWebSocketEventBuilder;
 import cn.ma.cei.generator.builder.IWebSocketInterfaceBuilder;
 import cn.ma.cei.generator.builder.IWebSocketNestedBuilder;
+import cn.ma.cei.generator.buildin.WebSocketCallback;
 import cn.ma.cei.langs.golang.tools.GoMethod;
 import cn.ma.cei.langs.golang.tools.GoStruct;
+import cn.ma.cei.langs.golang.vars.GoType;
+import cn.ma.cei.langs.golang.vars.GoVar;
 
+import java.util.LinkedList;
 import java.util.List;
 
 public class GoWebSocketInterfaceBuilder implements IWebSocketInterfaceBuilder {
 
-    private GoStruct clientStruct;
+    private final GoStruct clientStruct;
     private GoMethod method;
     private IWebSocketNestedBuilder onConnectBuilder = null;
     private IWebSocketNestedBuilder onCloseBuilder = null;
@@ -42,12 +46,25 @@ public class GoWebSocketInterfaceBuilder implements IWebSocketInterfaceBuilder {
 
     @Override
     public void onAddReference(VariableType variableType) {
-
+        method.addReference(variableType);
     }
 
     @Override
     public void startMethod(VariableType returnType, String methodDescriptor, List<Variable> params) {
         method = new GoMethod(clientStruct);
+        List<GoVar> tmp = new LinkedList<>();
+        params.forEach(item -> {
+            if (item.getType().getName().indexOf(WebSocketCallback.typeName) == 0) {
+
+            } else {
+                tmp.add(method.var(item));
+            }
+        });
+        GoType type = null;
+        if (returnType != null) {
+            type = new GoType(returnType);
+        }
+        method.startInterface(type, methodDescriptor, tmp);
     }
 
     @Override
@@ -57,12 +74,17 @@ public class GoWebSocketInterfaceBuilder implements IWebSocketInterfaceBuilder {
 
     @Override
     public void endMethod(Variable returnVariable) {
-
+        if (returnVariable != null) {
+            method.addReturn(method.var(returnVariable));
+        }
+        method.endMethod();
+        clientStruct.addMethod(method);
     }
 
     @Override
     public void endMethod() {
-
+        method.endMethod();
+        clientStruct.addMethod(method);
     }
 
     @Override
@@ -72,7 +94,7 @@ public class GoWebSocketInterfaceBuilder implements IWebSocketInterfaceBuilder {
 
     @Override
     public void connect(Variable connection, Variable target) {
-
+        method.addInvoke(connection.getDescriptor() + ".Connect", method.var(target));
     }
 
     @Override
@@ -82,6 +104,6 @@ public class GoWebSocketInterfaceBuilder implements IWebSocketInterfaceBuilder {
 
     @Override
     public void close(Variable connection) {
-
+        method.addInvoke(connection.getDescriptor() + ".Close");
     }
 }

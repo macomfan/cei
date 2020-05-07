@@ -12,7 +12,7 @@ public interface IWebSocketEventBuilder extends IBuilderBase {
 
     void newEvent(Variable event, Variable isPersistent);
 
-    void registerEvent(Variable event);
+    void registerEvent(Variable connection, Variable event);
 
     void setTriggerToEvent(Variable event, IMethod triggerMethod);
 

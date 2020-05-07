@@ -17,7 +17,7 @@ public class GoWebSocketNestedBuilder implements IWebSocketNestedBuilder {
 
     @Override
     public void onAddReference(VariableType variableType) {
-
+        method.addReference(variableType);
     }
 
     @Override
@@ -27,6 +27,8 @@ public class GoWebSocketNestedBuilder implements IWebSocketNestedBuilder {
 
     @Override
     public void endMethod(Variable returnVariable) {
-
+        if (returnVariable != null) {
+            method.addReturn(method.var(returnVariable));
+        }
     }
 }

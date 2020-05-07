@@ -1,6 +1,5 @@
 package cn.ma.cei.langs.java;
 
-import cn.ma.cei.generator.BuilderContext;
 import cn.ma.cei.generator.IMethod;
 import cn.ma.cei.generator.Variable;
 import cn.ma.cei.generator.builder.IWebSocketEventBuilder;
@@ -42,8 +41,8 @@ public class JavaWebSocketEventBuilder implements IWebSocketEventBuilder {
     }
 
     @Override
-    public void registerEvent(Variable event) {
-        method.addInvoke("this.connection.registerEvent", event);
+    public void registerEvent(Variable connection, Variable event) {
+        method.addInvoke(connection.getDescriptor() + ".registerEvent", event);
     }
 
     @Override

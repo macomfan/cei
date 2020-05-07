@@ -1,4 +1,4 @@
 package impl
 
-type WebsocketMessage struct {
+type WebSocketMessage struct {
 }

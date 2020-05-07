@@ -38,12 +38,12 @@ public class GoWebSocketEventBuilder implements IWebSocketEventBuilder {
 
     @Override
     public void newEvent(Variable event, Variable isPersistent) {
-
+        method.addAssignAndDeclare(method.useVariable(method.var(event)), method.invoke("impl.NewWebSocketEvent", method.var(isPersistent)));
     }
 
     @Override
-    public void registerEvent(Variable event) {
-
+    public void registerEvent(Variable connection, Variable event) {
+        method.addInvoke(connection.getDescriptor() + ".RegisterEvent", method.var(event));
     }
 
     @Override

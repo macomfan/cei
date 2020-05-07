@@ -125,7 +125,7 @@ public class Main {
         BuildSDK.registerFramework(new Python3Framework());
         BuildSDK.registerFramework(new GoFramework());
         try {
-            BuildSDK.build("C:\\dev\\cei\\exchanges", "golang|python3", "C:\\dev\\cei\\output");
+            BuildSDK.build("C:\\dev\\cei\\exchanges\\huobipro", "java|golang|python3", "C:\\dev\\cei\\output");
         } catch (Exception e) {
             System.err.println(e.getMessage());
             System.err.println(BuildTracer.getTraceString());

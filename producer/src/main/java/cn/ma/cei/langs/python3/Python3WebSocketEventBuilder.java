@@ -43,8 +43,9 @@ public class Python3WebSocketEventBuilder implements IWebSocketEventBuilder {
     }
 
     @Override
-    public void registerEvent(Variable event) {
-        method.addInvoke("self.__connection.register_event", event);
+    public void registerEvent(Variable connection, Variable event) {
+        method.addInvoke(connection.getDescriptor() + ".register_event", event);
+        //method.addInvoke("self.__connection.register_event", event);
     }
 
 

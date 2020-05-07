@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<sdk xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+     xsi:schemaLocation="https://github.com/macomfan/cei https://macomfan.github.io/cei/schema/ceisdk-0.0.1.xsd"
+     xmlns="https://github.com/macomfan/cei"
+     name="huobipro">
+    <models>
+        <model name="Account">
+            <string name="status"/>
+            <object_array name="data" model="AccountData"/>
+        </model>
+
+        <model name="AccountData">
+            <int name="id"/>
+            <string name="state"/>
+            <string name="type"/>
+            <string name="subtype"/>
+        </model>
+
+        <model name="Trade">
+            <int name="id"/>
+            <int name="tradeID"/>
+            <decimal name="price"/>
+            <decimal name="amount"/>
+            <string name="direction"/>
+            <int name="ts"/>
+        </model>
+
+        <model name="BestQuote">
+            <string name="status"/>
+            <string name="ch"/>
+            <int name="ts"/>
+            <decimal name="bestBidPrice"/>
+            <decimal name="bestBidAmount"/>
+            <decimal name="bestAskPrice"/>
+            <decimal name="bestAskAmount"/>
+        </model>
+
+        <model name="Candlestick">
+            <string name="status"/>
+            <object_array name="data" model="CandlestickData"/>
+        </model>
+
+        <model name="CandlestickData">
+            <int name="id"/>
+            <decimal name="amount"/>
+            <int name="count"/>
+            <decimal name="open"/>
+            <decimal name="close"/>
+            <decimal name="low"/>
+            <decimal name="high"/>
+            <decimal name="vol"/>
+        </model>
+
+        <model name="Currencies">
+            <string name="status"/>
+            <string_array name="data"/>
+        </model>
+
+        <model name="LastTrade">
+            <string name="status"/>
+            <string name="ch"/>
+            <int name="ts"/>
+            <int name="tsInTick"/>
+            <int name="idInTick"/>
+            <object_array name="data" model="Trade"/>
+        </model>
+
+        <model name="Depth">
+            <string name="status"/>
+            <string name="ch"/>
+            <int name="ts"/>
+            <object_array name="bids" model="Quote"/>
+            <object_array name="asks" model="Quote"/>
+        </model>
+
+        <model name="OrderID">
+            <string name="status"/>
+            <int name="data"/>
+        </model>
+
+        <model name="Quote">
+            <decimal name="price"/>
+            <decimal name="amount"/>
+        </model>
+
+        <model name="Symbols">
+            <string name="status"/>
+            <object_array name="data" model="SymbolsData"/>
+        </model>
+
+        <model name="SymbolsData">
+            <string name="baseCurrency"/>
+            <string name="quoteCurrency"/>
+            <int name="pricePrecision"/>
+            <int name="amountPrecision"/>
+            <string name="symbolPartition"/>
+            <string name="symbol"/>
+            <string name="state"/>
+            <int name="valuePrecision"/>
+            <decimal name="minOrderAmt"/>
+            <decimal name="maxOrderAmt"/>
+            <decimal name="minOrderValue"/>
+            <int name="leverageRatio"/>
+        </model>
+
+        <model name="Timestamp">
+            <int name="timestamp"/>
+        </model>
+        
+        <model name="AggregatedMarketData">
+            <int name="id"/>
+            <decimal name="amount"/>
+            <int name="count"/>
+            <decimal name="open"/>
+            <decimal name="close"/>
+            <decimal name="low"/>
+            <decimal name="high"/>
+            <decimal name="vol"/>
+            <decimal name="bidPrice"/>
+            <decimal name="bidSize"/>
+            <decimal name="askPrice"/>
+            <decimal name="askSize"/>
+        </model>
+    </models>
+</sdk>

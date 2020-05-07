@@ -1,7 +1,7 @@
 package impl
 
 type RestfulOptions struct {
-	URL               string
+	Url               string
 	ConnectionTimeout int
 	ApiKey            string
 	SecretKey         string

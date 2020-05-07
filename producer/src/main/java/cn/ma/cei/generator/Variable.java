@@ -67,7 +67,9 @@ public class Variable {
                 break;
             case REFER:
                 // TODO
-                this.nameDescriptor = parentVariable.nameDescriptor + "." + GlobalContext.getCurrentDescriptionConverter().getMemberVariableDescriptor(name);
+                // Need refactor, the REFER should equal to one MEMBER/PRIVATE variable which parentVariable is not null.
+                //this.nameDescriptor = parentVariable.nameDescriptor + "." + GlobalContext.getCurrentDescriptionConverter().getMemberVariableDescriptor(name);
+                this.nameDescriptor = parentVariable.nameDescriptor + "." + name;
                 this.name = name;
                 break;
             //case THIS:

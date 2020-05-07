@@ -81,11 +81,11 @@ public class WebSocketConnection extends WebSocketListener {
     public void onOpen(WebSocket webSocket, Response response) {
         super.onOpen(webSocket, response);
         CEILog.showInfo("");
+        status = Status.CONNECTED;
         if (onConnect != null) {
             onConnect.onSystemEvent(this);
         }
         synchronized (connectedNotification) {
-            status = Status.CONNECTED;
             connectedNotification.notify();
         }
     }

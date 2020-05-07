@@ -6,6 +6,7 @@
 package cn.ma.cei.langs.golang;
 
 import cn.ma.cei.exception.CEIException;
+import cn.ma.cei.generator.buildin.WebSocketCallback;
 import cn.ma.cei.generator.naming.IDescriptionConverter;
 import cn.ma.cei.utils.Checker;
 import cn.ma.cei.utils.WordSplitter;
@@ -92,16 +93,22 @@ public class GoDescriptionConverter implements IDescriptionConverter {
 
     @Override
     public String getSelfDescriptor() {
-        return "self";
+        return "inst";
     }
 
     @Override
     public String getGenericTypeDescriptor(String baseName, List<String> subNames) {
-        if (subNames.size() > 1) {
-            throw new CEIException("Type error in Go");
-        }
-        if (subNames.size() == 1) {
+//        if (subNames.size() > 1) {
+//            throw new CEIException("Type error in Go");
+//        }
+//        if (subNames.size() == 1) {
+//            return baseName + subNames.get(0);
+//        }
+        if ("[]".equals(baseName)) {
             return baseName + subNames.get(0);
+        }
+        else if ("impl.WebSocketCallback".equals(baseName)) {
+            return "func (connection *impl.WebSocketConnection)";
         }
         return baseName;
     }

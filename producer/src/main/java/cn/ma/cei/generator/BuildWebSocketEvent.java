@@ -48,6 +48,7 @@ public class BuildWebSocketEvent {
     private static void build(EventContext context,
                               IWebSocketEventBuilder eventBuilder) {
         sMethod interfaceMethod = GlobalContext.getCurrentMethod();
+        Variable connection = interfaceMethod.getVariable("connection");
         // Start event
         eventBuilder.startEvent();
 
@@ -102,7 +103,7 @@ public class BuildWebSocketEvent {
             eventBuilder.setEventToEvent(eventVariable, response);
             GlobalContext.setCurrentMethod(interfaceMethod);
         }
-        eventBuilder.registerEvent(eventVariable);
+        eventBuilder.registerEvent(connection, eventVariable);
         // End event
         eventBuilder.endEvent();
     }

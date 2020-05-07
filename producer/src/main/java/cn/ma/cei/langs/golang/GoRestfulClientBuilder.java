@@ -33,21 +33,21 @@ public class GoRestfulClientBuilder implements IRestfulClientBuilder {
     @Override
     public void startClient(VariableType client, RestfulOptions option, Variable optionVariable) {
         clientStruct = new GoStruct(client.getDescriptor());
-        clientStruct.addPrivateMember(clientStruct.varPtr(client.addPrivateMember(RestfulOptions.getType(), "options")));
+        clientStruct.addPrivateMember(clientStruct.varPtr(client.getMember("option")));
         GoMethod constructor = new GoMethod(null);
-        constructor.getCode().appendWordsln("func", "New" + client.getDescriptor() + "(options *" + RestfulOptions.getType().getDescriptor() + ")", "*" + client.getDescriptor(), "{");
+        constructor.getCode().appendWordsln("func", "New" + client.getDescriptor() + "(option *" + RestfulOptions.getType().getDescriptor() + ")", "*" + client.getDescriptor(), "{");
         constructor.getCode().newBlock(() -> {
             constructor.getCode().appendWordsln("inst", ":=", "new(" + client.getDescriptor() + ")");
             Variable url = BuilderContext.createStringConstant(option.url);
-            constructor.getCode().appendWordsln("if", "options", "!=", "nil", "{");
+            constructor.getCode().appendWordsln("if", "option", "!=", "nil", "{");
             constructor.getCode().newBlock(() -> {
-                constructor.getCode().appendln("inst.options = options");
+                constructor.getCode().appendln("inst.option = option");
             });
             constructor.getCode().appendln("} else {");
             constructor.getCode().newBlock(() -> {
-                constructor.getCode().appendWordsln("inst.options.URL", "=", url.getDescriptor());
+                constructor.getCode().appendWordsln("inst.option.Url", "=", url.getDescriptor());
                 if (option.connectionTimeout != null) {
-                    constructor.getCode().appendWordsln("inst.options.connectionTimeout", "=", option.connectionTimeout.toString());
+                    constructor.getCode().appendWordsln("inst.option.connectionTimeout", "=", option.connectionTimeout.toString());
                 }
             });
             constructor.getCode().appendln("}");
