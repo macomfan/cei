@@ -13,8 +13,8 @@ The full name of CEI is CryptoCurrency Exchange Interface. It is an SDK set supp
 |  Language   | Support Version |
 |  ----  | ----  |
 | [Java](https://github.com/macomfan/cei/tree/master/framework/cei_java) | v1.8 |
-| [Python3](https://github.com/macomfan/cei)   | v3.8 |
-| [golang](https://github.com/macomfan/cei)  | v1.13.5 (WebSocket is in developing)|
+| [Python3](https://github.com/macomfan/cei/tree/master/framework/cei_python3)   | v3.8 |
+| [golang](https://github.com/macomfan/cei/tree/master/framework/cei_golang)  | v1.13.5 (WebSocket is in developing)|
 | C++ | Developing, not support yet |
 | javascript | In plan, not support yet |
 | C# | In plan, not support yet |

@@ -1,4 +1,4 @@
-##CEI Python3
+## CEI Python3
 
 ### Getting Started:
 1. You must use [CEI](https://github.com/macomfan/cei) to generate the SDK code in java.  

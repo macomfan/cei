@@ -502,9 +502,6 @@
             <connection url="wss://api.huobi.pro/ws/v2">
                 <open>
                     <connect/>
-                    <on_connect>
-
-                    </on_connect>
                 </open>
             </connection>
             <events>
