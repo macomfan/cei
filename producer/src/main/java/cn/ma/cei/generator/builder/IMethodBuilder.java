@@ -17,9 +17,15 @@ public interface IMethodBuilder extends IBuilderBase {
      */
     void startMethod(VariableType returnType, String methodDescriptor, List<Variable> params);
 
+    /**
+     * Create the DataProcessorBuilder.
+     * @return The instance of DataProcessorBuilder
+     */
     IDataProcessorBuilder createDataProcessorBuilder();
 
     void endMethod(Variable returnVariable);
 
+    // TODO
+    // TO be deleted, instead of void endMethod(Variable returnVariable);
     void endMethod();
 }

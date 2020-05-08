@@ -21,10 +21,17 @@ import cn.ma.cei.utils.RegexHelper;
 public class BuildDataProcessor {
 
     public static class Context {
+        /**
+         * Cannot be null, the DataProcessor must have the procedure list.
+         */
         public xProcedure procedure = null;
         public String returnVariableName = null;
         public VariableType specifiedReturnType = null;
         public Variable defaultInput = null;
+
+        /**
+         * Builder cannot be null.
+         */
         public IDataProcessorBuilder dataProcessorBuilder = null;
     }
 

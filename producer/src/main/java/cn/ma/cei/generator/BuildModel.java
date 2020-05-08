@@ -1,7 +1,9 @@
 package cn.ma.cei.generator;
 
+import cn.ma.cei.exception.CEIErrors;
 import cn.ma.cei.generator.builder.IModelBuilder;
 import cn.ma.cei.model.xModel;
+import cn.ma.cei.utils.Checker;
 
 public class BuildModel {
 
@@ -12,11 +14,14 @@ public class BuildModel {
         VariableType modelType = GlobalContext.variableType(model.name);
         GlobalContext.setCurrentModel(modelType);
         builder.startModel(modelType);
-
-        model.memberList.forEach(item -> item.doBuild(() -> {
-            Variable member = modelType.addMember(item.getType(), item.name);
-            builder.addMember(member);
-        }));
+        if (!Checker.isNull(model.memberList)) {
+            model.memberList.forEach(item -> item.doBuild(() -> {
+                Variable member = modelType.addMember(item.getType(), item.name);
+                builder.addMember(member);
+            }));
+        } else {
+            CEIErrors.showWarning("No any member in model: %s", model.name);
+        }
         builder.endModel();
         GlobalContext.setCurrentModel(null);
     }
