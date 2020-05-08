@@ -1,10 +1,11 @@
 from impl.restfulrequest import RestfulRequest
-from impl.restfulconnection import RestfulConnection
+from impl.websocketoptions import WebSocketOptions
 import re
 from impl.jsonwrapper import JsonWrapper
 import decimal
 from impl.restfuloptions import RestfulOptions
 from exchanges import test
+from exchanges import huobipro
 
 
 # from exchanges.huobipro import *
@@ -67,7 +68,6 @@ if __name__ == '__main__':
     # print(simpleInfo.name)
     #
     # ws_client = test.WSClient()
-
 
     # def on_connect(connection):
     #     print("onconnect callback")
