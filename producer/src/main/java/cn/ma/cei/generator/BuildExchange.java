@@ -1,5 +1,6 @@
 package cn.ma.cei.generator;
 
+import cn.ma.cei.exception.CEIErrors;
 import cn.ma.cei.generator.builder.IExchangeBuilder;
 import cn.ma.cei.generator.buildin.Procedures;
 import cn.ma.cei.generator.buildin.RestfulOptions;
@@ -14,14 +15,16 @@ public class BuildExchange {
         RestfulOptions.registryMember();
         WebSocketOptions.registryMember();
 
-        if (sdk.modelList != null) {
+        if (!Checker.isNull(sdk.modelList)) {
             sdk.modelList.forEach((model) -> model.doBuild(() -> {
                 BuildModel.build(model, Checker.checkNull(builder.createModelBuilder(), builder, "ModelBuilder"));
             }));
+        } else {
+            CEIErrors.showWarning("No any model defined for SDK: ", sdk.name);
         }
 
-        VariableType procedureModel = GlobalContext.variableType(Procedures.typeName);
-        if (sdk.procedures != null) {
+        if (sdk.procedures != null && !Checker.isNull(sdk.procedures.functions)) {
+            VariableType procedureModel = GlobalContext.variableType(Procedures.typeName);
             GlobalContext.setCurrentModel(procedureModel);
             if (sdk.procedures.functions != null) {
                 sdk.procedures.functions.forEach(function -> function.doBuild(() -> {
@@ -34,9 +37,9 @@ public class BuildExchange {
             GlobalContext.setCurrentModel(null);
         }
 
-        // Build restful interfaces
         if (sdk.clients != null) {
-            if (sdk.clients.restfulList != null) {
+            // Build restful interfaces
+            if (!Checker.isNull(sdk.clients.restfulList)) {
                 sdk.clients.restfulList.forEach((restful) -> restful.doBuild(() -> {
                     GlobalContext.setupRunTimeVariableType(restful.name, BuilderContext.NO_REF);
                     VariableType clientType = GlobalContext.variableType(restful.name);
@@ -45,9 +48,8 @@ public class BuildExchange {
                     GlobalContext.setCurrentModel(null);
                 }));
             }
-
             // Build web socket interfaces
-            if (sdk.clients.webSocketList != null) {
+            if (!Checker.isNull(sdk.clients.webSocketList)) {
                 sdk.clients.webSocketList.forEach((websocket) -> websocket.doBuild(() -> {
                     GlobalContext.setupRunTimeVariableType(websocket.name, BuilderContext.NO_REF);
                     VariableType clientType = GlobalContext.variableType(websocket.name);
@@ -56,6 +58,8 @@ public class BuildExchange {
                     GlobalContext.setCurrentModel(null);
                 }));
             }
+        } else {
+            CEIErrors.showWarning("No any client defined for SDK: ", sdk.name);
         }
         builder.endExchange();
     }

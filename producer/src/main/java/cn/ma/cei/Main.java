@@ -2,12 +2,7 @@ package cn.ma.cei;
 
 import cn.ma.cei.exception.BuildTracer;
 import cn.ma.cei.exception.CEIErrors;
-import cn.ma.cei.finalizer.XMLDatabase;
 import cn.ma.cei.generator.BuildSDK;
-import cn.ma.cei.langs.cpp.CppFramework;
-import cn.ma.cei.langs.golang.GoFramework;
-import cn.ma.cei.langs.java.JavaFramework;
-import cn.ma.cei.langs.python3.Python3Framework;
 import cn.ma.cei.model.xSDK;
 import cn.ma.cei.service.Service;
 import cn.ma.cei.service.messages.ExchangeInfoMessage;
@@ -120,12 +115,13 @@ public class Main {
     }
 
     private void initialize() {
-        BuildSDK.registerFramework(new JavaFramework());
-        BuildSDK.registerFramework(new CppFramework());
-        BuildSDK.registerFramework(new Python3Framework());
-        BuildSDK.registerFramework(new GoFramework());
         try {
-            BuildSDK.build("C:\\dev\\cei\\exchanges\\huobipro", "java|golang|python3", "C:\\dev\\cei\\output");
+            BuildSDK.initialize();
+            BuildSDK.build(
+                    "C:\\dev\\cei\\exchanges",
+                    "C:\\dev\\cei\\framework",
+                    "C:\\dev\\cei\\output",
+                    "java|golang|python3");
         } catch (Exception e) {
             System.err.println(e.getMessage());
             System.err.println(BuildTracer.getTraceString());

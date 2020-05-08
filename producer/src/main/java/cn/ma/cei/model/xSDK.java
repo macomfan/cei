@@ -1,6 +1,8 @@
 package cn.ma.cei.model;
 
+import cn.ma.cei.exception.CEIErrors;
 import cn.ma.cei.model.base.xElement;
+import cn.ma.cei.utils.Checker;
 
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
@@ -21,9 +23,6 @@ public class xSDK extends xElement {
     @XmlElement(name = "model")
     public List<xModel> modelList;
 
-//    @XmlElement(name = "authentications")
-//    public xSDKAuthentications authentications;
-
     @XmlElement(name = "procedures")
     public xCustomProcedures procedures;
 
@@ -33,6 +32,8 @@ public class xSDK extends xElement {
     @Override
     public void customCheck() {
         super.customCheck();
-        checkMemberNotNull(name, "exchange");
+        if (Checker.isEmpty(name)) {
+            CEIErrors.showXMLFailure("name cannot be empty in SDK file: %s", filename);
+        }
     }
 }

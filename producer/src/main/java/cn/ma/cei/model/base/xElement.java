@@ -129,6 +129,11 @@ public abstract class xElement {
         }
     }
 
+    /**
+     * Custom check for each XML element.
+     * Do not call customCheck() for the children element.
+     *
+     */
     public void customCheck() {
 
     }
