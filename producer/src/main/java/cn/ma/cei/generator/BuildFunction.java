@@ -38,10 +38,6 @@ public class BuildFunction {
         if (!Checker.isEmpty(function.procedureReturn)) {
             returnVariable = GlobalContext.getCurrentMethod().queryVariable(function.procedureReturn);
         }
-        if (returnVariable != null) {
-            builder.endMethod(returnVariable);
-        } else {
-            builder.endMethod();
-        }
+        builder.endMethod(returnVariable);
     }
 }

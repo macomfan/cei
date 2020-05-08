@@ -5,8 +5,7 @@
  */
 package cn.ma.cei.langs.golang.tools;
 
-import cn.ma.cei.exception.CEIException;
-import cn.ma.cei.generator.Variable;
+import cn.ma.cei.exception.CEIErrors;
 import cn.ma.cei.generator.VariableType;
 import cn.ma.cei.langs.golang.GoCode;
 import cn.ma.cei.langs.golang.vars.GoVar;
@@ -14,8 +13,6 @@ import cn.ma.cei.utils.UniqueList;
 import cn.ma.cei.utils.WordSplitter;
 
 import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Set;
 
 /**
@@ -29,7 +26,7 @@ public class GoStruct extends GoVarMgr {
     private final UniqueList<String, GoVar> publicMemberList = new UniqueList<>();
     private final UniqueList<String, GoVar> privateMemberList = new UniqueList<>();
     private final Set<String> importList = new HashSet<>();
-    private final List<GoMethod> methodList = new LinkedList<>();
+    private final UniqueList<String, GoMethod> methodList = new UniqueList<>();
 
     public GoStruct(String structName) {
         this.structName = structName;
@@ -41,20 +38,20 @@ public class GoStruct extends GoVarMgr {
 
     public void addPublicMember(GoVar memberVariable) {
         if (privateMemberList.containsKey(memberVariable.getName())) {
-            throw new CEIException("Duplicate member in GoStruct");
+            CEIErrors.showXMLFailure("Duplicate member %s in GoStruct", memberVariable.getName());
         }
         publicMemberList.put(memberVariable.getName(), memberVariable);
     }
 
     public void addPrivateMember(GoVar memberVariable) {
         if (publicMemberList.containsKey(memberVariable.getName())) {
-            throw new CEIException("Duplicate member in GoStruct");
+            CEIErrors.showXMLFailure("Duplicate member %s in GoStruct", memberVariable.getName());
         }
         privateMemberList.put(memberVariable.getName(), memberVariable);
     }
 
     public void addMethod(GoMethod method) {
-        methodList.add(method);
+        methodList.put(method.getMethodName(), method);
     }
 
     public String getStructName() {
@@ -74,10 +71,6 @@ public class GoStruct extends GoVarMgr {
     }
 
     public void build() {
-        defineStruct();
-    }
-
-    private void defineStruct() {
         code.appendWordsln("type", structName, "struct", "{");
         code.newBlock(this::defineMembers);
         code.appendln("}");
@@ -110,12 +103,12 @@ public class GoStruct extends GoVarMgr {
         if (!methodList.isEmpty()) {
             code.endln();
         }
-        methodList.forEach(method -> {
+        methodList.values().forEach(method -> {
             if (method.getInputStruct() != null) {
                 method.getInputStruct().build();
                 code.appendCode(method.getInputStruct().getCode());
+                code.endln();
             }
-
             code.appendCode(method.getCode());
             code.endln();
         });

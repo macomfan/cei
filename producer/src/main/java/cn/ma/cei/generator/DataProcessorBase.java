@@ -30,14 +30,20 @@ public abstract class DataProcessorBase<T extends xDataProcessorItem> {
 
     public VariableType callReturnType(xDataProcessorItem item) {
         if (item != null) {
-            return returnType(convertTo(item));
+            item.startBuilding();
+            VariableType tmp = returnType(convertTo(item));
+            item.endBuilding();
+            return tmp;
         }
         return null;
     }
 
     public String callResultVariableName(xDataProcessorItem item) {
         if (item != null) {
-            return resultVariableName(convertTo(item));
+            item.startBuilding();
+            String tmp = resultVariableName(convertTo(item));
+            item.endBuilding();
+            return tmp;
         }
         return null;
     }

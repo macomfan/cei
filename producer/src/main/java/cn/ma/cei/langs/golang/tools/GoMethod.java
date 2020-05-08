@@ -21,8 +21,8 @@ import java.util.Set;
  */
 public class GoMethod extends GoVarMgr {
 
-    private GoStruct parent = null;
     private final GoCode code = new GoCode();
+    private GoStruct parent = null;
     private String methodName;
     private GoStruct inputStruct = null;
 
@@ -53,10 +53,6 @@ public class GoMethod extends GoVarMgr {
     public String createInstance(VariableType type) {
         return type.getDescriptor() + "{}";
     }
-
-//    public String defineVariable(GoVar variable) {
-//        return "var " + variable.getDescriptor() + " " + variable.getTypeDescriptor();
-//    }
 
     public String useVariable(GoVar variable) {
         return queryVariableDescriptor(variable);

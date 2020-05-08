@@ -31,6 +31,18 @@ public interface IDescriptionConverter {
     
     String getGenericTypeDescriptor(String baseName, List<String> subNames);
 
+    /**
+     * Retrun how to lookup a child member.
+     * e.g. In Java
+     * It is base.value
+     *
+     *
+     * @param baseName
+     * @param valueName
+     * @return
+     */
+    String getReferenceByChain(String baseName, String valueName);
+
     /***
      * List all keywords here, to check if the variable name is conflicting with the keyword.
      * @return Set of keywords.

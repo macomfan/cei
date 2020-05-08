@@ -2,8 +2,14 @@ package cn.ma.cei.generator;
 
 public class BuilderContext {
 
+    public static final String SELF = "###SELF###";
     public final static String NO_REF = "NO_REF";
 
+    /**
+     * Must be called before build a exchange
+     *
+     * @param folder Where the file to be generated.
+     */
     public static void setExchangeFolder(CEIPath folder) {
         GlobalContext.setExchangeFolder(folder);
     }

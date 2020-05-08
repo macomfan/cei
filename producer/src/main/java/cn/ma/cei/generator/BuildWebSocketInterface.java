@@ -55,7 +55,7 @@ public class BuildWebSocketInterface {
             context.dataProcessorBuilder = dataProcessorBuilder;
             BuildDataProcessor.build(context);
         }
-        interfaceBuilder.endMethod();
+        interfaceBuilder.endMethod(null);
     }
 
     private static VariableType getCallbackMessageType(xWSUserCallback callback) {

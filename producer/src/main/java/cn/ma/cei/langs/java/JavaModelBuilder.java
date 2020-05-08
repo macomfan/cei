@@ -21,7 +21,7 @@ public class JavaModelBuilder implements IModelBuilder {
 
     @Override
     public void addMember(Variable variable) {
-        modelClass.addMemberVariable(JavaClass.AccessType.PUBLIC, variable);
+        modelClass.addMemberVariable(variable);
     }
 
     @Override

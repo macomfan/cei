@@ -112,6 +112,11 @@ public class JavaDescriptionConverter implements IDescriptionConverter {
     }
 
     @Override
+    public String getReferenceByChain(String baseName, String valueName) {
+        return baseName + "." + valueName;
+    }
+
+    @Override
     public Set<String> getKeywords() {
         Set<String> keywords = new HashSet<>();
         keywords.add("abstract");

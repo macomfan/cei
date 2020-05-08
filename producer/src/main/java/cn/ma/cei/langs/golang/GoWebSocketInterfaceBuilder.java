@@ -54,7 +54,7 @@ public class GoWebSocketInterfaceBuilder implements IWebSocketInterfaceBuilder {
         method = new GoMethod(clientStruct);
         List<GoVar> tmp = new LinkedList<>();
         params.forEach(item -> {
-            if (item.getType().getName().indexOf(WebSocketCallback.typeName) == 0) {
+            if (item.getType().isBased(WebSocketCallback.getType())) {
 
             } else {
                 tmp.add(method.var(item));
@@ -77,12 +77,6 @@ public class GoWebSocketInterfaceBuilder implements IWebSocketInterfaceBuilder {
         if (returnVariable != null) {
             method.addReturn(method.var(returnVariable));
         }
-        method.endMethod();
-        clientStruct.addMethod(method);
-    }
-
-    @Override
-    public void endMethod() {
         method.endMethod();
         clientStruct.addMethod(method);
     }

@@ -22,10 +22,10 @@ public class JavaWebSocketClientBuilder implements IWebSocketClientBuilder {
     @Override
     public void startClient(VariableType client, WebSocketOptions option, Variable connectionVariable, Variable optionVariable) {
         clientClass = new JavaClass(client.getDescriptor());
-        clientClass.addMemberVariable(JavaClass.AccessType.PRIVATE, client.getMember("option"));
-        clientClass.addMemberVariable(JavaClass.AccessType.PRIVATE, client.getMember("connection"));
+        clientClass.addMemberVariable(client.getMember("option"));
+        clientClass.addMemberVariable(client.getMember("connection"));
 
-        JavaMethod defaultConstructor = new JavaMethod(clientClass);
+        JavaMethod defaultConstructor = new JavaMethod(clientClass, "###defaultConstructor");
         defaultConstructor.startConstructor("");
         {
             defaultConstructor.addAssign(defaultConstructor.useVariable(optionVariable), defaultConstructor.newInstance(optionVariable.getType()));
@@ -36,7 +36,8 @@ public class JavaWebSocketClientBuilder implements IWebSocketClientBuilder {
         defaultConstructor.endMethod();
         clientClass.addMethod(defaultConstructor);
 
-        JavaMethod optionConstructor = new JavaMethod(clientClass);
+        JavaMethod optionConstructor = new JavaMethod(clientClass, "###optionConstructor");
+
         optionConstructor.startConstructor(WebSocketOptions.getType().getDescriptor() + " option");
         {
             optionConstructor.addInvoke("this");

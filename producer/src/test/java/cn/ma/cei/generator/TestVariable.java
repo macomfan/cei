@@ -26,7 +26,7 @@ public class TestVariable {
         modelB.addMember(modelC, "c");
         modelC.addMember(xString.inst.getType(), "str_c");
 
-        Variable a = VariableCreator.createLocalVariable(modelA, "a");
+        Variable a = VariableCreator.createVariable(modelA, "a", Variable.Position.LOCAL);
         assertEquals("a", a.getDescriptor());
         Variable ab = a.getMember("b");
         assertEquals("a.b", ab.getDescriptor());

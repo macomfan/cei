@@ -87,15 +87,10 @@ public class GoFunctionBuilder implements IMethodBuilder {
 
     @Override
     public void endMethod(Variable returnVariable) {
-        method.addReturn(method.var(returnVariable));
+        if (returnVariable != null) {
+            method.addReturn(method.var(returnVariable));
+        }
         method.endMethod();
         mainFile.addMethod(method);
     }
-
-    @Override
-    public void endMethod() {
-        method.endMethod();
-        mainFile.addMethod(method);
-    }
-
 }

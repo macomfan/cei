@@ -24,5 +24,7 @@ public class xResponse extends xProcedure {
         if (Checker.isEmpty(type) && Checker.isNull(items)) {
             CEIErrors.showXMLFailure("Response cannot be null");
         }
+        Checker.checkVariableName(result, "result");
+        Checker.checkValueIn(type, "string", "binary", "json");
     }
 }

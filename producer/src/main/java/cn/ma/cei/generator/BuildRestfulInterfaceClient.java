@@ -14,12 +14,13 @@ public class BuildRestfulInterfaceClient {
         }
         option.url = client.connection.url;
 
-        GlobalContext.getCurrentModel().addPrivateMember(RestfulOptions.getType(), "option");
         VariableType clientModel = GlobalContext.getCurrentModel();
+        clientModel.addPrivateMember(RestfulOptions.getType(), "option");
+
+        // The defaultConstructor is used for lookup the option variable only.
         sMethod defaultConstructor = clientModel.createMethod(clientModel.getName() + "DefaultConstructor");
         builder.startClient(GlobalContext.getCurrentModel(), option, defaultConstructor.getVariable("option"));
-
-        if (client.interfaceList != null) {
+        if (!Checker.isNull(client.interfaceList)) {
             client.interfaceList.forEach((restIf) -> restIf.doBuild(() -> {
                 sMethod method = GlobalContext.getCurrentModel().createMethod(restIf.name);
                 GlobalContext.setCurrentMethod(method);

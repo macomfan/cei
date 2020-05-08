@@ -14,28 +14,47 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 class sMethod implements IMethod {
-    public static final String SELF = "###SELF###";
 
     private final String name;
     private final UniqueList<String, Variable> variableList = new UniqueList<>();
     private final UniqueList<String, sMethod> nestedMethodList = new UniqueList<>();
-    private VariableType returnType;
-    private int temporaryId = 0;
+
+    /**
+     * The indicate this method belongs to which model.
+     */
     private final VariableType parent;
+
+    /**
+     * The self variable point to the parent model. Like "this" in java.
+     */
     private final Variable self;
+
+    private VariableType returnType;
+
+    /**
+     * The index for the temporary variable name.
+     */
+    private int temporaryId = 0;
 
     public sMethod(VariableType parent, String name) {
         this.parent = parent;
         this.name = name;
-        self = createLocalVariable(parent, SELF);
+        self = createLocalVariable(parent, BuilderContext.SELF);
     }
 
+    /**
+     * The nested will share the both input and local variable except self variable.
+     *
+     * @param name
+     * @return
+     */
     public sMethod createNestedMethod(String name) {
         sMethod method = new sMethod(parent, name);
         method.temporaryId = temporaryId;
         nestedMethodList.put(name, method);
         variableList.values().forEach(item -> {
-            if (!item.getName().equals(SELF)) {
+            if (!item.isSelf()) {
+                // The nested method should not include the self variable
                 method.createLocalVariable(item.getType(), item.getName());
             }
         });
@@ -44,7 +63,7 @@ class sMethod implements IMethod {
 
     @Override
     public VariableType getReturnType() {
-        return this.returnType;
+        return returnType;
     }
 
     public void setReturnType(VariableType returnType) {
@@ -72,28 +91,35 @@ class sMethod implements IMethod {
     }
 
     public Variable createInputVariable(VariableType type, String variableName) {
-        Variable variable = VariableCreator.createInputVariable(type, variableName);
+        Variable variable = VariableCreator.createVariable(type, variableName, Variable.Position.INPUT);
         return attachVariable(variable);
     }
 
     public Variable createLocalVariable(VariableType type, String variableName) {
-        Variable variable = VariableCreator.createLocalVariable(type, variableName);
+        Variable variable = VariableCreator.createVariable(type, variableName, Variable.Position.LOCAL);
         return attachVariable(variable);
     }
 
+    /**
+     * Create the user defined variable, the name can be only the natural name. Cannot be {xxx}
+     *
+     * @param type The type of the created Variable.
+     * @param variableName The natural variable name.
+     * @return
+     */
     public Variable createUserVariable(VariableType type, String variableName) {
-        Variable variable = VariableCreator.createUserVariable(type, variableName);
+        Variable variable = VariableCreator.createVariable(type, variableName, Variable.Position.LOCAL);
         return attachVariable(variable);
     }
 
     public Variable createTempVariable(VariableType type, String variableName) {
-        Variable variable = VariableCreator.createLocalVariable(type, temporaryVariableName(variableName));
+        Variable variable = VariableCreator.createVariable(type, temporaryVariableName(variableName), Variable.Position.LOCAL);
         return attachVariable(variable);
     }
 
     private Variable attachVariable(Variable variable) {
         if (variableList.containsKey(variable.getName())) {
-            CEIErrors.showFailure(CEIErrorType.XML, "Method: %s has the duplicate variable: %s", name, variable.getName());
+            CEIErrors.showXMLFailure("Method: %s has the duplicate variable: %s", name, variable.getName());
         }
         variableList.put(variable.getName(), variable);
         return variable;

@@ -36,6 +36,21 @@ public class Checker {
         }
     }
 
+    public static void checkValueIn(String value, String... validValues) {
+        if (value == null) {
+            return;
+        }
+        boolean find = false;
+        for(String valid : validValues) {
+            if (valid.equals(value)) {
+                find = true;
+            }
+        }
+        if (!find) {
+            CEIErrors.showXMLFailure("Value: %s is invalid", value);
+        }
+    }
+
     public static <T> T checkNull(T object, IBuilderBase builder, String description) {
         if (object == null) {
             CEIErrors.showCodeFailure(builder.getClass(), "%s is null.", description);

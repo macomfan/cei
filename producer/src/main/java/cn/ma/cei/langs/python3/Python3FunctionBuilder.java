@@ -47,14 +47,10 @@ public class Python3FunctionBuilder implements IMethodBuilder {
 
     @Override
     public void endMethod(Variable returnVariable) {
+        if (returnVariable != null) {
+            method.addReturn(returnVariable);
+        }
         method.endMethod();
         parent.addMethod(method);
     }
-
-    @Override
-    public void endMethod() {
-        method.endMethod();
-        parent.addMethod(method);
-    }
-
 }

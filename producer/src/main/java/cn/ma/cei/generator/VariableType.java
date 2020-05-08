@@ -1,8 +1,8 @@
 package cn.ma.cei.generator;
 
-import cn.ma.cei.exception.CEIErrorType;
 import cn.ma.cei.exception.CEIErrors;
 import cn.ma.cei.exception.CEIException;
+import cn.ma.cei.utils.Checker;
 import cn.ma.cei.utils.TwoTuple;
 import cn.ma.cei.utils.UniqueList;
 
@@ -13,28 +13,26 @@ import java.util.Objects;
 
 public class VariableType {
 
-    public static VariableType VOID = new VariableType();
+    public static VariableType VOID = new VariableType("##CEI_VOID_TYPE", null);
+
+    private final String typeName;
 
     private final UniqueList<String, sMethod> methods = new UniqueList<>();
     private final UniqueList<String, Variable> members = new UniqueList<>();
-
-    private final String typeName;
     private final List<VariableType> genericList = new LinkedList<>();
+    private String baseName;
 
-    private VariableType() {
-        this.typeName = "CEI_VOID_TYPE";
-    }
-
-    public VariableType(String typeName, VariableType... subTypes) {
+    private VariableType(String typeName, String baseName, VariableType... subTypes) {
         if (subTypes != null && subTypes.length != 0) {
             Collections.addAll(genericList, subTypes);
         }
+        this.baseName = baseName;
         this.typeName = typeName;
     }
 
     public sMethod createMethod(String methodName) {
         if (methods.containsKey(methodName)) {
-            throw new CEIException("[VariableType] Duplicate method: " + methodName);
+            CEIErrors.showXMLFailure("[VariableType] Duplicate method: " + methodName);
         }
         sMethod method = new sMethod(this, methodName);
         methods.put(methodName, method);
@@ -50,18 +48,18 @@ public class VariableType {
 
     public Variable addPrivateMember(VariableType type, String memberName) {
         if (members.containsKey(memberName)) {
-            throw new CEIException("[VariableType] Duplicate member: " + memberName);
+            CEIErrors.showXMLFailure("Duplicate member: %s in model: %s", memberName, typeName);
         }
-        Variable member = VariableCreator.createPrivateMemberVariable(type, memberName);
+        Variable member = VariableCreator.createVariable(type, memberName, Variable.Position.PRIVATE);
         members.put(memberName, member);
         return member;
     }
 
     public Variable addMember(VariableType type, String memberName) {
         if (members.containsKey(memberName)) {
-            throw new CEIException("[VariableType] Duplicate member: " + memberName);
+            CEIErrors.showXMLFailure("Duplicate member: %s in model: %s", memberName, typeName);
         }
-        Variable member = VariableCreator.createMemberVariable(type, memberName);
+        Variable member = VariableCreator.createVariable(type, memberName, Variable.Position.MEMBER);
         members.put(memberName, member);
         return member;
     }
@@ -73,14 +71,16 @@ public class VariableType {
     public Variable tryGetMember(String memberName) {
         Variable result = members.get(memberName);
         if (result == null) {
-            CEIErrors.showFailure(CEIErrorType.XML, "Cannot get the member: %s in model: %s", memberName, typeName);
+            CEIErrors.showXMLFailure("Cannot get the member: %s in model: %s", memberName, typeName);
         }
         return result;
     }
 
-//    public boolean isGeneric() {
-//        return !genericList.isEmpty();
-//    }
+    public boolean isBased(VariableType type) {
+        if (!Checker.isEmpty(baseName) && baseName.equals(type.typeName)) {
+            return true;
+        } else return false;
+    }
 
     public List<VariableType> getGenericList() {
         return new LinkedList<>(genericList);
@@ -94,34 +94,14 @@ public class VariableType {
         return !(typeName == null || typeName.equals(""));
     }
 
-//    public boolean equalTo(VariableType obj) {
-//        return this.equals(obj);
-//    }
-
     public boolean equalTo(String typeName) {
         return this.typeName.equals(typeName);
     }
 
-//    public boolean isCustomModel() {
-//        return VariableFactory.isCustomModel(this);
-//    }
-
-//    public boolean isCustomModelArray() {
-//        if (!typeName.contains("array#")) {
-//            return false;
-//        }
-//        if (genericList.isEmpty()) {
-//            return false;
-//        }
-//        return VariableFactory.isCustomModel(genericList.get(0));
-//    }
-
-    // TODO remove it,
-    // Calculate the descriptor in VariableFactory.
     public String getDescriptor() {
         TwoTuple<String, List<String>> modelInfo = GlobalContext.getModelInfo(typeName);
         if (modelInfo == null) {
-            throw new CEIException("[] cannot find the model " + typeName);
+            throw new CEIException("Cannot find the model " + typeName);
         }
         return GlobalContext.getModelInfo(typeName).get1();
     }
@@ -129,7 +109,7 @@ public class VariableType {
     public List<String> getReferences() {
         TwoTuple<String, List<String>> modelInfo = GlobalContext.getModelInfo(typeName);
         if (modelInfo == null) {
-            throw new CEIException("[] cannot find the model " + typeName);
+            CEIErrors.showXMLFailure("Cannot find the model " + typeName);
         }
         return GlobalContext.getModelInfo(typeName).get2();
     }

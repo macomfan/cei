@@ -67,13 +67,9 @@ public class JavaRestfulInterfaceBuilder implements IRestfulInterfaceBuilder {
 
     @Override
     public void endMethod(Variable returnVariable) {
-        method.addReturn(returnVariable);
-        method.endMethod();
-        clientClass.addMethod(method);
-    }
-
-    @Override
-    public void endMethod() {
+        if (returnVariable != null) {
+            method.addReturn(returnVariable);
+        }
         method.endMethod();
         clientClass.addMethod(method);
     }

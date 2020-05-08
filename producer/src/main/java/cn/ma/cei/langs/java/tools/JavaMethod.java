@@ -20,15 +20,24 @@ public class JavaMethod {
 
     private final JavaCode code = new JavaCode();
     private final JavaClass parent;
-    private final String methodName = "";
+    private String methodName = "";
     private boolean isStatic = false;
 
     public JavaMethod(JavaClass parent) {
         this.parent = parent;
     }
 
+    public JavaMethod(JavaClass parent, String methodName) {
+        this.parent = parent;
+        this.methodName = methodName;
+    }
+
     public JavaCode getCode() {
         return code;
+    }
+
+    public String getMethodName() {
+        return methodName;
     }
 
     public String defineVariable(Variable variable) {
@@ -116,6 +125,7 @@ public class JavaMethod {
     }
 
     public void startMethod(VariableType returnType, String methodName, List<Variable> params) {
+        this.methodName = methodName;
         String staticString = null;
         if (isStatic) {
             staticString = "static";
@@ -143,33 +153,33 @@ public class JavaMethod {
         if (params.isEmpty()) {
             return "";
         }
-        String paramString = "";
+        StringBuilder paramString = new StringBuilder();
         for (Variable p : params) {
             if (p == null) {
                 continue;
             }
-            if (paramString.equals("")) {
-                paramString += p.getDescriptor();
+            if (paramString.toString().equals("")) {
+                paramString.append(p.getDescriptor());
             } else {
-                paramString += ", " + p.getDescriptor();
+                paramString.append(", ").append(p.getDescriptor());
             }
         }
-        return paramString;
+        return paramString.toString();
     }
 
     private String defineParamString(List<Variable> params) {
         if (params.isEmpty()) {
             return "";
         }
-        String paramString = "";
+        StringBuilder paramString = new StringBuilder();
         for (Variable variable : params) {
             parent.addReference(variable.getType());
-            if (paramString.equals("")) {
-                paramString += variable.getTypeDescriptor() + " " + variable.getDescriptor();
+            if (paramString.toString().equals("")) {
+                paramString.append(variable.getTypeDescriptor()).append(" ").append(variable.getDescriptor());
             } else {
-                paramString += ", " + variable.getTypeDescriptor() + " " + variable.getDescriptor();
+                paramString.append(", ").append(variable.getTypeDescriptor()).append(" ").append(variable.getDescriptor());
             }
         }
-        return paramString;
+        return paramString.toString();
     }
 }

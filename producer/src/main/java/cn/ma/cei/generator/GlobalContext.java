@@ -64,7 +64,7 @@ class GlobalContext {
 
     public static void setExchangeFolder(CEIPath folder) {
         if (!folder.exists()) {
-            throw new CEIException("Folder invalid");
+            CEIErrors.showInputFailure("Folder invalid: %s", folder.getFilename());
         }
         exchangeFolder = folder;
     }
@@ -112,19 +112,21 @@ class GlobalContext {
     }
 
     public static Variable createStringConstant(String value) {
-        return VariableCreator.createVariable(xString.inst.getType(), value, Variable.Position.STRING, null);
+        return VariableCreator.createVariable(xString.inst.getType(), value, Variable.Position.STRING);
     }
 
     public static Variable createStatement(String statement) {
-        return VariableCreator.createVariable(xString.inst.getType(), statement, Variable.Position.CONSTANT, null);
+        return VariableCreator.createVariable(xString.inst.getType(), statement, Variable.Position.STATEMENT);
     }
 
     public static VariableType variableType(String typeName, VariableType... argsTypes) {
         String finalName = typeName;
+        String baseName = null;
         boolean isGenericType = false;
         if (argsTypes != null && argsTypes.length != 0) {
             ArrayList<String> tmp = new ArrayList<>();
             isGenericType = true;
+            baseName = typeName;
             for (VariableType oneType : argsTypes) {
                 if (oneType != null) {
                     tmp.add(oneType.getName());
@@ -155,9 +157,9 @@ class GlobalContext {
             variableTypeInfo.tryPut(finalName, value);
         }
         try {
-            Constructor<?> cons = VariableType.class.getDeclaredConstructor(String.class, VariableType[].class);
+            Constructor<?> cons = VariableType.class.getDeclaredConstructor(String.class, String.class, VariableType[].class);
             cons.setAccessible(true);
-            VariableType type = (VariableType) cons.newInstance(finalName, argsTypes);
+            VariableType type = (VariableType) cons.newInstance(finalName, baseName, argsTypes);
             variableTypes.tryPut(finalName, type);
             return type;
         } catch (Exception e) {

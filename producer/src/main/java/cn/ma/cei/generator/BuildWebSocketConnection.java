@@ -81,7 +81,7 @@ public class BuildWebSocketConnection {
             }
 
         }
-        interfaceBuilder.endMethod();
+        interfaceBuilder.endMethod(null);
         GlobalContext.setCurrentMethod(null);
     }
 
@@ -111,7 +111,7 @@ public class BuildWebSocketConnection {
             // Close
             interfaceBuilder.close(connection);
         }
-        interfaceBuilder.endMethod();
+        interfaceBuilder.endMethod(null);
         GlobalContext.setCurrentMethod(null);
     }
 

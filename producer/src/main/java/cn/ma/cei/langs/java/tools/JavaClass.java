@@ -1,5 +1,6 @@
 package cn.ma.cei.langs.java.tools;
 
+import cn.ma.cei.exception.CEIErrors;
 import cn.ma.cei.exception.CEIException;
 import cn.ma.cei.generator.BuilderContext;
 import cn.ma.cei.generator.CEIPath;
@@ -12,39 +13,19 @@ import java.util.*;
 
 public class JavaClass {
 
-    enum ClassType {
-        STANDARD,
-        INNER
-    }
-
-    public enum AccessType {
-        PUBLIC,
-        PRIVATE
-    }
-
-    private String className = "";
-    private String packageName = "";
-    private VariableType superClass = null;
-    private ClassType type = ClassType.STANDARD;
-
     private final UniqueList<String, Variable> privateMemberList = new UniqueList<>();
     private final UniqueList<String, Variable> publicMemberList = new UniqueList<>();
     private final Set<String> importList = new HashSet<>();
-    private final List<JavaMethod> methodList = new LinkedList<>();
-
+    private final UniqueList<String, JavaMethod> methodList = new UniqueList<>();
     private final UniqueList<String, JavaClass> innerClasses = new UniqueList<>();
-
     JavaCode code = new JavaCode();
+    private String className = "";
+    private String packageName = "";
+    private ClassType type = ClassType.STANDARD;
 
     public JavaClass(String className, String packageName) {
         this.className = className;
         this.packageName = packageName.toLowerCase();
-    }
-
-    public JavaClass(String className, VariableType superClass) {
-        this(className);
-        this.superClass = superClass;
-        addReference(superClass);
     }
 
     public JavaClass(String className) {
@@ -63,35 +44,34 @@ public class JavaClass {
             innerClass.packageName = null;
         }
         if (innerClasses.containsKey(innerClass.className)) {
-            throw new CEIException("[JavaClass] Cannot add duplite class");
+            CEIErrors.showCodeFailure(this.getClass(),"Cannot add duplicate class");
         }
         innerClasses.put(innerClass.className, innerClass);
     }
 
-    // TODO accessType to be removed, use Variable.PRIVATE instead of
-    public void addMemberVariable(AccessType accessType, Variable memberVariable) {
-        if (accessType == AccessType.PUBLIC) {
+    public void addMemberVariable(Variable memberVariable) {
+        if (memberVariable.position == Variable.Position.MEMBER) {
             publicMemberList.put(memberVariable.getName(), memberVariable);
-        } else if (accessType == AccessType.PRIVATE) {
+        } else if (memberVariable.position == Variable.Position.PRIVATE) {
             privateMemberList.put(memberVariable.getName(), memberVariable);
         }
         addReference(memberVariable.getType());
     }
 
     public void addMethod(JavaMethod method) {
-        methodList.add(method);
+        methodList.put(method.getMethodName(), method);
     }
 
     public void build(CEIPath folder) {
         if (type == ClassType.INNER) {
-            defineClass(className, superClass, () -> {
+            defineClass(className, () -> {
                 writeMemberVariable(code);
                 writeMethods(code);
             });
         } else {
             writeReference(code);
 
-            defineClass(className, superClass, () -> {
+            defineClass(className, () -> {
                 code.endln();
                 innerClasses.values().forEach(value -> {
                     value.build(folder);
@@ -112,7 +92,10 @@ public class JavaClass {
     }
 
     private void writeMethods(JavaCode code) {
-        methodList.forEach(method -> {
+        if (methodList.isEmpty()) {
+            return;
+        }
+        methodList.values().forEach(method -> {
             code.endln();
             code.appendCode(method.getCode());
         });
@@ -144,32 +127,32 @@ public class JavaClass {
             code.appendJavaLine("public", variable.getTypeDescriptor(), variable.getDescriptor());
         });
         privateMemberList.values().forEach(variable -> {
-            code.appendJavaLine("private", variable.getTypeDescriptor(), variable.getDescriptor());
+            code.appendJavaLine("private final", variable.getTypeDescriptor(), variable.getDescriptor());
         });
     }
 
-    @FunctionalInterface
-    private interface ClassContent {
-
-        void inClass();
-    }
-
-    private void defineClass(String clsName, VariableType supperCls, ClassContent classContent) {
+    private void defineClass(String clsName, ClassContent classContent) {
         String header;
         if (type == ClassType.INNER) {
             header = "static public class";
         } else {
             header = "public class";
         }
-        if (supperCls != null ) {
-            code.appendWordsln(header, clsName, "extends", supperCls.getDescriptor(), "{");
-        } else {
-            code.appendWordsln(header, clsName, "{");
-        }
+        code.appendWordsln(header, clsName, "{");
 
         code.newBlock(() -> {
             classContent.inClass();
         });
         code.appendln("}");
+    }
+
+    enum ClassType {
+        STANDARD,
+        INNER
+    }
+
+    @FunctionalInterface
+    private interface ClassContent {
+        void inClass();
     }
 }

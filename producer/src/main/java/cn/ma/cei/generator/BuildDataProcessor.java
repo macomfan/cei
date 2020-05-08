@@ -9,7 +9,6 @@ import cn.ma.cei.model.json.xJsonBuilder;
 import cn.ma.cei.model.json.xJsonParser;
 import cn.ma.cei.model.processor.*;
 import cn.ma.cei.model.string.xStringBuilder;
-import cn.ma.cei.model.types.xString;
 import cn.ma.cei.model.xProcedure;
 import cn.ma.cei.utils.Checker;
 import cn.ma.cei.utils.NormalMap;
@@ -19,21 +18,6 @@ import cn.ma.cei.utils.RegexHelper;
  * To build each line in User Procedure.
  */
 public class BuildDataProcessor {
-
-    public static class Context {
-        /**
-         * Cannot be null, the DataProcessor must have the procedure list.
-         */
-        public xProcedure procedure = null;
-        public String returnVariableName = null;
-        public VariableType specifiedReturnType = null;
-        public Variable defaultInput = null;
-
-        /**
-         * Builder cannot be null.
-         */
-        public IDataProcessorBuilder dataProcessorBuilder = null;
-    }
 
     private static final NormalMap<Class<?>, DataProcessorBase<?>> processorMap = new NormalMap<>();
 
@@ -67,7 +51,7 @@ public class BuildDataProcessor {
             } else {
                 reportNotSupporting(firstItem);
             }
-        } else {
+        } else if (!Checker.isEmpty(returnVariableName)) {
             String returnName = RegexHelper.isReference(returnVariableName);
             if (returnName == null) {
                 CEIErrors.showXMLFailure("return value must be {xxx}");
@@ -91,7 +75,6 @@ public class BuildDataProcessor {
     private static void reportNotSupporting(xDataProcessorItem item) {
         CEIErrors.showFailure(CEIErrorType.CODE, "Processor is not supporting %s", item.getClass().getName());
     }
-
 
     public static Variable build(Context context) {
         if (context.dataProcessorBuilder == null) {
@@ -135,19 +118,18 @@ public class BuildDataProcessor {
             if (procedure.items.size() == 1) {
                 // Only one item in the processor list, return the only item. Do not define output name in this item.
                 return processSingleItem(procedure.items.get(0), defaultInput, builder);
-            } else {
-                CEIErrors.showFailure(CEIErrorType.XML, "Must define result, there are multi-processor items.");
             }
         }
-        procedure.items.forEach(item -> {
-            processSingleItem(item, defaultInput, builder);
-        });
-
-        Variable result = GlobalContext.getCurrentMethod().queryVariable(resultVariableName);
-        if (result == null) {
-            CEIErrors.showFailure(CEIErrorType.XML, "Cannot find the result variable: %s", RegexHelper.isReference(resultVariableName));
+        procedure.items.forEach(item -> processSingleItem(item, defaultInput, builder));
+        if (!Checker.isEmpty(resultVariableName)) {
+            Variable result = GlobalContext.getCurrentMethod().queryVariable(resultVariableName);
+            if (result == null) {
+                CEIErrors.showFailure(CEIErrorType.XML, "Cannot find the result variable: %s", RegexHelper.isReference(resultVariableName));
+            }
+            return result;
+        } else {
+            return null;
         }
-        return result;
     }
 
     private static Variable processSingleItem(xDataProcessorItem item, Variable defaultInput, IDataProcessorBuilder builder) {
@@ -158,5 +140,20 @@ public class BuildDataProcessor {
             CEIErrors.showCodeFailure(BuildDataProcessor.class, "Not supported %s ", item.getClass().getSimpleName());
             return null;
         }
+    }
+
+    public static class Context {
+        /**
+         * Cannot be null, the DataProcessor must have the procedure list.
+         */
+        public xProcedure procedure = null;
+        public String returnVariableName = null;
+        public VariableType specifiedReturnType = null;
+        public Variable defaultInput = null;
+
+        /**
+         * Builder cannot be null.
+         */
+        public IDataProcessorBuilder dataProcessorBuilder = null;
     }
 }

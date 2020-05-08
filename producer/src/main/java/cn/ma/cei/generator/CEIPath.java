@@ -50,6 +50,10 @@ public class CEIPath {
         filename = path.filename;
     }
 
+    public String getFilename() {
+        return filename;
+    }
+
     public File getIO() {
         return io;
     }

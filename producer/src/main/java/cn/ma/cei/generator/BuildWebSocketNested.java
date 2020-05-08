@@ -33,7 +33,7 @@ public class BuildWebSocketNested {
 
     public static void buildResponse(xResponse response, Variable msg, VariableType callbackType, Variable callbackVariable, IWebSocketNestedBuilder builder) {
         IDataProcessorBuilder dataProcessorBuilder = Checker.checkNull(builder.createDataProcessorBuilder(), builder, "DataProcessorBuilder");
-        Variable result = BuildResponse.build(response, msg, callbackType, builder);
+        Variable result = BuildResponse.build(response, msg, builder);
         xProcedure procedure = new xProcedure();
         procedure.items = new LinkedList<>();
         xWebSocketCallback newCallback = new xWebSocketCallback();

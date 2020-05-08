@@ -22,7 +22,7 @@ public class BuildRestfulInterface {
         Variable response = GlobalContext.getCurrentMethod().createLocalVariable(RestfulResponse.getType(), "response");
 
         List<Variable> inputVariableList = new LinkedList<>();
-        if (restIf.inputList != null) {
+        if (!Checker.isNull(restIf.inputList)) {
             restIf.inputList.forEach((input) -> input.doBuild(() -> {
                 Variable inputVariable = GlobalContext.getCurrentMethod().createInputVariable(input.getType(), input.name);
                 inputVariableList.add(inputVariable);
@@ -58,10 +58,9 @@ public class BuildRestfulInterface {
         });
 
         builder.onAddReference(RestfulConnection.getType());
-        VariableType finalReturnType = returnType.get();
         restIf.response.doBuild(() -> {
             builder.invokeQuery(response, request);
-            Variable returnVariable = BuildResponse.build(restIf.response, response, finalReturnType, builder);
+            Variable returnVariable = BuildResponse.build(restIf.response, response, builder);
             builder.endMethod(returnVariable);
         });
 

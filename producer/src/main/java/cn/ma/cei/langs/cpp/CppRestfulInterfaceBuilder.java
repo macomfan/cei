@@ -66,11 +66,6 @@ public class CppRestfulInterfaceBuilder implements IRestfulInterfaceBuilder {
     }
 
     @Override
-    public void endMethod() {
-
-    }
-
-    @Override
     public void addHeader(Variable request, Variable tag, Variable value) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }

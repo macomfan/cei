@@ -9,9 +9,8 @@ import cn.ma.cei.generator.Variable;
 import cn.ma.cei.generator.VariableType;
 import cn.ma.cei.generator.builder.IDataProcessorBuilder;
 import cn.ma.cei.generator.builder.IRestfulInterfaceBuilder;
-import cn.ma.cei.langs.golang.tools.*;
-import cn.ma.cei.langs.golang.vars.GoMergedInputVar;
-import cn.ma.cei.langs.golang.vars.GoPtrType;
+import cn.ma.cei.langs.golang.tools.GoMethod;
+import cn.ma.cei.langs.golang.tools.GoStruct;
 import cn.ma.cei.langs.golang.vars.GoType;
 import cn.ma.cei.langs.golang.vars.GoVar;
 
@@ -88,13 +87,9 @@ public class GoRestfulInterfaceBuilder implements IRestfulInterfaceBuilder {
 
     @Override
     public void endMethod(Variable returnVariable) {
-        method.addReturn(method.var(returnVariable));
-        method.endMethod();
-        clientStruct.addMethod(method);
-    }
-
-    @Override
-    public void endMethod() {
+        if (returnVariable != null) {
+            method.addReturn(method.var(returnVariable));
+        }
         method.endMethod();
         clientStruct.addMethod(method);
     }

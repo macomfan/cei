@@ -72,6 +72,11 @@ public class DescriptionConverterDefault implements IDescriptionConverter {
     }
 
     @Override
+    public String getReferenceByChain(String baseName, String valueName) {
+        return baseName + "." + valueName;
+    }
+
+    @Override
     public Set<String> getKeywords() {
         return null;
     }

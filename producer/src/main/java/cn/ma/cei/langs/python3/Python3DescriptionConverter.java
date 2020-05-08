@@ -109,6 +109,11 @@ public class Python3DescriptionConverter implements IDescriptionConverter {
         return baseName;
     }
 
+    @Override
+    public String getReferenceByChain(String baseName, String valueName) {
+        return baseName + "." + valueName;
+    }
+
     public Set<String> getBuildIn() {
         Set<String> buildIn = new HashSet<>();
         buildIn.add("abs");

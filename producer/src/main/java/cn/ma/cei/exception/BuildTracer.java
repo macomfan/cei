@@ -5,6 +5,7 @@
  */
 package cn.ma.cei.exception;
 
+import cn.ma.cei.utils.NormalMap;
 import cn.ma.cei.utils.ReflectionHelper;
 import io.vertx.core.json.JsonObject;
 import javafx.util.Pair;
@@ -16,33 +17,31 @@ import java.util.List;
 import java.util.Stack;
 
 /**
- *
  * @author u0151316
  */
 public class BuildTracer {
-
+    private static final Stack<Pair<Integer, ITraceFormat>> info = new Stack<>();
     private static int currentLevel = 0;
-    private static final Stack<Pair<Integer, JsonObject>> info = new Stack<>();
 
     public static void startBuilding(Object obj) {
         if (obj.getClass().isAnnotationPresent(XmlRootElement.class)) {
             String name = obj.getClass().getAnnotation(XmlRootElement.class).name();
             List<Field> fields = ReflectionHelper.getAllFields(obj);
-            JsonObject json = new JsonObject();
+            XMLTraceFormat xmlTraceFormat = new XMLTraceFormat();
             fields.forEach(item -> {
                 if (item.isAnnotationPresent(XmlAttribute.class)) {
                     try {
                         Object value = item.get(obj);
                         if (value != null) {
-                            json.put(item.getName(), value);
+                            xmlTraceFormat.addAttribute(item.getName(), value.toString());
                         }
                     } catch (Exception e) {
                         // Cannot process the field
                     }
                 }
             });
-            json.put("CEITypeID", name);
-            info.push(new Pair<>(currentLevel++, json));
+            xmlTraceFormat.setElementName(name);
+            info.push(new Pair<>(currentLevel++, xmlTraceFormat));
         } else {
             // Cannot trace this item.
         }
@@ -55,7 +54,7 @@ public class BuildTracer {
             for (int i = 0; i < level; i++) {
                 stringBuilder.append("  ");
             }
-            stringBuilder.append(item.getValue().toString());
+            stringBuilder.append(item.getValue().getTraceString());
             stringBuilder.append("\n");
         });
         return stringBuilder.toString();
@@ -64,5 +63,70 @@ public class BuildTracer {
     public static void endBuilding() {
         currentLevel--;
         info.pop();
+    }
+
+    private interface ITraceFormat {
+        String getTraceString();
+
+        String setElementName(String elementName);
+
+        void addAttribute(String key, String value);
+    }
+
+    private static class XMLTraceFormat implements ITraceFormat {
+        private String elementName = "";
+        private NormalMap<String, String> attrMap = new NormalMap<>();
+
+        @Override
+        public String getTraceString() {
+            StringBuilder sb = new StringBuilder();
+            sb.append("<");
+            sb.append(elementName);
+            attrMap.entrySet().forEach(item -> {
+                sb.append(" ");
+                sb.append(item.getKey());
+                sb.append("=\"");
+                sb.append(item.getValue());
+                sb.append("\"");
+            });
+            sb.append(">");
+            return sb.toString();
+        }
+
+        @Override
+        public String setElementName(String elementName) {
+            return this.elementName = elementName;
+        }
+
+        @Override
+        public void addAttribute(String key, String value) {
+            attrMap.put(key, value);
+        }
+    }
+
+    private static class JsonTraceFormat implements ITraceFormat {
+        private String elementName = "";
+        private NormalMap<String, String> attrMap = new NormalMap<>();
+
+        @Override
+        public String getTraceString() {
+            JsonObject json = new JsonObject();
+            JsonObject attr = new JsonObject();
+            attrMap.entrySet().forEach(item -> {
+                attr.put(item.getKey(), item.getValue());
+            });
+            json.put(elementName, attr);
+            return json.toString();
+        }
+
+        @Override
+        public String setElementName(String elementName) {
+            return this.elementName = elementName;
+        }
+
+        @Override
+        public void addAttribute(String key, String value) {
+            attrMap.put(key, value);
+        }
     }
 }

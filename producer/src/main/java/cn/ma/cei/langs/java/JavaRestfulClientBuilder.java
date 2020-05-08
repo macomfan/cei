@@ -23,9 +23,9 @@ public class JavaRestfulClientBuilder implements IRestfulClientBuilder {
     @Override
     public void startClient(VariableType client, RestfulOptions option, Variable optionVariable) {
         clientClass = new JavaClass(client.getDescriptor());
-        clientClass.addMemberVariable(JavaClass.AccessType.PRIVATE, client.getMember("option"));
+        clientClass.addMemberVariable(client.getMember("option"));
 
-        JavaMethod defaultConstructor = new JavaMethod(clientClass);
+        JavaMethod defaultConstructor = new JavaMethod(clientClass, "###defaultConstructor");
         defaultConstructor.startConstructor("");
         {
             defaultConstructor.addAssign(defaultConstructor.useVariable(optionVariable), defaultConstructor.newInstance(optionVariable.getType()));
@@ -35,7 +35,7 @@ public class JavaRestfulClientBuilder implements IRestfulClientBuilder {
         defaultConstructor.endMethod();
         clientClass.addMethod(defaultConstructor);
 
-        JavaMethod optionConstructor = new JavaMethod(clientClass);
+        JavaMethod optionConstructor = new JavaMethod(clientClass, "###optionConstructor");
         optionConstructor.startConstructor(RestfulOptions.getType().getDescriptor() + " option");
         {
             optionConstructor.addInvoke("this");
