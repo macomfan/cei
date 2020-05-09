@@ -77,7 +77,7 @@ public class GoRestfulInterfaceBuilder implements IRestfulInterfaceBuilder {
         params.forEach(item -> {
             tmp.add(method.var(item));
         });
-        method.startInterface(new GoType(returnType), methodDescriptor, tmp);
+        method.startInterface(new GoType(returnType), true, methodDescriptor, tmp, null);
     }
 
     @Override

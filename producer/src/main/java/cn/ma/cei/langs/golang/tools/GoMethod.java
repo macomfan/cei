@@ -21,8 +21,10 @@ import java.util.Set;
  */
 public class GoMethod extends GoVarMgr {
 
+    private static final String returnIndicator = "data";
     private final GoCode code = new GoCode();
     private GoStruct parent = null;
+    private boolean returnError;
     private String methodName;
     private GoStruct inputStruct = null;
 
@@ -59,7 +61,11 @@ public class GoMethod extends GoVarMgr {
     }
 
     public void addReturn(GoVar variable) {
-        code.appendWordsln("return", variable.getDescriptor());
+        if (returnError) {
+            code.appendWordsln("return", variable.getDescriptor() + ",", "nil");
+        } else {
+            code.appendWordsln("return", variable.getDescriptor());
+        }
     }
 
     public void addAssign(String left, String right) {
@@ -96,28 +102,49 @@ public class GoMethod extends GoVarMgr {
 //        startMethod(returnType, methodName, params);
 //    }
 
-    public void startInterface(GoType returnType, String methodName, List<GoVar> params) {
-        if (!Checker.isNull(params) && params.size() > 1) {
-            List<GoVar> vars = mergeInputVar(params);
+    public void startInterface(GoType returnType, boolean returnError, String methodName, List<GoVar> mergeParams, List<GoVar> normalParams) {
+        if (!Checker.isNull(mergeParams) && mergeParams.size() > 1) {
+            List<GoVar> vars = mergeInputVar(mergeParams);
             inputStruct = new GoStruct("Args" + methodName);
             vars.forEach(item -> inputStruct.addPublicMember(item));
+
         }
-        startMethod(returnType, methodName, params);
+        startMethod(returnType, returnError, methodName, normalParams);
     }
 
-    public void startMethod(GoType returnType, String methodName, List<GoVar> params) {
+    public void startMethod(GoType returnType, boolean returnError, String methodName, List<GoVar> params) {
+        this.returnError = returnError;
         this.methodName = methodName;
         String returnString = "";
         if (returnType != null) {
             returnString += returnType.getDescriptor();
-            returnString += " ";
+        }
+        if (returnError) {
+            if (!"".equals(returnString)) {
+                returnString = returnIndicator + " " + returnString;
+                returnString += " , exception error";
+                returnString = "(" + returnString + ")";
+            } else {
+                returnString = "error ";
+            }
         }
         if (parent != null) {
-            code.appendWordsln("func", methodBelongTo(), methodName + "(" + defineParamString(params) + ")", returnString + "{");
+            code.appendWordsln("func", methodBelongTo(), methodName + "(" + defineParamString(params) + ")", returnString, "{");
         } else {
-            code.appendWordsln("func", methodName + "(" + defineParamString(params) + ")", returnString + "{");
+            code.appendWordsln("func", methodName + "(" + defineParamString(params) + ")", returnString, "{");
         }
         code.startBlock();
+        if (returnError) {
+            code.appendWordsln("defer", "func()", "{");
+            code.newBlock(() -> {
+                code.appendln("if err := recover(); err != nil {");
+                code.newBlock(() -> {
+                    code.appendln("exception = errors.New(err.(string))");
+                });
+                code.appendln("}");
+            });
+            code.appendln("}()");
+        }
     }
 
     public void endMethod() {
@@ -161,14 +188,17 @@ public class GoMethod extends GoVarMgr {
     }
 
     private String defineParamString(List<GoVar> params) {
-        if (params == null) {
-            return "";
-        }
-        if (inputStruct != null) {
-            return "args " + inputStruct.getStructName();
-        }
         String paramString = "";
+        // commonTypeString to collect all type of params, if they are same type, merge them
+        // e.g.  merged: func (p1, p2, p3, string)  un-merged: func (p1 string, p2 string, p3 string)
         Set<String> commonTypeString = new HashSet<>();
+        if (inputStruct != null) {
+            paramString += "args " + inputStruct.getStructName();
+            commonTypeString.add(inputStruct.getStructName());
+        }
+        if (Checker.isNull(params)) {
+            return paramString;
+        }
         params.forEach((param) -> {
             commonTypeString.add(param.getTypeDescriptor());
         });

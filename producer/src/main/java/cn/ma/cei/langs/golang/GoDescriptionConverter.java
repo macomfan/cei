@@ -98,17 +98,11 @@ public class GoDescriptionConverter implements IDescriptionConverter {
 
     @Override
     public String getGenericTypeDescriptor(String baseName, List<String> subNames) {
-//        if (subNames.size() > 1) {
-//            throw new CEIException("Type error in Go");
-//        }
-//        if (subNames.size() == 1) {
-//            return baseName + subNames.get(0);
-//        }
         if ("[]".equals(baseName)) {
             return baseName + subNames.get(0);
         }
         else if ("impl.WebSocketCallback".equals(baseName)) {
-            return "func (connection *impl.WebSocketConnection)";
+            return "func (data " + subNames.get(0) + ")";
         }
         return baseName;
     }

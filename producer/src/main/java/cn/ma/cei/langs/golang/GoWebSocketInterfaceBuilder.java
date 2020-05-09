@@ -52,19 +52,21 @@ public class GoWebSocketInterfaceBuilder implements IWebSocketInterfaceBuilder {
     @Override
     public void startMethod(VariableType returnType, String methodDescriptor, List<Variable> params) {
         method = new GoMethod(clientStruct);
-        List<GoVar> tmp = new LinkedList<>();
+        List<GoVar> merged = new LinkedList<>();
+        List<GoVar> callback = new LinkedList<>();
         params.forEach(item -> {
             if (item.getType().isBased(WebSocketCallback.getType())) {
-
+                callback.add(method.var(item));
+                item.getTypeDescriptor();
             } else {
-                tmp.add(method.var(item));
+                merged.add(method.var(item));
             }
         });
         GoType type = null;
         if (returnType != null) {
             type = new GoType(returnType);
         }
-        method.startInterface(type, methodDescriptor, tmp);
+        method.startInterface(type, false, methodDescriptor, merged, callback);
     }
 
     @Override

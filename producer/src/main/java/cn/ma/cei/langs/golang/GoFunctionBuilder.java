@@ -11,7 +11,6 @@ import cn.ma.cei.generator.builder.IDataProcessorBuilder;
 import cn.ma.cei.generator.builder.IMethodBuilder;
 import cn.ma.cei.langs.golang.tools.GoFile;
 import cn.ma.cei.langs.golang.tools.GoMethod;
-import cn.ma.cei.langs.golang.vars.GoPtrVar;
 import cn.ma.cei.langs.golang.vars.GoType;
 import cn.ma.cei.langs.golang.vars.GoVar;
 import cn.ma.cei.utils.WordSplitter;
@@ -77,7 +76,7 @@ public class GoFunctionBuilder implements IMethodBuilder {
         if (returnType != null) {
             type = new GoType(returnType);
         }
-        method.startMethod(type, WordSplitter.getLowerCamelCase(methodDescriptor), tmp);
+        method.startMethod(type, false, WordSplitter.getLowerCamelCase(methodDescriptor), tmp);
     }
 
     @Override
