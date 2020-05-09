@@ -15,6 +15,5 @@
 # vendor/
 /bin/
 /pkg/
-/src/exchanges/
 /src/github.com/
 /.idea/

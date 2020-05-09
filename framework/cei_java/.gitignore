@@ -26,4 +26,3 @@ hs_err_pid*
 nb-configuration.xml
 *.iml
 /.idea/
-/src/main/java/cn/ma/cei/exchanges/
