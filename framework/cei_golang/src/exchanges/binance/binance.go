@@ -2,6 +2,7 @@ package binance
 
 import (
     "../../impl"
+    "errors"
 )
 
 type Trade struct {
@@ -106,15 +107,7 @@ func NewMarketClient(option *impl.RestfulOptions) *MarketClient {
     return inst
 }
 
-type ArgsGetAggregateTrades struct {
-    Symbol    string
-    FromId    int64
-    StartTime int64
-    EndTime   int64
-    Limit     int64
-}
-
-func (inst *MarketClient) GetAggregateTrades(args ArgsGetAggregateTrades) (data AggregateTradeList , exception error) {
+func (inst *MarketClient) GetAggregateTrades(symbol string, fromId int64, startTime int64, endTime int64, limit int64) (data AggregateTradeList , exception error) {
     defer func() {
         if err := recover(); err != nil {
             exception = errors.New(err.(string))
@@ -123,11 +116,11 @@ func (inst *MarketClient) GetAggregateTrades(args ArgsGetAggregateTrades) (data 
     request := impl.NewRestfulRequest(inst.option)
     request.SetTarget("/api/v3/aggTrades")
     request.SetMethod(impl.GET)
-    request.AddQueryString("symbol", args.Symbol)
-    request.AddQueryString("fromId", impl.ToString(args.FromId))
-    request.AddQueryString("startTime", impl.ToString(args.StartTime))
-    request.AddQueryString("startTime", impl.ToString(args.EndTime))
-    request.AddQueryString("limit", impl.ToString(args.Limit))
+    request.AddQueryString("symbol", symbol)
+    request.AddQueryString("fromId", impl.ToString(fromId))
+    request.AddQueryString("startTime", impl.ToString(startTime))
+    request.AddQueryString("startTime", impl.ToString(endTime))
+    request.AddQueryString("limit", impl.ToString(limit))
     response := impl.RestfulQuery(request)
     rootObj := impl.ParseJsonFromString(response.GetString())
     aggregateTradeListVar := AggregateTradeList{}
@@ -146,15 +139,7 @@ func (inst *MarketClient) GetAggregateTrades(args ArgsGetAggregateTrades) (data 
     return aggregateTradeListVar, nil
 }
 
-type ArgsGetCandlestickData struct {
-    Symbol    string
-    Interval  string
-    StartTime int64
-    EndTime   int64
-    Limit     int64
-}
-
-func (inst *MarketClient) GetCandlestickData(args ArgsGetCandlestickData) (data CandlestickDataList , exception error) {
+func (inst *MarketClient) GetCandlestickData(symbol string, interval string, startTime int64, endTime int64, limit int64) (data CandlestickDataList , exception error) {
     defer func() {
         if err := recover(); err != nil {
             exception = errors.New(err.(string))
@@ -163,11 +148,11 @@ func (inst *MarketClient) GetCandlestickData(args ArgsGetCandlestickData) (data 
     request := impl.NewRestfulRequest(inst.option)
     request.SetTarget("/api/v3/klines")
     request.SetMethod(impl.GET)
-    request.AddQueryString("symbol", args.Symbol)
-    request.AddQueryString("interval", args.Interval)
-    request.AddQueryString("startTime", impl.ToString(args.StartTime))
-    request.AddQueryString("endTime", impl.ToString(args.EndTime))
-    request.AddQueryString("limit", impl.ToString(args.Limit))
+    request.AddQueryString("symbol", symbol)
+    request.AddQueryString("interval", interval)
+    request.AddQueryString("startTime", impl.ToString(startTime))
+    request.AddQueryString("endTime", impl.ToString(endTime))
+    request.AddQueryString("limit", impl.ToString(limit))
     response := impl.RestfulQuery(request)
     rootObj := impl.ParseJsonFromString(response.GetString())
     candlestickDataListVar := CandlestickDataList{}
@@ -180,12 +165,7 @@ func (inst *MarketClient) GetCandlestickData(args ArgsGetCandlestickData) (data 
     return candlestickDataListVar, nil
 }
 
-type ArgsGetDepth struct {
-    Symbol string
-    Limit  int64
-}
-
-func (inst *MarketClient) GetDepth(args ArgsGetDepth) (data Depth , exception error) {
+func (inst *MarketClient) GetDepth(symbol string, limit int64) (data Depth , exception error) {
     defer func() {
         if err := recover(); err != nil {
             exception = errors.New(err.(string))
@@ -194,8 +174,8 @@ func (inst *MarketClient) GetDepth(args ArgsGetDepth) (data Depth , exception er
     request := impl.NewRestfulRequest(inst.option)
     request.SetTarget("/api/v3/depth")
     request.SetMethod(impl.GET)
-    request.AddQueryString("symbol", args.Symbol)
-    request.AddQueryString("limit", impl.ToString(args.Limit))
+    request.AddQueryString("symbol", symbol)
+    request.AddQueryString("limit", impl.ToString(limit))
     response := impl.RestfulQuery(request)
     rootObj := impl.ParseJsonFromString(response.GetString())
     depthVar := Depth{}
@@ -257,13 +237,7 @@ func (inst *MarketClient) GetExchangeInfo() (data ExchangeInfo , exception error
     return exchangeInfoVar, nil
 }
 
-type ArgsHistoricalTrades struct {
-    Symbol string
-    Limit  int64
-    FromId int64
-}
-
-func (inst *MarketClient) HistoricalTrades(args ArgsHistoricalTrades) (data TradeList , exception error) {
+func (inst *MarketClient) HistoricalTrades(symbol string, limit int64, fromId int64) (data TradeList , exception error) {
     defer func() {
         if err := recover(); err != nil {
             exception = errors.New(err.(string))
@@ -272,9 +246,9 @@ func (inst *MarketClient) HistoricalTrades(args ArgsHistoricalTrades) (data Trad
     request := impl.NewRestfulRequest(inst.option)
     request.SetTarget("/api/v3/historicalTrades")
     request.SetMethod(impl.GET)
-    request.AddQueryString("symbol", args.Symbol)
-    request.AddQueryString("limit", impl.ToString(args.Limit))
-    request.AddQueryString("fromId", impl.ToString(args.FromId))
+    request.AddQueryString("symbol", symbol)
+    request.AddQueryString("limit", impl.ToString(limit))
+    request.AddQueryString("fromId", impl.ToString(fromId))
     response := impl.RestfulQuery(request)
     rootObj := impl.ParseJsonFromString(response.GetString())
     tradeListVar := TradeList{}
@@ -308,12 +282,7 @@ func (inst *MarketClient) GetTimestamp() (data Timestamp , exception error) {
     return timestampVar, nil
 }
 
-type ArgsGetTrade struct {
-    Symbol string
-    Limit  int64
-}
-
-func (inst *MarketClient) GetTrade(args ArgsGetTrade) (data TradeList , exception error) {
+func (inst *MarketClient) GetTrade(symbol string, limit int64) (data TradeList , exception error) {
     defer func() {
         if err := recover(); err != nil {
             exception = errors.New(err.(string))
@@ -322,8 +291,8 @@ func (inst *MarketClient) GetTrade(args ArgsGetTrade) (data TradeList , exceptio
     request := impl.NewRestfulRequest(inst.option)
     request.SetTarget("/api/v3/trades")
     request.SetMethod(impl.GET)
-    request.AddQueryString("symbol", args.Symbol)
-    request.AddQueryString("limit", impl.ToString(args.Limit))
+    request.AddQueryString("symbol", symbol)
+    request.AddQueryString("limit", impl.ToString(limit))
     response := impl.RestfulQuery(request)
     rootObj := impl.ParseJsonFromString(response.GetString())
     tradeListVar := TradeList{}

@@ -2,6 +2,7 @@ package test
 
 import (
     "../../impl"
+    "errors"
     "fmt"
 )
 
@@ -106,6 +107,8 @@ func (inst *GetClient) GetModelInfo() (data ModelInfo , exception error) {
     request.SetMethod(impl.GET)
     response := impl.RestfulQuery(request)
     rootObj := impl.ParseJsonFromString(response.GetString())
+    jsonChecker := new(impl.JsonChecker)
+    jsonChecker.CheckEqual("aaa", "aa", rootObj)
     modelInfoVar := ModelInfo{}
     modelInfoVar.Name = rootObj.GetString("Name")
     obj := rootObj.GetObject("DataL1")
@@ -183,14 +186,7 @@ func (inst *GetClient) GetTestArray() (data SimpleInfo , exception error) {
     return simpleInfoVar, nil
 }
 
-type ArgsInputsByGet struct {
-    Name   string
-    Number int64
-    Price  float64
-    Status bool
-}
-
-func (inst *GetClient) InputsByGet(args ArgsInputsByGet) (data SimpleInfo , exception error) {
+func (inst *GetClient) InputsByGet(name string, number int64, price float64, status bool) (data SimpleInfo , exception error) {
     defer func() {
         if err := recover(); err != nil {
             exception = errors.New(err.(string))
@@ -199,10 +195,10 @@ func (inst *GetClient) InputsByGet(args ArgsInputsByGet) (data SimpleInfo , exce
     request := impl.NewRestfulRequest(inst.option)
     request.SetTarget("/restful/get/inputsByGet")
     request.SetMethod(impl.GET)
-    request.AddQueryString("Name", args.Name)
-    request.AddQueryString("Number", impl.ToString(args.Number))
-    request.AddQueryString("Price", impl.ToFloat64(args.Price))
-    request.AddQueryString("Status", impl.ToBool(args.Status))
+    request.AddQueryString("Name", name)
+    request.AddQueryString("Number", impl.ToString(number))
+    request.AddQueryString("Price", impl.ToFloat64(price))
+    request.AddQueryString("Status", impl.ToBool(status))
     response := impl.RestfulQuery(request)
     rootObj := impl.ParseJsonFromString(response.GetString())
     simpleInfoVar := SimpleInfo{}
@@ -213,7 +209,7 @@ func (inst *GetClient) InputsByGet(args ArgsInputsByGet) (data SimpleInfo , exce
     return simpleInfoVar, nil
 }
 
-func (inst *GetClient) Url() (data string , exception error) {
+func (inst *GetClient) Url(input string) (data string , exception error) {
     defer func() {
         if err := recover(); err != nil {
             exception = errors.New(err.(string))
@@ -241,14 +237,7 @@ func NewPostClient(option *impl.RestfulOptions) *PostClient {
     return inst
 }
 
-type ArgsPostInputs struct {
-    This   string
-    Price  float64
-    Number int64
-    Status bool
-}
-
-func (inst *PostClient) PostInputs(args ArgsPostInputs) (data SimpleInfo , exception error) {
+func (inst *PostClient) PostInputs(this string, price float64, number int64, status bool) (data SimpleInfo , exception error) {
     defer func() {
         if err := recover(); err != nil {
             exception = errors.New(err.(string))
@@ -256,10 +245,10 @@ func (inst *PostClient) PostInputs(args ArgsPostInputs) (data SimpleInfo , excep
     }()
     request := impl.NewRestfulRequest(inst.option)
     postMsg := impl.JsonWrapper{}
-    postMsg.AddJsonString("Name", args.This)
-    postMsg.AddJsonFloat64("Price", args.Price)
-    postMsg.AddJsonInt64("Number", args.Number)
-    postMsg.AddJsonBool("Status_1", args.Status)
+    postMsg.AddJsonString("Name", this)
+    postMsg.AddJsonFloat64("Price", price)
+    postMsg.AddJsonInt64("Number", number)
+    postMsg.AddJsonBool("Status_1", status)
     request.SetTarget("/restful/post/echo")
     request.SetMethod(impl.POST)
     request.SetPostBody(postMsg.ToJsonString())
@@ -273,12 +262,7 @@ func (inst *PostClient) PostInputs(args ArgsPostInputs) (data SimpleInfo , excep
     return simpleInfoVar, nil
 }
 
-type ArgsAuthentication struct {
-    Name   string
-    Number int64
-}
-
-func (inst *PostClient) Authentication(args ArgsAuthentication) (data SimpleInfo , exception error) {
+func (inst *PostClient) Authentication(name string, number int64) (data SimpleInfo , exception error) {
     defer func() {
         if err := recover(); err != nil {
             exception = errors.New(err.(string))
@@ -286,10 +270,10 @@ func (inst *PostClient) Authentication(args ArgsAuthentication) (data SimpleInfo
     }()
     request := impl.NewRestfulRequest(inst.option)
     postMsg := impl.JsonWrapper{}
-    postMsg.AddJsonInt64("Number", args.Number)
+    postMsg.AddJsonInt64("Number", number)
     request.SetTarget("/restful/post/authentication")
     request.SetMethod(impl.POST)
-    request.AddQueryString("Name", args.Name)
+    request.AddQueryString("Name", name)
     request.SetPostBody(postMsg.ToJsonString())
     response := impl.RestfulQuery(request)
     rootObj := impl.ParseJsonFromString(response.GetString())
@@ -316,42 +300,75 @@ func NewWSClient(option *impl.WebSocketOptions) *WSClient {
     return inst
 }
 
-type ArgsOpen struct {
-    Channel string
-    Name    string
-}
-
-func (inst *WSClient) Open(args ArgsOpen, onConnect func (data impl.WebSocketConnection)) {
+func (inst *WSClient) Open(channel string, name string, onConnect func (data impl.WebSocketConnection)) {
     onPingEvent := impl.NewWebSocketEvent(true)
+    onPingEvent.SetTrigger(func(msg *impl.WebSocketMessage) bool {
+        rootObj := impl.ParseJsonFromString(msg.GetString())
+        jsonChecker := new(impl.JsonChecker)
+        jsonChecker.CheckEqual("op", "ping", rootObj)
+        return jsonChecker.Complete()
+    })
+    onPingEvent.SetEvent(func(connection *impl.WebSocketConnection, msg *impl.WebSocketMessage)  {
+        ts := impl.GetNow("Unix_ms")
+        jsonResult := impl.JsonWrapper{}
+        jsonResult.AddJsonString("op", "pong")
+        jsonResult.AddJsonString("ts", ts)
+    })
     inst.connection.RegisterEvent(onPingEvent)
-    inst.connection.Connect(fmt.Sprintf("/websocket/%s", args.Channel))
+    inst.connection.Connect(fmt.Sprintf("/websocket/%s", channel))
 }
 
 func (inst *WSClient) Close(onClose func (data impl.WebSocketConnection)) {
     inst.connection.Close()
 }
 
-type ArgsRequestEcho struct {
-    Name   string
-    Price  float64
-    Number int64
-    Status bool
-}
-
-func (inst *WSClient) RequestEcho(args ArgsRequestEcho, onEcho func (data SimpleInfo)) {
+func (inst *WSClient) RequestEcho(name string, price float64, number int64, status bool, onEcho func (data SimpleInfo)) {
     onEchoEvent := impl.NewWebSocketEvent(false)
+    onEchoEvent.SetTrigger(func(msg *impl.WebSocketMessage) bool {
+        rootObj := impl.ParseJsonFromString(msg.GetString())
+        jsonChecker := new(impl.JsonChecker)
+        jsonChecker.CheckEqual("op", "echo", rootObj)
+        obj := rootObj.GetObject("param")
+        jsonChecker.CheckEqual("Name", name, obj)
+        return jsonChecker.Complete()
+    })
+    onEchoEvent.SetEvent(func(connection *impl.WebSocketConnection, msg *impl.WebSocketMessage)  {
+        rootObj := impl.ParseJsonFromString(msg.GetString())
+        simpleInfoVar := SimpleInfo{}
+        obj := rootObj.GetObject("param")
+        simpleInfoVar.Name = obj.GetString("Name")
+        simpleInfoVar.Number = obj.GetInt64("Number")
+        simpleInfoVar.Price = obj.GetFloat64("Price")
+        simpleInfoVar.Status = obj.GetBool("Status")
+        onEcho(simpleInfoVar)
+    })
     inst.connection.RegisterEvent(onEchoEvent)
     jsonResult := impl.JsonWrapper{}
     jsonResult.AddJsonString("op", "echo")
     obj := impl.JsonWrapper{}
-    obj.AddJsonString("Name", args.Name)
-    obj.AddJsonFloat64("Price", args.Price)
-    obj.AddJsonInt64("Number", args.Number)
-    obj.AddJsonBool("Status", args.Status)
+    obj.AddJsonString("Name", name)
+    obj.AddJsonFloat64("Price", price)
+    obj.AddJsonInt64("Number", number)
+    obj.AddJsonBool("Status", status)
 }
 
 func (inst *WSClient) SubscribeSecond1(onSecond1 func (data SimpleInfo)) {
     onSecond1Event := impl.NewWebSocketEvent(true)
+    onSecond1Event.SetTrigger(func(msg *impl.WebSocketMessage) bool {
+        rootObj := impl.ParseJsonFromString(msg.GetString())
+        jsonChecker := new(impl.JsonChecker)
+        jsonChecker.CheckEqual("ch", "Second1", rootObj)
+        return jsonChecker.Complete()
+    })
+    onSecond1Event.SetEvent(func(connection *impl.WebSocketConnection, msg *impl.WebSocketMessage)  {
+        rootObj := impl.ParseJsonFromString(msg.GetString())
+        simpleInfoVar := SimpleInfo{}
+        simpleInfoVar.Name = rootObj.GetString("Name")
+        simpleInfoVar.Number = rootObj.GetInt64("Number")
+        simpleInfoVar.Price = rootObj.GetFloat64("Price")
+        simpleInfoVar.Status = rootObj.GetBool("Status")
+        onSecond1(simpleInfoVar)
+    })
     inst.connection.RegisterEvent(onSecond1Event)
     jsonResult := impl.JsonWrapper{}
     jsonResult.AddJsonString("op", "sub")

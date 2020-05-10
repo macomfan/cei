@@ -79,6 +79,10 @@ func (inst *WebSocketConnection) Send(message string) {
 	inst.ws.WriteMessage(websocket.TextMessage, []byte(message))
 }
 
+func (inst *WebSocketConnection) Close() {
+
+}
+
 func (inst *WebSocketConnection) RegisterEvent(event *WebSocketEvent) {
 	inst.events = append(inst.events, event)
 }

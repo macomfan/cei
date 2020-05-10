@@ -6,8 +6,8 @@ import cn.ma.cei.langs.golang.tools.GoVarMgr;
 import cn.ma.cei.utils.WordSplitter;
 
 public class GoInputVar extends GoVar {
-    public GoInputVar(Variable variable, GoVarMgr method) {
-        super(variable, method);
+    public GoInputVar(Variable variable) {
+        super(variable);
     }
 
     @Override

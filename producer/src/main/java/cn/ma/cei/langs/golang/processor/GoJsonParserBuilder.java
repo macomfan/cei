@@ -109,7 +109,7 @@ public class GoJsonParserBuilder implements IJsonParserBuilder {
 
     @Override
     public IJsonCheckerBuilder createJsonCheckerBuilder() {
-        return new GoJsonCheckerBuilder();
+        return new GoJsonCheckerBuilder(method);
     }
 
 }

@@ -148,7 +148,7 @@ public class GoDataProcessorBuilder implements IDataProcessorBuilder {
 
     @Override
     public void invokeCallback(Variable callback, Variable... params) {
-
+        method.addInvoke(callback.getDescriptor(), method.varListToArray(params));
     }
 
     @Override

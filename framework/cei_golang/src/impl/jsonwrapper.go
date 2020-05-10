@@ -123,6 +123,16 @@ func (inst *JsonWrapper) addJsonValue(key string, value interface{}) {
 	}
 }
 
+func (inst* JsonWrapper) Contains(key string) bool{
+	index := inst.getIndexByKey(key)
+	if index != nil && inst.array != nil {
+		return index.(int) < len(inst.array) && index.(int) > 0
+	} else if inst.object != nil {
+		_, ok := inst.object[key]
+		return ok
+	}
+}
+
 func (inst *JsonWrapper) AddJsonString(key string, value string) {
 	inst.addJsonValue(key, value)
 }

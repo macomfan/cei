@@ -3,6 +3,7 @@ package main
 import (
 	"./impl"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"sort"
 )
@@ -31,8 +32,25 @@ func (s IntSlice) Len() int           { return len(s) }
 func (s IntSlice) Swap(i, j int)      { s[i], s[j] = s[j], s[i] }
 func (s IntSlice) Less(i, j int) bool { return s[i][0] < s[j][0] }
 
+func ex() {
+	//panic("message")
+}
+
+func test() (data int, exception error) {
+	defer func() {
+		if err := recover(); err != nil { //产生了panic异常
+			exception = errors.New(err.(string))
+		}
+	}()
+	a := 0
+	ex()
+	return a, nil
+}
 
 func main() {
+	_, err := test()
+	fmt.Println(err)
+
 	fmt.Println(impl.GetNow("%Y:%M:%DT%h:%m:%s"))
 
 	var queryString [][]string

@@ -21,6 +21,9 @@ public class GoType {
     }
     
     public String getDescriptor() {
+        if (type == null) {
+            return "";
+        }
         return this.type.getDescriptor();
     }
 }

@@ -9,7 +9,7 @@ import cn.ma.cei.langs.golang.tools.GoStruct;
 
 public class GoWebSocketNestedBuilder implements IWebSocketNestedBuilder {
 
-    private GoMethod method;
+    public GoMethod method;
 
     public GoWebSocketNestedBuilder(GoStruct clientStruct) {
         method = new GoMethod(clientStruct);

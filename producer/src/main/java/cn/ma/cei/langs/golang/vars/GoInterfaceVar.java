@@ -14,8 +14,8 @@ import cn.ma.cei.langs.golang.tools.GoVarMgr;
  */
 public class GoInterfaceVar extends GoVar {
 
-    public GoInterfaceVar(Variable variable, GoVarMgr method) {
-        super(variable, method);
+    public GoInterfaceVar(Variable variable) {
+        super(variable);
     }
     
     @Override

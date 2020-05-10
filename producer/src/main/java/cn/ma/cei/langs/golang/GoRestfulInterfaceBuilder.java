@@ -73,11 +73,7 @@ public class GoRestfulInterfaceBuilder implements IRestfulInterfaceBuilder {
     @Override
     public void startMethod(VariableType returnType, String methodDescriptor, List<Variable> params) {
         method = new GoMethod(clientStruct);
-        List<GoVar> tmp = new LinkedList<>();
-        params.forEach(item -> {
-            tmp.add(method.var(item));
-        });
-        method.startInterface(new GoType(returnType), true, methodDescriptor, tmp, null);
+        method.startMethod(new GoType(returnType), true, methodDescriptor, method.varListToList(params));
     }
 
     @Override

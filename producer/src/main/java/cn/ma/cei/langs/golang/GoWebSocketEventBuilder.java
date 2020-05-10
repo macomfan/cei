@@ -6,10 +6,11 @@ import cn.ma.cei.generator.builder.IWebSocketEventBuilder;
 import cn.ma.cei.generator.builder.IWebSocketNestedBuilder;
 import cn.ma.cei.langs.golang.tools.GoMethod;
 import cn.ma.cei.langs.golang.tools.GoStruct;
+import cn.ma.cei.langs.golang.vars.GoType;
 
 public class GoWebSocketEventBuilder implements IWebSocketEventBuilder {
-    private IWebSocketNestedBuilder triggerBuilder = null;
-    private IWebSocketNestedBuilder responseBuilder = null;
+    private GoWebSocketNestedBuilder triggerBuilder = null;
+    private GoWebSocketNestedBuilder responseBuilder = null;
 
     public GoStruct clientStruct;
     public GoMethod method;
@@ -48,12 +49,24 @@ public class GoWebSocketEventBuilder implements IWebSocketEventBuilder {
 
     @Override
     public void setTriggerToEvent(Variable event, IMethod triggerMethod) {
-
+        method.addLambda(
+                method.var(event),
+                "SetTrigger",
+                method.varListToPtrList(triggerMethod.getInputVariableList()),
+                new GoType(triggerMethod.getReturnType()));
+        method.getCode().appendCode(triggerBuilder.method.getCode());
+        method.endLambda();
     }
 
     @Override
     public void setEventToEvent(Variable event, IMethod eventMethod) {
-
+        method.addLambda(
+                method.var(event),
+                "SetEvent",
+                method.varListToPtrList(eventMethod.getInputVariableList()),
+                new GoType(eventMethod.getReturnType()));
+        method.getCode().appendCode(responseBuilder.method.getCode());
+        method.endLambda();
     }
 
     @Override

@@ -5,8 +5,8 @@ import cn.ma.cei.langs.golang.tools.GoVarMgr;
 
 public class GoGetValueVar extends GoVar {
 
-    public GoGetValueVar(Variable variable, GoVarMgr method) {
-        super(variable, method);
+    public GoGetValueVar(Variable variable) {
+        super(variable);
         super.isPtr = true;
     }
 

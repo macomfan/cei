@@ -6,8 +6,8 @@ import cn.ma.cei.langs.golang.tools.GoVarMgr;
 import cn.ma.cei.utils.WordSplitter;
 
 public class GoMergedInputVar extends GoVar{
-    public GoMergedInputVar(Variable variable, GoVarMgr method) {
-        super(variable, method);
+    public GoMergedInputVar(Variable variable) {
+        super(variable);
     }
 
     @Override

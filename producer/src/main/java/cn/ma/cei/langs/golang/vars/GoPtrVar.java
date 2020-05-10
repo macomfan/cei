@@ -14,8 +14,8 @@ import cn.ma.cei.langs.golang.tools.GoVarMgr;
  */
 public class GoPtrVar extends GoVar {
 
-    public GoPtrVar(Variable variable, GoVarMgr method) {
-        super(variable, method);
+    public GoPtrVar(Variable variable) {
+        super(variable);
         super.isPtr = true;
     }
 

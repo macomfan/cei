@@ -14,11 +14,9 @@ import cn.ma.cei.langs.golang.tools.GoVarMgr;
 public class GoVar {
     public Variable variable;
     public boolean isPtr = false;
-    public GoVarMgr method;
 
-    public GoVar(Variable variable, GoVarMgr method) {
+    public GoVar(Variable variable) {
         this.variable = variable;
-        this.method = method;
     }
 
     public String getName() {
@@ -26,10 +24,10 @@ public class GoVar {
     }
 
     public String getDescriptor() {
-        return this.variable.getDescriptor();
+        return variable.getDescriptor();
     }
 
     public String getTypeDescriptor() {
-        return this.variable.getTypeDescriptor();
+        return variable.getTypeDescriptor();
     }
 }

@@ -27,32 +27,37 @@ func NewWSClient(option *impl.WebSocketOptions) *WSClient {
     return inst
 }
 
-type ArgsOpen struct {
-    Channel string
-    Name    string
+func (inst *WSClient) Open(channel, name string) {
+    inst.connection.Connect(fmt.Sprintf("/websocket/%s", channel))
 }
 
-func (inst *WSClient) Open(args ArgsOpen) {
-    inst.connection.Connect(fmt.Sprintf("/websocket/%s", args.Channel))
-}
-
-type ArgsRequestEcho struct {
-    Name   string
-    Price  float64
-    Number int64
-    Status bool
-}
-
-func (inst *WSClient) RequestEcho(args ArgsRequestEcho, onEcho func (data SimpleInfo)) {
+func (inst *WSClient) RequestEcho(name string, price float64, number int64, status bool, onEcho func (data SimpleInfo)) {
     onEchoEvent := impl.NewWebSocketEvent(false)
+    onEchoEvent.SetTrigger(func(msg *impl.WebSocketMessage) bool {
+        rootObj := impl.ParseJsonFromString(msg.GetString())
+        jsonChecker := new(impl.JsonChecker)
+        jsonChecker.CheckEqual("op", "echo", rootObj)
+        obj := rootObj.GetObject("param")
+        jsonChecker.CheckEqual("Name", name, obj)
+        return jsonChecker.Complete()
+    })
+    onEchoEvent.SetEvent(func(connection *impl.WebSocketConnection, msg *impl.WebSocketMessage)  {
+        rootObj := impl.ParseJsonFromString(msg.GetString())
+        simpleInfoVar := SimpleInfo{}
+        simpleInfoVar.Name = rootObj.GetString("Name")
+        simpleInfoVar.Number = rootObj.GetInt64("Number")
+        simpleInfoVar.Price = rootObj.GetFloat64("Price")
+        simpleInfoVar.Status = rootObj.GetBool("Status")
+        onEcho(simpleInfoVar)
+    })
     inst.connection.RegisterEvent(onEchoEvent)
     json := impl.JsonWrapper{}
     json.AddJsonString("op", "echo")
     obj := impl.JsonWrapper{}
-    obj.AddJsonString("Name", args.Name)
-    obj.AddJsonFloat64("Price", args.Price)
-    obj.AddJsonInt64("Number", args.Number)
-    obj.AddJsonBool("Status", args.Status)
+    obj.AddJsonString("Name", name)
+    obj.AddJsonFloat64("Price", price)
+    obj.AddJsonInt64("Number", number)
+    obj.AddJsonBool("Status", status)
 }
 
 

@@ -46,8 +46,8 @@ public class JavaWebSocketEventBuilder implements IWebSocketEventBuilder {
     }
 
     @Override
-    public void setTriggerToEvent(Variable event, IMethod trigger) {
-        method.addLambda(event, "setTrigger", trigger.getInputVariableList());
+    public void setTriggerToEvent(Variable event, IMethod triggerMethod) {
+        method.addLambda(event, "setTrigger", triggerMethod.getInputVariableList());
         method.addCode(triggerBuilder.method.getCode());
         method.endLambda();
     }

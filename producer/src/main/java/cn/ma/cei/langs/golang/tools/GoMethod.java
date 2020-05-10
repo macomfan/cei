@@ -11,10 +11,7 @@ import cn.ma.cei.langs.golang.vars.GoType;
 import cn.ma.cei.langs.golang.vars.GoVar;
 import cn.ma.cei.utils.Checker;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * @author U0151316
@@ -23,10 +20,9 @@ public class GoMethod extends GoVarMgr {
 
     private static final String returnIndicator = "data";
     private final GoCode code = new GoCode();
-    private GoStruct parent = null;
+    private final GoStruct parent;
     private boolean returnError;
     private String methodName;
-    private GoStruct inputStruct = null;
 
     public GoMethod(GoStruct parent) {
         this.parent = parent;
@@ -40,24 +36,17 @@ public class GoMethod extends GoVarMgr {
         return code;
     }
 
-    public GoStruct getInputStruct() {
-        return inputStruct;
-    }
-
     public String newInstance(VariableType type) {
         return "new(" + type.getDescriptor() + ")";
     }
 
-    public String newPointerInstance(VariableType type) {
-        return "new(*" + type.getDescriptor() + ")";
-    }
 
     public String createInstance(VariableType type) {
         return type.getDescriptor() + "{}";
     }
 
     public String useVariable(GoVar variable) {
-        return queryVariableDescriptor(variable);
+        return variable.getDescriptor();
     }
 
     public void addReturn(GoVar variable) {
@@ -93,24 +82,34 @@ public class GoMethod extends GoVarMgr {
         return method + "(" + invokeParamString(tmp) + ")";
     }
 
-//    public void startInterface(GoType returnType, String methodName, List<GoVar> params) {
-//        if (!Checker.isNull(params) && params.size() > 1) {
-//            List<GoVar> vars = mergeInputVar(params);
-//            inputStruct = new GoStruct("Args" + methodName);
-//            vars.forEach(item -> inputStruct.addPublicMember(item));
-//        }
-//        startMethod(returnType, methodName, params);
-//    }
-
-    public void startInterface(GoType returnType, boolean returnError, String methodName, List<GoVar> mergeParams, List<GoVar> normalParams) {
-        if (!Checker.isNull(mergeParams) && mergeParams.size() > 1) {
-            List<GoVar> vars = mergeInputVar(mergeParams);
-            inputStruct = new GoStruct("Args" + methodName);
-            vars.forEach(item -> inputStruct.addPublicMember(item));
-
-        }
-        startMethod(returnType, returnError, methodName, normalParams);
+    public void addLambda(GoVar variable, String methodName, List<GoVar> params, GoType returnType) {
+        code.appendln(variable.getDescriptor() + "." + methodName + "(func(" + defineParamString(params) + ") " + returnType.getDescriptor() + " {");
+        code.startBlock();
     }
+
+    public void endLambda() {
+        code.endBlock();
+        code.appendln("})");
+    }
+
+//    public void startInterface(GoType returnType, boolean returnError, String methodName, List<GoVar> mergeParams, List<GoVar> normalParams) {
+//        List<GoVar> finalParams = new LinkedList<>();
+//        String mergedParam = null;
+//        if (!Checker.isNull(mergeParams)) {
+//            if (mergeParams.size() > 1) {
+//                List<GoVar> vars = mergeInputVar(mergeParams);
+//                inputStruct = new GoStruct("Args" + methodName);
+//                vars.forEach(item -> inputStruct.addPublicMember(item));
+//                mergedParam = "args " + inputStruct.getStructName();
+//            } else {
+//                finalParams.addAll(mergeParams);
+//            }
+//        }
+//        if (!Checker.isNull(normalParams)) {
+//            finalParams.addAll(normalParams);
+//        }
+//        startMethod(returnType, returnError, methodName, mergedParam, finalParams);
+//    }
 
     public void startMethod(GoType returnType, boolean returnError, String methodName, List<GoVar> params) {
         this.returnError = returnError;
@@ -135,6 +134,7 @@ public class GoMethod extends GoVarMgr {
         }
         code.startBlock();
         if (returnError) {
+            addReference("errors");
             code.appendWordsln("defer", "func()", "{");
             code.newBlock(() -> {
                 code.appendln("if err := recover(); err != nil {");
@@ -189,13 +189,7 @@ public class GoMethod extends GoVarMgr {
 
     private String defineParamString(List<GoVar> params) {
         String paramString = "";
-        // commonTypeString to collect all type of params, if they are same type, merge them
-        // e.g.  merged: func (p1, p2, p3, string)  un-merged: func (p1 string, p2 string, p3 string)
         Set<String> commonTypeString = new HashSet<>();
-        if (inputStruct != null) {
-            paramString += "args " + inputStruct.getStructName();
-            commonTypeString.add(inputStruct.getStructName());
-        }
         if (Checker.isNull(params)) {
             return paramString;
         }

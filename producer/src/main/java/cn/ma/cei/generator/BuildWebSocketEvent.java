@@ -7,6 +7,7 @@ import cn.ma.cei.generator.buildin.Keyword;
 import cn.ma.cei.generator.buildin.WebSocketConnection;
 import cn.ma.cei.generator.buildin.WebSocketEvent;
 import cn.ma.cei.generator.buildin.WebSocketMessage;
+import cn.ma.cei.model.types.xBoolean;
 import cn.ma.cei.model.websocket.xTrigger;
 import cn.ma.cei.model.websocket.xWSHandler;
 import cn.ma.cei.model.websocket.xWSOnMessage;
@@ -63,6 +64,7 @@ public class BuildWebSocketEvent {
         eventBuilder.newEvent(eventVariable, GlobalContext.createStatement(isPersistent));
         if (context.trigger != null) {
             sMethod trigger = interfaceMethod.createNestedMethod(context.name + "Trigger");
+            trigger.setReturnType(xBoolean.inst.getType());
             GlobalContext.setCurrentMethod(trigger);
             Variable msg = trigger.createInputVariable(WebSocketMessage.getType(), "msg");
             // Build trigger

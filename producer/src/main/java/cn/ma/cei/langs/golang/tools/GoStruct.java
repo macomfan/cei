@@ -104,11 +104,6 @@ public class GoStruct extends GoVarMgr {
             code.endln();
         }
         methodList.values().forEach(method -> {
-            if (method.getInputStruct() != null) {
-                method.getInputStruct().build();
-                code.appendCode(method.getInputStruct().getCode());
-                code.endln();
-            }
             code.appendCode(method.getCode());
             code.endln();
         });
