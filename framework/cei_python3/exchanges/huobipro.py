@@ -26,6 +26,22 @@ class SymbolsData:
         self.leverage_ratio = None
 
 
+class TradeClearingUpdate:
+    def __init__(self):
+        self.symbol = None
+        self.order_id = None
+        self.trade_price = None
+        self.trade_volume = None
+        self.order_side = None
+        self.order_type = None
+        self.aggressor = None
+        self.trade_id = None
+        self.trade_time = None
+        self.transact_fee = None
+        self.fee_deduct = None
+        self.fee_deduct_type = None
+
+
 class CandlestickData:
     def __init__(self):
         self.id = None
@@ -63,6 +79,11 @@ class AggregatedMarketData:
         self.bid_size = None
         self.ask_price = None
         self.ask_size = None
+
+
+class Code:
+    def __init__(self):
+        self.code = None
 
 
 class Currencies:
@@ -442,6 +463,7 @@ class MarketChannelClient:
     
         def on_any_message_event_event(connection, msg):
             decoded = CEIUtils.gzip(msg.get_bytes())
+            print("Rec: " + decoded)
             msg.upgrade(decoded)
         on_any_message_event.set_event(on_any_message_event_event)
         self.__connection.register_event(on_any_message_event)
@@ -465,7 +487,7 @@ class MarketChannelClient:
         self.__connection.connect("")
 
     def subscript_candlestick(self, symbol, period, on_candlestick):
-        on_candlestick_event = WebSocketEvent(False)
+        on_candlestick_event = WebSocketEvent(True)
     
         def on_candlestick_event_trigger(msg):
             root_obj = JsonWrapper.parse_from_string(msg.get_string())
@@ -501,23 +523,28 @@ class MarketChannelClient:
         def on_candlestick_event_trigger(msg):
             root_obj = JsonWrapper.parse_from_string(msg.get_string())
             json_checker = JsonChecker()
-            json_checker.check_equal("ch", CEIUtils.string_replace("market.{0}.kline.{1}", symbol, period), root_obj)
+            json_checker.check_equal("rep", CEIUtils.string_replace("market.{0}.kline.{1}", symbol, period), root_obj)
             return json_checker.complete()
         on_candlestick_event.set_trigger(on_candlestick_event_trigger)
     
         def on_candlestick_event_event(connection, msg):
             root_obj = JsonWrapper.parse_from_string(msg.get_string())
-            candlestick_data_var = CandlestickData()
-            obj = root_obj.get_object("tick")
-            candlestick_data_var.id = obj.get_int("id")
-            candlestick_data_var.amount = obj.get_decimal("amount")
-            candlestick_data_var.count = obj.get_int("count")
-            candlestick_data_var.open = obj.get_decimal("open")
-            candlestick_data_var.close = obj.get_decimal("close")
-            candlestick_data_var.low = obj.get_decimal("low")
-            candlestick_data_var.high = obj.get_decimal("high")
-            candlestick_data_var.vol = obj.get_decimal("vol")
-            on_candlestick(candlestick_data_var)
+            candlestick_var = Candlestick()
+            obj = root_obj.get_array("data")
+            for item in obj.array():
+                candlestick_data_var = CandlestickData()
+                candlestick_data_var.id = item.get_int("id")
+                candlestick_data_var.amount = item.get_decimal("amount")
+                candlestick_data_var.count = item.get_int("count")
+                candlestick_data_var.open = item.get_decimal("open")
+                candlestick_data_var.close = item.get_decimal("close")
+                candlestick_data_var.low = item.get_decimal("low")
+                candlestick_data_var.high = item.get_decimal("high")
+                candlestick_data_var.vol = item.get_decimal("vol")
+                if candlestick_var.data is None:
+                    candlestick_var.data = list()
+                candlestick_var.data.append(candlestick_data_var)
+            on_candlestick(candlestick_var)
         on_candlestick_event.set_event(on_candlestick_event_event)
         self.__connection.register_event(on_candlestick_event)
         ts = CEIUtils.get_now("Unix_ms")
@@ -607,7 +634,7 @@ class MarketChannelClient:
         self.__connection.send(json.to_json_string())
 
 
-class AssetChannelClient:
+class AssetOrderV2ChannelClient:
     def __init__(self, option=None):
         self.__option = WebSocketOptions()
         self.__option.url = "wss://api.huobi.pro/ws/v2"
@@ -638,14 +665,14 @@ class AssetChannelClient:
         self.__connection.register_event(on_ping_event)
         self.__connection.connect("")
 
-    def subscript_order(self, symbol, on_order):
+    def set_handler(self, on_order, on_trade):
         on_order_event = WebSocketEvent(True)
     
         def on_order_event_trigger(msg):
             root_obj = JsonWrapper.parse_from_string(msg.get_string())
             json_checker = JsonChecker()
             json_checker.check_equal("action", "push", root_obj)
-            json_checker.check_equal("ch", CEIUtils.string_replace("orders#{0}", symbol), root_obj)
+            json_checker.value_include("ch", "order.", root_obj)
             return json_checker.complete()
         on_order_event.set_trigger(on_order_event_trigger)
     
@@ -673,10 +700,80 @@ class AssetChannelClient:
             on_order(order_update_var)
         on_order_event.set_event(on_order_event_event)
         self.__connection.register_event(on_order_event)
+        on_trade_event = WebSocketEvent(True)
+    
+        def on_trade_event_trigger(msg):
+            root_obj = JsonWrapper.parse_from_string(msg.get_string())
+            json_checker = JsonChecker()
+            json_checker.check_equal("action", "push", root_obj)
+            json_checker.value_include("ch", "trade.clearing.", root_obj)
+            return json_checker.complete()
+        on_trade_event.set_trigger(on_trade_event_trigger)
+    
+        def on_trade_event_event(connection, msg):
+            root_obj = JsonWrapper.parse_from_string(msg.get_string())
+            trade_clearing_update_var = TradeClearingUpdate()
+            obj = root_obj.get_object("data")
+            trade_clearing_update_var.symbol = obj.get_string_or_none("symbol")
+            trade_clearing_update_var.order_id = obj.get_int_or_none("orderId")
+            trade_clearing_update_var.trade_price = obj.get_string_or_none("tradePrice")
+            trade_clearing_update_var.trade_volume = obj.get_string_or_none("tradeVolume")
+            trade_clearing_update_var.order_side = obj.get_string_or_none("orderSide")
+            trade_clearing_update_var.order_type = obj.get_string_or_none("orderType")
+            trade_clearing_update_var.aggressor = obj.get_bool_or_none("aggressor")
+            trade_clearing_update_var.trade_id = obj.get_int_or_none("tradeId")
+            trade_clearing_update_var.trade_time = obj.get_string_or_none("tradeTime")
+            trade_clearing_update_var.transact_fee = obj.get_string_or_none("transactFee")
+            trade_clearing_update_var.fee_deduct = obj.get_string_or_none("feeDeduct")
+            trade_clearing_update_var.fee_deduct_type = obj.get_string_or_none("feeDeductType")
+            on_trade(trade_clearing_update_var)
+        on_trade_event.set_event(on_trade_event_event)
+        self.__connection.register_event(on_trade_event)
+
+    def subscript_order(self, symbol, on_sub):
+        on_sub_event = WebSocketEvent(False)
+    
+        def on_sub_event_trigger(msg):
+            root_obj = JsonWrapper.parse_from_string(msg.get_string())
+            json_checker = JsonChecker()
+            json_checker.check_equal("action", "sub", root_obj)
+            json_checker.value_include("ch", "orders", root_obj)
+            return json_checker.complete()
+        on_sub_event.set_trigger(on_sub_event_trigger)
+    
+        def on_sub_event_event(connection, msg):
+            root_obj = JsonWrapper.parse_from_string(msg.get_string())
+            code_var = Code()
+            code_var.code = root_obj.get_int("code")
+            on_sub(code_var)
+        on_sub_event.set_event(on_sub_event_event)
+        self.__connection.register_event(on_sub_event)
         json = JsonWrapper()
         json.add_json_string("action", "sub")
         json.add_json_string("ch", CEIUtils.string_replace("orders#{0}", symbol))
         self.__connection.send(json.to_json_string())
+
+    def subscript_trade_clearing(self, symbol, on_sub):
+        on_sub_event = WebSocketEvent(False)
+    
+        def on_sub_event_trigger(msg):
+            root_obj = JsonWrapper.parse_from_string(msg.get_string())
+            json_checker = JsonChecker()
+            json_checker.check_equal("action", "sub", root_obj)
+            json_checker.value_include("ch", "trade.clearing", root_obj)
+            return json_checker.complete()
+        on_sub_event.set_trigger(on_sub_event_trigger)
+    
+        def on_sub_event_event(connection, msg):
+            root_obj = JsonWrapper.parse_from_string(msg.get_string())
+            code_var = Code()
+            code_var.code = root_obj.get_int("code")
+            on_sub(code_var)
+        on_sub_event.set_event(on_sub_event_event)
+        self.__connection.register_event(on_sub_event)
+        json = JsonWrapper()
+        json.add_json_string("action", "sub")
+        json.add_json_string("ch", CEIUtils.string_replace("trade.clearing#{0}", symbol))
 
 
 class Procedures:

@@ -39,6 +39,14 @@ public class GoJsonCheckerBuilder implements IJsonCheckerBuilder {
     }
 
     @Override
+    public void setValueInclude(Variable jsonChecker, Variable key, Variable value, Variable jsonWrapperObject) {
+        method.addInvoke(jsonChecker.getDescriptor() + ".ValueInclude",
+                method.var(key),
+                method.var(value),
+                method.var(jsonWrapperObject));
+    }
+
+    @Override
     public void returnResult(Variable jsonChecker) {
         method.addReturn(method.var(BuilderContext.createStatement(jsonChecker.getDescriptor() + ".Complete()")));
     }

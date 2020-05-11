@@ -1,5 +1,7 @@
 package impl
 
+import "strings"
+
 type JsonChecker struct {
 	result int
 }
@@ -10,7 +12,7 @@ func (inst *JsonChecker) pass() {
 	}
 }
 
-func (inst *JsonChecker) fail()  {
+func (inst *JsonChecker) fail() {
 	inst.result = 0
 }
 
@@ -27,7 +29,7 @@ func (inst *JsonChecker) CheckEqual(key, value string, jsonWrapper *JsonWrapper)
 
 func (inst *JsonChecker) CheckNotEqual(key, value string, jsonWrapper *JsonWrapper) {
 	if jsonWrapper.Contains(key) {
-		jsonValue:= jsonWrapper.GetString(key)
+		jsonValue := jsonWrapper.GetString(key)
 		if jsonValue != value {
 			inst.pass()
 		} else {
@@ -36,12 +38,22 @@ func (inst *JsonChecker) CheckNotEqual(key, value string, jsonWrapper *JsonWrapp
 	}
 }
 
-func (inst *JsonChecker) ContainKey(key string, jsonWrapper *JsonWrapper)  {
+func (inst *JsonChecker) ContainKey(key string, jsonWrapper *JsonWrapper) {
 	if jsonWrapper.Contains(key) {
 		inst.pass()
 	} else {
 		inst.fail()
 	}
+}
+
+func (inst *JsonChecker) ValueInclude(key, value string, jsonWrapper *JsonWrapper) {
+	if jsonWrapper.Contains(key) {
+		tmp := jsonWrapper.GetString(key)
+		if strings.Index(tmp, value) != -1 {
+			inst.pass()
+		}
+	}
+	inst.fail()
 }
 
 func (inst *JsonChecker) Complete() bool {

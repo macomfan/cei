@@ -25,6 +25,7 @@ public abstract class xJsonWithModel extends xJsonType {
             xJsonValue.class,
             xJsonCheckerEqual.class,
             xJsonCheckerNotEqual.class,
-            xJsonCheckerContainKey.class})
+            xJsonCheckerContainKey.class,
+            xJsonCheckerValueInclude.class})
     public List<xJsonType> itemList;
 }

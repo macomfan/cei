@@ -23,6 +23,8 @@ public interface IJsonCheckerBuilder extends IBuilderBase {
 
     void setContainKey(Variable jsonChecker, Variable key, Variable jsonWrapperObject);
 
+    void setValueInclude(Variable jsonChecker, Variable key, Variable value, Variable jsonWrapperObject);
+
     void returnResult(Variable jsonChecker);
 
     void reportError(Variable jsonChecker);

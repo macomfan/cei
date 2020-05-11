@@ -136,6 +136,9 @@ public class BuildJsonParser extends DataProcessorBase<xJsonParser> {
         } else if (context.currentItem instanceof xJsonCheckerContainKey) {
             processCheckerContainKey(context);
             return true;
+        } else if (context.currentItem instanceof xJsonCheckerValueInclude) {
+            processCheckerValueInclude(context);
+            return true;
         }
         return false;
     }
@@ -341,5 +344,12 @@ public class BuildJsonParser extends DataProcessorBase<xJsonParser> {
         xJsonCheckerContainKey jsonCheckerContainKey = (xJsonCheckerContainKey) context.currentItem;
         Variable key = queryVariableOrConstant(jsonCheckerContainKey.key, xString.inst.getType());
         context.jsonCheckerBuilder.setContainKey(context.jsonCheckerObject, key, context.currentJsonObject);
+    }
+
+    private void processCheckerValueInclude(JsonItemContext context) {
+        xJsonCheckerValueInclude jsonCheckerNotEqual = (xJsonCheckerValueInclude) context.currentItem;
+        Variable key = queryVariableOrConstant(jsonCheckerNotEqual.key, xString.inst.getType());
+        Variable value = queryVariableOrConstant(jsonCheckerNotEqual.value, xString.inst.getType());
+        context.jsonCheckerBuilder.setValueInclude(context.jsonCheckerObject, key, value, context.currentJsonObject);
     }
 }

@@ -4,12 +4,37 @@ import websocket
 import threading
 from impl.websocketoptions import WebSocketOptions
 from impl.websocketmessage import WebSocketMessage
+from impl.ceilog import CEILog
+
+# Key: ws, Value: connection
+websocket_connection_handler = dict()
 
 
 class ConnectionState(Enum):
     IDLE = 0
     CONNECTED = 1
     CLOSED_ON_ERROR = 2
+
+
+def on_message(ws, message):
+    websocket_connection = websocket_connection_handler[ws]
+    websocket_connection.on_message(message)
+    return
+
+
+def on_error(ws, error):
+    websocket_connection = websocket_connection_handler[ws]
+    websocket_connection.on_failure(error)
+
+
+def on_close(ws):
+    websocket_connection = websocket_connection_handler[ws]
+    websocket_connection.on_close()
+
+
+def on_open(ws):
+    websocket_connection = websocket_connection_handler[ws]
+    websocket_connection.on_open()
 
 
 class WebSocketConnection:
@@ -34,19 +59,23 @@ class WebSocketConnection:
         self.__target = target
         self.__websocket = websocket.WebSocketApp(
             self.__option.url + self.__target,
-            on_open=self.on_open,
-            on_message=self.on_message,
-            on_error=self.on_failure,
-            on_close=self.on_close,
+            on_open=on_open,
+            on_message=on_message,
+            on_error=on_error,
+            on_close=on_close,
         )
+        global websocket_connection_handler
+        websocket_connection_handler[self.__websocket] = self
         self.__thread = threading.Thread(target=self.__websocket.run_forever, name=str(self.__client_id))
         self.__thread.start()
-        print("Before wait")
         self.__connected_notification.acquire()
-        self.__connected_notification.wait(self.__option.connection_timeout)
+        # self.__connected_notification.wait(self.__option.connection_timeout)
+        self.__connected_notification.wait(1000)
         self.__connected_notification.release()
         if self.__status != ConnectionState.CONNECTED:
             print("Connect failed")
+        else:
+            print("Connected")
 
     def on_open(self):
         if self.__on_connect is not None:
@@ -60,7 +89,7 @@ class WebSocketConnection:
         pass
 
     def on_close(self):
-        pass
+        del websocket_connection_handler[self.ws]
 
     def close(self):
         pass
@@ -75,7 +104,6 @@ class WebSocketConnection:
         self.__event.append(event)
 
     def on_message(self, data):
-        print("Receive " + data)
         msg = None
         if isinstance(data, str):
             msg = WebSocketMessage(text=data)
@@ -94,4 +122,6 @@ class WebSocketConnection:
 
     def send(self, what):
         print("Send: " + what)
+        if self.__status != ConnectionState.CONNECTED:
+            CEILog.show_failure("The channel is disconnected")
         self.__websocket.send(what)

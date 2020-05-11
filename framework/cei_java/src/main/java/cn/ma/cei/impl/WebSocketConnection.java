@@ -142,6 +142,10 @@ public class WebSocketConnection extends WebSocketListener {
     }
 
     public void send(String msg) {
+        if (status != Status.CONNECTED) {
+            // TODO
+            CEILog.showFailure("The channel is disconnected");
+        }
         if (msg != null && !msg.isEmpty()) {
             System.out.println("Send " + msg);
             webSocket.send(msg);

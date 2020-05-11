@@ -21,6 +21,21 @@ type SymbolsData struct {
     LeverageRatio   int64
 }
 
+type TradeClearingUpdate struct {
+    Symbol        string
+    OrderId       int64
+    TradePrice    string
+    TradeVolume   string
+    OrderSide     string
+    OrderType     string
+    Aggressor     bool
+    TradeId       int64
+    TradeTime     string
+    TransactFee   string
+    FeeDeduct     string
+    FeeDeductType string
+}
+
 type CandlestickData struct {
     Id     int64
     Amount float64
@@ -54,6 +69,10 @@ type AggregatedMarketData struct {
     BidSize  float64
     AskPrice float64
     AskSize  float64
+}
+
+type Code struct {
+    Code int64
 }
 
 type Currencies struct {
@@ -524,7 +543,7 @@ func (inst *MarketChannelClient) Open() {
 }
 
 func (inst *MarketChannelClient) SubscriptCandlestick(symbol string, period string, onCandlestick func (data CandlestickData)) {
-    onCandlestickEvent := impl.NewWebSocketEvent(false)
+    onCandlestickEvent := impl.NewWebSocketEvent(true)
     onCandlestickEvent.SetTrigger(func(msg *impl.WebSocketMessage) bool {
         rootObj := impl.ParseJsonFromString(msg.GetString())
         jsonChecker := new(impl.JsonChecker)
@@ -552,27 +571,31 @@ func (inst *MarketChannelClient) SubscriptCandlestick(symbol string, period stri
     json.AddJsonString("id", ts)
 }
 
-func (inst *MarketChannelClient) RequestCandlestick(symbol string, period string, onCandlestick func (data CandlestickData)) {
+func (inst *MarketChannelClient) RequestCandlestick(symbol string, period string, onCandlestick func (data Candlestick)) {
     onCandlestickEvent := impl.NewWebSocketEvent(false)
     onCandlestickEvent.SetTrigger(func(msg *impl.WebSocketMessage) bool {
         rootObj := impl.ParseJsonFromString(msg.GetString())
         jsonChecker := new(impl.JsonChecker)
-        jsonChecker.CheckEqual("ch", fmt.Sprintf("market.%s.kline.%s", symbol, period), rootObj)
+        jsonChecker.CheckEqual("rep", fmt.Sprintf("market.%s.kline.%s", symbol, period), rootObj)
         return jsonChecker.Complete()
     })
     onCandlestickEvent.SetEvent(func(connection *impl.WebSocketConnection, msg *impl.WebSocketMessage)  {
         rootObj := impl.ParseJsonFromString(msg.GetString())
-        candlestickDataVar := CandlestickData{}
-        obj := rootObj.GetObject("tick")
-        candlestickDataVar.Id = obj.GetInt64("id")
-        candlestickDataVar.Amount = obj.GetFloat64("amount")
-        candlestickDataVar.Count = obj.GetInt64("count")
-        candlestickDataVar.Open = obj.GetFloat64("open")
-        candlestickDataVar.Close = obj.GetFloat64("close")
-        candlestickDataVar.Low = obj.GetFloat64("low")
-        candlestickDataVar.High = obj.GetFloat64("high")
-        candlestickDataVar.Vol = obj.GetFloat64("vol")
-        onCandlestick(candlestickDataVar)
+        candlestickVar := Candlestick{}
+        obj := rootObj.GetArray("data")
+        for _, item := range obj.Array() {
+            candlestickDataVar := CandlestickData{}
+            candlestickDataVar.Id = item.GetInt64("id")
+            candlestickDataVar.Amount = item.GetFloat64("amount")
+            candlestickDataVar.Count = item.GetInt64("count")
+            candlestickDataVar.Open = item.GetFloat64("open")
+            candlestickDataVar.Close = item.GetFloat64("close")
+            candlestickDataVar.Low = item.GetFloat64("low")
+            candlestickDataVar.High = item.GetFloat64("high")
+            candlestickDataVar.Vol = item.GetFloat64("vol")
+            candlestickVar.Data = append(candlestickVar.Data, candlestickDataVar)
+        }
+        onCandlestick(candlestickVar)
     })
     inst.connection.RegisterEvent(onCandlestickEvent)
     ts := impl.GetNow("Unix_ms")
@@ -654,13 +677,13 @@ func (inst *MarketChannelClient) RequestDepth(symbol string, typeU string, onDep
 }
 
 
-type AssetChannelClient struct {
+type AssetOrderV2ChannelClient struct {
     option     *impl.WebSocketOptions
     connection *impl.WebSocketConnection
 }
 
-func NewAssetChannelClient(option *impl.WebSocketOptions) *AssetChannelClient {
-    inst := new(AssetChannelClient)
+func NewAssetOrderV2ChannelClient(option *impl.WebSocketOptions) *AssetOrderV2ChannelClient {
+    inst := new(AssetOrderV2ChannelClient)
     if option != nil {
         inst.option = option
     } else {
@@ -669,7 +692,7 @@ func NewAssetChannelClient(option *impl.WebSocketOptions) *AssetChannelClient {
     return inst
 }
 
-func (inst *AssetChannelClient) Open() {
+func (inst *AssetOrderV2ChannelClient) Open() {
     onPingEvent := impl.NewWebSocketEvent(true)
     onPingEvent.SetTrigger(func(msg *impl.WebSocketMessage) bool {
         rootObj := impl.ParseJsonFromString(msg.GetString())
@@ -690,13 +713,13 @@ func (inst *AssetChannelClient) Open() {
     inst.connection.Connect("")
 }
 
-func (inst *AssetChannelClient) SubscriptOrder(symbol string, onOrder func (data OrderUpdate)) {
+func (inst *AssetOrderV2ChannelClient) SetHandler(onOrder func (data OrderUpdate), onTrade func (data TradeClearingUpdate)) {
     onOrderEvent := impl.NewWebSocketEvent(true)
     onOrderEvent.SetTrigger(func(msg *impl.WebSocketMessage) bool {
         rootObj := impl.ParseJsonFromString(msg.GetString())
         jsonChecker := new(impl.JsonChecker)
         jsonChecker.CheckEqual("action", "push", rootObj)
-        jsonChecker.CheckEqual("ch", fmt.Sprintf("orders#%s", symbol), rootObj)
+        jsonChecker.ValueInclude("ch", "order.", rootObj)
         return jsonChecker.Complete()
     })
     onOrderEvent.SetEvent(func(connection *impl.WebSocketConnection, msg *impl.WebSocketMessage)  {
@@ -723,9 +746,75 @@ func (inst *AssetChannelClient) SubscriptOrder(symbol string, onOrder func (data
         onOrder(orderUpdateVar)
     })
     inst.connection.RegisterEvent(onOrderEvent)
+    onTradeEvent := impl.NewWebSocketEvent(true)
+    onTradeEvent.SetTrigger(func(msg *impl.WebSocketMessage) bool {
+        rootObj := impl.ParseJsonFromString(msg.GetString())
+        jsonChecker := new(impl.JsonChecker)
+        jsonChecker.CheckEqual("action", "push", rootObj)
+        jsonChecker.ValueInclude("ch", "trade.clearing.", rootObj)
+        return jsonChecker.Complete()
+    })
+    onTradeEvent.SetEvent(func(connection *impl.WebSocketConnection, msg *impl.WebSocketMessage)  {
+        rootObj := impl.ParseJsonFromString(msg.GetString())
+        tradeClearingUpdateVar := TradeClearingUpdate{}
+        obj := rootObj.GetObject("data")
+        tradeClearingUpdateVar.Symbol = obj.GetString("symbol")
+        tradeClearingUpdateVar.OrderId = obj.GetInt64("orderId")
+        tradeClearingUpdateVar.TradePrice = obj.GetString("tradePrice")
+        tradeClearingUpdateVar.TradeVolume = obj.GetString("tradeVolume")
+        tradeClearingUpdateVar.OrderSide = obj.GetString("orderSide")
+        tradeClearingUpdateVar.OrderType = obj.GetString("orderType")
+        tradeClearingUpdateVar.Aggressor = obj.GetBool("aggressor")
+        tradeClearingUpdateVar.TradeId = obj.GetInt64("tradeId")
+        tradeClearingUpdateVar.TradeTime = obj.GetString("tradeTime")
+        tradeClearingUpdateVar.TransactFee = obj.GetString("transactFee")
+        tradeClearingUpdateVar.FeeDeduct = obj.GetString("feeDeduct")
+        tradeClearingUpdateVar.FeeDeductType = obj.GetString("feeDeductType")
+        onTrade(tradeClearingUpdateVar)
+    })
+    inst.connection.RegisterEvent(onTradeEvent)
+}
+
+func (inst *AssetOrderV2ChannelClient) SubscriptOrder(symbol string, onSub func (data Code)) {
+    onSubEvent := impl.NewWebSocketEvent(false)
+    onSubEvent.SetTrigger(func(msg *impl.WebSocketMessage) bool {
+        rootObj := impl.ParseJsonFromString(msg.GetString())
+        jsonChecker := new(impl.JsonChecker)
+        jsonChecker.CheckEqual("action", "sub", rootObj)
+        jsonChecker.ValueInclude("ch", "orders", rootObj)
+        return jsonChecker.Complete()
+    })
+    onSubEvent.SetEvent(func(connection *impl.WebSocketConnection, msg *impl.WebSocketMessage)  {
+        rootObj := impl.ParseJsonFromString(msg.GetString())
+        codeVar := Code{}
+        codeVar.Code = rootObj.GetInt64("code")
+        onSub(codeVar)
+    })
+    inst.connection.RegisterEvent(onSubEvent)
     json := impl.JsonWrapper{}
     json.AddJsonString("action", "sub")
     json.AddJsonString("ch", fmt.Sprintf("orders#%s", symbol))
+}
+
+func (inst *AssetOrderV2ChannelClient) SubscriptTradeClearing(symbol string, onSub func (data Code)) {
+    onSubEvent := impl.NewWebSocketEvent(false)
+    onSubEvent.SetTrigger(func(msg *impl.WebSocketMessage) bool {
+        rootObj := impl.ParseJsonFromString(msg.GetString())
+        jsonChecker := new(impl.JsonChecker)
+        jsonChecker.CheckEqual("action", "sub", rootObj)
+        jsonChecker.ValueInclude("ch", "trade.clearing", rootObj)
+        return jsonChecker.Complete()
+    })
+    onSubEvent.SetEvent(func(connection *impl.WebSocketConnection, msg *impl.WebSocketMessage)  {
+        rootObj := impl.ParseJsonFromString(msg.GetString())
+        codeVar := Code{}
+        codeVar.Code = rootObj.GetInt64("code")
+        onSub(codeVar)
+    })
+    inst.connection.RegisterEvent(onSubEvent)
+    json := impl.JsonWrapper{}
+    json.AddJsonString("action", "sub")
+    json.AddJsonString("ch", fmt.Sprintf("trade.clearing#%s", symbol))
 }
 
 

@@ -140,5 +140,24 @@
             <string name="remainAmt"/>
             <string name="lastActTime"/>
         </model>
+        
+        <model name="TradeClearingUpdate">
+            <string name="symbol"/>
+            <int name="orderId"/>
+            <string name="tradePrice"/>
+            <string name="tradeVolume"/>
+            <string name="orderSide"/>
+            <string name="orderType"/>
+            <boolean name="aggressor"/>
+            <int name="tradeId"/>
+            <string name="tradeTime"/>
+            <string name="transactFee"/>
+            <string name="feeDeduct"/>
+            <string name="feeDeductType"/>
+        </model>
+        
+        <model name="Code">
+            <int name="code"/>
+        </model>
     </models>
 </sdk>

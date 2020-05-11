@@ -33,6 +33,21 @@ public class huobipro {
         public Long leverageRatio;
     }
 
+    static public class TradeClearingUpdate {
+        public String symbol;
+        public Long orderId;
+        public String tradePrice;
+        public String tradeVolume;
+        public String orderSide;
+        public String orderType;
+        public Boolean aggressor;
+        public Long tradeId;
+        public String tradeTime;
+        public String transactFee;
+        public String feeDeduct;
+        public String feeDeductType;
+    }
+
     static public class CandlestickData {
         public Long id;
         public BigDecimal amount;
@@ -66,6 +81,10 @@ public class huobipro {
         public BigDecimal bidSize;
         public BigDecimal askPrice;
         public BigDecimal askSize;
+    }
+
+    static public class Code {
+        public Long code;
     }
 
     static public class Currencies {
@@ -500,7 +519,7 @@ public class huobipro {
         }
     
         public void subscriptCandlestick(String symbol, String period, IWebSocketCallback<CandlestickData> onCandlestick) {
-            WebSocketEvent onCandlestickEvent = new WebSocketEvent(false);
+            WebSocketEvent onCandlestickEvent = new WebSocketEvent(true);
             onCandlestickEvent.setTrigger((msg) -> {
                 JsonWrapper rootObj = JsonWrapper.parseFromString(msg.getString());
                 JsonChecker jsonChecker = new JsonChecker();
@@ -529,27 +548,34 @@ public class huobipro {
             this.connection.send(json.toJsonString());
         }
     
-        public void requestCandlestick(String symbol, String period, IWebSocketCallback<CandlestickData> onCandlestick) {
+        public void requestCandlestick(String symbol, String period, IWebSocketCallback<Candlestick> onCandlestick) {
             WebSocketEvent onCandlestickEvent = new WebSocketEvent(false);
             onCandlestickEvent.setTrigger((msg) -> {
                 JsonWrapper rootObj = JsonWrapper.parseFromString(msg.getString());
                 JsonChecker jsonChecker = new JsonChecker();
-                jsonChecker.checkEqual("ch", CEIUtils.stringReplace("market.%s.kline.%s", symbol, period), rootObj);
+                jsonChecker.checkEqual("rep", CEIUtils.stringReplace("market.%s.kline.%s", symbol, period), rootObj);
                 return jsonChecker.complete();
             });
             onCandlestickEvent.setEvent((connection, msg) -> {
                 JsonWrapper rootObj = JsonWrapper.parseFromString(msg.getString());
-                CandlestickData candlestickDataVar = new CandlestickData();
-                JsonWrapper obj = rootObj.getObject("tick");
-                candlestickDataVar.id = obj.getLong("id");
-                candlestickDataVar.amount = obj.getDecimal("amount");
-                candlestickDataVar.count = obj.getLong("count");
-                candlestickDataVar.open = obj.getDecimal("open");
-                candlestickDataVar.close = obj.getDecimal("close");
-                candlestickDataVar.low = obj.getDecimal("low");
-                candlestickDataVar.high = obj.getDecimal("high");
-                candlestickDataVar.vol = obj.getDecimal("vol");
-                onCandlestick.invoke(candlestickDataVar);
+                Candlestick candlestickVar = new Candlestick();
+                JsonWrapper obj = rootObj.getArray("data");
+                obj.forEach(item -> {
+                    CandlestickData candlestickDataVar = new CandlestickData();
+                    candlestickDataVar.id = item.getLong("id");
+                    candlestickDataVar.amount = item.getDecimal("amount");
+                    candlestickDataVar.count = item.getLong("count");
+                    candlestickDataVar.open = item.getDecimal("open");
+                    candlestickDataVar.close = item.getDecimal("close");
+                    candlestickDataVar.low = item.getDecimal("low");
+                    candlestickDataVar.high = item.getDecimal("high");
+                    candlestickDataVar.vol = item.getDecimal("vol");
+                    if (candlestickVar.data == null) {
+                        candlestickVar.data = new LinkedList<>();
+                    }
+                    candlestickVar.data.add(candlestickDataVar);
+                });
+                onCandlestick.invoke(candlestickVar);
             });
             this.connection.registerEvent(onCandlestickEvent);
             String ts = CEIUtils.getNow("Unix_ms");
@@ -646,17 +672,17 @@ public class huobipro {
         }
     }
 
-    static public class AssetChannelClient {
+    static public class AssetOrderV2ChannelClient {
         private final WebSocketOptions option;
         private final WebSocketConnection connection;
     
-        public AssetChannelClient() {
+        public AssetOrderV2ChannelClient() {
             this.option = new WebSocketOptions();
             this.option.url = "wss://api.huobi.pro/ws/v2";
             this.connection = new WebSocketConnection(this.option);
         }
     
-        public AssetChannelClient(WebSocketOptions option) {
+        public AssetOrderV2ChannelClient(WebSocketOptions option) {
             this();
             this.option.setFrom(option);
         }
@@ -683,13 +709,13 @@ public class huobipro {
             this.connection.connect("");
         }
     
-        public void subscriptOrder(String symbol, IWebSocketCallback<OrderUpdate> onOrder) {
+        public void setHandler(IWebSocketCallback<OrderUpdate> onOrder, IWebSocketCallback<TradeClearingUpdate> onTrade) {
             WebSocketEvent onOrderEvent = new WebSocketEvent(true);
             onOrderEvent.setTrigger((msg) -> {
                 JsonWrapper rootObj = JsonWrapper.parseFromString(msg.getString());
                 JsonChecker jsonChecker = new JsonChecker();
                 jsonChecker.checkEqual("action", "push", rootObj);
-                jsonChecker.checkEqual("ch", CEIUtils.stringReplace("orders#%s", symbol), rootObj);
+                jsonChecker.valueInclude("ch", "order.", rootObj);
                 return jsonChecker.complete();
             });
             onOrderEvent.setEvent((connection, msg) -> {
@@ -716,10 +742,76 @@ public class huobipro {
                 onOrder.invoke(orderUpdateVar);
             });
             this.connection.registerEvent(onOrderEvent);
+            WebSocketEvent onTradeEvent = new WebSocketEvent(true);
+            onTradeEvent.setTrigger((msg) -> {
+                JsonWrapper rootObj = JsonWrapper.parseFromString(msg.getString());
+                JsonChecker jsonChecker = new JsonChecker();
+                jsonChecker.checkEqual("action", "push", rootObj);
+                jsonChecker.valueInclude("ch", "trade.clearing.", rootObj);
+                return jsonChecker.complete();
+            });
+            onTradeEvent.setEvent((connection, msg) -> {
+                JsonWrapper rootObj = JsonWrapper.parseFromString(msg.getString());
+                TradeClearingUpdate tradeClearingUpdateVar = new TradeClearingUpdate();
+                JsonWrapper obj = rootObj.getObject("data");
+                tradeClearingUpdateVar.symbol = obj.getStringOrNull("symbol");
+                tradeClearingUpdateVar.orderId = obj.getLongOrNull("orderId");
+                tradeClearingUpdateVar.tradePrice = obj.getStringOrNull("tradePrice");
+                tradeClearingUpdateVar.tradeVolume = obj.getStringOrNull("tradeVolume");
+                tradeClearingUpdateVar.orderSide = obj.getStringOrNull("orderSide");
+                tradeClearingUpdateVar.orderType = obj.getStringOrNull("orderType");
+                tradeClearingUpdateVar.aggressor = obj.getBooleanOrNull("aggressor");
+                tradeClearingUpdateVar.tradeId = obj.getLongOrNull("tradeId");
+                tradeClearingUpdateVar.tradeTime = obj.getStringOrNull("tradeTime");
+                tradeClearingUpdateVar.transactFee = obj.getStringOrNull("transactFee");
+                tradeClearingUpdateVar.feeDeduct = obj.getStringOrNull("feeDeduct");
+                tradeClearingUpdateVar.feeDeductType = obj.getStringOrNull("feeDeductType");
+                onTrade.invoke(tradeClearingUpdateVar);
+            });
+            this.connection.registerEvent(onTradeEvent);
+        }
+    
+        public void subscriptOrder(String symbol, IWebSocketCallback<Code> onSub) {
+            WebSocketEvent onSubEvent = new WebSocketEvent(false);
+            onSubEvent.setTrigger((msg) -> {
+                JsonWrapper rootObj = JsonWrapper.parseFromString(msg.getString());
+                JsonChecker jsonChecker = new JsonChecker();
+                jsonChecker.checkEqual("action", "sub", rootObj);
+                jsonChecker.valueInclude("ch", "orders", rootObj);
+                return jsonChecker.complete();
+            });
+            onSubEvent.setEvent((connection, msg) -> {
+                JsonWrapper rootObj = JsonWrapper.parseFromString(msg.getString());
+                Code codeVar = new Code();
+                codeVar.code = rootObj.getLong("code");
+                onSub.invoke(codeVar);
+            });
+            this.connection.registerEvent(onSubEvent);
             JsonWrapper json = new JsonWrapper();
             json.addJsonString("action", "sub");
             json.addJsonString("ch", CEIUtils.stringReplace("orders#%s", symbol));
             this.connection.send(json.toJsonString());
+        }
+    
+        public void subscriptTradeClearing(String symbol, IWebSocketCallback<Code> onSub) {
+            WebSocketEvent onSubEvent = new WebSocketEvent(false);
+            onSubEvent.setTrigger((msg) -> {
+                JsonWrapper rootObj = JsonWrapper.parseFromString(msg.getString());
+                JsonChecker jsonChecker = new JsonChecker();
+                jsonChecker.checkEqual("action", "sub", rootObj);
+                jsonChecker.valueInclude("ch", "trade.clearing", rootObj);
+                return jsonChecker.complete();
+            });
+            onSubEvent.setEvent((connection, msg) -> {
+                JsonWrapper rootObj = JsonWrapper.parseFromString(msg.getString());
+                Code codeVar = new Code();
+                codeVar.code = rootObj.getLong("code");
+                onSub.invoke(codeVar);
+            });
+            this.connection.registerEvent(onSubEvent);
+            JsonWrapper json = new JsonWrapper();
+            json.addJsonString("action", "sub");
+            json.addJsonString("ch", CEIUtils.stringReplace("trade.clearing#%s", symbol));
         }
     }
 

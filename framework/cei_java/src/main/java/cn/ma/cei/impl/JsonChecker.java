@@ -22,8 +22,7 @@ public class JsonChecker {
             if (jsonValue.equals(value)) {
                 pass();
             }
-        }
-        else {
+        } else {
             fail();
         }
     }
@@ -43,6 +42,17 @@ public class JsonChecker {
         } else {
             fail();
         }
+    }
+
+    public void valueInclude(String key, String value, JsonWrapper jsonWrapper) {
+        if (jsonWrapper.contains(key)) {
+            String tmp = jsonWrapper.getString(key);
+            if (tmp.indexOf(value) != -1) {
+                pass();
+                return;
+            }
+        }
+        fail();
     }
 
     public boolean complete() {

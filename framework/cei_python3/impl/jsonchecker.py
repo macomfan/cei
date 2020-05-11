@@ -34,6 +34,14 @@ class JsonChecker(object):
         else:
             self.fail()
 
+    def check_not_equal(self, key: str, value: str, json_wrapper: JsonWrapper):
+        if json_wrapper.contains(key):
+            tmp = json_wrapper.get_string(key)
+            if tmp.find(value) != -1:
+                self.pass_result()
+                return
+        self.fail()
+
     def complete(self):
         return self.__result
 
