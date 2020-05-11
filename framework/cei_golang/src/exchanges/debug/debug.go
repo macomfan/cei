@@ -1,7 +1,6 @@
 package debug
 
 import (
-    "../../impl"
     "fmt"
 )
 

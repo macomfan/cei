@@ -30,6 +30,7 @@ public class JavaExchangeBuilder implements IExchangeBuilder {
         Constant.requestInfo().tryPut(CEIUtils.Constant.TARGET, "CEIUtils.Constant.TARGET");
         Constant.requestInfo().tryPut(CEIUtils.Constant.UPPERCASE, "CEIUtils.Constant.UPPERCASE");
         Constant.requestInfo().tryPut(CEIUtils.Constant.LOWERCASE, "CEIUtils.Constant.LOWERCASE");
+        Constant.requestInfo().tryPut(CEIUtils.Constant.POSTBODY, "CEIUtils.Constant.POSTBODY");
         Constant.requestInfo().tryPut(CEIUtils.Constant.NONE, "CEIUtils.Constant.NONE");
 
         Constant.keyword().tryPut(Keyword.TRUE, "true");
@@ -41,30 +42,30 @@ public class JavaExchangeBuilder implements IExchangeBuilder {
         BuilderContext.setupBuildInVariableType(xDecimal.typeName, "BigDecimal", "java.math.BigDecimal");
         BuilderContext.setupBuildInVariableType(TheArray.typeName, "List", "java.util.List");
         BuilderContext.setupBuildInVariableType(TheLinkedList.typeName, "LinkedList", "java.util.LinkedList");
-        BuilderContext.setupBuildInVariableType(RestfulRequest.typeName, "RestfulRequest", "cn.ma.cei.impl.RestfulRequest");
-        BuilderContext.setupBuildInVariableType(RestfulResponse.typeName, "RestfulResponse", "cn.ma.cei.impl.RestfulResponse");
-        BuilderContext.setupBuildInVariableType(RestfulConnection.typeName, "RestfulConnection", "cn.ma.cei.impl.RestfulConnection");
-        BuilderContext.setupBuildInVariableType(RestfulOptions.typeName, "RestfulOptions", "cn.ma.cei.impl.RestfulOptions");
-        BuilderContext.setupBuildInVariableType(JsonWrapper.typeName, "JsonWrapper", "cn.ma.cei.impl.JsonWrapper");
-        BuilderContext.setupBuildInVariableType(CEIUtils.typeName, "CEIUtils", "cn.ma.cei.impl.CEIUtils");
+        BuilderContext.setupBuildInVariableType(RestfulRequest.typeName, "RestfulRequest", "cei.impl.RestfulRequest");
+        BuilderContext.setupBuildInVariableType(RestfulResponse.typeName, "RestfulResponse", "cei.impl.RestfulResponse");
+        BuilderContext.setupBuildInVariableType(RestfulConnection.typeName, "RestfulConnection", "cei.impl.RestfulConnection");
+        BuilderContext.setupBuildInVariableType(RestfulOptions.typeName, "RestfulOptions", "cei.impl.RestfulOptions");
+        BuilderContext.setupBuildInVariableType(JsonWrapper.typeName, "JsonWrapper", "cei.impl.JsonWrapper");
+        BuilderContext.setupBuildInVariableType(CEIUtils.typeName, "CEIUtils", "cei.impl.CEIUtils");
         BuilderContext.setupBuildInVariableType(TheStream.typeName, "byte[]", BuilderContext.NO_REF);
-        BuilderContext.setupBuildInVariableType(JsonChecker.typeName, "JsonChecker", "cn.ma.cei.impl.JsonChecker");
-        BuilderContext.setupBuildInVariableType(StringWrapper.typeName, "StringWrapper", "cn.ma.cei.impl.StringWrapper");
+        BuilderContext.setupBuildInVariableType(JsonChecker.typeName, "JsonChecker", "cei.impl.JsonChecker");
+        BuilderContext.setupBuildInVariableType(StringWrapper.typeName, "StringWrapper", "cei.impl.StringWrapper");
         BuilderContext.setupBuildInVariableType(Procedures.typeName, "Procedures", BuilderContext.NO_REF);
 
-        BuilderContext.setupBuildInVariableType(WebSocketConnection.typeName, "WebSocketConnection", "cn.ma.cei.impl.WebSocketConnection");
-        BuilderContext.setupBuildInVariableType(WebSocketEvent.typeName, "WebSocketEvent", "cn.ma.cei.impl.WebSocketEvent");
-        BuilderContext.setupBuildInVariableType(WebSocketMessage.typeName, "WebSocketMessage", "cn.ma.cei.impl.WebSocketMessage");
-        BuilderContext.setupBuildInVariableType(WebSocketCallback.typeName, "IWebSocketCallback", "cn.ma.cei.impl.IWebSocketCallback");
-        BuilderContext.setupBuildInVariableType(WebSocketOptions.typeName, "WebSocketOptions", "cn.ma.cei.impl.WebSocketOptions");
+        BuilderContext.setupBuildInVariableType(WebSocketConnection.typeName, "WebSocketConnection", "cei.impl.WebSocketConnection");
+        BuilderContext.setupBuildInVariableType(WebSocketEvent.typeName, "WebSocketEvent", "cei.impl.WebSocketEvent");
+        BuilderContext.setupBuildInVariableType(WebSocketMessage.typeName, "WebSocketMessage", "cei.impl.WebSocketMessage");
+        BuilderContext.setupBuildInVariableType(WebSocketCallback.typeName, "IWebSocketCallback", "cei.impl.IWebSocketCallback");
+        BuilderContext.setupBuildInVariableType(WebSocketOptions.typeName, "WebSocketOptions", "cei.impl.WebSocketOptions");
 
         CEIPath workingFolder = BuilderContext.getWorkingFolder();
-        CEIPath exchangeFolder = CEIPath.appendPath(workingFolder, "src", "main", "java", "cn", "ma", "cei", "exchanges");
+        CEIPath exchangeFolder = CEIPath.appendPath(workingFolder, "src", "main", "java", "cei", "exchanges");
         exchangeFolder.mkdirs();
         BuilderContext.setExchangeFolder(exchangeFolder);
 
-        mainClass = new JavaClass(exchangeName, "cn.ma.cei.exchanges");
-        functionClass = new JavaClass(Procedures.getType().getDescriptor());
+        mainClass = new JavaClass(exchangeName, "cei.exchanges");
+
     }
 
     @Override
@@ -79,6 +80,7 @@ public class JavaExchangeBuilder implements IExchangeBuilder {
 
     @Override
     public IMethodBuilder createFunctionBuilder() {
+        functionClass = new JavaClass(Procedures.getType().getDescriptor());
         return new JavaFunctionBuilder(functionClass);
     }
 

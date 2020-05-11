@@ -4,6 +4,7 @@ import cn.ma.cei.model.types.xBoolean;
 import cn.ma.cei.model.types.xDecimal;
 import cn.ma.cei.model.types.xInt;
 import cn.ma.cei.model.types.xString;
+import cn.ma.cei.model.types.xStringArray;
 import cn.ma.cei.xml.CEIXmlAnyElementTypes;
 
 import javax.xml.bind.annotation.XmlAnyElement;
@@ -17,6 +18,7 @@ public class xElementWithInputs extends xElement {
             xString.class,
             xBoolean.class,
             xInt.class,
-            xDecimal.class})
+            xDecimal.class,
+            xStringArray.class})
     public List<xType> inputList;
 }

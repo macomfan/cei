@@ -76,6 +76,17 @@ public interface IDataProcessorBuilder extends IBuilderBase {
     void addQueryString(Variable requestVariable, Variable key, Variable value);
 
     /**
+     * Add the header string to restful request. No output.
+     * e.g.
+     * addHeaderString(requestVariable, key, value)
+     *
+     * @param requestVariable The request defined by <request></request>.
+     * @param key The key.
+     * @param value The value.
+     */
+    void addHeaderString(Variable requestVariable, Variable key, Variable value);
+
+    /**
      * Combine the query strings to a signal string.
      * e.g.
      * output = combineQueryString(requestVariable, sort, separator)
@@ -188,6 +199,13 @@ public interface IDataProcessorBuilder extends IBuilderBase {
      * @return
      */
     Variable convertBooleanToString(Variable booleanVariable);
+
+    /***
+     *
+     *
+     * @return
+     */
+    Variable convertStreamToString(Variable streamVariable);
 
     /***
      *

@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sdk xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+     xsi:schemaLocation="https://github.com/macomfan/cei https://macomfan.github.io/cei/schema/ceisdk-0.0.1.xsd"
+     xmlns="https://github.com/macomfan/cei"
+     name="binance">
+    <clients>
+        <restful name="MarketClient">
+			<connection url="https://api.binance.com"/>
+            <interfaces>
+                <interface name="getTimestamp">
+                    <request method="get" target="/api/v3/time"/>
+                    <response>
+                        <json_parser model="Timestamp">
+                            <json_value copy="serverTime"/>
+                        </json_parser>
+                    </response>
+                </interface>
+                <interface name="getAggregateTrades">
+                    <inputs>
+                        <string name="symbol"/>
+                        <int name="fromId"/>
+                        <int name="startTime"/>
+                        <int name="endTime"/>
+                        <int name="limit"/>
+                    </inputs>
+                    <request method="get" target="/api/v3/aggTrades">
+                        <query_strings>
+                            <query key="symbol" value="{symbol}"/>
+                            <query key="fromId" value="{fromId}"/>
+                            <query key="startTime" value="{startTime}"/>
+                            <query key="startTime" value="{endTime}"/>
+                            <query key="limit" value="{limit}"/>
+                        </query_strings>
+                    </request>
+                    <response>
+                        <json_parser model="AggregateTradeList">
+                            <json_object_for_each value="{data}" model="AggregateTrade">
+                                <json_value key="a" value="{id}"/>
+                                <json_value key="p" value="{price}"/>
+                                <json_value key="q" value="{qty}"/>
+                                <json_value key="f" value="{firstTradeId}"/>
+                                <json_value key="l" value="{lastTradeId}"/>
+                                <json_value key="T" value="{timestamp}"/>
+                                <json_value key="m" value="{isBuyerMaker}"/>
+                                <json_value key="M" value="{isBestMatch}"/>
+                            </json_object_for_each>
+                        </json_parser>
+                    </response>
+                </interface>
+                <interface name="getTrade">
+                    <inputs>
+                        <string name="symbol"/>
+                        <int name="limit"/>
+                    </inputs>
+                    <request method="get" target="/api/v3/trades">
+                        <query_strings>
+                            <query key="symbol" value="{symbol}"/>
+                            <query key="limit" value="{limit}"/>
+                        </query_strings>
+                    </request>
+                    <response>
+                        <json_parser model="TradeList">
+                            <json_object_for_each value="{data}" model="Trade">
+                                <json_value copy="id"/>
+                                <json_value copy="price"/>
+                                <json_value copy="qty"/>
+                                <json_value copy="quoteQty"/>
+                                <json_value copy="time"/>
+                                <json_value copy="isBuyerMaker"/>
+                                <json_value copy="isBestMatch"/>
+                            </json_object_for_each>
+                        </json_parser>
+                    </response>
+                </interface>
+                <interface name="historicalTrades">
+                    <inputs>
+                        <string name="symbol"/>
+                        <int name="limit"/>
+                        <int name="fromId"/>
+                    </inputs>
+                    <request method="get" target="/api/v3/historicalTrades" signature="TBD">
+                        <query_strings>
+                            <query key="symbol" value="{symbol}"/>
+                            <query key="limit" value="{limit}"/>
+                            <query key="fromId" value="{fromId}"/>
+                        </query_strings>
+                    </request>
+                    <response>
+                        <json_parser model="TradeList">
+                            <json_object_for_each value="{data}" model="Trade">
+                                <json_value copy="id"/>
+                                <json_value copy="price"/>
+                                <json_value copy="qty"/>
+                                <json_value copy="quoteQty"/>
+                                <json_value copy="time"/>
+                                <json_value copy="isBuyerMaker"/>
+                                <json_value copy="isBestMatch"/>
+                            </json_object_for_each>
+                        </json_parser>
+                    </response>
+                </interface>
+                <interface name="getExchangeInfo">
+                    <request method="get" target="/api/v3/exchangeInfo"/>
+                    <response>
+                        <json_parser model="ExchangeInfo">
+                            <json_value copy="timezone"/>
+                            <json_value copy="serverTime"/>
+                            <json_object_for_each copy="rateLimits" model="RateLimits">
+                                <json_value copy="rateLimitType"/>
+                                <json_value copy="interval"/>
+                                <json_value copy="intervalNum"/>
+                                <json_value copy="limit"/>
+                            </json_object_for_each>
+                            <json_object_for_each copy="symbols" model="Symbol">
+                                <json_value copy="symbol"/>
+                                <json_value copy="status"/>
+                                <json_value copy="baseAsset"/>
+                                <json_value copy="baseAssetPrecision"/>
+                                <json_value copy="quoteAsset"/>
+                                <json_value copy="quotePrecision"/>
+                                <json_value copy="orderTypes"/>
+                                <json_value copy="icebergAllowed"/>
+                                <json_value copy="ocoAllowed"/>
+                            </json_object_for_each>
+                        </json_parser>
+                    </response>
+                </interface>
+                <interface name="getDepth">
+                    <inputs>
+                        <string name="symbol"/>
+                        <int name="limit"/>
+                    </inputs>
+                    <request method="get" target="/api/v3/depth">
+                        <query_strings>
+                            <query key="symbol" value="{symbol}"/>
+                            <query key="limit" value="{limit}"/>
+                        </query_strings>
+                    </request>
+                    <response>
+                        <json_parser model="Depth">
+                            <json_value copy="lastUpdateId"/>
+                            <json_object_for_each copy="bids" model="DepthEntity">
+                                <json_value key="[0]" value="{price}"/>
+                                <json_value key="[1]" value="{qty}"/>
+                            </json_object_for_each>
+                            <json_object_for_each copy="asks" model="DepthEntity">
+                                <json_value key="[0]" value="{price}"/>
+                                <json_value key="[1]" value="{qty}"/>
+                            </json_object_for_each>
+                        </json_parser>
+                    </response>
+                </interface>
+                <interface name="getCandlestickData">
+                    <inputs>
+                        <string name="symbol"/>
+                        <string name="interval"/>
+                        <int name="startTime"/>
+                        <int name="endTime"/>
+                        <int name="limit"/>
+                    </inputs>
+                    <request method="get" target="/api/v3/klines">
+                        <query_strings>
+                            <query key="symbol" value="{symbol}"/>
+                            <query key="interval" value="{interval}"/>
+                            <query key="startTime" value="{startTime}"/>
+                            <query key="endTime" value="{endTime}"/>
+                            <query key="limit" value="{limit}"/>
+                        </query_strings>
+                    </request>
+                    <response>
+                        <json_parser model="CandlestickDataList">
+                            <json_object_for_each value="{data}" model="CandlestickData">
+                                <json_value key="\[0]" value="{open}"/>
+                                <json_value key="\[1]" value="{high}"/>
+                            </json_object_for_each>
+                        </json_parser>
+                    </response>
+                </interface>
+            </interfaces>
+        </restful>
+    </clients>
+
+</sdk>

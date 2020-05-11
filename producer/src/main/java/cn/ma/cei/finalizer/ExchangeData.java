@@ -74,7 +74,7 @@ class ExchangeData {
             UniqueList<String, T> interfaces = data.get(clientName);
             list.forEach(item -> {
                 if (interfaces.containsKey(getKey.get(item))) {
-                    CEIErrors.showFailure(CEIErrorType.XML, "Duplicate name exist");
+                    CEIErrors.showFailure(CEIErrorType.XML, "Duplicate name exist: %s", getKey.get(item));
                 }
                 interfaces.put(getKey.get(item), item);
             });

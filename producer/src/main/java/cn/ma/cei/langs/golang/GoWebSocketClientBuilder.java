@@ -27,7 +27,7 @@ public class GoWebSocketClientBuilder implements IWebSocketClientBuilder {
         clientStruct.addPrivateMember(clientStruct.varPtr(client.getMember("option")));
         clientStruct.addPrivateMember(clientStruct.varPtr(client.getMember("connection")));
 
-        GoMethod constructor = new GoMethod(null);
+        GoMethod constructor = new GoMethod(clientStruct);
         constructor.getCode().appendWordsln("func", "New" + client.getDescriptor() + "(option *" + WebSocketOptions.getType().getDescriptor() + ")", "*" + client.getDescriptor(), "{");
         constructor.getCode().newBlock(() -> {
             constructor.getCode().appendWordsln("inst", ":=", "new(" + client.getDescriptor() + ")");

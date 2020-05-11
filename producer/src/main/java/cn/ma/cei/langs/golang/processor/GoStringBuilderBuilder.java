@@ -17,12 +17,20 @@ public class GoStringBuilderBuilder implements IStringBuilderBuilder {
     }
 
     @Override
-    public void appendStringItem(Variable stringBuilderObject, Variable variable) {
+    public void addStringItem(Variable stringBuilderObject, Variable variable) {
         method.addInvoke(stringBuilderObject.getDescriptor() + ".AppendStringItem", method.var(variable));
     }
 
     @Override
-    public void combineStringItems(Variable stringBuilderObject, Variable separator) {
-        method.addInvoke(stringBuilderObject.getDescriptor() + ".CombineStringItems", method.var(separator));
+    public void combineStringItems(Variable stringBuilderObject, Variable prefix, Variable suffix, Variable separator) {
+        method.addInvoke(stringBuilderObject.getDescriptor() + ".CombineStringItems",
+                method.var(prefix),
+                method.var(suffix),
+                method.var(separator));
+    }
+
+    @Override
+    public void addStringArray(Variable stringBuilderObject, Variable input, Variable trim) {
+        method.addInvoke(stringBuilderObject.getDescriptor() + ".AddStringArray", method.var(input), method.var(trim));
     }
 }

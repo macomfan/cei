@@ -6,9 +6,27 @@
 
 	<definition document="https://binance-docs.github.io/apidocs/spot/cn/"/>
 
-	<clients>
-		<restful name="MarketClient">
-			<connection url="https://api.binance.com"/>
-		</restful>
-	</clients>
+	<procedures>
+		<function name="restfulAuth">
+			<inputs>
+				<restful_request name="request"/>
+				<restful_options name="option"/>
+			</inputs>
+			<implementation>
+				<add_header_string input="{request}" key="X-MBX-APIKEY" value="{option.apiKey}"/>
+				<get_now name="ts" format="Unix_ms"/>
+				<add_query_string key="timestamp" value="{ts}"/>
+				<combine_query_string name="queryString" input="{request}" separator="&amp;"/>
+				<get_request_info name="postBody" input="{request}" info="post_body"/>
+				<string_builder name="buffer">
+					<add_string_item input="{queryString}"/>
+					<add_string_item input="{postBody}"/>
+					<combine_string_items/>
+				</string_builder>
+				<hmacsha256 name="output" input="{buffer}" key="{option.secretKey}"/>
+				<add_query_string input="{request}" key="signature" value="{output}"/>
+			</implementation>
+		</function>
+	</procedures>
+
 </sdk>

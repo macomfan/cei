@@ -20,7 +20,7 @@ public interface IStringBuilderBuilder extends IBuilderBase {
      * @param stringBuilderObject
      * @param variable
      */
-    void appendStringItem(Variable stringBuilderObject, Variable variable);
+    void addStringItem(Variable stringBuilderObject, Variable variable);
 
     /**
      * Combine the string items in StringWrapper.
@@ -30,5 +30,16 @@ public interface IStringBuilderBuilder extends IBuilderBase {
      * @param stringBuilderObject
      * @param separator
      */
-    void combineStringItems(Variable stringBuilderObject, Variable separator);
+    void combineStringItems(Variable stringBuilderObject, Variable prefix, Variable suffix, Variable separator);
+
+    /**
+     * Append string array to StringWrapper.
+     * e.g.
+     * stringBuilderObject.append(variable);
+     *
+     * @param stringBuilderObject
+     * @param input
+     * @param trim
+     */
+    void addStringArray(Variable stringBuilderObject, Variable input, Variable trim);
 }

@@ -15,6 +15,7 @@ class CEIUtils:
         HOST = "host",
         METHOD = "method",
         TARGET = "target",
+        POSTBODY = "postbody"
         UPPERCASE = "uppercase",
         LOWERCASE = "lowercase",
         NONE = "none"
@@ -31,6 +32,8 @@ class CEIUtils:
             result = request.get_target()
         elif method == CEIUtils.Constant.METHOD:
             result = request.get_method()
+        elif method == CEIUtils.Constant.POSTBODY:
+            result = str(request.get_post_body(), encoding="utf-8")
         else:
             # TODO
             pass

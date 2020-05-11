@@ -15,7 +15,7 @@ import cn.ma.cei.generator.Code;
  */
 public class JavaCode extends Code {
 
-    public static final String CURRENT_PACKAGE = "cn.ma.cei.exchanges";
+    public static final String CURRENT_PACKAGE = "cei.exchanges";
 
     public void appendPackage(String name) {
         if (name == null || name.equals("")) {

@@ -23,6 +23,7 @@ public class CEIUtils {
         public final static String TARGET = "target";
         public final static String UPPERCASE = "uppercase";
         public final static String LOWERCASE = "lowercase";
+        public final static String POSTBODY = "post_body";
         public final static String NONE = "none";
     }
 

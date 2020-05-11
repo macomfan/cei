@@ -39,6 +39,7 @@ public class Python3ExchangeBuilder implements IExchangeBuilder {
         Constant.requestInfo().tryPut(CEIUtils.Constant.TARGET, "CEIUtils.Constant.TARGET");
         Constant.requestInfo().tryPut(CEIUtils.Constant.UPPERCASE, "CEIUtils.Constant.UPPERCASE");
         Constant.requestInfo().tryPut(CEIUtils.Constant.LOWERCASE, "CEIUtils.Constant.LOWERCASE");
+        Constant.requestInfo().tryPut(CEIUtils.Constant.POSTBODY, "CEIUtils.Constant.POSTBODY");
         Constant.requestInfo().tryPut(CEIUtils.Constant.NONE, "CEIUtils.Constant.NONE");
 
         Constant.keyword().tryPut(Keyword.TRUE, "True");

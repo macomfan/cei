@@ -5,6 +5,7 @@ import cn.ma.cei.generator.IMethod;
 import cn.ma.cei.generator.Variable;
 import cn.ma.cei.generator.VariableType;
 import cn.ma.cei.generator.builder.*;
+import cn.ma.cei.generator.buildin.CEIUtils;
 import cn.ma.cei.generator.buildin.Procedures;
 import cn.ma.cei.langs.python3.processor.Python3GetNowBuilder;
 import cn.ma.cei.langs.python3.processor.Python3JsonBuilderBuilder;
@@ -61,6 +62,7 @@ public class Python3DataProcessorBuilder implements IDataProcessorBuilder {
 
     @Override
     public Variable stringReplacement(Variable... items) {
+        method.addReference(CEIUtils.getType());
         return BuilderContext.createStatement(method.invoke("CEIUtils.string_replace", items));
     }
 
@@ -95,6 +97,11 @@ public class Python3DataProcessorBuilder implements IDataProcessorBuilder {
     }
 
     @Override
+    public Variable convertStreamToString(Variable streamVariable) {
+        return BuilderContext.createStatement("str(" + streamVariable.getDescriptor()+ "encoding = \"utf8\")");
+    }
+
+    @Override
     public Variable convertNativeToDecimal(Variable stringVariable) {
         return BuilderContext.createStatement(method.invoke("float", stringVariable));
     }
@@ -117,6 +124,11 @@ public class Python3DataProcessorBuilder implements IDataProcessorBuilder {
     @Override
     public void addQueryString(Variable requestVariable, Variable key, Variable value) {
         method.addInvoke(requestVariable.getDescriptor() + ".add_query_string", key, value);
+    }
+
+    @Override
+    public void addHeaderString(Variable requestVariable, Variable key, Variable value) {
+        method.addInvoke(requestVariable.getDescriptor() + ".add_header_string", key, value);
     }
 
     @Override

@@ -35,6 +35,7 @@ public class GoExchangeBuilder implements IExchangeBuilder {
         Constant.requestInfo().tryPut(CEIUtils.Constant.TARGET, "impl.TARGET");
         Constant.requestInfo().tryPut(CEIUtils.Constant.UPPERCASE, "impl.UPPERCASE");
         Constant.requestInfo().tryPut(CEIUtils.Constant.LOWERCASE, "impl.LOWERCASE");
+        Constant.requestInfo().tryPut(CEIUtils.Constant.POSTBODY, "impl.POSTBODY");
         Constant.requestInfo().tryPut(CEIUtils.Constant.NONE, "impl.NONE");
 
         Constant.keyword().tryPut(Keyword.TRUE, "true");
@@ -68,6 +69,7 @@ public class GoExchangeBuilder implements IExchangeBuilder {
         BuilderContext.setExchangeFolder(exchangeFolder);
 
         mainFile = new GoFile(exchangeName, exchangeName);
+
     }
 
     @Override

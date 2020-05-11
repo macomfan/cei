@@ -27,6 +27,7 @@ public class TypeConverter {
         converterMap.put(xInt.inst.getType(), xString.inst.getType(), (IDataProcessorBuilder::convertIntToString));
         converterMap.put(xBoolean.inst.getType(), xString.inst.getType(), (IDataProcessorBuilder::convertBooleanToString));
         converterMap.put(xDecimal.inst.getType(), xString.inst.getType(), (IDataProcessorBuilder::convertDecimalToString));
+        converterMap.put(TheStream.getType(), xString.inst.getType(), (IDataProcessorBuilder::convertStreamToString));
 
         converterMap.put(RestfulResponse.getType(), xString.inst.getType(), (IDataProcessorBuilder::convertResponseToString));
         converterMap.put(WebSocketMessage.getType(), xString.inst.getType(), (IDataProcessorBuilder::convertResponseToString));

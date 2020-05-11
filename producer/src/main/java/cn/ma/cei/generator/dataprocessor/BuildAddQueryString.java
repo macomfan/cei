@@ -27,6 +27,4 @@ public class BuildAddQueryString extends DataProcessorBase<xAddQueryString> {
     public String resultVariableName(xAddQueryString item) {
         return "";
     }
-
-
 }

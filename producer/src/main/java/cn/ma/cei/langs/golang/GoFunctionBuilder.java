@@ -30,36 +30,6 @@ public class GoFunctionBuilder implements IMethodBuilder {
         this.mainFile = mainFile;
     }
 
-//    @Override
-//    public void newStringArray(Variable stringArray) {
-//        method.addAssignAndDeclare(method.useVariable(new GoVar(stringArray)), "make([]string, 10)");
-//    }
-//
-//
-//
-//    @Override
-//    public void appendToString(boolean needDefineNewOutput, Variable output, Variable input) {
-//        if (needDefineNewOutput) {
-//            method.addAssignAndDeclare(method.useVariable(new GoVar(output)), "make([]string, 10)");
-//        } else {
-//            method.addAssign(method.useVariable(new GoVar(output)), method.invoke("authentication.AppendToString", new GoVar(output), new GoVar(input)));
-//        }
-//    }
-//
-//
-//
-//    @Override
-//    public void addStringArray(Variable output, Variable input) {
-//        method.addAssign(method.useVariable(new GoVar(output)),
-//                method.invoke("authentication.addStringArray", new GoVar(output), new GoVar(input)));
-//    }
-//
-//    @Override
-//    public void combineStringArray(Variable output, Variable input, Variable separator) {
-//        method.addAssignAndDeclare(method.useVariable(new GoVar(output)),
-//                method.invoke("authentication.CombineStringArray", new GoVar(input), new GoVar(separator)));
-//    }
-
     @Override
     public void onAddReference(VariableType variableType) {
         method.addReference(variableType);

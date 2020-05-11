@@ -98,6 +98,12 @@ public class JavaDataProcessorBuilder implements IDataProcessorBuilder {
     }
 
     @Override
+    public Variable convertStreamToString(Variable streamVariable) {
+        method.addReference("cei.impl.TypeConverter");
+        return BuilderContext.createStatement(method.invoke("TypeConverter.toNormalString", streamVariable));
+    }
+
+    @Override
     public Variable convertNativeToDecimal(Variable stringVariable) {
         return BuilderContext.createStatement(method.newInstance(xDecimal.inst.getType(), stringVariable));
     }
@@ -120,6 +126,11 @@ public class JavaDataProcessorBuilder implements IDataProcessorBuilder {
     @Override
     public void addQueryString(Variable requestVariable, Variable key, Variable value) {
         method.addInvoke(requestVariable.getDescriptor() + ".addQueryString", key, value);
+    }
+
+    @Override
+    public void addHeaderString(Variable requestVariable, Variable key, Variable value) {
+        method.addInvoke(requestVariable.getDescriptor() + ".addHeaderString", key, value);
     }
 
     @Override

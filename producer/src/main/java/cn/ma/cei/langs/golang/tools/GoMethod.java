@@ -23,8 +23,12 @@ public class GoMethod extends GoVarMgr {
     private final GoStruct parent;
     private boolean returnError;
     private String methodName;
+    private final Set<String> importList = new HashSet<>();
 
     public GoMethod(GoStruct parent) {
+        if (parent == null) {
+            int a = 0;
+        }
         this.parent = parent;
     }
 
@@ -39,7 +43,6 @@ public class GoMethod extends GoVarMgr {
     public String newInstance(VariableType type) {
         return "new(" + type.getDescriptor() + ")";
     }
-
 
     public String createInstance(VariableType type) {
         return type.getDescriptor() + "{}";
@@ -69,12 +72,16 @@ public class GoMethod extends GoVarMgr {
         code.appendln(invoke(method, params));
     }
 
+    public Set<String> getImportList() {
+        return importList;
+    }
+
     public void addReference(VariableType type) {
-        parent.addReference(type);
+        importList.addAll(type.getReferences());
     }
 
     public void addReference(String type) {
-        parent.addReference(type);
+        importList.add(type);
     }
 
     public String invoke(String method, GoVar... params) {
@@ -91,25 +98,6 @@ public class GoMethod extends GoVarMgr {
         code.endBlock();
         code.appendln("})");
     }
-
-//    public void startInterface(GoType returnType, boolean returnError, String methodName, List<GoVar> mergeParams, List<GoVar> normalParams) {
-//        List<GoVar> finalParams = new LinkedList<>();
-//        String mergedParam = null;
-//        if (!Checker.isNull(mergeParams)) {
-//            if (mergeParams.size() > 1) {
-//                List<GoVar> vars = mergeInputVar(mergeParams);
-//                inputStruct = new GoStruct("Args" + methodName);
-//                vars.forEach(item -> inputStruct.addPublicMember(item));
-//                mergedParam = "args " + inputStruct.getStructName();
-//            } else {
-//                finalParams.addAll(mergeParams);
-//            }
-//        }
-//        if (!Checker.isNull(normalParams)) {
-//            finalParams.addAll(normalParams);
-//        }
-//        startMethod(returnType, returnError, methodName, mergedParam, finalParams);
-//    }
 
     public void startMethod(GoType returnType, boolean returnError, String methodName, List<GoVar> params) {
         this.returnError = returnError;

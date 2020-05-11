@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sdk xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+     xsi:schemaLocation="https://github.com/macomfan/cei https://macomfan.github.io/cei/schema/ceisdk-0.0.1.xsd"
+     xmlns="https://github.com/macomfan/cei"
+     name="binance">
+    <models>
+        <model name="CandlestickData">
+            <int name="openTime"/>
+            <decimal name="open"/>
+            <decimal name="high"/>
+            <decimal name="low"/>
+            <decimal name="close"/>
+            <decimal name="volume"/>
+            <int name="closeTime"/>
+            <decimal name="quoteAssetVolume"/>
+            <int name="numberOfTrades"/>
+            <decimal name="takerBuyBaseAssetVolume"/>
+            <decimal name="takerBuyQuoteAssetVolume"/>
+        </model>
+
+        <model name="CandlestickDataList">
+            <object_array name="data" model="CandlestickData"/>
+        </model>
+
+        <model name="Depth">
+            <int name="lastUpdateId"/>
+            <object_array name="bids" model="DepthEntity"/>
+            <object_array name="asks" model="DepthEntity"/>
+        </model>
+
+        <model name="DepthEntity">
+            <decimal name="price"/>
+            <decimal name="qty"/>
+        </model>
+
+        <model name="ExchangeInfo">
+            <string name="timezone"/>
+            <int name="serverTime"/>
+            <object_array name="rateLimits" model="RateLimits"/>
+            <object_array name="symbols" model="Symbol"/>
+        </model>
+
+        <model name="RateLimits">
+            <string name="rateLimitType"/>
+            <string name="interval"/>
+            <int name="intervalNum"/>
+            <int name="limit"/>
+        </model>
+
+        <model name="Timestamp">
+            <int name="serverTime"/>
+        </model>
+
+        <model name="CandlestickStream">
+            <string name="symbol"/>
+        </model>
+
+        <model name="TradeList">
+            <object_array name="data" model="Trade"/>
+        </model>
+
+        <model name="Trade">
+            <int name="id"/>
+            <decimal name="price"/>
+            <decimal name="qty"/>
+            <decimal name="quoteQty"/>
+            <int name="time"/>
+            <boolean name="isBuyerMaker"/>
+            <boolean name="isBestMatch"/>
+        </model>
+
+        <model name="Symbol">
+            <string name="symbol"/>
+            <string name="status"/>
+            <string name="baseAsset"/>
+            <int name="baseAssetPrecision"/>
+            <string name="quoteAsset"/>
+            <int name="quotePrecision"/>
+            <string_array name="orderTypes"/>
+            <boolean name="icebergAllowed"/>
+            <boolean name="ocoAllowed"/>
+        </model>
+
+        <model name="AggregateTrade">
+            <int name="id"/>
+            <decimal name="price"/>
+            <decimal name="qty"/>
+            <int name="timestamp"/>
+            <int name="firstTradeId"/>
+            <int name="lastTradeId"/>
+            <boolean name="isBuyerMaker"/>
+            <boolean name="isBestMatch"/>
+        </model>
+
+        <model name="AggregateTradeList">
+            <object_array name="data" model="AggregateTrade"/>
+        </model>
+    </models>
+</sdk>

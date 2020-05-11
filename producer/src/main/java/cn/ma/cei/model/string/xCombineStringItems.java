@@ -20,8 +20,23 @@ public class xCombineStringItems extends xDataProcessorItem {
     @XmlAttribute(name = "separator")
     public String separator;
 
+    @XmlAttribute(name = "prefix")
+    public String prefix;
+
+    @XmlAttribute(name = "suffix")
+    public String suffix;
+
     @Override
     public void customCheck() {
         super.customCheck();
+        if (prefix == null) {
+            prefix = "";
+        }
+        if (suffix == null) {
+            suffix = "";
+        }
+        if (separator == null) {
+            separator = "";
+        }
     }
 }

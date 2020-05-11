@@ -1,3 +1,4 @@
+from impl.ceiutils import CEIUtils
 from impl.jsonchecker import JsonChecker
 from impl.jsonwrapper import JsonWrapper
 from impl.websocketconnection import WebSocketConnection

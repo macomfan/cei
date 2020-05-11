@@ -91,6 +91,10 @@ public class JavaClass {
         importList.addAll(type.getReferences());
     }
 
+    public void addReference(String type) {
+        importList.add(type);
+    }
+
     private void writeMethods(JavaCode code) {
         if (methodList.isEmpty()) {
             return;

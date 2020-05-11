@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sdk xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+     xsi:schemaLocation="https://github.com/macomfan/cei https://macomfan.github.io/cei/schema/ceisdk-0.0.1.xsd"
+     xmlns="https://github.com/macomfan/cei"
+     name="binance">
+    <clients>
+        <websocket name="CandlestickChannel">
+            <connection url="wss://stream.binance.com:9443">
+                <open>
+                    <inputs>
+                        <string_array name="symbolList"/>
+                        <string name="interval"/>
+                    </inputs>
+                    <connect target="/ws/{streams}">
+                        <pre_processor>
+                            <string_builder name="streams">
+                                <add_string_array input="{symbolList}" trim="true"/>
+                                <combine_string_items suffix="@kline_{interval}" separator="/"/>
+                            </string_builder>
+                        </pre_processor>
+                    </connect>
+                </open>
+            </connection>
+            <interfaces>
+                <interface name="setOnCandlestickHandler">
+                    <event callback="onCandlestick" persistent="true">
+                        <trigger>
+                            <json_checker>
+                                <json_checker_equal key="e" value="kline"/>
+                            </json_checker>
+                        </trigger>
+                        <handler>
+                            <json_parser model="CandlestickStream">
+                                <json_value key="s" value="{symbol}"/>
+                            </json_parser>
+                        </handler>
+                    </event>
+                </interface>
+            </interfaces>
+        </websocket>
+    </clients>
+</sdk>

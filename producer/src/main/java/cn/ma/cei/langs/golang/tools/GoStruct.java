@@ -67,6 +67,9 @@ public class GoStruct extends GoVarMgr {
     }
 
     public Set<String> getImportList() {
+        methodList.values().forEach(item -> {
+            importList.addAll(item.getImportList());
+        });
         return importList;
     }
 

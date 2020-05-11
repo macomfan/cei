@@ -250,6 +250,7 @@
             <xs:element name="int" type="xType"/>
             <xs:element name="decimal" type="xType"/>
             <xs:element name="boolean" type="xType"/>
+            <xs:element name="string_array" type="xType"/>
         </xs:choice>
     </xs:complexType>
 
@@ -296,6 +297,7 @@
             <xs:element name="url_escape" type="xURLEscape"/>
             <xs:element name="string_builder" type="xStringBuilder"/>
             <xs:element name="add_query_string" type="xAddQueryString"/>
+            <xs:element name="add_header_string" type="xAddHeaderString"/>
             <xs:element name="combine_query_string" type="xCombineQueryString"/>
             <xs:element name="get_request_info" type="xGetRequestInfo"/>
             <xs:element name="invoke" type="xInvoke"/>
@@ -313,6 +315,11 @@
         <xs:attribute name="key" type="xs:string"/>
         <xs:attribute name="value" type="xs:string"/>
     </xs:complexType>
+    <xs:complexType name="xAddHeaderString">
+        <xs:attribute name="input" type="variableType"/>
+        <xs:attribute name="key" type="xs:string"/>
+        <xs:attribute name="value" type="xs:string"/>
+    </xs:complexType>
     <xs:complexType name="xCombineQueryString">
         <xs:attribute name="input" type="variableType"/>
         <xs:attribute name="name" type="nameType" use="required"/>
@@ -322,9 +329,19 @@
     <xs:complexType name="xGetRequestInfo">
         <xs:attribute name="input" type="variableType"/>
         <xs:attribute name="name" type="nameType" use="required"/>
-        <xs:attribute name="info"/>
+        <xs:attribute name="info">
+            <xs:simpleType>
+                <xs:restriction base="xs:string">
+                    <xs:enumeration value="host"/>
+                    <xs:enumeration value="method"/>
+                    <xs:enumeration value="target"/>
+                    <xs:enumeration value="post_body"/>
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
         <xs:attribute name="convert"/>
     </xs:complexType>
+
     <xs:complexType name="xHmacsha256">
         <xs:attribute name="name" type="nameType" use="required"/>
         <xs:attribute name="input"/>
@@ -336,6 +353,7 @@
     </xs:complexType>
     <xs:complexType name="xStringBuilder">
         <xs:choice maxOccurs="unbounded">
+            <xs:element name="add_string_array" type="xAddStringItem"/>
             <xs:element name="add_string_item" type="xAddStringItem"/>
             <xs:element name="combine_string_items" type="xCombineStringItems"/>
         </xs:choice>
@@ -343,9 +361,12 @@
     </xs:complexType>
     <xs:complexType name="xAddStringItem">
         <xs:attribute name="input"/>
+        <xs:attribute name="trim" type="xs:boolean"/>
     </xs:complexType>
     <xs:complexType name="xCombineStringItems">
         <xs:attribute name="separator"/>
+        <xs:attribute name="prefix"/>
+        <xs:attribute name="suffix"/>
     </xs:complexType>
     <xs:complexType name="xInvoke">
         <xs:attribute name="function" type="nameType" use="required"/>
@@ -513,4 +534,5 @@
             <xs:element name="send" type="xSend"/>
         </xs:choice>
     </xs:complexType>
+
 </xs:schema>

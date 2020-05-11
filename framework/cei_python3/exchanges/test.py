@@ -364,7 +364,7 @@ class Procedures:
         buffer.append_string_item(host)
         buffer.append_string_item(target)
         buffer.append_string_item(query_string)
-        buffer.combine_string_items("\\n")
+        buffer.combine_string_items("", "", "\\n")
         hmacsha256 = CEIUtils.hmacsha256(buffer.to_string(), option.secret_key)
         result = CEIUtils.base64(hmacsha256)
         request.add_query_string("Signature", result)

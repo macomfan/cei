@@ -58,7 +58,7 @@ class RestfulRequest:
     def get_query_string(self):
         return self.__queryString
 
-    def add_header(self, key: str, value):
+    def add_header_string(self, key: str, value):
         if value is None:
             # TODO
             pass

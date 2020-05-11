@@ -37,6 +37,7 @@ public class BuildDataProcessor {
         processorMap.put(xWebSocketCallback.class, new BuildWebSocketCallback());
         processorMap.put(xWebSocketSend.class, new BuildWebSocketSend());
         processorMap.put(xWebSocketMessageUpgrade.class, new BuildWebSocketMessageUpgrade());
+        processorMap.put(xAddHeaderString.class, new BuildAddHeaderString());
     }
 
     public static VariableType getReturnType(xProcedure procedure, String returnVariableName) {

@@ -104,6 +104,13 @@ public class GoDataProcessorBuilder implements IDataProcessorBuilder {
     }
 
     @Override
+    public Variable convertStreamToString(Variable streamVariable) {
+        method.addReference("../../impl");
+        return BuilderContext.createStatement(method.invoke("impl.ToString",
+                method.var(streamVariable)));
+    }
+
+    @Override
     public Variable convertNativeToDecimal(Variable stringVariable) {
         return stringVariable;
     }
@@ -164,5 +171,10 @@ public class GoDataProcessorBuilder implements IDataProcessorBuilder {
     @Override
     public void addQueryString(Variable requestVariable, Variable key, Variable value) {
         method.addInvoke(requestVariable.getDescriptor() + ".AddQueryString", method.var(key), method.var(value));
+    }
+
+    @Override
+    public void addHeaderString(Variable requestVariable, Variable key, Variable value) {
+        method.addInvoke(requestVariable.getDescriptor() + ".AddHeaderString", method.var(key), method.var(value));
     }
 }

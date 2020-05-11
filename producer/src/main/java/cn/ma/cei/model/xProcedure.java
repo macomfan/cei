@@ -25,6 +25,7 @@ public class xProcedure extends xElement {
             xJsonParser.class,
             xStringBuilder.class,
             xAddQueryString.class,
+            xAddHeaderString.class,
             xCombineQueryString.class,
             xGetRequestInfo.class,
             xInvoke.class,

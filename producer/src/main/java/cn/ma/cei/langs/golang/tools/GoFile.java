@@ -65,6 +65,10 @@ public class GoFile {
             newImportList.addAll(value.getImportList());
         });
 
+        methodList.values().forEach(item -> {
+            newImportList.addAll(item.getImportList());
+        });
+
         List<String> list = new ArrayList<>(newImportList);
         Collections.sort(list);
         code.appendln("import (");

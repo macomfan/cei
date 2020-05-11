@@ -1,15 +1,15 @@
 package cn.ma.cei.generator.dataprocessor;
 
-import cn.ma.cei.generator.DataProcessorBase;
-import cn.ma.cei.generator.Variable;
-import cn.ma.cei.generator.VariableType;
+import cn.ma.cei.generator.*;
 import cn.ma.cei.generator.builder.IDataProcessorBuilder;
 import cn.ma.cei.generator.builder.IStringBuilderBuilder;
 import cn.ma.cei.generator.buildin.StringWrapper;
+import cn.ma.cei.model.string.xAddStringArray;
 import cn.ma.cei.model.string.xAddStringItem;
 import cn.ma.cei.model.string.xCombineStringItems;
 import cn.ma.cei.model.string.xStringBuilder;
 import cn.ma.cei.model.types.xString;
+import cn.ma.cei.model.types.xStringArray;
 import cn.ma.cei.utils.Checker;
 
 public class BuildStringWrapper extends DataProcessorBase<xStringBuilder> {
@@ -30,6 +30,8 @@ public class BuildStringWrapper extends DataProcessorBase<xStringBuilder> {
                 processAppendStingItem(rootStringBuilder, (xAddStringItem)item, stringBuilderBuilder);
             } else if (item instanceof xCombineStringItems) {
                 processCombineString(rootStringBuilder, (xCombineStringItems)item, stringBuilderBuilder);
+            } else if (item instanceof xAddStringArray) {
+                processAddStingArray(rootStringBuilder, (xAddStringArray)item, stringBuilderBuilder);
             }
         });
         return null;
@@ -47,11 +49,24 @@ public class BuildStringWrapper extends DataProcessorBase<xStringBuilder> {
 
     public void processAppendStingItem(Variable rootStringBuilder, xAddStringItem addStringItem, IStringBuilderBuilder builder) {
         Variable input = queryVariableOrConstant(addStringItem.input);
-        builder.appendStringItem(rootStringBuilder, input);
+        builder.addStringItem(rootStringBuilder, input);
     }
 
     public void processCombineString(Variable rootStringBuilder, xCombineStringItems combineStringItems, IStringBuilderBuilder builder) {
         Variable separator = queryVariableOrConstant(combineStringItems.separator);
-        builder.combineStringItems(rootStringBuilder, separator);
+        Variable prefix = queryVariableOrConstant(combineStringItems.prefix, xString.inst.getType());
+        Variable suffix = queryVariableOrConstant(combineStringItems.suffix, xString.inst.getType());
+        builder.combineStringItems(rootStringBuilder, prefix, suffix, separator);
+    }
+
+    public void processAddStingArray(Variable rootStringBuilder, xAddStringArray addStringArray, IStringBuilderBuilder builder) {
+        Variable input = queryVariable(addStringArray.input, xStringArray.inst.getType());
+        Variable trim;
+        if (addStringArray.trim) {
+            trim = BuilderContext.createStatement(Constant.keyword().get("true"));
+        } else {
+            trim = BuilderContext.createStatement(Constant.keyword().get("false"));
+        }
+        builder.addStringArray(rootStringBuilder, input, trim);
     }
 }

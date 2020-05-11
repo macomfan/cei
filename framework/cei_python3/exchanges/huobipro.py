@@ -463,7 +463,6 @@ class MarketChannelClient:
     
         def on_any_message_event_event(connection, msg):
             decoded = CEIUtils.gzip(msg.get_bytes())
-            print("Rec: " + decoded)
             msg.upgrade(decoded)
         on_any_message_event.set_event(on_any_message_event_event)
         self.__connection.register_event(on_any_message_event)
@@ -796,7 +795,7 @@ class Procedures:
         buffer.append_string_item(host)
         buffer.append_string_item(target)
         buffer.append_string_item(query_string)
-        buffer.combine_string_items("\\n")
+        buffer.combine_string_items("", "", "\\n")
         hmacsha256 = CEIUtils.hmacsha256(buffer.to_string(), option.secret_key)
         result = CEIUtils.base64(hmacsha256)
         request.add_query_string("Signature", result)

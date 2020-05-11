@@ -33,7 +33,8 @@ public class XMLDatabase {
             }
             return sdkData.get(exchange).getModel(modelName);
         } catch (CEIException e) {
-            throw new CEIException("Cannot find model: " + modelName);
+            CEIErrors.showXMLFailure("Cannot find model: %s in exchange %s", modelName, exchange);
+            return null;
         }
     }
 
