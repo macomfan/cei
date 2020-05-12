@@ -13,7 +13,7 @@ public class GoStringBuilderBuilder implements IStringBuilderBuilder {
 
     @Override
     public void defineStringBuilderObject(Variable stringBuilderObject) {
-        method.addAssignAndDeclare(stringBuilderObject.getDescriptor(), method.createInstance(stringBuilderObject.getType()));
+        method.addAssignAndDeclare(stringBuilderObject.getDescriptor(), method.invoke("impl.NewStringWrapper"));
     }
 
     @Override

@@ -52,7 +52,7 @@ public class RestfulRequest {
         if (value == null) {
             return;
         }
-        queryString_.put(name, value);
+        queryString_.put(name, CEIUtils.urlEscape(value));
     }
 
     public String buildQueryString() {

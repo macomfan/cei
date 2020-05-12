@@ -1,6 +1,7 @@
 package debug
 
 import (
+    "../../impl"
     "fmt"
 )
 
@@ -12,14 +13,14 @@ type SimpleInfo struct {
 }
 
 type WSClient struct {
-    option     *impl.WebSocketOptions
-    connection *impl.WebSocketConnection
+    option     impl.WebSocketOptions
+    connection impl.WebSocketConnection
 }
 
 func NewWSClient(option *impl.WebSocketOptions) *WSClient {
     inst := new(WSClient)
     if option != nil {
-        inst.option = option
+        inst.option = *option
     } else {
         inst.option.Url = "http://127.0.0.1:8888"
     }
@@ -28,9 +29,9 @@ func NewWSClient(option *impl.WebSocketOptions) *WSClient {
 
 func (inst *WSClient) Open(channel, name string) {
     inst.connection.SetOnConnect(func(connection *impl.WebSocketConnection)  {
-        login := impl.JsonWrapper{}
+        login := impl.NewJsonWrapper()
         login.AddJsonString("op", "echo")
-        obj := impl.JsonWrapper{}
+        obj := impl.NewJsonWrapper()
         obj.AddJsonString("Name", name)
         connection.Send("login")
     })
@@ -41,7 +42,7 @@ func (inst *WSClient) RequestEcho(name string, price float64, number int64, stat
     onEchoEvent := impl.NewWebSocketEvent(false)
     onEchoEvent.SetTrigger(func(msg *impl.WebSocketMessage) bool {
         rootObj := impl.ParseJsonFromString(msg.GetString())
-        jsonChecker := new(impl.JsonChecker)
+        jsonChecker := impl.NewJsonChecker()
         jsonChecker.CheckEqual("op", "echo", rootObj)
         obj := rootObj.GetObject("param")
         jsonChecker.CheckEqual("Name", name, obj)
@@ -57,9 +58,9 @@ func (inst *WSClient) RequestEcho(name string, price float64, number int64, stat
         onEcho(simpleInfoVar)
     })
     inst.connection.RegisterEvent(onEchoEvent)
-    json := impl.JsonWrapper{}
+    json := impl.NewJsonWrapper()
     json.AddJsonString("op", "echo")
-    obj := impl.JsonWrapper{}
+    obj := impl.NewJsonWrapper()
     obj.AddJsonString("Name", name)
     obj.AddJsonFloat64("Price", price)
     obj.AddJsonInt64("Number", number)

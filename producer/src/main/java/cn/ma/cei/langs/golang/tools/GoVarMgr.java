@@ -1,12 +1,11 @@
 package cn.ma.cei.langs.golang.tools;
 
 import cn.ma.cei.generator.Variable;
-import cn.ma.cei.langs.golang.vars.*;
-import cn.ma.cei.utils.Checker;
-import cn.ma.cei.utils.NormalMap;
+import cn.ma.cei.generator.buildin.*;
+import cn.ma.cei.langs.golang.vars.GoPtrVar;
+import cn.ma.cei.langs.golang.vars.GoVar;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -16,15 +15,26 @@ import java.util.List;
 public class GoVarMgr {
 
     public GoVar var(Variable variable) {
-        return new GoVar(variable);
-    }
-    public GoVar varGetPtrVal(Variable variable) {
-        return new GoGetValueVar(variable);
+        if (variable.getType() == RestfulOptions.getType()
+                || variable.getType() == RestfulRequest.getType()
+                || variable.getType() == RestfulRequest.getType()
+                || variable.getType() == WebSocketCallback.getType()
+                || variable.getType() == WebSocketConnection.getType()
+                || variable.getType() == WebSocketMessage.getType()
+                || variable.getType() == WebSocketOptions.getType()) {
+            return new GoPtrVar(variable);
+        } else {
+            return new GoVar(variable);
+        }
     }
 
-    public GoVar varPtr(Variable variable) {
-        return new GoPtrVar(variable);
+    public GoVar varNormal(Variable variable) {
+        return new GoVar(variable);
     }
+
+//    public GoVar varPtr(Variable variable) {
+//        return new GoPtrVar(variable);
+//    }
 
     public GoVar[] varListToArray(Variable... items) {
         List<GoVar> list = new ArrayList<>();
@@ -42,11 +52,11 @@ public class GoVarMgr {
         return list;
     }
 
-    public List<GoVar> varListToPtrList(List<Variable> items) {
-        List<GoVar> list = new ArrayList<>();
-        for (Variable item : items) {
-            list.add(new GoPtrVar(item));
-        }
-        return list;
-    }
+//    public List<GoVar> varListToPtrList(List<Variable> items) {
+//        List<GoVar> list = new ArrayList<>();
+//        for (Variable item : items) {
+//            list.add(new GoPtrVar(item));
+//        }
+//        return list;
+//    }
 }

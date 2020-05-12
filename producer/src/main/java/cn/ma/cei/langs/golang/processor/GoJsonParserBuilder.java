@@ -9,13 +9,9 @@ import cn.ma.cei.generator.Variable;
 import cn.ma.cei.generator.builder.IJsonCheckerBuilder;
 import cn.ma.cei.generator.builder.IJsonParserBuilder;
 import cn.ma.cei.generator.buildin.JsonWrapper;
-import cn.ma.cei.langs.golang.tools.*;
-import cn.ma.cei.langs.golang.vars.GoGetValueVar;
-import cn.ma.cei.langs.golang.vars.GoType;
-import cn.ma.cei.langs.golang.vars.GoVar;
+import cn.ma.cei.langs.golang.tools.GoMethod;
 
 /**
- *
  * @author U0151316
  */
 public class GoJsonParserBuilder implements IJsonParserBuilder {
@@ -70,7 +66,6 @@ public class GoJsonParserBuilder implements IJsonParserBuilder {
     public void getJsonArray(Variable jsonObject, Variable parentJsonObject, Variable key, boolean optional) {
         method.addAssignAndDeclare(method.useVariable(method.var(jsonObject)), method.invoke(parentJsonObject.getDescriptor() + ".GetArray", method.var(key)));
     }
-
 
 
     @Override

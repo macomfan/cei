@@ -33,6 +33,7 @@ public class BuildDataProcessor {
         processorMap.put(xStringBuilder.class, new BuildStringWrapper());
         processorMap.put(xURLEscape.class, new BuildURLEscape());
         processorMap.put(xGZip.class, new BuildGZip());
+        processorMap.put(xEncodeHex.class, new BuildEncodeHex());
         // processorMap.put(xInvoke.class);
         processorMap.put(xWebSocketCallback.class, new BuildWebSocketCallback());
         processorMap.put(xWebSocketSend.class, new BuildWebSocketSend());

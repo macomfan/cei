@@ -99,13 +99,13 @@ type AggregateTradeList struct {
 }
 
 type MarketClient struct {
-    option *impl.RestfulOptions
+    option impl.RestfulOptions
 }
 
 func NewMarketClient(option *impl.RestfulOptions) *MarketClient {
     inst := new(MarketClient)
     if option != nil {
-        inst.option = option
+        inst.option = *option
     } else {
         inst.option.Url = "https://api.binance.com"
     }
@@ -317,14 +317,14 @@ func (inst *MarketClient) GetCandlestickData(symbol string, interval string, sta
 
 
 type CandlestickChannel struct {
-    option     *impl.WebSocketOptions
-    connection *impl.WebSocketConnection
+    option     impl.WebSocketOptions
+    connection impl.WebSocketConnection
 }
 
 func NewCandlestickChannel(option *impl.WebSocketOptions) *CandlestickChannel {
     inst := new(CandlestickChannel)
     if option != nil {
-        inst.option = option
+        inst.option = *option
     } else {
         inst.option.Url = "wss://stream.binance.com:9443"
     }
@@ -332,7 +332,7 @@ func NewCandlestickChannel(option *impl.WebSocketOptions) *CandlestickChannel {
 }
 
 func (inst *CandlestickChannel) Open(symbolList []string, interval string) {
-    streams := impl.StringWrapper{}
+    streams := impl.NewStringWrapper()
     streams.AddStringArray(symbolList, true)
     streams.CombineStringItems("", fmt.Sprintf("@kline_%s", interval), "/")
     inst.connection.Connect(fmt.Sprintf("/ws/%s", streams.ToString()))
@@ -342,7 +342,7 @@ func (inst *CandlestickChannel) SetOnCandlestickHandler(onCandlestick func (data
     onCandlestickEvent := impl.NewWebSocketEvent(true)
     onCandlestickEvent.SetTrigger(func(msg *impl.WebSocketMessage) bool {
         rootObj := impl.ParseJsonFromString(msg.GetString())
-        jsonChecker := new(impl.JsonChecker)
+        jsonChecker := impl.NewJsonChecker()
         jsonChecker.CheckEqual("e", "kline", rootObj)
         return jsonChecker.Complete()
     })
@@ -362,11 +362,12 @@ func restfulAuth(request *impl.RestfulRequest, option *impl.RestfulOptions) {
     request.AddQueryString("timestamp", ts)
     queryString := impl.CombineQueryString(request, impl.NONE, "&")
     postBody := impl.GetRequestInfo(request, impl.POSTBODY, impl.NONE)
-    buffer := impl.StringWrapper{}
+    buffer := impl.NewStringWrapper()
     buffer.AppendStringItem(queryString)
     buffer.AppendStringItem(postBody)
     buffer.CombineStringItems("", "", "")
-    output := impl.HMACSHA256(buffer.ToString(), option.SecretKey)
-    request.AddQueryString("signature", impl.ToString(output))
+    hmac := impl.HMACSHA256(buffer.ToString(), option.SecretKey)
+    output := impl.EncodeHex(hmac)
+    request.AddQueryString("signature", output)
 }
 

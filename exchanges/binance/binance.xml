@@ -23,7 +23,8 @@
 					<add_string_item input="{postBody}"/>
 					<combine_string_items/>
 				</string_builder>
-				<hmacsha256 name="output" input="{buffer}" key="{option.secretKey}"/>
+				<hmacsha256 name="hmac" input="{buffer}" key="{option.secretKey}"/>
+				<encode_hex name="output" input="{hmac}"/>
 				<add_query_string input="{request}" key="signature" value="{output}"/>
 			</implementation>
 		</function>

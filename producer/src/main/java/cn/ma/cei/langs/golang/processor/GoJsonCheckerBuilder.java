@@ -14,7 +14,7 @@ public class GoJsonCheckerBuilder implements IJsonCheckerBuilder {
 
     @Override
     public void defineJsonChecker(Variable jsonChecker) {
-        method.addAssignAndDeclare(method.useVariable(method.var(jsonChecker)), method.newInstance(jsonChecker.getType()));
+        method.addAssignAndDeclare(method.useVariable(method.var(jsonChecker)), method.invoke("impl.NewJsonChecker"));
     }
 
     @Override

@@ -16,7 +16,7 @@ type RestfulRequest struct {
 	requestBody  []byte
 }
 
-func NewRestfulRequest(options *RestfulOptions) *RestfulRequest {
+func NewRestfulRequest(options RestfulOptions) *RestfulRequest {
 	instance := new(RestfulRequest)
 	return instance
 }

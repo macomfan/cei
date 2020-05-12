@@ -124,6 +124,11 @@ public class JavaDataProcessorBuilder implements IDataProcessorBuilder {
     }
 
     @Override
+    public void encodeHex(Variable output, Variable input) {
+        method.addAssign(method.defineVariable(output), method.invoke("CEIUtils.encodeHex", input));
+    }
+
+    @Override
     public void addQueryString(Variable requestVariable, Variable key, Variable value) {
         method.addInvoke(requestVariable.getDescriptor() + ".addQueryString", key, value);
     }

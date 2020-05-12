@@ -24,8 +24,9 @@ public class GoWebSocketClientBuilder implements IWebSocketClientBuilder {
     @Override
     public void startClient(VariableType client, WebSocketOptions option, Variable connectionVariable, Variable optionVariable) {
         clientStruct = new GoStruct(client.getDescriptor());
-        clientStruct.addPrivateMember(clientStruct.varPtr(client.getMember("option")));
-        clientStruct.addPrivateMember(clientStruct.varPtr(client.getMember("connection")));
+        clientStruct.addReference("../../impl");
+        clientStruct.addPrivateMember(clientStruct.varNormal(client.getMember("option")));
+        clientStruct.addPrivateMember(clientStruct.varNormal(client.getMember("connection")));
 
         GoMethod constructor = new GoMethod(clientStruct);
         constructor.getCode().appendWordsln("func", "New" + client.getDescriptor() + "(option *" + WebSocketOptions.getType().getDescriptor() + ")", "*" + client.getDescriptor(), "{");
@@ -34,7 +35,7 @@ public class GoWebSocketClientBuilder implements IWebSocketClientBuilder {
             Variable url = BuilderContext.createStringConstant(option.url);
             constructor.getCode().appendWordsln("if", "option", "!=", "nil", "{");
             constructor.getCode().newBlock(() -> {
-                constructor.getCode().appendln("inst.option = option");
+                constructor.getCode().appendln("inst.option = *option");
             });
             constructor.getCode().appendln("} else {");
             constructor.getCode().newBlock(() -> {

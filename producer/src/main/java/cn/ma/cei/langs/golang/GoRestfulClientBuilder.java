@@ -31,7 +31,8 @@ public class GoRestfulClientBuilder implements IRestfulClientBuilder {
     @Override
     public void startClient(VariableType client, RestfulOptions option, Variable optionVariable) {
         clientStruct = new GoStruct(client.getDescriptor());
-        clientStruct.addPrivateMember(clientStruct.varPtr(client.getMember("option")));
+        clientStruct.addReference("../../impl");
+        clientStruct.addPrivateMember(clientStruct.varNormal(client.getMember("option")));
         GoMethod constructor = new GoMethod(null);
         constructor.getCode().appendWordsln("func", "New" + client.getDescriptor() + "(option *" + RestfulOptions.getType().getDescriptor() + ")", "*" + client.getDescriptor(), "{");
         constructor.getCode().newBlock(() -> {
@@ -39,7 +40,7 @@ public class GoRestfulClientBuilder implements IRestfulClientBuilder {
             Variable url = BuilderContext.createStringConstant(option.url);
             constructor.getCode().appendWordsln("if", "option", "!=", "nil", "{");
             constructor.getCode().newBlock(() -> {
-                constructor.getCode().appendln("inst.option = option");
+                constructor.getCode().appendln("inst.option = *option");
             });
             constructor.getCode().appendln("} else {");
             constructor.getCode().newBlock(() -> {

@@ -65,7 +65,7 @@ public class Variable {
                 break;
             case STRING:
                 this.nameDescriptor = GlobalContext.getCurrentDescriptionConverter().toStringDescriptor(name);
-                this.name = "##STR##_" + name;
+                this.name = name;
                 break;
             default:
                 throw new CEIException("[Variable] position is not supported");

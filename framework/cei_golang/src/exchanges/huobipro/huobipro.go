@@ -163,13 +163,13 @@ type BestQuote struct {
 }
 
 type MarketClient struct {
-    option *impl.RestfulOptions
+    option impl.RestfulOptions
 }
 
 func NewMarketClient(option *impl.RestfulOptions) *MarketClient {
     inst := new(MarketClient)
     if option != nil {
-        inst.option = option
+        inst.option = *option
     } else {
         inst.option.Url = "https://api.huobi.so"
     }
@@ -187,7 +187,7 @@ func (inst *MarketClient) GetTimestamp() (data Timestamp , exception error) {
     request.SetMethod(impl.GET)
     response := impl.RestfulQuery(request)
     rootObj := impl.ParseJsonFromString(response.GetString())
-    jsonChecker := new(impl.JsonChecker)
+    jsonChecker := impl.NewJsonChecker()
     jsonChecker.CheckNotEqual("stauts", "ok", rootObj)
     timestampVar := Timestamp{}
     timestampVar.Timestamp = rootObj.GetInt64("data")
@@ -205,7 +205,7 @@ func (inst *MarketClient) GetSymbol() (data Symbols , exception error) {
     request.SetMethod(impl.GET)
     response := impl.RestfulQuery(request)
     rootObj := impl.ParseJsonFromString(response.GetString())
-    jsonChecker := new(impl.JsonChecker)
+    jsonChecker := impl.NewJsonChecker()
     jsonChecker.CheckNotEqual("stauts", "ok", rootObj)
     symbolsVar := Symbols{}
     symbolsVar.Status = rootObj.GetString("status")
@@ -410,13 +410,13 @@ func (inst *MarketClient) GetLatestAggregatedTicker(symbol string) (data Aggrega
 
 
 type TradingClient struct {
-    option *impl.RestfulOptions
+    option impl.RestfulOptions
 }
 
 func NewTradingClient(option *impl.RestfulOptions) *TradingClient {
     inst := new(TradingClient)
     if option != nil {
-        inst.option = option
+        inst.option = *option
     } else {
         inst.option.Url = "https://api.huobi.so"
     }
@@ -430,7 +430,7 @@ func (inst *TradingClient) PlaceOrder(accountId, symbol, orderType, amount, pric
         }
     }()
     request := impl.NewRestfulRequest(inst.option)
-    postMsg := impl.JsonWrapper{}
+    postMsg := impl.NewJsonWrapper()
     postMsg.AddJsonString("account-Id", accountId)
     postMsg.AddJsonString("symbol", symbol)
     postMsg.AddJsonString("orderType", orderType)
@@ -466,13 +466,13 @@ func (inst *TradingClient) CancelOrder(orderId int64) (data OrderID , exception 
 
 
 type AccountClient struct {
-    option *impl.RestfulOptions
+    option impl.RestfulOptions
 }
 
 func NewAccountClient(option *impl.RestfulOptions) *AccountClient {
     inst := new(AccountClient)
     if option != nil {
-        inst.option = option
+        inst.option = *option
     } else {
         inst.option.Url = "https://api.huobi.so"
     }
@@ -503,14 +503,14 @@ func (inst *AccountClient) GetAccounts() (data Account , exception error) {
 
 
 type MarketChannelClient struct {
-    option     *impl.WebSocketOptions
-    connection *impl.WebSocketConnection
+    option     impl.WebSocketOptions
+    connection impl.WebSocketConnection
 }
 
 func NewMarketChannelClient(option *impl.WebSocketOptions) *MarketChannelClient {
     inst := new(MarketChannelClient)
     if option != nil {
-        inst.option = option
+        inst.option = *option
     } else {
         inst.option.Url = "wss://api.huobi.pro/ws"
     }
@@ -524,18 +524,19 @@ func (inst *MarketChannelClient) Open() {
     })
     onAnyMessageEvent.SetEvent(func(connection *impl.WebSocketConnection, msg *impl.WebSocketMessage)  {
         decoded := impl.GZip(msg.GetBytes())
+        msg.Upgrade(decoded)
     })
     inst.connection.RegisterEvent(onAnyMessageEvent)
     onPingEvent := impl.NewWebSocketEvent(true)
     onPingEvent.SetTrigger(func(msg *impl.WebSocketMessage) bool {
         rootObj := impl.ParseJsonFromString(msg.GetString())
-        jsonChecker := new(impl.JsonChecker)
+        jsonChecker := impl.NewJsonChecker()
         jsonChecker.CheckEqual("op", "ping", rootObj)
         return jsonChecker.Complete()
     })
     onPingEvent.SetEvent(func(connection *impl.WebSocketConnection, msg *impl.WebSocketMessage)  {
         ts := impl.GetNow("Unix_ms")
-        jsonResult := impl.JsonWrapper{}
+        jsonResult := impl.NewJsonWrapper()
         jsonResult.AddJsonString("op", "pong")
         jsonResult.AddJsonString("ts", ts)
         connection.Send(jsonResult.ToJsonString())
@@ -548,7 +549,7 @@ func (inst *MarketChannelClient) SubscriptCandlestick(symbol string, period stri
     onCandlestickEvent := impl.NewWebSocketEvent(true)
     onCandlestickEvent.SetTrigger(func(msg *impl.WebSocketMessage) bool {
         rootObj := impl.ParseJsonFromString(msg.GetString())
-        jsonChecker := new(impl.JsonChecker)
+        jsonChecker := impl.NewJsonChecker()
         jsonChecker.CheckEqual("ch", fmt.Sprintf("market.%s.kline.%s", symbol, period), rootObj)
         return jsonChecker.Complete()
     })
@@ -568,7 +569,7 @@ func (inst *MarketChannelClient) SubscriptCandlestick(symbol string, period stri
     })
     inst.connection.RegisterEvent(onCandlestickEvent)
     ts := impl.GetNow("Unix_ms")
-    json := impl.JsonWrapper{}
+    json := impl.NewJsonWrapper()
     json.AddJsonString("sub", fmt.Sprintf("market.%s.kline.%s", symbol, period))
     json.AddJsonString("id", ts)
     inst.connection.Send(json.ToJsonString())
@@ -578,7 +579,7 @@ func (inst *MarketChannelClient) RequestCandlestick(symbol string, period string
     onCandlestickEvent := impl.NewWebSocketEvent(false)
     onCandlestickEvent.SetTrigger(func(msg *impl.WebSocketMessage) bool {
         rootObj := impl.ParseJsonFromString(msg.GetString())
-        jsonChecker := new(impl.JsonChecker)
+        jsonChecker := impl.NewJsonChecker()
         jsonChecker.CheckEqual("rep", fmt.Sprintf("market.%s.kline.%s", symbol, period), rootObj)
         return jsonChecker.Complete()
     })
@@ -602,7 +603,7 @@ func (inst *MarketChannelClient) RequestCandlestick(symbol string, period string
     })
     inst.connection.RegisterEvent(onCandlestickEvent)
     ts := impl.GetNow("Unix_ms")
-    json := impl.JsonWrapper{}
+    json := impl.NewJsonWrapper()
     json.AddJsonString("req", fmt.Sprintf("market.%s.kline.%s", symbol, period))
     json.AddJsonString("id", ts)
     inst.connection.Send(json.ToJsonString())
@@ -612,7 +613,7 @@ func (inst *MarketChannelClient) SubscriptMarketDepth(symbol string, typeU strin
     onDepthEvent := impl.NewWebSocketEvent(true)
     onDepthEvent.SetTrigger(func(msg *impl.WebSocketMessage) bool {
         rootObj := impl.ParseJsonFromString(msg.GetString())
-        jsonChecker := new(impl.JsonChecker)
+        jsonChecker := impl.NewJsonChecker()
         jsonChecker.CheckEqual("ch", fmt.Sprintf("market.%s.depth.%s", symbol, typeU), rootObj)
         return jsonChecker.Complete()
     })
@@ -639,7 +640,7 @@ func (inst *MarketChannelClient) SubscriptMarketDepth(symbol string, typeU strin
     })
     inst.connection.RegisterEvent(onDepthEvent)
     ts := impl.GetNow("Unix_ms")
-    json := impl.JsonWrapper{}
+    json := impl.NewJsonWrapper()
     json.AddJsonString("sub", fmt.Sprintf("market.%s.depth.%s", symbol, typeU))
     json.AddJsonString("id", ts)
     inst.connection.Send(json.ToJsonString())
@@ -649,7 +650,7 @@ func (inst *MarketChannelClient) RequestDepth(symbol string, typeU string, onDep
     onDepthEvent := impl.NewWebSocketEvent(true)
     onDepthEvent.SetTrigger(func(msg *impl.WebSocketMessage) bool {
         rootObj := impl.ParseJsonFromString(msg.GetString())
-        jsonChecker := new(impl.JsonChecker)
+        jsonChecker := impl.NewJsonChecker()
         jsonChecker.CheckEqual("ch", fmt.Sprintf("market.%s.depth.%s", symbol, typeU), rootObj)
         return jsonChecker.Complete()
     })
@@ -676,7 +677,7 @@ func (inst *MarketChannelClient) RequestDepth(symbol string, typeU string, onDep
     })
     inst.connection.RegisterEvent(onDepthEvent)
     ts := impl.GetNow("Unix_ms")
-    json := impl.JsonWrapper{}
+    json := impl.NewJsonWrapper()
     json.AddJsonString("sub", fmt.Sprintf("market.%s.depth.%s", symbol, typeU))
     json.AddJsonString("id", ts)
     inst.connection.Send(json.ToJsonString())
@@ -684,14 +685,14 @@ func (inst *MarketChannelClient) RequestDepth(symbol string, typeU string, onDep
 
 
 type AssetOrderV2ChannelClient struct {
-    option     *impl.WebSocketOptions
-    connection *impl.WebSocketConnection
+    option     impl.WebSocketOptions
+    connection impl.WebSocketConnection
 }
 
 func NewAssetOrderV2ChannelClient(option *impl.WebSocketOptions) *AssetOrderV2ChannelClient {
     inst := new(AssetOrderV2ChannelClient)
     if option != nil {
-        inst.option = option
+        inst.option = *option
     } else {
         inst.option.Url = "wss://api.huobi.pro/ws/v2"
     }
@@ -702,7 +703,7 @@ func (inst *AssetOrderV2ChannelClient) Open() {
     onPingEvent := impl.NewWebSocketEvent(true)
     onPingEvent.SetTrigger(func(msg *impl.WebSocketMessage) bool {
         rootObj := impl.ParseJsonFromString(msg.GetString())
-        jsonChecker := new(impl.JsonChecker)
+        jsonChecker := impl.NewJsonChecker()
         jsonChecker.CheckEqual("action", "ping", rootObj)
         return jsonChecker.Complete()
     })
@@ -711,7 +712,7 @@ func (inst *AssetOrderV2ChannelClient) Open() {
         ts := Timestamp{}
         obj := rootObj.GetObject("data")
         ts.Timestamp = obj.GetInt64("ts")
-        jsonResult := impl.JsonWrapper{}
+        jsonResult := impl.NewJsonWrapper()
         jsonResult.AddJsonString("op", "pong")
         jsonResult.AddJsonInt64("ts", ts.Timestamp)
         connection.Send(jsonResult.ToJsonString())
@@ -724,7 +725,7 @@ func (inst *AssetOrderV2ChannelClient) SetHandler(onOrder func (data OrderUpdate
     onOrderEvent := impl.NewWebSocketEvent(true)
     onOrderEvent.SetTrigger(func(msg *impl.WebSocketMessage) bool {
         rootObj := impl.ParseJsonFromString(msg.GetString())
-        jsonChecker := new(impl.JsonChecker)
+        jsonChecker := impl.NewJsonChecker()
         jsonChecker.CheckEqual("action", "push", rootObj)
         jsonChecker.ValueInclude("ch", "order.", rootObj)
         return jsonChecker.Complete()
@@ -756,7 +757,7 @@ func (inst *AssetOrderV2ChannelClient) SetHandler(onOrder func (data OrderUpdate
     onTradeEvent := impl.NewWebSocketEvent(true)
     onTradeEvent.SetTrigger(func(msg *impl.WebSocketMessage) bool {
         rootObj := impl.ParseJsonFromString(msg.GetString())
-        jsonChecker := new(impl.JsonChecker)
+        jsonChecker := impl.NewJsonChecker()
         jsonChecker.CheckEqual("action", "push", rootObj)
         jsonChecker.ValueInclude("ch", "trade.clearing.", rootObj)
         return jsonChecker.Complete()
@@ -786,7 +787,7 @@ func (inst *AssetOrderV2ChannelClient) SubscriptOrder(symbol string, onSub func 
     onSubEvent := impl.NewWebSocketEvent(false)
     onSubEvent.SetTrigger(func(msg *impl.WebSocketMessage) bool {
         rootObj := impl.ParseJsonFromString(msg.GetString())
-        jsonChecker := new(impl.JsonChecker)
+        jsonChecker := impl.NewJsonChecker()
         jsonChecker.CheckEqual("action", "sub", rootObj)
         jsonChecker.ValueInclude("ch", "orders", rootObj)
         return jsonChecker.Complete()
@@ -798,7 +799,7 @@ func (inst *AssetOrderV2ChannelClient) SubscriptOrder(symbol string, onSub func 
         onSub(codeVar)
     })
     inst.connection.RegisterEvent(onSubEvent)
-    json := impl.JsonWrapper{}
+    json := impl.NewJsonWrapper()
     json.AddJsonString("action", "sub")
     json.AddJsonString("ch", fmt.Sprintf("orders#%s", symbol))
     inst.connection.Send(json.ToJsonString())
@@ -808,7 +809,7 @@ func (inst *AssetOrderV2ChannelClient) SubscriptTradeClearing(symbol string, onS
     onSubEvent := impl.NewWebSocketEvent(false)
     onSubEvent.SetTrigger(func(msg *impl.WebSocketMessage) bool {
         rootObj := impl.ParseJsonFromString(msg.GetString())
-        jsonChecker := new(impl.JsonChecker)
+        jsonChecker := impl.NewJsonChecker()
         jsonChecker.CheckEqual("action", "sub", rootObj)
         jsonChecker.ValueInclude("ch", "trade.clearing", rootObj)
         return jsonChecker.Complete()
@@ -820,7 +821,7 @@ func (inst *AssetOrderV2ChannelClient) SubscriptTradeClearing(symbol string, onS
         onSub(codeVar)
     })
     inst.connection.RegisterEvent(onSubEvent)
-    json := impl.JsonWrapper{}
+    json := impl.NewJsonWrapper()
     json.AddJsonString("action", "sub")
     json.AddJsonString("ch", fmt.Sprintf("trade.clearing#%s", symbol))
 }
@@ -836,7 +837,7 @@ func restfulAuth(request *impl.RestfulRequest, option *impl.RestfulOptions) {
     method := impl.GetRequestInfo(request, impl.METHOD, impl.UPPERCASE)
     host := impl.GetRequestInfo(request, impl.HOST, impl.NONE)
     target := impl.GetRequestInfo(request, impl.TARGET, impl.NONE)
-    buffer := impl.StringWrapper{}
+    buffer := impl.NewStringWrapper()
     buffer.AppendStringItem(method)
     buffer.AppendStringItem(host)
     buffer.AppendStringItem(target)

@@ -6,6 +6,11 @@ type JsonChecker struct {
 	result int
 }
 
+func NewJsonChecker() *JsonChecker {
+	inst := new(JsonChecker)
+	return inst
+}
+
 func (inst *JsonChecker) pass() {
 	if inst.result == -1 {
 		inst.result = 1

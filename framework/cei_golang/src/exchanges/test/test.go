@@ -64,13 +64,13 @@ type HistoricalTrade struct {
 }
 
 type GetClient struct {
-    option *impl.RestfulOptions
+    option impl.RestfulOptions
 }
 
 func NewGetClient(option *impl.RestfulOptions) *GetClient {
     inst := new(GetClient)
     if option != nil {
-        inst.option = option
+        inst.option = *option
     } else {
         inst.option.Url = "http://127.0.0.1:8888"
     }
@@ -107,7 +107,7 @@ func (inst *GetClient) GetModelInfo() (data ModelInfo , exception error) {
     request.SetMethod(impl.GET)
     response := impl.RestfulQuery(request)
     rootObj := impl.ParseJsonFromString(response.GetString())
-    jsonChecker := new(impl.JsonChecker)
+    jsonChecker := impl.NewJsonChecker()
     jsonChecker.CheckEqual("aaa", "aa", rootObj)
     modelInfoVar := ModelInfo{}
     modelInfoVar.Name = rootObj.GetString("Name")
@@ -224,13 +224,13 @@ func (inst *GetClient) Url(input string) (data string , exception error) {
 
 
 type PostClient struct {
-    option *impl.RestfulOptions
+    option impl.RestfulOptions
 }
 
 func NewPostClient(option *impl.RestfulOptions) *PostClient {
     inst := new(PostClient)
     if option != nil {
-        inst.option = option
+        inst.option = *option
     } else {
         inst.option.Url = "http://127.0.0.1:8888"
     }
@@ -244,7 +244,7 @@ func (inst *PostClient) PostInputs(this string, price float64, number int64, sta
         }
     }()
     request := impl.NewRestfulRequest(inst.option)
-    postMsg := impl.JsonWrapper{}
+    postMsg := impl.NewJsonWrapper()
     postMsg.AddJsonString("Name", this)
     postMsg.AddJsonFloat64("Price", price)
     postMsg.AddJsonInt64("Number", number)
@@ -269,7 +269,7 @@ func (inst *PostClient) Authentication(name string, number int64) (data SimpleIn
         }
     }()
     request := impl.NewRestfulRequest(inst.option)
-    postMsg := impl.JsonWrapper{}
+    postMsg := impl.NewJsonWrapper()
     postMsg.AddJsonInt64("Number", number)
     request.SetTarget("/restful/post/authentication")
     request.SetMethod(impl.POST)
@@ -286,51 +286,51 @@ func (inst *PostClient) Authentication(name string, number int64) (data SimpleIn
 
 
 type WSClient struct {
-    option     *impl.WebSocketOptions
-    connection *impl.WebSocketConnection
+    option     impl.WebSocketOptions
+    connection impl.WebSocketConnection
 }
 
 func NewWSClient(option *impl.WebSocketOptions) *WSClient {
     inst := new(WSClient)
     if option != nil {
-        inst.option = option
+        inst.option = *option
     } else {
         inst.option.Url = "ws://127.0.0.1:8888"
     }
     return inst
 }
 
-func (inst *WSClient) Open(channel string, name string, onConnect func (data impl.WebSocketConnection)) {
+func (inst *WSClient) Open(channel string, name string, onConnect func (data *impl.WebSocketConnection)) {
     onPingEvent := impl.NewWebSocketEvent(true)
     onPingEvent.SetTrigger(func(msg *impl.WebSocketMessage) bool {
         rootObj := impl.ParseJsonFromString(msg.GetString())
-        jsonChecker := new(impl.JsonChecker)
+        jsonChecker := impl.NewJsonChecker()
         jsonChecker.CheckEqual("op", "ping", rootObj)
         return jsonChecker.Complete()
     })
     onPingEvent.SetEvent(func(connection *impl.WebSocketConnection, msg *impl.WebSocketMessage)  {
         ts := impl.GetNow("Unix_ms")
-        jsonResult := impl.JsonWrapper{}
+        jsonResult := impl.NewJsonWrapper()
         jsonResult.AddJsonString("op", "pong")
         jsonResult.AddJsonString("ts", ts)
         connection.Send(jsonResult.ToJsonString())
     })
     inst.connection.RegisterEvent(onPingEvent)
     inst.connection.SetOnConnect(func(connection *impl.WebSocketConnection)  {
-        login := impl.JsonWrapper{}
+        login := impl.NewJsonWrapper()
         login.AddJsonString("op", "login")
-        obj := impl.JsonWrapper{}
+        obj := impl.NewJsonWrapper()
         obj.AddJsonString("Name", name)
-        obj0 := impl.JsonWrapper{}
-        obj0.AddJsonFloat64("[]", ##STR##_1)
-        obj0.AddJsonFloat64("[]", ##STR##_2)
+        obj0 := impl.NewJsonWrapper()
+        obj0.AddJsonFloat64("[]", 1)
+        obj0.AddJsonFloat64("[]", 2)
         connection.Send(login.ToJsonString())
         onConnect(connection)
     })
     inst.connection.Connect(fmt.Sprintf("/websocket/%s", channel))
 }
 
-func (inst *WSClient) Close(onClose func (data impl.WebSocketConnection)) {
+func (inst *WSClient) Close(onClose func (data *impl.WebSocketConnection)) {
     inst.connection.SetOnClose(func(connection *impl.WebSocketConnection)  {
         onClose(connection)
     })
@@ -341,7 +341,7 @@ func (inst *WSClient) RequestEcho(name string, price float64, number int64, stat
     onEchoEvent := impl.NewWebSocketEvent(false)
     onEchoEvent.SetTrigger(func(msg *impl.WebSocketMessage) bool {
         rootObj := impl.ParseJsonFromString(msg.GetString())
-        jsonChecker := new(impl.JsonChecker)
+        jsonChecker := impl.NewJsonChecker()
         jsonChecker.CheckEqual("op", "echo", rootObj)
         obj := rootObj.GetObject("param")
         jsonChecker.CheckEqual("Name", name, obj)
@@ -358,9 +358,9 @@ func (inst *WSClient) RequestEcho(name string, price float64, number int64, stat
         onEcho(simpleInfoVar)
     })
     inst.connection.RegisterEvent(onEchoEvent)
-    jsonResult := impl.JsonWrapper{}
+    jsonResult := impl.NewJsonWrapper()
     jsonResult.AddJsonString("op", "echo")
-    obj := impl.JsonWrapper{}
+    obj := impl.NewJsonWrapper()
     obj.AddJsonString("Name", name)
     obj.AddJsonFloat64("Price", price)
     obj.AddJsonInt64("Number", number)
@@ -372,7 +372,7 @@ func (inst *WSClient) SubscribeSecond1(onSecond1 func (data SimpleInfo)) {
     onSecond1Event := impl.NewWebSocketEvent(true)
     onSecond1Event.SetTrigger(func(msg *impl.WebSocketMessage) bool {
         rootObj := impl.ParseJsonFromString(msg.GetString())
-        jsonChecker := new(impl.JsonChecker)
+        jsonChecker := impl.NewJsonChecker()
         jsonChecker.CheckEqual("ch", "Second1", rootObj)
         return jsonChecker.Complete()
     })
@@ -386,7 +386,7 @@ func (inst *WSClient) SubscribeSecond1(onSecond1 func (data SimpleInfo)) {
         onSecond1(simpleInfoVar)
     })
     inst.connection.RegisterEvent(onSecond1Event)
-    jsonResult := impl.JsonWrapper{}
+    jsonResult := impl.NewJsonWrapper()
     jsonResult.AddJsonString("op", "sub")
     jsonResult.AddJsonString("name", "Second1")
     inst.connection.Send(jsonResult.ToJsonString())
@@ -403,7 +403,7 @@ func restfulAuth(request *impl.RestfulRequest, option *impl.RestfulOptions) {
     method := impl.GetRequestInfo(request, impl.METHOD, impl.UPPERCASE)
     host := impl.GetRequestInfo(request, impl.HOST, impl.NONE)
     target := impl.GetRequestInfo(request, impl.TARGET, impl.NONE)
-    buffer := impl.StringWrapper{}
+    buffer := impl.NewStringWrapper()
     buffer.AppendStringItem(method)
     buffer.AppendStringItem(host)
     buffer.AppendStringItem(target)

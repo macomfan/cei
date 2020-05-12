@@ -65,6 +65,16 @@ public interface IDataProcessorBuilder extends IBuilderBase {
     void hmacsha265(Variable output, Variable input, Variable key);
 
     /**
+     * Encode the input to by HEX string.
+     * e.g.
+     * output = encodeHex(input)
+     *
+     * @param output The output, be String type.
+     * @param input The input, be TheStream type.
+     */
+    void encodeHex(Variable output, Variable input);
+
+    /**
      * Add the query string to restful request. No output.
      * e.g.
      * addQueryString(requestVariable, key, value)

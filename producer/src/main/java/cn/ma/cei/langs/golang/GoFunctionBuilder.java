@@ -38,15 +38,11 @@ public class GoFunctionBuilder implements IMethodBuilder {
     @Override
     public void startMethod(VariableType returnType, String methodDescriptor, List<Variable> params) {
         method = new GoMethod(null);
-        List<GoVar> tmp = new LinkedList<>();
-        params.forEach(item -> {
-            tmp.add(method.varPtr(item));
-        });
         GoType type = null;
         if (returnType != null) {
             type = new GoType(returnType);
         }
-        method.startMethod(type, false, WordSplitter.getLowerCamelCase(methodDescriptor), tmp);
+        method.startMethod(type, false, WordSplitter.getLowerCamelCase(methodDescriptor), method.varListToList(params));
     }
 
     @Override

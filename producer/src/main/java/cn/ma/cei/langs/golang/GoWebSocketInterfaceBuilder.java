@@ -77,7 +77,7 @@ public class GoWebSocketInterfaceBuilder implements IWebSocketInterfaceBuilder {
     public void setupOnConnect(Variable connection, IMethod onConnect) {
         method.addLambda(method.var(connection),
                 "SetOnConnect",
-                method.varListToPtrList(onConnect.getInputVariableList()),
+                method.varListToList(onConnect.getInputVariableList()),
                 null);
         method.getCode().appendCode(onConnectBuilder.method.getCode());
         method.endLambda();
@@ -92,7 +92,7 @@ public class GoWebSocketInterfaceBuilder implements IWebSocketInterfaceBuilder {
     public void setupOnClose(Variable connection, IMethod onClose) {
         method.addLambda(method.var(connection),
                 "SetOnClose",
-                method.varListToPtrList(onClose.getInputVariableList()),
+                method.varListToList(onClose.getInputVariableList()),
                 null);
         method.getCode().appendCode(onCloseBuilder.method.getCode());
         method.endLambda();

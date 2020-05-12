@@ -52,7 +52,7 @@ public class GoWebSocketEventBuilder implements IWebSocketEventBuilder {
         method.addLambda(
                 method.var(event),
                 "SetTrigger",
-                method.varListToPtrList(triggerMethod.getInputVariableList()),
+                method.varListToList(triggerMethod.getInputVariableList()),
                 new GoType(triggerMethod.getReturnType()));
         method.getCode().appendCode(triggerBuilder.method.getCode());
         method.endLambda();
@@ -63,7 +63,7 @@ public class GoWebSocketEventBuilder implements IWebSocketEventBuilder {
         method.addLambda(
                 method.var(event),
                 "SetEvent",
-                method.varListToPtrList(eventMethod.getInputVariableList()),
+                method.varListToList(eventMethod.getInputVariableList()),
                 new GoType(eventMethod.getReturnType()));
         method.getCode().appendCode(responseBuilder.method.getCode());
         method.endLambda();

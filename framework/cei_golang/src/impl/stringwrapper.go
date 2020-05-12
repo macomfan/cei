@@ -9,6 +9,11 @@ type StringWrapper struct {
 	result strings.Builder
 }
 
+func NewStringWrapper() *StringWrapper {
+	inst := new(StringWrapper)
+	return inst
+}
+
 func (inst *StringWrapper) AddStringArray(array []string, trim bool) {
 	for _, value := range array {
 		inst.items = append(inst.items, value)

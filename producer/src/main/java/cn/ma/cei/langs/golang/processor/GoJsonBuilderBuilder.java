@@ -25,7 +25,7 @@ public class GoJsonBuilderBuilder implements IJsonBuilderBuilder {
 
     @Override
     public void defineJsonObject(Variable jsonObject) {
-        method.addAssignAndDeclare(jsonObject.getDescriptor(), method.createInstance(JsonWrapper.getType()));
+        method.addAssignAndDeclare(jsonObject.getDescriptor(), method.invoke("impl.NewJsonWrapper"));
     }
 
     @Override

@@ -1,5 +1,7 @@
 import cei.exchanges.binance;
 import cei.exchanges.huobipro;
+import cei.impl.RestfulOptions;
+import cei.impl.RestfulRequest;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -7,6 +9,25 @@ import java.util.List;
 public class main {
 
     public static void main(String[] args) {
+        RestfulOptions option = new RestfulOptions();
+        option.apiKey = "vmPUZE6mv9SD5VNHk4HlWFsOr6aKE2zvsw0MuIgwCIPy6utIco14y7Ju91duEh8A";
+        option.secretKey = "NhqPtmdSJYdKjVHjA7PZj4Mge3R5YNiP1e3UZjInClVN65XAbvqqM6A7H5fATj0j";
+        RestfulRequest request = new RestfulRequest(option);
+        request.addQueryString("symbol", "LTCBTC");
+//        request.addQueryString("side", "BUY");
+//        request.addQueryString("type", "LIMIT");
+//        request.addQueryString("timeInForce","GTC");
+//        request.addQueryString("quantity","1");
+//        request.addQueryString("price","0.1");
+//        request.addQueryString("recvWindow","5000");
+//        request.addQueryString("timestamp","1499827319559");
+
+//        binance.Procedures.restfulAuth(request, option);
+        option.url = "https://127.0.0.1";
+        request.setMethod(RestfulRequest.Method.GET);
+        request.setTarget("/aaa/aaa");
+        huobipro.Procedures.restfulAuth(request, option);
+
         huobipro.MarketClient marketClient = new huobipro.MarketClient();
         huobipro.LastTrade lastTrade = marketClient.getLastTrade("btcusdt");
         System.out.println(lastTrade.ts);

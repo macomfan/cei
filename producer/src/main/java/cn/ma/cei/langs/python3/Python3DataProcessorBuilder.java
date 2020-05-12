@@ -122,6 +122,11 @@ public class Python3DataProcessorBuilder implements IDataProcessorBuilder {
     }
 
     @Override
+    public void encodeHex(Variable output, Variable input) {
+        method.addAssign(method.defineVariable(output), method.invoke("CEIUtils.hex", input));
+    }
+
+    @Override
     public void addQueryString(Variable requestVariable, Variable key, Variable value) {
         method.addInvoke(requestVariable.getDescriptor() + ".add_query_string", key, value);
     }

@@ -40,9 +40,9 @@ public class GoMethod extends GoVarMgr {
         return code;
     }
 
-    public String newInstance(VariableType type) {
-        return "new(" + type.getDescriptor() + ")";
-    }
+//    public String newInstance(VariableType type) {
+//        return "new(" + type.getDescriptor() + ")";
+//    }
 
     public String createInstance(VariableType type) {
         return type.getDescriptor() + "{}";

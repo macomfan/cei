@@ -7,6 +7,7 @@ package cn.ma.cei.langs.golang;
 
 import cn.ma.cei.exception.CEIException;
 import cn.ma.cei.generator.buildin.WebSocketCallback;
+import cn.ma.cei.generator.buildin.WebSocketConnection;
 import cn.ma.cei.generator.naming.IDescriptionConverter;
 import cn.ma.cei.utils.Checker;
 import cn.ma.cei.utils.WordSplitter;
@@ -102,7 +103,12 @@ public class GoDescriptionConverter implements IDescriptionConverter {
             return baseName + subNames.get(0);
         }
         else if ("impl.WebSocketCallback".equals(baseName)) {
-            return "func (data " + subNames.get(0) + ")";
+            if ("impl.WebSocketConnection".equals(subNames.get(0))) {
+                return "func (data *" + subNames.get(0) + ")";
+            } else {
+                return "func (data " + subNames.get(0) + ")";
+            }
+
         }
         return baseName;
     }

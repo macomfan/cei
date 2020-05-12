@@ -116,7 +116,7 @@ public class GoDataProcessorBuilder implements IDataProcessorBuilder {
 
     @Override
     public void upgradeWebSocketMessage(Variable messageVariable, Variable valueVariable) {
-
+        method.addInvoke(messageVariable.getDescriptor() + ".Upgrade", method.var(valueVariable));
     }
 
     @Override
@@ -127,6 +127,11 @@ public class GoDataProcessorBuilder implements IDataProcessorBuilder {
     @Override
     public void hmacsha265(Variable output, Variable input, Variable key) {
         method.addAssignAndDeclare(method.useVariable(method.var(output)), method.invoke("impl.HMACSHA256", method.var(input), method.var(key)));
+    }
+
+    @Override
+    public void encodeHex(Variable output, Variable input) {
+        method.addAssignAndDeclare(method.useVariable(method.var(output)), method.invoke("impl.EncodeHex", method.var(input)));
     }
 
     @Override

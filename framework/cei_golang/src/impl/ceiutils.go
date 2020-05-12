@@ -1,10 +1,14 @@
 package impl
 
 import (
+	"bytes"
+	"compress/gzip"
 	"crypto/hmac"
 	"crypto/sha256"
 	"encoding/base64"
+	"encoding/hex"
 	"fmt"
+	"io/ioutil"
 	"net/url"
 	"sort"
 	"strings"
@@ -110,6 +114,31 @@ func HMACSHA256(input string, key string) []byte {
 	hash := hmac.New(sha256.New, []byte(key))
 	hash.Write([]byte(input))
 	return hash.Sum(nil)
+}
+
+func EncodeHex(input []byte) string {
+	if input != nil {
+		return hex.EncodeToString(input)
+	}
+	return ""
+}
+
+func GZip(input []byte) string {
+	buf := bytes.NewBuffer(input)
+	reader, err := gzip.NewReader(buf)
+	if reader != nil {
+		defer func() {
+			_ = reader.Close()
+		}()
+	}
+	if err != nil {
+		panic("Cannot decode by gzip")
+	}
+	res, readErr := ioutil.ReadAll(reader)
+	if readErr != nil {
+		panic("Cannot read gzip result")
+	}
+	return string(res)
 }
 
 func Base64Encode(input []byte) string {
