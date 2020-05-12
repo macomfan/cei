@@ -313,12 +313,27 @@ func (inst *WSClient) Open(channel string, name string, onConnect func (data imp
         jsonResult := impl.JsonWrapper{}
         jsonResult.AddJsonString("op", "pong")
         jsonResult.AddJsonString("ts", ts)
+        connection.Send(jsonResult.ToJsonString())
     })
     inst.connection.RegisterEvent(onPingEvent)
+    inst.connection.SetOnConnect(func(connection *impl.WebSocketConnection)  {
+        login := impl.JsonWrapper{}
+        login.AddJsonString("op", "login")
+        obj := impl.JsonWrapper{}
+        obj.AddJsonString("Name", name)
+        obj0 := impl.JsonWrapper{}
+        obj0.AddJsonFloat64("[]", ##STR##_1)
+        obj0.AddJsonFloat64("[]", ##STR##_2)
+        connection.Send(login.ToJsonString())
+        onConnect(connection)
+    })
     inst.connection.Connect(fmt.Sprintf("/websocket/%s", channel))
 }
 
 func (inst *WSClient) Close(onClose func (data impl.WebSocketConnection)) {
+    inst.connection.SetOnClose(func(connection *impl.WebSocketConnection)  {
+        onClose(connection)
+    })
     inst.connection.Close()
 }
 
@@ -350,6 +365,7 @@ func (inst *WSClient) RequestEcho(name string, price float64, number int64, stat
     obj.AddJsonFloat64("Price", price)
     obj.AddJsonInt64("Number", number)
     obj.AddJsonBool("Status", status)
+    inst.connection.Send(jsonResult.ToJsonString())
 }
 
 func (inst *WSClient) SubscribeSecond1(onSecond1 func (data SimpleInfo)) {
@@ -373,6 +389,7 @@ func (inst *WSClient) SubscribeSecond1(onSecond1 func (data SimpleInfo)) {
     jsonResult := impl.JsonWrapper{}
     jsonResult.AddJsonString("op", "sub")
     jsonResult.AddJsonString("name", "Second1")
+    inst.connection.Send(jsonResult.ToJsonString())
 }
 
 

@@ -21,6 +21,7 @@ const (
 	TARGET
 	UPPERCASE
 	LOWERCASE
+	POSTBODY
 	NONE
 )
 
@@ -86,6 +87,10 @@ func GetRequestInfo(request *RestfulRequest, method Constant, convert Constant) 
 		res = request.GetTarget()
 	case METHOD:
 		res = string(request.GetMethod())
+	case POSTBODY:
+		if request.GetRequestBody() != nil {
+			res = string(request.GetRequestBody())
+		}
 	default:
 		panic("Unknown method")
 	}

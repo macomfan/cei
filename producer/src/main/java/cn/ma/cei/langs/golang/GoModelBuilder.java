@@ -20,7 +20,7 @@ import cn.ma.cei.langs.golang.vars.GoVar;
 public class GoModelBuilder implements IModelBuilder {
 
     private GoStruct modelStruct = null;
-    private GoFile mainFile = null;
+    private final GoFile mainFile;
     
     
     public GoModelBuilder(GoFile mainFile) {

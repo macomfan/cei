@@ -10,7 +10,6 @@ import cn.ma.cei.langs.golang.processor.GoJsonBuilderBuilder;
 import cn.ma.cei.langs.golang.processor.GoJsonParserBuilder;
 import cn.ma.cei.langs.golang.processor.GoStringBuilderBuilder;
 import cn.ma.cei.langs.golang.tools.GoMethod;
-import cn.ma.cei.langs.golang.vars.GoVar;
 
 public class GoDataProcessorBuilder implements IDataProcessorBuilder {
 
@@ -112,7 +111,7 @@ public class GoDataProcessorBuilder implements IDataProcessorBuilder {
 
     @Override
     public Variable convertNativeToDecimal(Variable stringVariable) {
-        return stringVariable;
+        return BuilderContext.createStatement(stringVariable.getName());
     }
 
     @Override
@@ -144,7 +143,7 @@ public class GoDataProcessorBuilder implements IDataProcessorBuilder {
 
     @Override
     public void URLEscape(Variable output, Variable input) {
-        method.addAssignAndDeclare(method.useVariable(method.var(output)), method.invoke("impl.url_escape", method.var(input)));
+        method.addAssignAndDeclare(method.useVariable(method.var(output)), method.invoke("impl.UrlEscape", method.var(input)));
 
     }
 
@@ -160,12 +159,13 @@ public class GoDataProcessorBuilder implements IDataProcessorBuilder {
 
     @Override
     public void send(Variable connection, Variable value) {
-
+        method.addInvoke(connection.getDescriptor() + ".Send", method.var(value));
     }
 
     @Override
     public void gzip(Variable output, Variable input) {
-
+        method.addAssignAndDeclare(method.useVariable(method.var(output)),
+                method.invoke("impl.GZip", method.var(input)));
     }
 
     @Override

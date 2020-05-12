@@ -523,6 +523,7 @@ func (inst *MarketChannelClient) Open() {
         return true
     })
     onAnyMessageEvent.SetEvent(func(connection *impl.WebSocketConnection, msg *impl.WebSocketMessage)  {
+        decoded := impl.GZip(msg.GetBytes())
     })
     inst.connection.RegisterEvent(onAnyMessageEvent)
     onPingEvent := impl.NewWebSocketEvent(true)
@@ -537,6 +538,7 @@ func (inst *MarketChannelClient) Open() {
         jsonResult := impl.JsonWrapper{}
         jsonResult.AddJsonString("op", "pong")
         jsonResult.AddJsonString("ts", ts)
+        connection.Send(jsonResult.ToJsonString())
     })
     inst.connection.RegisterEvent(onPingEvent)
     inst.connection.Connect("")
@@ -569,6 +571,7 @@ func (inst *MarketChannelClient) SubscriptCandlestick(symbol string, period stri
     json := impl.JsonWrapper{}
     json.AddJsonString("sub", fmt.Sprintf("market.%s.kline.%s", symbol, period))
     json.AddJsonString("id", ts)
+    inst.connection.Send(json.ToJsonString())
 }
 
 func (inst *MarketChannelClient) RequestCandlestick(symbol string, period string, onCandlestick func (data Candlestick)) {
@@ -602,6 +605,7 @@ func (inst *MarketChannelClient) RequestCandlestick(symbol string, period string
     json := impl.JsonWrapper{}
     json.AddJsonString("req", fmt.Sprintf("market.%s.kline.%s", symbol, period))
     json.AddJsonString("id", ts)
+    inst.connection.Send(json.ToJsonString())
 }
 
 func (inst *MarketChannelClient) SubscriptMarketDepth(symbol string, typeU string, onDepth func (data Depth)) {
@@ -638,6 +642,7 @@ func (inst *MarketChannelClient) SubscriptMarketDepth(symbol string, typeU strin
     json := impl.JsonWrapper{}
     json.AddJsonString("sub", fmt.Sprintf("market.%s.depth.%s", symbol, typeU))
     json.AddJsonString("id", ts)
+    inst.connection.Send(json.ToJsonString())
 }
 
 func (inst *MarketChannelClient) RequestDepth(symbol string, typeU string, onDepth func (data Depth)) {
@@ -674,6 +679,7 @@ func (inst *MarketChannelClient) RequestDepth(symbol string, typeU string, onDep
     json := impl.JsonWrapper{}
     json.AddJsonString("sub", fmt.Sprintf("market.%s.depth.%s", symbol, typeU))
     json.AddJsonString("id", ts)
+    inst.connection.Send(json.ToJsonString())
 }
 
 
@@ -708,6 +714,7 @@ func (inst *AssetOrderV2ChannelClient) Open() {
         jsonResult := impl.JsonWrapper{}
         jsonResult.AddJsonString("op", "pong")
         jsonResult.AddJsonInt64("ts", ts.Timestamp)
+        connection.Send(jsonResult.ToJsonString())
     })
     inst.connection.RegisterEvent(onPingEvent)
     inst.connection.Connect("")
@@ -794,6 +801,7 @@ func (inst *AssetOrderV2ChannelClient) SubscriptOrder(symbol string, onSub func 
     json := impl.JsonWrapper{}
     json.AddJsonString("action", "sub")
     json.AddJsonString("ch", fmt.Sprintf("orders#%s", symbol))
+    inst.connection.Send(json.ToJsonString())
 }
 
 func (inst *AssetOrderV2ChannelClient) SubscriptTradeClearing(symbol string, onSub func (data Code)) {

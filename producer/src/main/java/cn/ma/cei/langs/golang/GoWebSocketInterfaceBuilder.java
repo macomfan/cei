@@ -20,8 +20,8 @@ public class GoWebSocketInterfaceBuilder implements IWebSocketInterfaceBuilder {
 
     private final GoStruct clientStruct;
     private GoMethod method;
-    private IWebSocketNestedBuilder onConnectBuilder = null;
-    private IWebSocketNestedBuilder onCloseBuilder = null;
+    private GoWebSocketNestedBuilder onConnectBuilder = null;
+    private GoWebSocketNestedBuilder onCloseBuilder = null;
 
     public GoWebSocketInterfaceBuilder(GoStruct clientStruct) {
         this.clientStruct = clientStruct;
@@ -75,7 +75,12 @@ public class GoWebSocketInterfaceBuilder implements IWebSocketInterfaceBuilder {
 
     @Override
     public void setupOnConnect(Variable connection, IMethod onConnect) {
-
+        method.addLambda(method.var(connection),
+                "SetOnConnect",
+                method.varListToPtrList(onConnect.getInputVariableList()),
+                null);
+        method.getCode().appendCode(onConnectBuilder.method.getCode());
+        method.endLambda();
     }
 
     @Override
@@ -85,7 +90,12 @@ public class GoWebSocketInterfaceBuilder implements IWebSocketInterfaceBuilder {
 
     @Override
     public void setupOnClose(Variable connection, IMethod onClose) {
-
+        method.addLambda(method.var(connection),
+                "SetOnClose",
+                method.varListToPtrList(onClose.getInputVariableList()),
+                null);
+        method.getCode().appendCode(onCloseBuilder.method.getCode());
+        method.endLambda();
     }
 
     @Override

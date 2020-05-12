@@ -14,11 +14,9 @@ import cn.ma.cei.generator.builder.IRestfulInterfaceBuilder;
 import cn.ma.cei.generator.buildin.RestfulOptions;
 import cn.ma.cei.langs.golang.tools.GoFile;
 import cn.ma.cei.langs.golang.tools.GoMethod;
-import cn.ma.cei.langs.golang.vars.GoPtrVar;
 import cn.ma.cei.langs.golang.tools.GoStruct;
 
 /**
- *
  * @author U0151316
  */
 public class GoRestfulClientBuilder implements IRestfulClientBuilder {

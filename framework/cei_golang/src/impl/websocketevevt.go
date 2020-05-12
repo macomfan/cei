@@ -8,13 +8,9 @@ type WebSocketEvent struct {
 
 func NewWebSocketEvent(persistence bool) *WebSocketEvent {
 	inst := new(WebSocketEvent)
+	inst.persistence = persistence
 	return inst
 }
-
-//func (inst *WebSocketEvent) Register(when func(*WebSocketMessage) bool, callback func(*WebSocketMessage)) {
-//	inst.when = when
-//	inst.callback = callback
-//}
 
 func (inst *WebSocketEvent) isPersistence() bool {
 	return inst.persistence

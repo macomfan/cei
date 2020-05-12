@@ -90,7 +90,11 @@ public class GoMethod extends GoVarMgr {
     }
 
     public void addLambda(GoVar variable, String methodName, List<GoVar> params, GoType returnType) {
-        code.appendln(variable.getDescriptor() + "." + methodName + "(func(" + defineParamString(params) + ") " + returnType.getDescriptor() + " {");
+        String returnString = " ";
+        if (returnType != null) {
+            returnString = " " + returnType.getDescriptor();
+        }
+        code.appendln(variable.getDescriptor() + "." + methodName + "(func(" + defineParamString(params) + ")" + returnString + " {");
         code.startBlock();
     }
 

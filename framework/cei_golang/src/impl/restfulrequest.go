@@ -49,7 +49,7 @@ func (inst *RestfulRequest) GetQueryString() [][]string {
 	return inst.queryStrings
 }
 
-func (inst *RestfulRequest) AddHeader(key string, value interface{}) {
+func (inst *RestfulRequest) AddHeaderString(key string, value interface{}) {
 	inst.headers[key] = ToStringOrDefault(value)
 }
 

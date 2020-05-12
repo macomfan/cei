@@ -27,6 +27,13 @@ func NewWSClient(option *impl.WebSocketOptions) *WSClient {
 }
 
 func (inst *WSClient) Open(channel, name string) {
+    inst.connection.SetOnConnect(func(connection *impl.WebSocketConnection)  {
+        login := impl.JsonWrapper{}
+        login.AddJsonString("op", "echo")
+        obj := impl.JsonWrapper{}
+        obj.AddJsonString("Name", name)
+        connection.Send("login")
+    })
     inst.connection.Connect(fmt.Sprintf("/websocket/%s", channel))
 }
 
@@ -57,6 +64,7 @@ func (inst *WSClient) RequestEcho(name string, price float64, number int64, stat
     obj.AddJsonFloat64("Price", price)
     obj.AddJsonInt64("Number", number)
     obj.AddJsonBool("Status", status)
+    inst.connection.Send(json.ToJsonString())
 }
 
 
