@@ -302,6 +302,7 @@
             <xs:element name="get_request_info" type="xGetRequestInfo"/>
             <xs:element name="invoke" type="xInvoke"/>
             <xs:element name="gzip" type="xGzip"/>
+            <xs:element name="encode_hex" type="xEncodeHex"/>
         </xs:choice>
     </xs:group>
 
@@ -341,7 +342,6 @@
         </xs:attribute>
         <xs:attribute name="convert"/>
     </xs:complexType>
-
     <xs:complexType name="xHmacsha256">
         <xs:attribute name="name" type="nameType" use="required"/>
         <xs:attribute name="input"/>
@@ -388,6 +388,10 @@
             <xs:enumeration value="decompress"/>
         </xs:restriction>
     </xs:simpleType>
+    <xs:complexType name="xEncodeHex">
+        <xs:attribute name="name" type="nameType" use="required"/>
+        <xs:attribute name="input" type="variableType" use="required"/>
+    </xs:complexType>
     <!--======== Common Processor End =========-->
 
 

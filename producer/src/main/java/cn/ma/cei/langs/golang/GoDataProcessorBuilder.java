@@ -131,6 +131,11 @@ public class GoDataProcessorBuilder implements IDataProcessorBuilder {
     }
 
     @Override
+    public void encodeHex(Variable output, Variable input) {
+        method.addAssignAndDeclare(method.useVariable(method.var(output)), method.invoke("impl.EncodeHex", method.var(input)));
+    }
+
+    @Override
     public void combineQueryString(Variable requestVariable, Variable output, Variable sort, Variable separator) {
         method.addAssignAndDeclare(method.useVariable(method.var(output)),
                 method.invoke("impl.CombineQueryString", method.var(requestVariable), method.var(sort), method.var(separator)));

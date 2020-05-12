@@ -340,7 +340,8 @@ class Procedures:
         buffer.append_string_item(query_string)
         buffer.append_string_item(post_body)
         buffer.combine_string_items("", "", "")
-        output = CEIUtils.hmacsha256(buffer.to_string(), option.secret_key)
-        request.add_query_string("signature", str(outputencoding = "utf8"))
+        hmac = CEIUtils.hmacsha256(buffer.to_string(), option.secret_key)
+        output = CEIUtils.hex(hmac)
+        request.add_query_string("signature", output)
 
 

@@ -196,9 +196,6 @@ public class BuildJsonBuilder extends DataProcessorBase<xJsonBuilder> {
         if (Checker.isEmpty(jsonItem.value)) {
             return null;
         }
-        if ("{ts.timestamp}".equals(jsonItem.value)) {
-            int a = 0;
-        }
         Variable value = queryVariableOrConstant(jsonItem.value);
         if (value == null) {
             CEIErrors.showXMLFailure("Cannot define the value: %s", jsonItem.value);

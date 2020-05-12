@@ -50,13 +50,14 @@ public class CEIUtils {
     }
 
     public static String combineQueryString(RestfulRequest request, Constant sort, String separator) {
-        Map<String, String> queryString = new TreeMap<>(request.getQueryString());
+        Map<String, String> queryString = new LinkedHashMap<>(request.getQueryString());
         if (sort != null) {
             switch (sort) {
                 case ASC:
+                    queryString = new TreeMap<>(queryString);
                     break;
                 case DSC:
-                    queryString = ((TreeMap<String, String>) queryString).descendingMap();
+                    queryString = (new TreeMap<>(queryString)).descendingMap();
                     break;
                 case NONE:
                     // Do nothing
@@ -74,9 +75,19 @@ public class CEIUtils {
             }
             builder.append(key);
             builder.append("=");
-            builder.append(urlEscape(value));
+            builder.append(value);
         });
         return builder.toString();
+    }
+
+    public static String encodeHex(byte[] input) {
+        String strHex = "";
+        StringBuilder sb = new StringBuilder("");
+        for (int n = 0; n < input.length; n++) {
+            strHex = Integer.toHexString(input[n] & 0xFF);
+            sb.append((strHex.length() == 1) ? "0" + strHex : strHex);
+        }
+        return sb.toString().trim();
     }
 
     public static String getRequestInfo(RestfulRequest request, Constant method, Constant convert) {
@@ -96,7 +107,9 @@ public class CEIUtils {
                 res = request.getMethod().toString();
                 break;
             case POSTBODY:
-                res = new String(request.getPostBody());
+                if (request.getPostBody() != null) {
+                    res = new String(request.getPostBody());
+                }
                 break;
             default:
                 throw new CEIException(method.toString());

@@ -9,7 +9,6 @@ import cei.impl.RestfulOptions;
 import cei.impl.RestfulRequest;
 import cei.impl.RestfulResponse;
 import cei.impl.StringWrapper;
-import cei.impl.TypeConverter;
 import cei.impl.WebSocketConnection;
 import cei.impl.WebSocketEvent;
 import cei.impl.WebSocketOptions;
@@ -369,8 +368,9 @@ public class binance {
             buffer.appendStringItem(queryString);
             buffer.appendStringItem(postBody);
             buffer.combineStringItems("", "", "");
-            byte[] output = CEIUtils.hmacsha256(buffer.toNormalString(), option.secretKey);
-            request.addQueryString("signature", TypeConverter.toNormalString(output));
+            byte[] hmac = CEIUtils.hmacsha256(buffer.toNormalString(), option.secretKey);
+            String output = CEIUtils.encodeHex(hmac);
+            request.addQueryString("signature", output);
         }
     }
 

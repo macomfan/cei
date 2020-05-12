@@ -366,7 +366,8 @@ func restfulAuth(request *impl.RestfulRequest, option *impl.RestfulOptions) {
     buffer.AppendStringItem(queryString)
     buffer.AppendStringItem(postBody)
     buffer.CombineStringItems("", "", "")
-    output := impl.HMACSHA256(buffer.ToString(), option.SecretKey)
-    request.AddQueryString("signature", impl.ToString(output))
+    hmac := impl.HMACSHA256(buffer.ToString(), option.SecretKey)
+    output := impl.EncodeHex(hmac)
+    request.AddQueryString("signature", output)
 }
 

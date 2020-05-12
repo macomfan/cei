@@ -47,7 +47,7 @@ class RestfulRequest:
 
     def add_query_string(self, key: str, value):
         if value is not None:
-            self.__queryString.append([key, value])
+            self.__queryString.append([key, urllib.parse.quote(value, "utf-8")])
 
     def set_post_body(self, body):
         self.__post_body = body

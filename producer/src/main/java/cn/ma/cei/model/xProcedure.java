@@ -19,6 +19,7 @@ public class xProcedure extends xElement {
             xGZip.class,
             xBase64.class,
             xHmacSHA256.class,
+            xEncodeHex.class,
             xURLEscape.class,
             xGetNow.class,
             xJsonBuilder.class,

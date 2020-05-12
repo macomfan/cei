@@ -33,7 +33,8 @@ class CEIUtils:
         elif method == CEIUtils.Constant.METHOD:
             result = request.get_method()
         elif method == CEIUtils.Constant.POSTBODY:
-            result = str(request.get_post_body(), encoding="utf-8")
+            if request.get_post_body() is not None:
+                result = str(request.get_post_body(), encoding="utf-8")
         else:
             # TODO
             pass
@@ -54,9 +55,6 @@ class CEIUtils:
         query_string = list()
         query_string.extend(request.get_query_string())
 
-        def get_key(tmp):
-            return tmp[0]
-
         if sort is not None:
             if sort == CEIUtils.Constant.ASC:
                 query_string = sorted(query_string, key=lambda tmp: tmp[0])
@@ -75,7 +73,7 @@ class CEIUtils:
                     result += separator
             result += item[0]
             result += "="
-            result += urllib.parse.quote(item[1], "utf-8")
+            result += item[1]
         return result
 
     @staticmethod
@@ -87,6 +85,12 @@ class CEIUtils:
         if key is None:
             raise CEIException("key is None")
         return hmac.new(key.encode('utf-8'), msg=input_value.encode('utf-8'), digestmod=hashlib.sha256).digest()
+
+    @staticmethod
+    def hex(input_value: bytes):
+        if input_value is not None:
+            return input_value.hex()
+        return ""
 
     @staticmethod
     def string_replace(format_string: str, *args):
