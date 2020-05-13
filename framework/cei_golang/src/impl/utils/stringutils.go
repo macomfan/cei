@@ -17,7 +17,7 @@ func findReferenceStrings(objStr string) []string {
 func ToString(value interface{}) string {
 	switch v := value.(type) {
 	case string:
-		return string(v)
+		return v
 	case bool:
 		return strconv.FormatBool(v)
 	case uint8:

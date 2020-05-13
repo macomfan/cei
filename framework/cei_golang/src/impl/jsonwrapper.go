@@ -131,6 +131,7 @@ func (inst* JsonWrapper) Contains(key string) bool{
 		_, ok := inst.object[key]
 		return ok
 	}
+	return false
 }
 
 func (inst *JsonWrapper) AddJsonString(key string, value string) {

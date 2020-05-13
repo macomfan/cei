@@ -287,7 +287,7 @@ func (inst *PostClient) Authentication(name string, number int64) (data SimpleIn
 
 type WSClient struct {
     option     impl.WebSocketOptions
-    connection impl.WebSocketConnection
+    connection *impl.WebSocketConnection
 }
 
 func NewWSClient(option *impl.WebSocketOptions) *WSClient {
@@ -296,6 +296,7 @@ func NewWSClient(option *impl.WebSocketOptions) *WSClient {
         inst.option = *option
     } else {
         inst.option.Url = "ws://127.0.0.1:8888"
+    inst.connection = impl.NewWebSocketConnection(&inst.option)
     }
     return inst
 }

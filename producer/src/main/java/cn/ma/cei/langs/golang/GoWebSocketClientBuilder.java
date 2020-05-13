@@ -26,7 +26,7 @@ public class GoWebSocketClientBuilder implements IWebSocketClientBuilder {
         clientStruct = new GoStruct(client.getDescriptor());
         clientStruct.addReference("../../impl");
         clientStruct.addPrivateMember(clientStruct.varNormal(client.getMember("option")));
-        clientStruct.addPrivateMember(clientStruct.varNormal(client.getMember("connection")));
+        clientStruct.addPrivateMember(clientStruct.varPtr(client.getMember("connection")));
 
         GoMethod constructor = new GoMethod(clientStruct);
         constructor.getCode().appendWordsln("func", "New" + client.getDescriptor() + "(option *" + WebSocketOptions.getType().getDescriptor() + ")", "*" + client.getDescriptor(), "{");
@@ -44,6 +44,7 @@ public class GoWebSocketClientBuilder implements IWebSocketClientBuilder {
                     constructor.getCode().appendWordsln("inst.option.connectionTimeout", "=", option.connectionTimeout.toString());
                 }
             });
+            constructor.getCode().appendWordsln("inst.connection =", "impl.NewWebSocketConnection(&inst.option)");
             constructor.getCode().appendln("}");
             constructor.getCode().appendWordsln("return", "inst");
         });

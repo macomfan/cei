@@ -318,7 +318,7 @@ func (inst *MarketClient) GetCandlestickData(symbol string, interval string, sta
 
 type CandlestickChannel struct {
     option     impl.WebSocketOptions
-    connection impl.WebSocketConnection
+    connection *impl.WebSocketConnection
 }
 
 func NewCandlestickChannel(option *impl.WebSocketOptions) *CandlestickChannel {
@@ -327,6 +327,7 @@ func NewCandlestickChannel(option *impl.WebSocketOptions) *CandlestickChannel {
         inst.option = *option
     } else {
         inst.option.Url = "wss://stream.binance.com:9443"
+    inst.connection = impl.NewWebSocketConnection(&inst.option)
     }
     return inst
 }

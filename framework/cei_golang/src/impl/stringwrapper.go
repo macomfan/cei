@@ -25,7 +25,13 @@ func (inst *StringWrapper) AppendStringItem(value string) {
 }
 
 func (inst *StringWrapper) CombineStringItems(prefix, suffix, separator string) {
-
+	inst.result.Reset();
+	for _, item := range inst.items {
+		if inst.result.Len() != 0 {
+			inst.result.WriteString(separator);
+		}
+		inst.result.WriteString(prefix + item + suffix);
+	}
 }
 
 func (inst *StringWrapper) ToString() string {

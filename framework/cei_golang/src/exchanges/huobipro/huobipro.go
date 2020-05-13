@@ -504,7 +504,7 @@ func (inst *AccountClient) GetAccounts() (data Account , exception error) {
 
 type MarketChannelClient struct {
     option     impl.WebSocketOptions
-    connection impl.WebSocketConnection
+    connection *impl.WebSocketConnection
 }
 
 func NewMarketChannelClient(option *impl.WebSocketOptions) *MarketChannelClient {
@@ -513,6 +513,7 @@ func NewMarketChannelClient(option *impl.WebSocketOptions) *MarketChannelClient 
         inst.option = *option
     } else {
         inst.option.Url = "wss://api.huobi.pro/ws"
+    inst.connection = impl.NewWebSocketConnection(&inst.option)
     }
     return inst
 }
@@ -686,7 +687,7 @@ func (inst *MarketChannelClient) RequestDepth(symbol string, typeU string, onDep
 
 type AssetOrderV2ChannelClient struct {
     option     impl.WebSocketOptions
-    connection impl.WebSocketConnection
+    connection *impl.WebSocketConnection
 }
 
 func NewAssetOrderV2ChannelClient(option *impl.WebSocketOptions) *AssetOrderV2ChannelClient {
@@ -695,6 +696,7 @@ func NewAssetOrderV2ChannelClient(option *impl.WebSocketOptions) *AssetOrderV2Ch
         inst.option = *option
     } else {
         inst.option.Url = "wss://api.huobi.pro/ws/v2"
+    inst.connection = impl.NewWebSocketConnection(&inst.option)
     }
     return inst
 }

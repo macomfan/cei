@@ -14,7 +14,7 @@ type SimpleInfo struct {
 
 type WSClient struct {
     option     impl.WebSocketOptions
-    connection impl.WebSocketConnection
+    connection *impl.WebSocketConnection
 }
 
 func NewWSClient(option *impl.WebSocketOptions) *WSClient {
@@ -23,6 +23,7 @@ func NewWSClient(option *impl.WebSocketOptions) *WSClient {
         inst.option = *option
     } else {
         inst.option.Url = "http://127.0.0.1:8888"
+    inst.connection = impl.NewWebSocketConnection(&inst.option)
     }
     return inst
 }

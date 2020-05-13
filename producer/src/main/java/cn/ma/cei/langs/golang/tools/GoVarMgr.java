@@ -32,9 +32,9 @@ public class GoVarMgr {
         return new GoVar(variable);
     }
 
-//    public GoVar varPtr(Variable variable) {
-//        return new GoPtrVar(variable);
-//    }
+    public GoVar varPtr(Variable variable) {
+        return new GoPtrVar(variable);
+    }
 
     public GoVar[] varListToArray(Variable... items) {
         List<GoVar> list = new ArrayList<>();
