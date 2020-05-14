@@ -26,9 +26,6 @@ public class GoMethod extends GoVarMgr {
     private final Set<String> importList = new HashSet<>();
 
     public GoMethod(GoStruct parent) {
-        if (parent == null) {
-            int a = 0;
-        }
         this.parent = parent;
     }
 

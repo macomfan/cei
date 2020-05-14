@@ -121,7 +121,7 @@ public class Main {
                     "C:\\dev\\cei\\exchanges",
                     "C:\\dev\\cei\\framework",
                     "C:\\dev\\cei\\output",
-                    "java|golang|python3");
+                    "java|cpp");
         } catch (Exception e) {
             System.err.println(e.getMessage());
             System.err.println(BuildTracer.getTraceString());

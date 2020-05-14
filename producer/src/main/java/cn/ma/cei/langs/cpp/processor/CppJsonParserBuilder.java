@@ -1,24 +1,32 @@
-package cn.ma.cei.langs.java.processor;
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package cn.ma.cei.langs.cpp.processor;
 
 import cn.ma.cei.generator.Variable;
 import cn.ma.cei.generator.builder.IJsonCheckerBuilder;
 import cn.ma.cei.generator.builder.IJsonParserBuilder;
 import cn.ma.cei.generator.buildin.JsonWrapper;
-import cn.ma.cei.langs.java.buildin.TheLinkedList;
-import cn.ma.cei.langs.java.tools.JavaMethod;
+import cn.ma.cei.langs.cpp.tools.CppMethod;
 
-public class JavaJsonParserBuilder implements IJsonParserBuilder {
+/**
+ *
+ * @author U0151316
+ */
+public class CppJsonParserBuilder implements IJsonParserBuilder {
 
-    private final JavaMethod method;
+    private CppMethod method;
 
-    public JavaJsonParserBuilder(JavaMethod method) {
+    public CppJsonParserBuilder(CppMethod method) {
         this.method = method;
     }
 
     @Override
     public void getJsonString(Variable value, Variable jsonObject, Variable key, boolean optional) {
         if (optional) {
-            method.addAssign(method.useVariable(value), method.invoke(jsonObject.getDescriptor() + ".getStringOrNull", key));
+            method.addAssign(method.useVariable(value), method.invoke(jsonObject.getDescriptor() + ".getStringOrDefault", key));
         } else {
             method.addAssign(method.useVariable(value), method.invoke(jsonObject.getDescriptor() + ".getString", key));
         }
@@ -27,7 +35,7 @@ public class JavaJsonParserBuilder implements IJsonParserBuilder {
     @Override
     public void getJsonInteger(Variable value, Variable jsonObject, Variable key, boolean optional) {
         if (optional) {
-            method.addAssign(method.useVariable(value), method.invoke(jsonObject.getDescriptor() + ".getLongOrNull", key));
+            method.addAssign(method.useVariable(value), method.invoke(jsonObject.getDescriptor() + ".getLongOrDefault", key));
         }
         else {
             method.addAssign(method.useVariable(value), method.invoke(jsonObject.getDescriptor() + ".getLong", key));
@@ -35,9 +43,24 @@ public class JavaJsonParserBuilder implements IJsonParserBuilder {
     }
 
     @Override
+    public void defineModel(Variable model) {
+        method.addDefineStackVariable(model);
+    }
+
+    @Override
+    public void defineRootJsonObject(Variable jsonObject, Variable stringVariable) {
+        method.addAssign(method.declareStackVariable(jsonObject), method.invoke(JsonWrapper.getType().getDescriptor() + ".parseFromString", stringVariable));
+    }
+
+    @Override
+    public IJsonCheckerBuilder createJsonCheckerBuilder() {
+        return new CppJsonCheckerBuilder();
+    }
+
+    @Override
     public void assignJsonStringArray(Variable value, Variable jsonObject, Variable key, boolean optional) {
         if (optional) {
-            method.addAssign(method.useVariable(value), method.invoke(jsonObject.getDescriptor() + ".getStringArrayOrNull", key));
+            method.addAssign(method.useVariable(value), method.invoke(jsonObject.getDescriptor() + ".getStringArrayOrDefault", key));
         } else {
             method.addAssign(method.useVariable(value), method.invoke(jsonObject.getDescriptor() + ".getStringArray", key));
         }
@@ -46,7 +69,7 @@ public class JavaJsonParserBuilder implements IJsonParserBuilder {
     @Override
     public void assignJsonDecimalArray(Variable value, Variable jsonObject, Variable key, boolean optional) {
         if (optional) {
-            method.addAssign(method.useVariable(value), method.invoke(jsonObject.getDescriptor() + ".getDecimalArrayOrNull", key));
+            method.addAssign(method.useVariable(value), method.invoke(jsonObject.getDescriptor() + ".getDecimalArrayOrDefault", key));
         } else {
             method.addAssign(method.useVariable(value), method.invoke(jsonObject.getDescriptor() + ".getDecimalArray", key));
         }
@@ -55,7 +78,7 @@ public class JavaJsonParserBuilder implements IJsonParserBuilder {
     @Override
     public void assignJsonBooleanArray(Variable value, Variable jsonObject, Variable key, boolean optional) {
         if (optional) {
-            method.addAssign(method.useVariable(value), method.invoke(jsonObject.getDescriptor() + ".getBooleanArrayOrNull", key));
+            method.addAssign(method.useVariable(value), method.invoke(jsonObject.getDescriptor() + ".getBooleanArrayOrDefault", key));
         } else {
             method.addAssign(method.useVariable(value), method.invoke(jsonObject.getDescriptor() + ".getBooleanArray", key));
         }
@@ -64,7 +87,7 @@ public class JavaJsonParserBuilder implements IJsonParserBuilder {
     @Override
     public void assignJsonIntArray(Variable value, Variable jsonObject, Variable key, boolean optional) {
         if (optional) {
-            method.addAssign(method.useVariable(value), method.invoke(jsonObject.getDescriptor() + ".getIntArrayOrNull", key));
+            method.addAssign(method.useVariable(value), method.invoke(jsonObject.getDescriptor() + ".getIntArrayOrDefault", key));
         } else {
             method.addAssign(method.useVariable(value), method.invoke(jsonObject.getDescriptor() + ".getIntArray", key));
         }
@@ -73,50 +96,38 @@ public class JavaJsonParserBuilder implements IJsonParserBuilder {
     @Override
     public void getJsonArray(Variable jsonObject, Variable parentJsonObject, Variable key, boolean optional) {
         if (optional) {
-            method.addAssign(method.defineVariable(jsonObject), method.invoke(parentJsonObject.getDescriptor() + ".getArrayOrNull", key));
+            method.addAssign(method.declareStackVariable(jsonObject), method.invoke(parentJsonObject.getDescriptor() + ".getArrayOrNull", key));
         } else {
-            method.addAssign(method.defineVariable(jsonObject), method.invoke(parentJsonObject.getDescriptor() + ".getArray", key));
+            method.addAssign(method.declareStackVariable(jsonObject), method.invoke(parentJsonObject.getDescriptor() + ".getArray", key));
         }
     }
+
 
     @Override
     public void getJsonObject(Variable jsonObject, Variable parentJsonObject, Variable key, boolean optional) {
         if (optional) {
-            method.addAssign(method.defineVariable(jsonObject), method.invoke(parentJsonObject.getDescriptor() + ".getObjectOrNull", key));
+            method.addAssign(method.declareStackVariable(jsonObject), method.invoke(parentJsonObject.getDescriptor() + ".getObjectOrNull", key));
         } else {
-            method.addAssign(method.defineVariable(jsonObject), method.invoke(parentJsonObject.getDescriptor() + ".getObject", key));
+            method.addAssign(method.declareStackVariable(jsonObject), method.invoke(parentJsonObject.getDescriptor() + ".getObject", key));
         }
     }
 
     @Override
-    public void assignModel(Variable to, Variable model) {
-        if (to != null) {
-            method.addAssign(method.useVariable(to), method.useVariable(model));
+    public void assignModel(Variable value, Variable model) {
+        if (value != null) {
+            method.addAssign(method.useVariable(value), method.useVariable(model));
         }
     }
 
     @Override
     public void startJsonObjectArray(Variable eachItemJsonObject, Variable jsonObject) {
-        method.startFor(eachItemJsonObject, jsonObject.getDescriptor());
+        method.startFor(eachItemJsonObject, method.invoke(jsonObject.getDescriptor() + ".Array"));
     }
 
     @Override
     public void endJsonObjectArray(Variable value, Variable model) {
-        method.startIf(value.getDescriptor() + " == null");
-        method.addAssign(method.useVariable(value), method.newInstance(TheLinkedList.getType()));
-        method.endIf();
-        method.addInvoke(value.getDescriptor() + ".add", model);
+        method.addAssign(method.useVariable(value), method.invoke(value.getDescriptor() + ".push_back", model));
         method.endFor();
-    }
-
-    @Override
-    public void defineModel(Variable model) {
-        method.addAssign(method.defineVariable(model), method.newInstance(model.getType()));
-    }
-
-    @Override
-    public void defineRootJsonObject(Variable jsonObject, Variable stringVariable) {
-        method.addAssign(method.defineVariable(jsonObject), method.invoke(JsonWrapper.getType().getDescriptor() + ".parseFromString", stringVariable));
     }
 
     @Override
@@ -126,7 +137,6 @@ public class JavaJsonParserBuilder implements IJsonParserBuilder {
         } else {
             method.addAssign(method.useVariable(value), method.invoke(jsonObject.getDescriptor() + ".getBoolean", key));
         }
-
     }
 
     @Override
@@ -137,10 +147,5 @@ public class JavaJsonParserBuilder implements IJsonParserBuilder {
         else {
             method.addAssign(method.useVariable(value), method.invoke(jsonObject.getDescriptor() + ".getDecimal", key));
         }
-    }
-
-    @Override
-    public IJsonCheckerBuilder createJsonCheckerBuilder() {
-        return new JavaJsonCheckerBuilder(method);
     }
 }
