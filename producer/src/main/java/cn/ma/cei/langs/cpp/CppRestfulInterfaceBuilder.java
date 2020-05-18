@@ -10,83 +10,70 @@ import cn.ma.cei.langs.cpp.tools.CppMethod;
 import java.util.List;
 
 public class CppRestfulInterfaceBuilder implements IRestfulInterfaceBuilder {
-    
-    private CppMethod cppMethod;
-    private final CppClass cppClass;
-    
-    public CppRestfulInterfaceBuilder(CppClass cppClass) {
-        this.cppClass = cppClass;
+
+    private final CppClass clientClass;
+    private CppMethod method;
+
+    public CppRestfulInterfaceBuilder(CppClass clientClass) {
+        this.clientClass = clientClass;
     }
 
-//    @Override
-//    public void setRequestTarget(Variable request, String target) {
-//        cppMethod.getCode().appendStatementWordsln(request.nameDescriptor + ".target", "=", cppMethod.getCode().toCppString(target));
-//    }
-    
+
     @Override
     public void defineRequest(Variable request, Variable option) {
-        cppMethod.getCode().appendStatementWordsln(request.getTypeDescriptor(), request.getDescriptor());
+        method.addDefineStackVariable(request, option);
     }
-    
-    
+
+
     @Override
-    public void invokeQuery(Variable request, Variable response) {
-        
+    public void invokeQuery(Variable response, Variable request) {
+        method.addAssign(method.declareStackVariable(response), method.invoke(request.getDescriptor() + ".query"));
     }
-    
+
     @Override
     public void onAddReference(VariableType variableType) {
-        
+
     }
-
-//    @Override
-//    public IStringBuilderBuilder createStringBuilderBuilder() {
-//        return null;
-//    }
-//
-//    @Override
-//    public IJsonParserBuilder createJsonParserBuilder() {
-//        return new CppJsonParserBuilder();
-//    }
-
 
     @Override
     public void startMethod(VariableType returnType, String methodDescriptor, List<Variable> params) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        method = new CppMethod(clientClass);
+        method.startMethod(returnType, methodDescriptor, params);
     }
 
     @Override
     public IDataProcessorBuilder createDataProcessorBuilder() {
-        return null;
+        return new CppDataProcessorBuilder(method);
     }
 
     @Override
     public void endMethod(Variable returnVariable) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        method.endMethod();
+        clientClass.addMethod(method);
     }
 
     @Override
     public void addHeader(Variable request, Variable tag, Variable value) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        method.addInvoke(request.getDescriptor() + ".addHeader", tag, value);
     }
 
     @Override
     public void addToQueryString(Variable request, Variable queryStringName, Variable variable) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        method.addInvoke(request.getDescriptor() + ".addQueryString", queryStringName, variable);
     }
 
     @Override
     public void setRequestTarget(Variable request, Variable target) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        method.addInvoke(request.getDescriptor() + ".setTarget", target);
     }
 
     @Override
     public void setRequestMethod(Variable request, Variable requestMethod) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        method.addInvoke(request.getDescriptor() + ".setMethod", requestMethod);
     }
 
     @Override
     public void setPostBody(Variable request, Variable postBody) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        method.addInvoke(request.getDescriptor() + ".setPostBody", postBody);
     }
 }

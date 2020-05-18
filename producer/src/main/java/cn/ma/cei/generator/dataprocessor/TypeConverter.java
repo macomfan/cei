@@ -35,8 +35,8 @@ public class TypeConverter {
 
         nativeConvertMap.put(xDecimal.inst.getType(), IDataProcessorBuilder::convertNativeToDecimal);
     }
-    public static Variable convertType(Variable input, VariableType objectType, IDataProcessorBuilder builder) {
 
+    public static Variable convertType(Variable input, VariableType objectType, IDataProcessorBuilder builder) {
         if (input.getType() == objectType) {
             return input;
         }

@@ -8,7 +8,6 @@ import cn.ma.cei.generator.VariableType;
  * To implement the method to call the user defined processor.
  * For some simple processors, just use one method to implement。
  * For the complex processor, such as json parse, get now. will be implemented in another builder.
- *
  */
 public interface IDataProcessorBuilder extends IBuilderBase {
 
@@ -49,7 +48,7 @@ public interface IDataProcessorBuilder extends IBuilderBase {
      * output = base64(input)
      *
      * @param output The output, be String type.
-     * @param input The input, be TheStream type.
+     * @param input  The input, be TheStream type.
      */
     void base64(Variable output, Variable input);
 
@@ -59,8 +58,8 @@ public interface IDataProcessorBuilder extends IBuilderBase {
      * output = hmacsha256(input, key)
      *
      * @param output The output, be String type.
-     * @param input The input, be TheStream type.
-     * @param key The private key.
+     * @param input  The input, be TheStream type.
+     * @param key    The private key.
      */
     void hmacsha265(Variable output, Variable input, Variable key);
 
@@ -70,7 +69,7 @@ public interface IDataProcessorBuilder extends IBuilderBase {
      * output = encodeHex(input)
      *
      * @param output The output, be String type.
-     * @param input The input, be TheStream type.
+     * @param input  The input, be TheStream type.
      */
     void encodeHex(Variable output, Variable input);
 
@@ -80,8 +79,8 @@ public interface IDataProcessorBuilder extends IBuilderBase {
      * addQueryString(requestVariable, key, value)
      *
      * @param requestVariable The request defined by <request></request>.
-     * @param key The key.
-     * @param value The value.
+     * @param key             The key.
+     * @param value           The value.
      */
     void addQueryString(Variable requestVariable, Variable key, Variable value);
 
@@ -91,8 +90,8 @@ public interface IDataProcessorBuilder extends IBuilderBase {
      * addHeaderString(requestVariable, key, value)
      *
      * @param requestVariable The request defined by <request></request>.
-     * @param key The key.
-     * @param value The value.
+     * @param key             The key.
+     * @param value           The value.
      */
     void addHeaderString(Variable requestVariable, Variable key, Variable value);
 
@@ -102,9 +101,9 @@ public interface IDataProcessorBuilder extends IBuilderBase {
      * output = combineQueryString(requestVariable, sort, separator)
      *
      * @param requestVariable The request defined by <request></request>.
-     * @param output The output, be String type.
-     * @param sort The sort value.
-     * @param separator The separator.
+     * @param output          The output, be String type.
+     * @param sort            The sort value.
+     * @param separator       The separator.
      */
     void combineQueryString(Variable requestVariable, Variable output, Variable sort, Variable separator);
 
@@ -122,7 +121,7 @@ public interface IDataProcessorBuilder extends IBuilderBase {
      * @param callback the callback variable in the input parameter
      * @param params the response should be the input parameter of the callback function
      */
-    void invokeCallback(Variable callback,  Variable... params);
+    void invokeCallback(Variable callback, Variable... params);
 
     /**
      * Send the variable to WebSocket.
@@ -130,7 +129,7 @@ public interface IDataProcessorBuilder extends IBuilderBase {
      * connection.send(value)
      *
      * @param connection the variable sent to the WebSocket
-     * @param value the variable to send the WebSocket, it should string type
+     * @param value      the variable to send the WebSocket, it should string type
      */
     void send(Variable connection, Variable value);
 
@@ -159,7 +158,7 @@ public interface IDataProcessorBuilder extends IBuilderBase {
     Variable convertStringWrapperToArray(Variable stringWrapper);
 
 
-    /***
+    /**
      * Return the statement of calling the replacement function.
      * e.g.
      * return BuilderContext.createStatement("StringBuilder.replace(items)");
@@ -169,6 +168,15 @@ public interface IDataProcessorBuilder extends IBuilderBase {
      */
     Variable stringReplacement(Variable... items);
 
+    /**
+     * Get the indicator for the string format.
+     * e.g.
+     * In Java, it should be %s
+     *
+     * @param index
+     * @param item
+     * @return
+     */
     String getStringFormatEntity(int index, Variable item);
 
     /***

@@ -41,7 +41,6 @@ public class JavaJsonParserBuilder implements IJsonParserBuilder {
         } else {
             method.addAssign(method.useVariable(value), method.invoke(jsonObject.getDescriptor() + ".getStringArray", key));
         }
-
     }
 
     @Override
@@ -51,27 +50,24 @@ public class JavaJsonParserBuilder implements IJsonParserBuilder {
         } else {
             method.addAssign(method.useVariable(value), method.invoke(jsonObject.getDescriptor() + ".getDecimalArray", key));
         }
-
     }
 
     @Override
     public void assignJsonBooleanArray(Variable value, Variable jsonObject, Variable key, boolean optional) {
         if (optional) {
-            method.addAssign(method.useVariable(value), method.invoke(jsonObject.getDescriptor() + ".getBooleanArray", key));
-        } else {
             method.addAssign(method.useVariable(value), method.invoke(jsonObject.getDescriptor() + ".getBooleanArrayOrNull", key));
+        } else {
+            method.addAssign(method.useVariable(value), method.invoke(jsonObject.getDescriptor() + ".getBooleanArray", key));
         }
-
     }
 
     @Override
     public void assignJsonIntArray(Variable value, Variable jsonObject, Variable key, boolean optional) {
         if (optional) {
-            method.addAssign(method.useVariable(value), method.invoke(jsonObject.getDescriptor() + ".getIntArray", key));
-        } else {
             method.addAssign(method.useVariable(value), method.invoke(jsonObject.getDescriptor() + ".getIntArrayOrNull", key));
+        } else {
+            method.addAssign(method.useVariable(value), method.invoke(jsonObject.getDescriptor() + ".getIntArray", key));
         }
-
     }
 
     @Override
