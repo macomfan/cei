@@ -7,18 +7,19 @@ import cn.ma.cei.generator.builder.IRestfulClientBuilder;
 import cn.ma.cei.generator.builder.IRestfulInterfaceBuilder;
 import cn.ma.cei.generator.buildin.RestfulOptions;
 import cn.ma.cei.langs.cpp.tools.CppClass;
+import cn.ma.cei.langs.cpp.tools.CppExchangeFile;
 
 public class CppRestfulClientBuilder implements IRestfulClientBuilder {
     private CppClass cppClass;
-    private final String exchangeName;
+    private final CppExchangeFile file;
     
-    public CppRestfulClientBuilder(String exchangeName) {
-        this.exchangeName = exchangeName;
+    public CppRestfulClientBuilder(CppExchangeFile exchange) {
+        this.file = exchange;
     }
     
     @Override
     public void startClient(VariableType client, RestfulOptions option, Variable optionVariable) {
-        cppClass = new CppClass(exchangeName, client.getDescriptor());
+        cppClass = new CppClass(client.getDescriptor());
     }
 
     @Override
@@ -28,6 +29,6 @@ public class CppRestfulClientBuilder implements IRestfulClientBuilder {
 
     @Override
     public void endClient() {
-        cppClass.build();
+        file.addClass(cppClass);
     }
 }

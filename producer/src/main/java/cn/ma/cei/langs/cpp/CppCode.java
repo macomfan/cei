@@ -7,6 +7,10 @@ package cn.ma.cei.langs.cpp;
 
 import cn.ma.cei.generator.BuilderContext;
 import cn.ma.cei.generator.Code;
+import cn.ma.cei.generator.VariableType;
+
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  *
@@ -14,12 +18,22 @@ import cn.ma.cei.generator.Code;
  */
 public class CppCode extends Code {
 
-    public void appendStatementWordsln(String... args) {
+    private final Set<String> includeList = new HashSet<>();
+
+    public void addReference(VariableType type) {
+        includeList.addAll(type.getReferences());
+    }
+
+    public Set<String> getIncludeList() {
+        return includeList;
+    }
+
+    public void appendCppWordsln(String... args) {
         appendWords(args);
         appendln(";");
     }
 
-    public void appendStatementln(String str) {
+    public void appendCppln(String str) {
         appendln(str + ";");
     }
 

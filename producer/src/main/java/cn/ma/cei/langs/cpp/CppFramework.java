@@ -28,7 +28,7 @@ public class CppFramework implements IFramework {
 
     @Override
     public IDescriptionConverter getDescriptionConverter() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return new CppDescriptionConverter();
     }
     
 }

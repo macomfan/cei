@@ -25,6 +25,5 @@ public class TestWordSplitter {
         assertEquals("test_type_flag",WordSplitter.getLowercase("testTypeFlag", "_"));
         assertEquals("test_type_flag",WordSplitter.getLowercase("Test_Type_Flag"));
         assertEquals("Test_type_flag",WordSplitter.getUpperCamelCase("test_type_flag"));
-        int aa = 0;
     }
 }

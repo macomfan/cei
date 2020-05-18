@@ -24,53 +24,93 @@ public class GoJsonParserBuilder implements IJsonParserBuilder {
 
     @Override
     public void getJsonString(Variable value, Variable jsonObject, Variable key, boolean optional) {
-        method.addAssign(method.useVariable(method.var(value)), method.invoke(jsonObject.getDescriptor() + ".GetString", method.var(key)));
+        if (optional) {
+            method.addAssign(method.useVariable(method.var(value)), method.invoke(jsonObject.getDescriptor() + ".GetStringOrDefault", method.var(key)));
+        } else {
+            method.addAssign(method.useVariable(method.var(value)), method.invoke(jsonObject.getDescriptor() + ".GetString", method.var(key)));
+        }
     }
 
     @Override
     public void getJsonInteger(Variable value, Variable jsonObject, Variable key, boolean optional) {
-        method.addAssign(method.useVariable(method.var(value)), method.invoke(jsonObject.getDescriptor() + ".GetInt64", method.var(key)));
+        if (optional) {
+            method.addAssign(method.useVariable(method.var(value)), method.invoke(jsonObject.getDescriptor() + ".GetInt64OrDefault", method.var(key)));
+        } else {
+            method.addAssign(method.useVariable(method.var(value)), method.invoke(jsonObject.getDescriptor() + ".GetInt64", method.var(key)));
+        }
     }
 
     @Override
     public void getJsonBoolean(Variable value, Variable jsonObject, Variable key, boolean optional) {
-        method.addAssign(method.useVariable(method.var(value)), method.invoke(jsonObject.getDescriptor() + ".GetBool", method.var(key)));
+        if (optional) {
+            method.addAssign(method.useVariable(method.var(value)), method.invoke(jsonObject.getDescriptor() + ".GetBoolOrDefault", method.var(key)));
+        } else {
+            method.addAssign(method.useVariable(method.var(value)), method.invoke(jsonObject.getDescriptor() + ".GetBool", method.var(key)));
+        }
     }
 
     @Override
     public void getJsonDecimal(Variable value, Variable jsonObject, Variable key, boolean optional) {
-        method.addAssign(method.useVariable(method.var(value)), method.invoke(jsonObject.getDescriptor() + ".GetFloat64", method.var(key)));
+        if (optional) {
+            method.addAssign(method.useVariable(method.var(value)), method.invoke(jsonObject.getDescriptor() + ".GetFloat64OrDefault", method.var(key)));
+        } else {
+            method.addAssign(method.useVariable(method.var(value)), method.invoke(jsonObject.getDescriptor() + ".GetFloat64", method.var(key)));
+        }
     }
 
     @Override
     public void assignJsonStringArray(Variable value, Variable jsonObject, Variable key, boolean optional) {
-        method.addAssign(method.useVariable(method.var(value)), method.invoke(jsonObject.getDescriptor() + ".GetStringArray", method.var(key)));
+        if (optional) {
+            method.addAssign(method.useVariable(method.var(value)), method.invoke(jsonObject.getDescriptor() + ".GetStringArrayOrNil", method.var(key)));
+        } else {
+            method.addAssign(method.useVariable(method.var(value)), method.invoke(jsonObject.getDescriptor() + ".GetStringArray", method.var(key)));
+        }
     }
 
     @Override
     public void assignJsonDecimalArray(Variable value, Variable jsonObject, Variable key, boolean optional) {
-
+        if (optional) {
+            method.addAssign(method.useVariable(method.var(value)), method.invoke(jsonObject.getDescriptor() + ".GetDecimalArrayOrNil", method.var(key)));
+        } else {
+            method.addAssign(method.useVariable(method.var(value)), method.invoke(jsonObject.getDescriptor() + ".GetDecimalArray", method.var(key)));
+        }
     }
 
     @Override
     public void assignJsonBooleanArray(Variable value, Variable jsonObject, Variable key, boolean optional) {
-
+        if (optional) {
+            method.addAssign(method.useVariable(method.var(value)), method.invoke(jsonObject.getDescriptor() + ".GetBoolArrayOrNil", method.var(key)));
+        } else {
+            method.addAssign(method.useVariable(method.var(value)), method.invoke(jsonObject.getDescriptor() + ".GetBoolArray", method.var(key)));
+        }
     }
 
     @Override
     public void assignJsonIntArray(Variable value, Variable jsonObject, Variable key, boolean optional) {
-
+        if (optional) {
+            method.addAssign(method.useVariable(method.var(value)), method.invoke(jsonObject.getDescriptor() + ".GetInt64ArrayOrNil", method.var(key)));
+        } else {
+            method.addAssign(method.useVariable(method.var(value)), method.invoke(jsonObject.getDescriptor() + ".GetInt64Array", method.var(key)));
+        }
     }
 
     @Override
     public void getJsonArray(Variable jsonObject, Variable parentJsonObject, Variable key, boolean optional) {
-        method.addAssignAndDeclare(method.useVariable(method.var(jsonObject)), method.invoke(parentJsonObject.getDescriptor() + ".GetArray", method.var(key)));
+        if (optional) {
+            method.addAssign(method.useVariable(method.var(jsonObject)), method.invoke(jsonObject.getDescriptor() + ".GetArrayOrNil", method.var(key)));
+        } else {
+            method.addAssign(method.useVariable(method.var(jsonObject)), method.invoke(jsonObject.getDescriptor() + ".GetArray", method.var(key)));
+        }
     }
 
 
     @Override
     public void getJsonObject(Variable jsonObject, Variable parentJsonObject, Variable key, boolean optional) {
-        method.addAssignAndDeclare(method.useVariable(method.var(jsonObject)), method.invoke(parentJsonObject.getDescriptor() + ".GetObject", method.var(key)));
+        if (optional) {
+            method.addAssign(method.useVariable(method.var(jsonObject)), method.invoke(jsonObject.getDescriptor() + ".GetObjectOrNil", method.var(key)));
+        } else {
+            method.addAssign(method.useVariable(method.var(jsonObject)), method.invoke(jsonObject.getDescriptor() + ".GetObject", method.var(key)));
+        }
     }
 
     @Override
