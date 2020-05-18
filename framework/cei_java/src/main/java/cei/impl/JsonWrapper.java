@@ -234,11 +234,10 @@ public class JsonWrapper {
         Object obj = getByKey(key);
         if (obj == null) {
             return new JsonWrapper();
-        }
-        if (obj instanceof JSONObject) {
+        } else if (obj instanceof JSONObject) {
             return new JsonWrapper((JSONObject) obj);
-        } else if (obj instanceof JSONArray) {
-            return new JsonWrapper((JSONArray) obj);
+//        } else if (obj instanceof JSONArray) {
+//            return new JsonWrapper((JSONArray) obj);
         } else {
             CEILog.showWarning("[Json] Failed to get Object, type error");
             return new JsonWrapper();
@@ -246,7 +245,7 @@ public class JsonWrapper {
     }
 
     public JsonWrapper getArray(String key) {
-        JsonWrapper value = getObjectOrNull(key);
+        JsonWrapper value = getArrayOrNull(key);
         return checkMandatoryObject(key, value);
     }
 

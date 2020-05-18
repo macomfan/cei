@@ -213,8 +213,6 @@ func (inst *JsonWrapper) GetObjectOrNil(key string) *JsonWrapper {
 	}
 	if obj, ok := value.(map[string]interface{}); ok {
 		return newObjectJsonWrapper(obj)
-	} else if obj, ok := value.([]interface{}); ok {
-		return newArrayJsonWrapper(obj)
 	} else {
 		// TODO
 		panic("TODO")
@@ -223,7 +221,7 @@ func (inst *JsonWrapper) GetObjectOrNil(key string) *JsonWrapper {
 }
 
 func (inst *JsonWrapper) GetArray(key string) *JsonWrapper {
-	value := inst.GetObjectOrNil(key)
+	value := inst.GetArrayOrNil(key)
 	return inst.checkMandatoryObject(key, value)
 }
 
@@ -252,11 +250,11 @@ func (inst *JsonWrapper) Array() []*JsonWrapper {
 }
 
 func (inst *JsonWrapper) GetStringArray(key string) []string {
-	value := inst.GetStringArrayOrNull(key)
+	value := inst.GetStringArrayOrNil(key)
 	return inst.checkMandatoryField(key, value).([]string)
 }
 
-func (inst *JsonWrapper) GetStringArrayOrNull(key string) []string {
+func (inst *JsonWrapper) GetStringArrayOrNil(key string) []string {
 	value := inst.getByKey(key)
 	if obj, ok := value.([]interface{}); ok {
 		res := make([]string, 0)
@@ -270,11 +268,11 @@ func (inst *JsonWrapper) GetStringArrayOrNull(key string) []string {
 }
 
 func (inst *JsonWrapper) GetInt64Array(key string) []int64 {
-	value := inst.GetInt64ArrayOrNull(key)
+	value := inst.GetInt64ArrayOrNil(key)
 	return inst.checkMandatoryField(key, value).([]int64)
 }
 
-func (inst *JsonWrapper) GetInt64ArrayOrNull(key string) []int64 {
+func (inst *JsonWrapper) GetInt64ArrayOrNil(key string) []int64 {
 	value := inst.getByKey(key)
 	if obj, ok := value.([]interface{}); ok {
 		res := make([]int64, 0)
@@ -288,11 +286,11 @@ func (inst *JsonWrapper) GetInt64ArrayOrNull(key string) []int64 {
 }
 
 func (inst *JsonWrapper) GetFloat64Array(key string) []float64 {
-	value := inst.GetFloat64ArrayOrNull(key)
+	value := inst.GetFloat64ArrayOrNil(key)
 	return inst.checkMandatoryField(key, value).([]float64)
 }
 
-func (inst *JsonWrapper) GetFloat64ArrayOrNull(key string) []float64 {
+func (inst *JsonWrapper) GetFloat64ArrayOrNil(key string) []float64 {
 	value := inst.getByKey(key)
 	if obj, ok := value.([]interface{}); ok {
 		res := make([]float64, 0)
@@ -306,11 +304,11 @@ func (inst *JsonWrapper) GetFloat64ArrayOrNull(key string) []float64 {
 }
 
 func (inst *JsonWrapper) GetBool64Array(key string) []bool {
-	value := inst.GetBool64ArrayOrNull(key)
+	value := inst.GetBool64ArrayOrNil(key)
 	return inst.checkMandatoryField(key, value).([]bool)
 }
 
-func (inst *JsonWrapper) GetBool64ArrayOrNull(key string) []bool {
+func (inst *JsonWrapper) GetBool64ArrayOrNil(key string) []bool {
 	value := inst.getByKey(key)
 	if obj, ok := value.([]interface{}); ok {
 		res := make([]bool, 0)
