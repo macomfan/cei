@@ -167,7 +167,7 @@ class JsonWrapper(object):
         obj = self.__get_by_key(key)
         if obj is None:
             return JsonWrapper()
-        if isinstance(obj, dict) or isinstance(obj, list):
+        if isinstance(obj, dict):
             return JsonWrapper(obj)
         else:
             # TODO
