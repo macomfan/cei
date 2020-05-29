@@ -18,15 +18,19 @@ import java.util.Set;
  */
 public class CppCode extends Code {
 
-    private final Set<String> includeList = new HashSet<>();
-
-    public void addReference(VariableType type) {
-        includeList.addAll(type.getReferences());
-    }
-
-    public Set<String> getIncludeList() {
-        return includeList;
-    }
+//    private final Set<String> includeList = new HashSet<>();
+//
+//    public void addReference(VariableType type) {
+//        includeList.addAll(type.getReferences());
+//    }
+//
+//    public void addReference(Set<String> references) {
+//        includeList.addAll(references);
+//    }
+//
+//    public Set<String> getIncludeList() {
+//        return includeList;
+//    }
 
     public void appendCppWordsln(String... args) {
         appendWords(args);

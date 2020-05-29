@@ -1,4 +1,9 @@
 #include "utils/rapidjson/document.h"
+//#include "cei/exchanges/binance.hpp"
+
+#include "include/cei/impl/JsonWrapper.h"
+#include "cei/Types.h"
+#include "cei/Exception.h"
 
 int main(int argc, char** argv) {
     std::string data = "{\n"
@@ -29,17 +34,28 @@ int main(int argc, char** argv) {
             "  ]\n"
             "}";
     
-    rapidjson::Document doc;
-    rapidjson::Value& object = doc.Parse<rapidjson::kParseNumbersAsStringsFlag>(data.c_str());
-    rapidjson::Value& object1 = object["aaa"];
+//    rapidjson::Document doc;
+//    rapidjson::Value& object = doc.Parse<rapidjson::kParseNumbersAsStringsFlag>(data.c_str());
+//    rapidjson::Value& object1 = object["aaa"];
+//    
+//    
+//    if (doc.IsObject()) {
+//        printf("hello = %s\n", object["status"].GetString());
+//    }
+//    rapidjson::Value& array = doc["data"];
+//    if (array.IsArray()) {
+//        printf("array");
+//    }
+
+    cei::JsonWrapper jsonWrapper = cei::JsonWrapper::parseFromString(data);
+    printf("status = %s\n", jsonWrapper.getString("status").c_str());
+    std::cout<<"ts = "<<jsonWrapper.getInt("ts").value() << std::endl;
+    auto dataArray = jsonWrapper.getArray("data");
+    //std::cout << dataArray.toJsonString() << std::endl;
+    auto data0 = dataArray.getObject("[0]");
+    //std::cout << data0.toJsonString() << std::endl;
     
+    std::cout<<"open = "<<data0.getDecimal("open").value().toString() << std::endl;
     
-    if (doc.IsObject()) {
-        printf("hello = %s\n", object["status"].GetString());
-    }
-    rapidjson::Value& array = doc["data"];
-    if (array.IsArray()) {
-        printf("array");
-    }
    //doc["status"].GetArray
 }

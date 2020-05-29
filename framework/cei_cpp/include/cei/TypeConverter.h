@@ -16,22 +16,21 @@
 
 #include <string>
 
-#include "Nullable.h"
-#include "Decimal.h"
+#include "cei/Types.h"
 
 namespace cei {
 
-    Nullable<std::string> castToString(const std::string& value);
+    CEIString castToString(const std::string& value);
     
-    Nullable<std::string> castToString(long value);
+    CEIString castToString(long value);
 
-    Nullable<std::string> castToString(bool value);
+    CEIString castToString(bool value);
 
-    Nullable<long> castToLong(const std::string& value);
+    CEIInt castToLong(const std::string& value);
     
-    Nullable<Decimal> castToDecimal(const std::string& value);
+    CEIDecimal castToDecimal(const std::string& value);
     
-    Nullable<bool> castToBool(const std::string& value);
+    CEIBool castToBool(const std::string& value);
 }
 
 #endif /* TYPECONVERTER_H */

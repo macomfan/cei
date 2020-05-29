@@ -20,8 +20,7 @@
 #include "rapidjson/document.h"
 #include "rapidjson/stringbuffer.h"
 #include "rapidjson/writer.h"
-#include "Decimal.h"
-#include "Nullable.h"
+#include "cei/Types.h"
 
 
 namespace cei {
@@ -44,29 +43,29 @@ namespace cei {
 
         bool contains(const std::string& key);
 
-        std::string getString(const std::string& key);
-        long getLong(const std::string& key);
-        Decimal getDecimal(const std::string& key);
-        bool getBoolean(const std::string& key);
+        CEIString getString(const std::string& key);
+        CEIInt getInt(const std::string& key);
+        CEIDecimal getDecimal(const std::string& key);
+        CEIBool getBoolean(const std::string& key);
         JsonWrapper getObject(const std::string& key);
         JsonWrapper getArray(const std::string& key);
 
-        std::string getStringOrDefault(const std::string& key);
-        long getLongOrDefault(const std::string& key);
-        Decimal getDecimalOrDefault(const std::string& key);
-        bool getBooleanOrDefault(const std::string& key);
+        CEIString getStringOrNull(const std::string& key);
+        CEIInt getIntOrNull(const std::string& key);
+        CEIDecimal getDecimalOrNull(const std::string& key);
+        CEIBool getBooleanOrNull(const std::string& key);
         JsonWrapper getObjectOrDefault(const std::string& key);
         JsonWrapper getArrayOrDefault(const std::string& key);
 
-        std::vector<std::string> getStringArray(const std::string& key);
-        std::vector<long> getLongArray(const std::string& key);
-        std::vector<Decimal> getDecimalArray(const std::string& key);
-        std::vector<bool> getBooleanArray(const std::string& key);
+        std::vector<CEIString> getStringArray(const std::string& key);
+        std::vector<CEIInt> getIntArray(const std::string& key);
+        std::vector<CEIDecimal> getDecimalArray(const std::string& key);
+        std::vector<CEIBool> getBooleanArray(const std::string& key);
 
-        std::vector<std::string> getStringArrayOrEmpty(const std::string& key);
-        std::vector<long> getLongArrayOrEmpty(const std::string& key);
-        std::vector<Decimal> getDecimalArrayOrEmpty(const std::string& key);
-        std::vector<bool> getBooleanArrayOrEmpty(const std::string& key);
+        std::vector<CEIString> getStringArrayOrEmpty(const std::string& key);
+        std::vector<CEIInt> getIntArrayOrEmpty(const std::string& key);
+        std::vector<CEIDecimal> getDecimalArrayOrEmpty(const std::string& key);
+        std::vector<CEIBool> getBooleanArrayOrEmpty(const std::string& key);
 
         void addJsonString(const std::string& key, const std::string& value);
         void addJsonDecimal(const std::string& key, const Decimal& value);

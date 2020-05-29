@@ -33,12 +33,13 @@ public class CppExchangeFile {
         Set<String> includeSetH = new HashSet<>();
         Set<String> includeSetCpp = new HashSet<>();
         classList.values().forEach(item -> {
-            includeSetH.addAll(item.getCodeH().getIncludeList());
-            includeSetCpp.addAll(item.getCode().getIncludeList());
+            includeSetH.addAll(item.getIncludeListH());
+            includeSetCpp.addAll(item.getIncludeListCpp());
         });
         writeReference(codeH, includeSetH);
-        includeSetCpp.add("\"exchanges/" + exchangeName + ".hpp\"");
+        includeSetCpp.add("\"cei/exchanges/" + exchangeName + ".hpp\"");
         writeReference(codeCpp, includeSetCpp);
+        codeCpp.endln();
 
         codeH.appendWordsln("namespace", exchangeName, "{");
         codeCpp.appendWordsln("namespace", exchangeName, "{");
@@ -56,7 +57,7 @@ public class CppExchangeFile {
         codeCpp.endBlock();
         codeCpp.appendln("}");
         codeH.endBlock();
-        codeCpp.appendln("}");
+        codeH.appendln("}");
     }
 
     public void build() {

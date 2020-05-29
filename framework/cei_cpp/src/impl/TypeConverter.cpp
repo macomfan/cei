@@ -4,45 +4,50 @@
  * and open the template in the editor.
  */
 
-#include "TypeConverter.h"
+#include "cei/TypeConverter.h"
+#include <string>
 
 namespace cei {
 
-    Nullable<std::string> castToString(const std::string& value) {
-        return Nullable<std::string>(value);
+    CEIString castToString(const std::string& value) {
+        return CEIString(value);
     }
 
-    Nullable<std::string> castToString(long value) {
-
-    }
-
-    Nullable<std::string> castToString(bool value) {
+    CEIString castToString(long value) {
 
     }
 
-    Nullable<long> castToLong(const std::string& value) {
+    CEIString castToString(bool value) {
 
     }
-    
-    Nullable<Decimal> castToDecimal(const std::string& value) {
+
+    CEIInt castToLong(const std::string& value) {
         try {
-            return Nullable<Decimal>(Decimal(value.c_str()));
+            return CEIInt(std::stol(value));
         } catch (...) {
-            return Nullable<Decimal>::NULL_ENTITY;
+            return CEIInt::NULL_ENTITY;
         }
     }
-    
-    Nullable<bool> castToBool(const std::string& value) {
+
+    CEIDecimal castToDecimal(const std::string& value) {
+        try {
+            return CEIDecimal(Decimal(value.c_str()));
+        } catch (...) {
+            return CEIDecimal::NULL_ENTITY;
+        }
+    }
+
+    CEIBool castToBool(const std::string& value) {
         const static std::string TRUE = "true";
         const static std::string FALSE = "false";
-        const static Nullable<bool> TRUE_VALUE = Nullable<bool>(true);
-        const static Nullable<bool> FALSE_VALUE = Nullable<bool>(true);
+        const static CEIBool TRUE_VALUE = Nullable<bool>(true);
+        const static CEIBool FALSE_VALUE = Nullable<bool>(true);
         if (value == TRUE) {
             return TRUE_VALUE;
         } else if (value == FALSE) {
             return FALSE_VALUE;
         } else {
-            return Nullable<bool>::NULL_ENTITY;
+            return CEIBool::NULL_ENTITY;
         }
     }
 }

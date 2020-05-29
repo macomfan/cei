@@ -3,12 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-#include "JsonWrapper.h"
+#include "cei/impl/JsonWrapper.h"
 #include <regex>
 #include <functional>
 #include "rapidjson/stringbuffer.h"
 #include "rapidjson/writer.h"
-#include "TypeConverter.h"
+#include "cei/TypeConverter.h"
+#include "cei/Exception.h"
 
 namespace cei {
 
@@ -18,44 +19,34 @@ namespace cei {
 
     template<typename VALUE_TYPE>
     class JsonValueTo {
-        typedef std::function<Nullable<VALUE_TYPE>(const std::string&) > CONVERTER;
+        typedef std::function<VALUE_TYPE(const std::string&) > CONVERTER;
 
-        VALUE_TYPE defaultValue_;
         CONVERTER converter_;
 
     public:
 
-        JsonValueTo(CONVERTER fun, VALUE_TYPE defaultValue) : defaultValue_(defaultValue), converter_(fun) {
+        JsonValueTo(CONVERTER fun) : converter_(fun) {
         }
 
-        const Nullable<VALUE_TYPE> to(const rapidjson::Value& value) const {
+        const VALUE_TYPE to(const rapidjson::Value& value) const {
             if (!value.IsNull()) {
-                return Nullable<VALUE_TYPE>(converter_(value.GetString()));
+                return converter_(value.GetString());
             }
-            return Nullable<VALUE_TYPE>::NULL_ENTITY;
-        }
-
-        const Nullable<VALUE_TYPE> toOrDefault(const rapidjson::Value& value) const {
-            auto res = to(value);
-            if (res.isNull()) {
-                const static Nullable<VALUE_TYPE> DEFAULT_VALUE(defaultValue_);
-                return DEFAULT_VALUE;
-            }
-            return res;
+            return VALUE_TYPE::NULL_ENTITY;
         }
     };
 
-    static JsonValueTo<std::string> jsonValueToString(static_cast<Nullable<std::string>(*)(const std::string&)> (&castToString), std::string(""));
-    static JsonValueTo<long> jsonValueToLong(castToLong, 0);
-    static JsonValueTo<Decimal> jsonValueToDecimal(castToDecimal, Decimal());
-    static JsonValueTo<bool> jsonValueToBool(castToBool, false);
+    static JsonValueTo<CEIString> jsonValueToString(static_cast<CEIString(*)(const std::string&)> (&castToString));
+    static JsonValueTo<CEIInt> jsonValueToLong(castToLong);
+    static JsonValueTo<CEIDecimal> jsonValueToDecimal(castToDecimal);
+    static JsonValueTo<CEIBool> jsonValueToBool(castToBool);
 
     template<typename VALUE_TYPE>
-    VALUE_TYPE checkMandatoryField(const std::string& key, const Nullable<VALUE_TYPE>& value) {
+    VALUE_TYPE checkMandatoryField(const std::string& key, const VALUE_TYPE& value) {
         if (!value.isNull()) {
-            return value.getValue();
+            return value;
         } else {
-            // TODO
+            throw cei::Exception::new_exception("Field ", key, " is not exist");
         }
     }
 
@@ -64,7 +55,7 @@ namespace cei {
         if (!value.empty()) {
             return std::move(value);
         } else {
-            // TODO
+            throw cei::Exception::new_exception("Array ", key, " is null");
         }
     }
 
@@ -134,7 +125,7 @@ namespace cei {
                 return nullValue;
             }
         } else {
-            if (!array_.IsNull() && 0 < index && index < array_.Size()) {
+            if (!array_.IsNull() && 0 <= index && index < array_.Size()) {
                 return array_[index];
             }
         }
@@ -149,7 +140,7 @@ namespace cei {
         }
         auto array = value.GetArray();
         for (auto it = array.Begin(); it != array.End(); it++) {
-            res.push_back(converter.toOrDefault(*it).getValue());
+            res.push_back(converter.to(*it));
         }
         return std::move(res);
     }
@@ -164,44 +155,41 @@ namespace cei {
         return false;
     }
 
-    std::string JsonWrapper::getStringOrDefault(const std::string& key) {
+    CEIString JsonWrapper::getStringOrNull(const std::string& key) {
         const rapidjson::Value& value = getByKey(key);
-        return jsonValueToString.toOrDefault(value).getValue();
+        return jsonValueToString.to(value);
     }
 
-    std::string JsonWrapper::getString(const std::string& key) {
-        const rapidjson::Value& value = getByKey(key);
-        return checkMandatoryField(key, jsonValueToString.to(value));
+    CEIString JsonWrapper::getString(const std::string& key) {
+        return checkMandatoryField(key, getStringOrNull(key));
+        //return getStringOrNull(key);
     }
 
-    long JsonWrapper::getLongOrDefault(const std::string& key) {
+    CEIInt JsonWrapper::getIntOrNull(const std::string& key) {
         const rapidjson::Value& value = getByKey(key);
-        return jsonValueToLong.toOrDefault(value).getValue();
+        return jsonValueToLong.to(value);
     }
 
-    long JsonWrapper::getLong(const std::string& key) {
-        const rapidjson::Value& value = getByKey(key);
-        return checkMandatoryField(key, jsonValueToLong.to(value));
+    CEIInt JsonWrapper::getInt(const std::string& key) {
+        return checkMandatoryField(key, getIntOrNull(key));
     }
 
-    Decimal JsonWrapper::getDecimalOrDefault(const std::string& key) {
+    CEIDecimal JsonWrapper::getDecimalOrNull(const std::string& key) {
         const rapidjson::Value& value = getByKey(key);
-        return jsonValueToDecimal.toOrDefault(value).getValue();
+        return jsonValueToDecimal.to(value);
     }
 
-    Decimal JsonWrapper::getDecimal(const std::string& key) {
-        const rapidjson::Value& value = getByKey(key);
-        return checkMandatoryField(key, jsonValueToDecimal.to(value));
+    CEIDecimal JsonWrapper::getDecimal(const std::string& key) {
+        return checkMandatoryField(key, getDecimalOrNull(key));
     }
 
-    bool JsonWrapper::getBooleanOrDefault(const std::string& key) {
+    CEIBool JsonWrapper::getBooleanOrNull(const std::string& key) {
         const rapidjson::Value& value = getByKey(key);
-        return jsonValueToBool.toOrDefault(value).getValue();
+        return jsonValueToBool.to(value);
     }
 
-    bool JsonWrapper::getBoolean(const std::string& key) {
-        const rapidjson::Value& value = getByKey(key);
-        return jsonValueToBool.toOrDefault(value).getValue();
+    CEIBool JsonWrapper::getBoolean(const std::string& key) {
+        return checkMandatoryField(key, getBooleanOrNull(key));
     }
 
     JsonWrapper JsonWrapper::getObjectOrDefault(const std::string& key) {
@@ -301,39 +289,39 @@ namespace cei {
         addJsonValue(key, tmp);
     }
 
-    std::vector<std::string> JsonWrapper::getStringArray(const std::string& key) {
-        std::vector<std::string>&& value = getArrayByKey(key, getByKey(key), jsonValueToString);
+    std::vector<CEIString> JsonWrapper::getStringArray(const std::string& key) {
+        std::vector<CEIString>&& value = getArrayByKey(key, getByKey(key), jsonValueToString);
         return std::move(checkMandatoryArray(key, value));
     }
 
-    std::vector<long> JsonWrapper::getLongArray(const std::string& key) {
-        std::vector<long>&& value = getArrayByKey(key, getByKey(key), jsonValueToLong);
+    std::vector<CEIInt> JsonWrapper::getIntArray(const std::string& key) {
+        std::vector<CEIInt>&& value = getArrayByKey(key, getByKey(key), jsonValueToLong);
         return std::move(checkMandatoryArray(key, value));
     }
 
-    std::vector<Decimal> JsonWrapper::getDecimalArray(const std::string& key) {
-        std::vector<Decimal>&& value = getArrayByKey(key, getByKey(key), jsonValueToDecimal);
+    std::vector<CEIDecimal> JsonWrapper::getDecimalArray(const std::string& key) {
+        std::vector<CEIDecimal>&& value = getArrayByKey(key, getByKey(key), jsonValueToDecimal);
         return std::move(checkMandatoryArray(key, value));
     }
 
-    std::vector<bool> JsonWrapper::getBooleanArray(const std::string& key) {
-        std::vector<bool>&& value = getArrayByKey(key, getByKey(key), jsonValueToBool);
+    std::vector<CEIBool> JsonWrapper::getBooleanArray(const std::string& key) {
+        std::vector<CEIBool>&& value = getArrayByKey(key, getByKey(key), jsonValueToBool);
         return std::move(checkMandatoryArray(key, value));
     }
 
-    std::vector<std::string> JsonWrapper::getStringArrayOrEmpty(const std::string& key) {
+    std::vector<CEIString> JsonWrapper::getStringArrayOrEmpty(const std::string& key) {
         return std::move(getArrayByKey(key, getByKey(key), jsonValueToString));
     }
 
-    std::vector<long> JsonWrapper::getLongArrayOrEmpty(const std::string& key) {
+    std::vector<CEIInt> JsonWrapper::getIntArrayOrEmpty(const std::string& key) {
         return std::move(getArrayByKey(key, getByKey(key), jsonValueToLong));
     }
 
-    std::vector<Decimal> JsonWrapper::getDecimalArrayOrEmpty(const std::string& key) {
+    std::vector<CEIDecimal> JsonWrapper::getDecimalArrayOrEmpty(const std::string& key) {
         return std::move(getArrayByKey(key, getByKey(key), jsonValueToDecimal));
     }
 
-    std::vector<bool> JsonWrapper::getBooleanArrayOrEmpty(const std::string& key) {
+    std::vector<CEIBool> JsonWrapper::getBooleanArrayOrEmpty(const std::string& key) {
         return std::move(getArrayByKey(key, getByKey(key), jsonValueToBool));
     }
 

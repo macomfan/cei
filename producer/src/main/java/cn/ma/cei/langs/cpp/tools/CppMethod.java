@@ -30,7 +30,6 @@ public class CppMethod {
 
     public void startMethod(VariableType returnType, String methodName, List<Variable> params) {
         codeH.appendCppWordsln(returnType.getDescriptor(), methodName + "(" + defineParamString(params) + ")");
-
         codeCpp.appendWordsln(returnType.getDescriptor(), parent.getClassName() + "::" + methodName + "(" + defineParamString(params) + ") {");
         codeCpp.startBlock();
     }
@@ -62,6 +61,7 @@ public class CppMethod {
     }
 
     public void addDefineStackVariable(Variable variable, Variable... params) {
+        parent.addReferenceCpp(variable.getType());
         List<Variable> tmp = Arrays.asList(params);
         codeCpp.appendCppWordsln(variable.getTypeDescriptor(), variable.getDescriptor() + "{" + invokeParamString(tmp) + "}");
     }
@@ -85,7 +85,7 @@ public class CppMethod {
     }
 
     public String declareStackVariable(Variable variable) {
-        codeCpp.addReference(variable.getType());
+        parent.addReferenceCpp(variable.getType());
         return variable.getTypeDescriptor() + " " + variable.getDescriptor();
     }
 

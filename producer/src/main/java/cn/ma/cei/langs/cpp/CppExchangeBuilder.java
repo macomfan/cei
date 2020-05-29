@@ -13,10 +13,10 @@ import cn.ma.cei.model.types.xInt;
 import cn.ma.cei.model.types.xString;
 
 public class CppExchangeBuilder implements IExchangeBuilder {
-    
+
     private String exchangeName;
     private CppExchangeFile mainFile = null;
-    
+
     @Override
     public void startExchange(String exchangeName) {
         this.exchangeName = exchangeName;
@@ -37,30 +37,30 @@ public class CppExchangeBuilder implements IExchangeBuilder {
         Constant.keyword().tryPut(Keyword.TRUE, "true");
         Constant.keyword().tryPut(Keyword.FALSE, "false");
 
-        BuilderContext.setupBuildInVariableType(xString.typeName, "std::string", "<string>");
-        BuilderContext.setupBuildInVariableType(xBoolean.typeName, "bool", BuilderContext.NO_REF);
-        BuilderContext.setupBuildInVariableType(xInt.typeName, "long", BuilderContext.NO_REF);
-        BuilderContext.setupBuildInVariableType(xDecimal.typeName, "Decimal", "\"impl/decimal.h\"");
+        BuilderContext.setupBuildInVariableType(xString.typeName, "cei::CEIString", "\"cei/Types.h\"");
+        BuilderContext.setupBuildInVariableType(xBoolean.typeName, "cei::CEIBool", "\"cei/Types.h\"");
+        BuilderContext.setupBuildInVariableType(xInt.typeName, "cei::CEIInt", "\"cei/Types.h\"");
+        BuilderContext.setupBuildInVariableType(xDecimal.typeName, "cei::CEIDecimal", "\"cei/Types.h\"");
         BuilderContext.setupBuildInVariableType(TheArray.typeName, "std::vector", "<vector>");
-        BuilderContext.setupBuildInVariableType(RestfulRequest.typeName, "RestfulRequest", "\"impl/RestfulRequest.h\"");
-        BuilderContext.setupBuildInVariableType(RestfulResponse.typeName, "RestfulResponse", "\"impl/RestfulResponse.h\"");
+        BuilderContext.setupBuildInVariableType(RestfulRequest.typeName, "RestfulRequest", "\"cei/impl/RestfulRequest.h\"");
+        BuilderContext.setupBuildInVariableType(RestfulResponse.typeName, "RestfulResponse", "\"cei/impl/RestfulResponse.h\"");
         BuilderContext.setupBuildInVariableType(RestfulConnection.typeName, "RestfulConnection", "\"impl/RestfulConnection.h\"");
-        BuilderContext.setupBuildInVariableType(RestfulOptions.typeName, "RestfulOptions", "\"impl/RestfulOptions.h\"");
-        BuilderContext.setupBuildInVariableType(JsonWrapper.typeName, "JsonWrapper", "\"impl/RestfulJsonWrapper.h\"");
+        BuilderContext.setupBuildInVariableType(RestfulOptions.typeName, "RestfulOptions", "\"cei/RestfulOptions.h\"");
+        BuilderContext.setupBuildInVariableType(JsonWrapper.typeName, "JsonWrapper", "\"cei/impl/JsonWrapper.h\"");
         BuilderContext.setupBuildInVariableType(CEIUtils.typeName, "CEIUtils", "\"impl/CEIUtils.h\"");
         BuilderContext.setupBuildInVariableType(TheStream.typeName, "byte[]", BuilderContext.NO_REF);
         BuilderContext.setupBuildInVariableType(JsonChecker.typeName, "JsonChecker", "\"impl/JsonChecker.h\"");
         BuilderContext.setupBuildInVariableType(StringWrapper.typeName, "StringWrapper", "\"impl/StringWrapper.h\"");
         BuilderContext.setupBuildInVariableType(Procedures.typeName, "Procedures", BuilderContext.NO_REF);
 
-        BuilderContext.setupBuildInVariableType(WebSocketConnection.typeName, "WebSocketConnection", "\"impl/WebSocketConnection.h\"");
-        BuilderContext.setupBuildInVariableType(WebSocketEvent.typeName, "WebSocketEvent", "\"impl/WebSocketEvent.h\"");
-        BuilderContext.setupBuildInVariableType(WebSocketMessage.typeName, "WebSocketMessage", "\"impl/WebSocketMessage.h\"");
-        BuilderContext.setupBuildInVariableType(WebSocketCallback.typeName, "WebSocketCallback", "\"impl/WebSocketCallback.h\"");
-        BuilderContext.setupBuildInVariableType(WebSocketOptions.typeName, "WebSocketOptions", "\"impl/WebSocketOptions.h\"");
+        BuilderContext.setupBuildInVariableType(WebSocketConnection.typeName, "WebSocketConnection", "\"cei/impl/WebSocketConnection.h\"");
+        BuilderContext.setupBuildInVariableType(WebSocketEvent.typeName, "WebSocketEvent", "\"cei/impl/WebSocketEvent.h\"");
+        BuilderContext.setupBuildInVariableType(WebSocketMessage.typeName, "WebSocketMessage", "\"cei/impl/WebSocketMessage.h\"");
+        BuilderContext.setupBuildInVariableType(WebSocketCallback.typeName, "WebSocketCallback", "\"cei/WebSocketCallback.h\"");
+        BuilderContext.setupBuildInVariableType(WebSocketOptions.typeName, "WebSocketOptions", "\"cei/WebSocketOptions.h\"");
 
         CEIPath workingFolder = BuilderContext.getWorkingFolder();
-        CEIPath exchangeIncludeFolder = CEIPath.appendPath(workingFolder, "include", "exchanges");
+        CEIPath exchangeIncludeFolder = CEIPath.appendPath(workingFolder, "include", "cei", "exchanges");
         exchangeIncludeFolder.mkdirs();
         CEIPath exchangeSrcFolder = CEIPath.appendPath(workingFolder, "src", "exchanges");
         exchangeSrcFolder.mkdirs();

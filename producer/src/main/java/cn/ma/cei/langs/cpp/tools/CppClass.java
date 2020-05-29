@@ -5,8 +5,10 @@ import cn.ma.cei.generator.VariableType;
 import cn.ma.cei.utils.Checker;
 import cn.ma.cei.utils.UniqueList;
 
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 public class CppClass {
 
@@ -15,6 +17,9 @@ public class CppClass {
 
     private final UniqueList<String, Variable> privateMemberList = new UniqueList();
     final UniqueList<String, Variable> publicMemberList = new UniqueList();
+
+    private final Set<String> includeListH = new HashSet<>();
+    private final Set<String> includeListCpp = new HashSet<>();
 
     private final List<CppMethod> methodList = new LinkedList<>();
     private final String className;
@@ -45,7 +50,19 @@ public class CppClass {
     }
 
     public void addReferenceH(VariableType type) {
-        codeH.addReference(type);
+        includeListH.addAll(type.getReferences());
+    }
+
+    public void addReferenceCpp(VariableType type) {
+        includeListCpp.addAll(type.getReferences());
+    }
+
+    public Set<String> getIncludeListH() {
+        return includeListH;
+    }
+
+    public Set<String> getIncludeListCpp() {
+        return includeListCpp;
     }
 
     public void addMethod(CppMethod method) {

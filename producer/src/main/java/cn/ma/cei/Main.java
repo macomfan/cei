@@ -116,10 +116,11 @@ public class Main {
 
     private void initialize() {
         try {
+            System.out.println(System.getProperty("user.dir"));
             BuildSDK.initialize();
             BuildSDK.build(
-                    "C:\\dev\\cei\\exchanges",
-                    "C:\\dev\\cei\\framework",
+                    "..\\exchanges",
+                    "..\\framework",
                     "C:\\dev\\cei\\output",
                     "java|cpp");
         } catch (Exception e) {
